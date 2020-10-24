@@ -1,9 +1,26 @@
-<template>
-  <div id="app">
-    <router-view/>
-  </div>
+<template lang="pug">
+  div#app
+    Header
+    main
+      router-view
+    Footer
 </template>
 
+<script lang="ts">
+
+import { Component, Vue } from 'vue-property-decorator';
+import Footer from '@/components/Footer.vue';
+import Header from '@/components/Header.vue';
+
+@Component({
+  components: {
+    Footer,
+    Header,
+  },
+})
+export default class Index extends Vue {
+}
+</script>
 <style lang="scss">
   body {
     margin: 0;
@@ -11,7 +28,15 @@
   }
 
   #app {
-    text-align: center;
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main {
+    flex: 1;
+    background: $background-color;
   }
 
   #nav {
@@ -36,6 +61,7 @@
   html {
     box-sizing: border-box;
   }
+
   *, *:before, *:after {
     box-sizing: inherit;
   }

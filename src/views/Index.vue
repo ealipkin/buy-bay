@@ -1,48 +1,44 @@
 <template lang="pug">
   div
-    Header
-    Main
-      section.main-slider.container
-        BigSlider
-      CatalogSlider
-      section.top-categories
-        .container
-          .top-categories__header
-            h2.top-categories__title Топ категории
-            a.top-categories__show-all Показать все
-          ul.top-categories__list
-            li(v-for="item in topCategories").top-categories__list-item
-              a(href="#").top-categories__list-link
-                div.top-categories__list-img-wrapper(:style="{'background-color':item.color}")
-                  img(:src="item.src" :class="item.position").top-categories__list-img
-                p.top-categories__list-title {{ item.title }}
+    section.main-slider.container
+      BigSlider
 
-      Brands
+    CatalogSlider
 
-      section.advantages
-        .container
-          ul.advantages__list
-            li(v-for="item in advantagesList").advantages__list-item
-              img(:src="item.src").advantages__list-img
-              div.advantages__list-inner
-                h3.advantages__list-title {{ item.title }}
-                p.advantages__list-text {{ item.text }}
+    section.top-categories
+      .container
+        .top-categories__header
+          h2.top-categories__title Топ категории
+          a.top-categories__show-all Показать все
+        ul.top-categories__list
+          li(v-for="item in topCategories").top-categories__list-item
+            a(href="#").top-categories__list-link
+              div.top-categories__list-img-wrapper(:style="{'background-color':item.color}")
+                img(:src="item.src" :class="item.position").top-categories__list-img
+              p.top-categories__list-title {{ item.title }}
 
-      section.seo-block
-        .container
-          h2.seo-block__title SEO Block
-          p.seo-block__description {{ seoBlockDescription[0] }}
-          p.seo-block__description {{ seoBlockDescription[0] }}
-    Footer
+    Brands
+
+    section.advantages
+      .container
+        ul.advantages__list
+          li(v-for="item in advantagesList").advantages__list-item
+            img(:src="item.src").advantages__list-img
+            div.advantages__list-inner
+              h3.advantages__list-title {{ item.title }}
+              p.advantages__list-text {{ item.text }}
+
+    section.seo-block
+      .container
+        h2.seo-block__title SEO Block
+        p.seo-block__description {{ seoBlockDescription[0] }}
+        p.seo-block__description {{ seoBlockDescription[0] }}
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import Header from '@/components/Header.vue';
-import Main from '@/components/Main.vue';
 import BigSlider from '@/components/BigSlider.vue';
-import Footer from '@/components/Footer.vue';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Brands from '@/components/Brands.vue';
 import Slick from 'vue-slick';
@@ -53,10 +49,7 @@ import CatalogSlider from '@/components/CatalogSlider.vue';
     CatalogSlider,
     Brands,
     CatalogCardItem,
-    Footer,
     BigSlider,
-    Header,
-    Main,
     Slick,
   },
 })

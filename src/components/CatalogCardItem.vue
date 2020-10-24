@@ -1,5 +1,5 @@
 <template lang="pug">
-  a(:href="item.id" :class="{'--isOutlined': isOutlined }").catalog-card
+  a(:href="`product/${item.id}`" :class="{'--isOutlined': isOutlined }").catalog-card
     img.catalog-card__img(:src="item.images.preview")
     .catalog-card__bottom
       a.catalog-card__title-link

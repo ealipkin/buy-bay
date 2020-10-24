@@ -5,6 +5,11 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
+    path: '/product/:id',
+    name: 'ItemDetail',
+    component: () => import('../views/ItemDetail.vue'),
+  },
+  {
     path: '/',
     name: 'Index',
     component: () => import('../views/Index.vue'),
