@@ -54,7 +54,7 @@ export interface ProductDetailImage {
 
 export interface ProductImage {
   preview: string;
-  detail: ProductDetailImage[];
+  detail?: ProductDetailImage[];
 }
 
 export interface Product {

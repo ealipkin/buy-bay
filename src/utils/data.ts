@@ -43,7 +43,7 @@ const createProduct = (): Product => ({
   title: getRandomArrayElement(PRODUCT_TITLES),
   rate: parseFloat(`${getRandomNumberBetween(0, 9)}.${getRandomNumberBetween(0, 9)}`),
   groups: getRandomNumberBetween(0, 999),
-  images: getRandomArrayElement(PRODUCT_IMAGES),
+  images: {preview: 'https://picsum.photos/300'},
   features: createFeatures(),
   options: [],
   description: '',
