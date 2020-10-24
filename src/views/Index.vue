@@ -65,7 +65,7 @@ export default class Index extends Vue {
   topCategories = [
     {
       title: 'Спортивный инвентарь',
-      src: 'src/assets/images/category-01.jpg',
+      src: require('../assets/images/category-01.jpg'),
       position: 'top',
       color: '#fe8787',
     },
