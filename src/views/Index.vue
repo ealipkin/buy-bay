@@ -145,7 +145,7 @@ export default class Index extends Vue {
 
     &__list-item {
       padding-right: 10px;
-      width: 234px;
+      width: 229px;
       flex-shrink: 0;
     }
 
