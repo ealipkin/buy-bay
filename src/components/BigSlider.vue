@@ -1,7 +1,5 @@
 <template lang="pug">
-  section.big-slider
-    p test
-
+  .big-slider
 </template>
 
 <script lang="ts">

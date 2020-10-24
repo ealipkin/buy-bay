@@ -2,13 +2,13 @@
   header.header
     .header-top
       .header-top__inner.container
-        a.header-top__text Групповые покупки без наценок
+        a(href="#").header-top__text Групповые покупки без наценок
         .header-top__list
-          a.header-top__list-item Доставка
-          a.header-top__list-item Гарантия и возврат
-          a.header-top__list-item Помощь
+          a(href="#").header-top__list-item Доставка
+          a(href="#").header-top__list-item Гарантия и возврат
+          a(href="#").header-top__list-item Помощь
     .header-main.container
-      a.header-main__logo
+      a(href="#").header-main__logo
         img.header-main__logo-img(src="http://placehold.it/130x40")
 
       form.header-main__input-search.input-search
@@ -19,6 +19,10 @@
         button(type="submit").input-search__submit-button Найти
 
       .header-main__user-block
+        a(href="#").header-main__user-block-favorites
+          include ../assets/icons/heart.svg
+          span.header-main__favorites-number 23
+          p.header-main__favorites-text избранное
         a.header-main__user-block-text Регистрация
         a.header-main__user-block-text.header-main__user-block-text--login Войти
 
@@ -83,6 +87,7 @@ export default class Header extends Vue {
     &__text {
       font-size: 14px;
       color: #8a8a8a;
+      text-decoration: none;
     }
 
     &__list {
@@ -91,6 +96,7 @@ export default class Header extends Vue {
     }
 
     &__list-item {
+      text-decoration: none;
       font-size: 14px;
       color: #8a8a8a;
 
@@ -103,7 +109,7 @@ export default class Header extends Vue {
   .header-main {
     display: flex;
     align-items: center;
-    padding: 13px 0;
+    padding: 12px 0;
 
     &__logo {
       margin-right: 55px;
@@ -113,6 +119,36 @@ export default class Header extends Vue {
       margin-left: auto;
       align-items: center;
       display: flex;
+    }
+
+    &__user-block-favorites{
+      text-decoration: none;
+      position: relative;
+      margin-right: 30px;
+    }
+
+    &__favorites-number {
+      position: absolute;
+      top: -6px;
+      right: 7px;
+    }
+
+    &__favorites-text {
+      font-size: 12px;
+      color: #496cff;
+      margin-top: 3px;
+      margin-bottom: 0;
+    }
+
+    &__favorites-number {
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px;
+      width: 24px;
+      height: 19px;
+      border-radius: 9px;
+      color: #ffffff;
+      background-color: #496cff;
     }
 
     &__user-block-text {

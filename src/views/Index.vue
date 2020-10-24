@@ -2,6 +2,8 @@
   div
     Header
     Main
+      section.main-slider
+        BigSlider
       section.catalog-slider
         CatalogCardItem
       section.top-categories
@@ -11,7 +13,7 @@
             a.top-categories__show-all Показать все
           ul.top-categories__list
             li(v-for="item in topCategories").top-categories__list-item
-              a.top-categories__list-link
+              a(href="#").top-categories__list-link
                 div.top-categories__list-img-wrapper(:style="{'background-color':item.color}")
                   img(:src="item.src").top-categories__list-img
                 p.top-categories__list-title {{ item.title }}
@@ -148,6 +150,7 @@ export default class Index extends Vue {
 
     &__list-link {
       display: flex;
+      text-decoration: none;
       align-items: center;
       text-align: left;
       font-size: 18px;
