@@ -1,6 +1,6 @@
 <template lang="pug">
-  a(href="#").catalog-card
-    img.catalog-card__img
+  a(href="#" :class="{'--isOutlined': isOutlined }").catalog-card
+    img.catalog-card__img(src="http://placehold.it/152x152")
     .catalog-card__bottom
       a.catalog-card__title-link
         h3.catalog-card__title Магнитный кабель с адаптером или адаптер
@@ -14,11 +14,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class CatalogCardItem extends Vue {
-
+  @Prop(Number) readonly isOutlined: boolean
 }
 </script>
 
@@ -27,13 +27,17 @@ export default class CatalogCardItem extends Vue {
     display: block;
     text-decoration: none;
     max-width: 216px;
-    border:1px solid red;
-    border-radius: 4px;
+    border-radius: 8px;
     background-color: #ffffff;
 
+    &.--isOutlined {
+      border: 1px solid #e7e7e7;
+    }
+
     &__img {
-      height: 218px;
+      //height: 218px;
       width: 100%;
+      border-radius: 8px 8px 0 0;
     }
 
     a &__title {
@@ -82,6 +86,8 @@ export default class CatalogCardItem extends Vue {
     &__price {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
     }
 
     &__old-price,
@@ -94,10 +100,10 @@ export default class CatalogCardItem extends Vue {
 
     &__old-price {
       text-decoration: line-through;
+      margin-bottom: 10px;
     }
 
     &__actual-price {
-      margin-left: auto;
       color: #ffffff;
       background-color: #496cff;
       padding: 5px 21px 5px 29px;

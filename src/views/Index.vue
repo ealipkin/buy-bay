@@ -18,11 +18,7 @@
                   img(:src="item.src").top-categories__list-img
                 p.top-categories__list-title {{ item.title }}
 
-      section.best-brands
-        h2.best-brands__title Лучшие бренды
-
-        .best-brands__slider
-          .best-brands__slider-item
+      Brands
 
       section.advantages
         .container
@@ -49,9 +45,11 @@ import Main from '@/components/Main.vue';
 import BigSlider from '@/components/BigSlider.vue';
 import Footer from '@/components/Footer.vue';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
+import Brands from '@/components/Brands.vue';
 
 @Component({
   components: {
+    Brands,
     CatalogCardItem,
     Footer,
     BigSlider,
@@ -166,10 +164,6 @@ export default class Index extends Vue {
       border-radius: 20px;
       flex-shrink: 0;
     }
-  }
-
-  .best-brands {
-    background-color: #f7f7fa;
   }
 
   .advantages {
