@@ -1,0 +1,76 @@
+@mixin tablet {
+  @media #{$tablet} {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media #{$laptop} {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media #{$desktop} {
+    @content;
+  }
+}
+
+@mixin container() {
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 1596px;
+  margin: 0 auto;
+}
+
+@mixin clearList() {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+@mixin loader($color: $red) {
+  border: 4px double;
+  border-radius: 50%;
+  border-color: transparent $color $color;
+  animation: loader-spin 690ms infinite linear;
+}
+
+@mixin arrow-down($color: #666666) {
+  width: 14px;
+  height: 14px;
+  border: 2px solid $color;
+  border-top: 0;
+  border-right: 0;
+  transform: rotate(-45deg);
+}
+
+@keyframes loader-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes loader-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-ms-keyframes loader-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes loader-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes loader-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
