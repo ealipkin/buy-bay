@@ -16,9 +16,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-@Component
+@Component({})
 export default class CatalogCardItem extends Vue {
-  @Prop(Number) readonly isOutlined: boolean
+  @Prop({ type: Boolean, default: false }) public isOutlined!: boolean;
 }
 </script>
 

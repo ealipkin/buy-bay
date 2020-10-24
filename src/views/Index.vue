@@ -15,7 +15,7 @@
             li(v-for="item in topCategories").top-categories__list-item
               a(href="#").top-categories__list-link
                 div.top-categories__list-img-wrapper(:style="{'background-color':item.color}")
-                  img(:src="item.src").top-categories__list-img
+                  img(:src="item.src" :class="item.position").top-categories__list-img
                 p.top-categories__list-title {{ item.title }}
 
       Brands
@@ -24,7 +24,7 @@
         .container
           ul.advantages__list
             li(v-for="item in advantagesList").advantages__list-item
-              img
+              img(:src="item.src").advantages__list-img
               div.advantages__list-inner
                 h3.advantages__list-title {{ item.title }}
                 p.advantages__list-text {{ item.text }}
@@ -65,38 +65,49 @@ export default class Index extends Vue {
   topCategories = [
     {
       title: 'Спортивный инвентарь',
-      src: require('../assets/images/category-01.jpg'),
-      position: 'top',
+      src: require('../assets/images/category-01.png'),
+      position: 'bottom',
       color: '#fe8787',
     },
     {
       title: 'Компьютеры и офис',
+      src: require('../assets/images/category-02.png'),
+      position: 'top',
       color: '#925aca',
     },
     {
       title: 'Cмарфтоны',
+      src: require('../assets/images/category-03.png'),
+      position: 'center',
       color: '#ffe091',
     },
     {
       title: 'Спортивный инвентарь',
+      src: require('../assets/images/category-01.png'),
+      position: 'bottom',
       color: '#fe8787',
     },
     {
       title: 'Компьютеры и офис',
+      src: require('../assets/images/category-02.png'),
+      position: 'top',
       color: '#925aca',
     },
   ]
 
   advantagesList = [
     {
+      src: require('../assets/images/feature-01.svg'),
       title: 'Ультра дискаунтер',
       text: 'Мы собрали супер товары из Китая по супер ценам',
     },
     {
+      src: require('../assets/images/feature-02.svg'),
       title: 'Вместе дешевле',
       text: 'Объединяйтесь с друзьями в группы и покупайте по супер цене',
     },
     {
+      src: require('../assets/images/feature-03.svg'),
       title: 'Гарантия',
       text: 'Мы стоим за вас стеной гарантируем возврат денег и бесплатную доставку',
     },
@@ -163,24 +174,49 @@ export default class Index extends Vue {
       height: 60px;
       border-radius: 20px;
       flex-shrink: 0;
+      display: flex;
+    }
+
+    &__list-img {
+      &.bottom {
+        margin-top: auto;
+      }
+
+      &.top {
+        margin-bottom: auto;
+        margin-left: auto;
+      }
+
+      &.center {
+        margin-top: auto;
+        margin-left: auto;
+        margin-right: auto;
+      }
     }
   }
 
   .advantages {
+    padding: 65px 0;
+
     &__list {
       display: flex;
       padding: 0;
       margin: 0;
       list-style-type: none;
       text-align: left;
-      justify-content: space-between;
     }
 
     &__list-item {
       max-width: 333px;
+      display: flex;
+
       &:not(:first-child) {
-        margin-left: 70px;
+        margin-left: 77px;
       }
+    }
+
+    &__list-img {
+      margin-right: 35px;
     }
 
     &__list-inner {
