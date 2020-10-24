@@ -2,10 +2,9 @@
   div
     Header
     Main
-      section.main-slider
+      section.main-slider.container
         BigSlider
-      section.catalog-slider.container
-        CatalogCardItem
+      CatalogSlider
       section.top-categories
         .container
           .top-categories__header
@@ -46,21 +45,25 @@ import BigSlider from '@/components/BigSlider.vue';
 import Footer from '@/components/Footer.vue';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Brands from '@/components/Brands.vue';
+import Slick from 'vue-slick';
+import CatalogSlider from '@/components/CatalogSlider.vue';
 
 @Component({
   components: {
+    CatalogSlider,
     Brands,
     CatalogCardItem,
     Footer,
     BigSlider,
     Header,
     Main,
+    Slick,
   },
 })
 export default class Index extends Vue {
   seoBlockDescription = [
     'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-  ]
+  ];
 
   topCategories = [
     {
@@ -93,7 +96,7 @@ export default class Index extends Vue {
       position: 'top',
       color: '#925aca',
     },
-  ]
+  ];
 
   advantagesList = [
     {
@@ -111,7 +114,7 @@ export default class Index extends Vue {
       title: 'Гарантия',
       text: 'Мы стоим за вас стеной гарантируем возврат денег и бесплатную доставку',
     },
-  ]
+  ];
 }
 </script>
 

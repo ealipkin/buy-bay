@@ -1,24 +1,27 @@
 <template lang="pug">
-  a(href="#" :class="{'--isOutlined': isOutlined }").catalog-card
-    img.catalog-card__img(src="http://placehold.it/152x152")
+  a(:href="item.id" :class="{'--isOutlined': isOutlined }").catalog-card
+    img.catalog-card__img(:src="item.images.preview")
     .catalog-card__bottom
       a.catalog-card__title-link
-        h3.catalog-card__title Магнитный кабель с адаптером или адаптер
+        h3.catalog-card__title {{item.title}}
 
       .catalog-card__group
-        p.catalog-card__group-text 12 групп на покупку
-        span.catalog-card__group-rating 2.6
+        p.catalog-card__group-text {{item.groups}} групп на покупку
+        span.catalog-card__group-rating {{item.rate}}
       .catalog-card__price
-        p.catalog-card__old-price 321 363
-        p.catalog-card__actual-price 244 345
+        p.catalog-card__old-price {{item.selfPrice}}
+        p.catalog-card__actual-price {{item.groupPrice}}
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Product } from '@/utils/models';
 
 @Component({})
 export default class CatalogCardItem extends Vue {
   @Prop({ type: Boolean, default: false }) public isOutlined!: boolean;
+
+  @Prop() public item!: Product;
 }
 </script>
 

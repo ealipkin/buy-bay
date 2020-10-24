@@ -1,6 +1,46 @@
 import { MenuItem } from '@/utils/models';
 
-const MENU_ITEMS: MenuItem[] = [
+export const MENU_ITEMS: MenuItem[] = [
+  {
+    title: 'Гаджеты',
+    inGeneralMenu: true,
+    href: '',
+    icon: '',
+  },
+  {
+    title: 'Смартфоны',
+    href: '',
+    icon: '',
+    inGeneralMenu: true,
+    children: [
+      {
+        main: { title: 'Смартфоны и умные часы', href: '' },
+        links: [
+          { title: 'Мобильные телефоны', href: '' },
+          { title: 'Смартфоны', href: '' },
+          { title: 'Кнопочные мобильные телефоны', href: '' },
+          { title: 'Умные часы и браслеты', href: '' },
+          { title: 'Аксессуары для телефонов', href: '' },
+        ],
+      },
+      {
+        main: { title: 'Фото- и видеокамеры', href: '' },
+        links: [
+          { title: 'Фотоаппараты', href: '' },
+          { title: 'Объективы', href: '' },
+          { title: 'Экшн-камеры', href: '' },
+          { title: 'Видеокамеры', href: '' },
+          { title: 'Квадрокоптеры с камерой', href: '' },
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Женский гардероб',
+    inGeneralMenu: true,
+    href: '',
+    icon: '',
+  },
   {
     title: 'Электроника',
     href: '',
@@ -57,32 +97,16 @@ const MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
-    title: 'Смартфоны',
+    title: 'Детские товары',
     href: '',
     icon: '',
     inGeneralMenu: true,
-    children: [
-      {
-        main: { title: 'Смартфоны и умные часы', href: '' },
-        links: [
-          { title: 'Мобильные телефоны', href: '' },
-          { title: 'Смартфоны', href: '' },
-          { title: 'Кнопочные мобильные телефоны', href: '' },
-          { title: 'Умные часы и браслеты', href: '' },
-          { title: 'Аксессуары для телефонов', href: '' },
-        ],
-      },
-      {
-        main: { title: 'Фото- и видеокамеры', href: '' },
-        links: [
-          { title: 'Фотоаппараты', href: '' },
-          { title: 'Объективы', href: '' },
-          { title: 'Экшн-камеры', href: '' },
-          { title: 'Видеокамеры', href: '' },
-          { title: 'Квадрокоптеры с камерой', href: '' },
-        ],
-      },
-    ],
+  },
+  {
+    title: 'Хобби',
+    inGeneralMenu: true,
+    href: '',
+    icon: '',
   },
   {
     title: 'Бытовая техника',
@@ -101,29 +125,6 @@ const MENU_ITEMS: MenuItem[] = [
         ],
       },
     ],
-  },
-  {
-    title: 'Женский гардероб',
-    inGeneralMenu: true,
-    href: '',
-    icon: '',
-  },
-  {
-    title: 'Гаджеты',
-    inGeneralMenu: true,
-    href: '',
-    icon: '',
-  },
-  {
-    title: 'Детские товары',
-    href: '',
-    icon: '',
-  },
-  {
-    title: 'Хобби',
-    inGeneralMenu: true,
-    href: '',
-    icon: '',
   },
   {
     title: 'Красота',
@@ -152,6 +153,12 @@ const MENU_ITEMS: MenuItem[] = [
   },
   {
     title: 'Зоотовары',
+    href: '',
+    icon: '',
+  },
+  {
+    title: 'Дача',
+    inGeneralMenu: true,
     href: '',
     icon: '',
   },

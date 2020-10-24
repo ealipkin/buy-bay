@@ -3,7 +3,11 @@
     .container
       h2.brands__title Лучшие бренды
 
-      .brands__slider
+      Slick(ref="slick" :options="sliderSettings").brands__slider
+        BrandsItem
+        BrandsItem
+        BrandsItem
+        BrandsItem
         BrandsItem
         BrandsItem
 </template>
@@ -11,14 +15,32 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import BrandsItem from '@/components/BrandsItem.vue';
+import Slick from 'vue-slick';
 
 @Component({
   components: {
     BrandsItem,
+    Slick,
   },
 })
 export default class Brands extends Vue {
-
+  sliderSettings = {
+    mobileFirst: true,
+    responsive: [
+      {
+        breakpoint: '320',
+        settings: 'unslick',
+      },
+      {
+        breakpoint: '1200',
+        settings: {
+          rows: 1,
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
 }
 </script>
 
@@ -39,6 +61,7 @@ export default class Brands extends Vue {
     &__slider {
       display: flex;
       justify-content: space-between;
+      overflow: auto;
     }
   }
 </style>
