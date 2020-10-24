@@ -7,12 +7,19 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import HelloWorld from '@/components/HelloWorld.vue';
+import { generateProducts } from '@/utils/data'; // @ is an alias to /src
 
 @Component({
   components: {
     HelloWorld,
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  public products = generateProducts(30);
+
+  mounted() {
+    console.log(this.products);
+  }
+}
 </script>

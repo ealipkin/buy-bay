@@ -1,32 +1,4 @@
-export interface BrandMenuItem {
-  title: string,
-  imageUrl: string,
-  href: string,
-}
-
-export interface ChildMenuItem {
-  title: string,
-  href: string,
-}
-
-export interface ChildMenuItem {
-  title: string,
-  href: string,
-}
-
-export interface ChildItem {
-  main: ChildMenuItem,
-  links: ChildMenuItem[]
-}
-
-export interface MenuItem {
-  title: string,
-  href: string,
-  icon: string,
-  inGeneralMenu?: boolean,
-  brands?: BrandMenuItem[],
-  children?: ChildItem[]
-}
+import { MenuItem } from '@/utils/models';
 
 const MENU_ITEMS: MenuItem[] = [
   {
@@ -35,11 +7,11 @@ const MENU_ITEMS: MenuItem[] = [
     icon: '',
     inGeneralMenu: true,
     brands: [
-      { title: 'Honor', imageUrl: '', href: '', },
+      { title: 'Honor', imageUrl: '', href: '' },
       { title: 'Samsung', imageUrl: '', href: '' },
       { title: 'Xiaomi', imageUrl: '', href: '' },
       { title: 'Sony', imageUrl: '', href: '' },
-      { title: 'JBL', imageUrl: '', href: '' }
+      { title: 'JBL', imageUrl: '', href: '' },
     ],
     children: [
       {
@@ -50,7 +22,7 @@ const MENU_ITEMS: MenuItem[] = [
           { title: 'Кнопочные мобильные телефоны', href: '' },
           { title: 'Умные часы и браслеты', href: '' },
           { title: 'Аксессуары для телефонов', href: '' },
-        ]
+        ],
       },
       {
         main: { title: 'Портативная техника', href: '' },
@@ -59,8 +31,8 @@ const MENU_ITEMS: MenuItem[] = [
           { title: 'Портативная акустика', href: '' },
           { title: 'Очки виртуальной реальности', href: '' },
           { title: 'Планшеты', href: '' },
-          { title: 'Умные колонки', href: '' }
-        ]
+          { title: 'Умные колонки', href: '' },
+        ],
       },
       {
         main: { title: 'Аудио- и видеотехника', href: '' },
@@ -69,8 +41,8 @@ const MENU_ITEMS: MenuItem[] = [
           { title: 'Онлайн подписки и карты оплаты', href: '' },
           { title: 'Аудиотехника', href: '' },
           { title: 'TV-тюнеры', href: '' },
-          { title: 'ТВ-приставки и медиаплееры', href: '' }
-        ]
+          { title: 'ТВ-приставки и медиаплееры', href: '' },
+        ],
       },
       {
         main: { title: 'Фото- и видеокамеры', href: '' },
@@ -79,10 +51,10 @@ const MENU_ITEMS: MenuItem[] = [
           { title: 'Объективы', href: '' },
           { title: 'Экшн-камеры', href: '' },
           { title: 'Видеокамеры', href: '' },
-          { title: 'Квадрокоптеры с камерой', href: '' }
-        ]
+          { title: 'Квадрокоптеры с камерой', href: '' },
+        ],
       },
-    ]
+    ],
   },
   {
     title: 'Смартфоны',
@@ -98,7 +70,7 @@ const MENU_ITEMS: MenuItem[] = [
           { title: 'Кнопочные мобильные телефоны', href: '' },
           { title: 'Умные часы и браслеты', href: '' },
           { title: 'Аксессуары для телефонов', href: '' },
-        ]
+        ],
       },
       {
         main: { title: 'Фото- и видеокамеры', href: '' },
@@ -107,10 +79,10 @@ const MENU_ITEMS: MenuItem[] = [
           { title: 'Объективы', href: '' },
           { title: 'Экшн-камеры', href: '' },
           { title: 'Видеокамеры', href: '' },
-          { title: 'Квадрокоптеры с камерой', href: '' }
-        ]
+          { title: 'Квадрокоптеры с камерой', href: '' },
+        ],
       },
-    ]
+    ],
   },
   {
     title: 'Бытовая техника',
@@ -126,9 +98,9 @@ const MENU_ITEMS: MenuItem[] = [
           { title: 'Кнопочные мобильные телефоны', href: '' },
           { title: 'Умные часы и браслеты', href: '' },
           { title: 'Аксессуары для телефонов', href: '' },
-        ]
+        ],
       },
-    ]
+    ],
   },
   {
     title: 'Женский гардероб',
@@ -184,13 +156,3 @@ const MENU_ITEMS: MenuItem[] = [
     icon: '',
   },
 ];
-
-
-
-
-
-
-
-
-
-
