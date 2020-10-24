@@ -109,7 +109,7 @@ export default class Header extends Vue {
   .header-main {
     display: flex;
     align-items: center;
-    padding: 12px 0;
+    padding: 12px 10px;
 
     &__logo {
       margin-right: 55px;

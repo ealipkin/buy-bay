@@ -4,7 +4,7 @@
     Main
       section.main-slider
         BigSlider
-      section.catalog-slider
+      section.catalog-slider.container
         CatalogCardItem
       section.top-categories
         .container
@@ -136,6 +136,7 @@ export default class Index extends Vue {
 
     &__list {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       list-style-type: none;
       margin: 0;

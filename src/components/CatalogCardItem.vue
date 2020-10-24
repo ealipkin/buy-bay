@@ -1,5 +1,5 @@
 <template lang="pug">
-  a(href="#").catalog-card.container
+  a(href="#").catalog-card
     img.catalog-card__img
     .catalog-card__bottom
       a.catalog-card__title-link
