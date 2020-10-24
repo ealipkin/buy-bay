@@ -11,7 +11,7 @@
       a.header-main__logo
         img.header-main__logo-img(src="http://placehold.it/130x40")
 
-      .header-main__input-search.input-search
+      form.header-main__input-search.input-search
         .input-search__inner
           input.input-search__input(placeholder="Поиск товара")
           button(type="button").input-search__category-button Выбрать категорию
@@ -194,6 +194,7 @@ export default class Header extends Vue {
       opacity: 0.9;
       border-radius: 0 4px 4px 0;
       background-color: #355cff;
+      cursor: pointer;
       &:focus {
         outline: none;
       }
