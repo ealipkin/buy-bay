@@ -29,45 +29,19 @@
     .header-bottom.container
       ul.header-bottom__navigation-list
         li(v-for="item in navigationList").header-bottom__navigation-list-item
-          a(:href="item.href").header-bottom__navigation-list-text {{item.text}}
+          a(:href="item.href").header-bottom__navigation-list-text {{item.title}}
 
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { MENU_ITEMS } from '@/utils/constants';
 
 @Component
 export default class Header extends Vue {
-  navigationList = [
-    {
-      text: 'Гаджеты',
-      href: '/',
-    },
-    {
-      text: 'Смартфоны',
-      href: '/',
-    },
-    {
-      text: 'Женский гардероб',
-      href: '/',
-    },
-    {
-      text: 'Электроника',
-      href: '/',
-    },
-    {
-      text: 'Детские товары',
-      href: '/',
-    },
-    {
-      text: 'Хобби',
-      href: '/',
-    },
-    {
-      text: 'Дача',
-      href: '/',
-    },
-  ]
+  menuItems = MENU_ITEMS;
+
+  navigationList = MENU_ITEMS.filter((item) => item.inGeneralMenu);
 }
 </script>
 
@@ -75,6 +49,7 @@ export default class Header extends Vue {
 @import "src/scss/_mixins.scss";
 
   .header {
+    background: white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.19);
 
     @include mobile() {

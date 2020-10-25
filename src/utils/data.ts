@@ -9,7 +9,7 @@ const featureDate = () => {
 };
 
 const PRODUCT_IMAGES = [''];
-const PRODUCT_TITLES = ['Магнитный кабель с адаптером или адаптер', 'Просто кабель', 'Фото камера сумка через плечо крест цифровой чехол водонепроницаемый'];
+const PRODUCT_TITLES = ['Магнитный кабель с адаптером или адаптер', 'Просто кабель', 'Фото камера сумка через плечо крест цифровой'];
 const FEATURES: ProductFeature[] = [
   {
     type: PRODUCT_FEATURES.DELIVERY,
@@ -38,12 +38,17 @@ const createFeatures = () => {
   const featuresLength = getRandomNumberBetween(0, FEATURES.length);
   return FEATURES.slice(0, featuresLength);
 };
-const createProduct = (): Product => ({
+const createProduct = (item, index): Product => ({
   id: nanoid(),
   title: getRandomArrayElement(PRODUCT_TITLES),
   rate: parseFloat(`${getRandomNumberBetween(0, 9)}.${getRandomNumberBetween(0, 9)}`),
   groups: getRandomNumberBetween(0, 999),
-  images: {preview: 'https://picsum.photos/300'},
+  images: {
+    preview: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/300`,
+    detail: new Array(getRandomNumberBetween(1, 5)).fill({}).map(() => ({
+      url: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/700`,
+    }))
+  },
   features: createFeatures(),
   options: [],
   description: '',

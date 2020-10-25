@@ -7,13 +7,14 @@
         p.brands-item__category Спортивные товары
 
     ul.brands-item__list
-      li(v-for="item in 3").brands-item__card
-        CatalogCardItem(:is-outlined="true")
+      li(v-for="item in items").brands-item__card
+        CatalogCardItem(:is-outlined="true" :item="item")
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
+import { generateProducts } from '@/utils/data';
 
 @Component({
   components: {
@@ -21,7 +22,7 @@ import CatalogCardItem from '@/components/CatalogCardItem.vue';
   },
 })
 export default class BrandsItem extends Vue {
-
+  items = generateProducts(3)
 }
 </script>
 
@@ -63,10 +64,14 @@ export default class BrandsItem extends Vue {
     }
 
     &__list {
-      display: flex;
       margin: 0;
       padding: 0;
       list-style: none;
+      display: none;
+
+      @include laptop() {
+        display: flex;
+      }
     }
 
     &__card {

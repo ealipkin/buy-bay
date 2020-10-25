@@ -48,8 +48,8 @@ export interface ProductFeature {
 
 export interface ProductDetailImage {
   url: string;
-  isVideo: boolean;
-
+  isVideo?: boolean;
+  videoLink?: string
 }
 
 export interface ProductImage {
