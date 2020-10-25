@@ -2,13 +2,13 @@
   header.header
     .header-top
       .header-top__inner.container
-        a(href="#").header-top__text Групповые покупки без наценок
+        .header-top__text Групповые покупки без наценок
         .header-top__list
           a(href="#").header-top__list-item Доставка
           a(href="#").header-top__list-item Гарантия и возврат
           a(href="#").header-top__list-item Помощь
     .header-main.container
-      a(href="#").header-main__logo
+      router-link(to='/').header-main__logo
         img.header-main__logo-img(src="http://placehold.it/130x40")
 
       form.header-main__input-search.input-search

@@ -1,9 +1,13 @@
 <template lang="pug">
   .item-preview(v-if="item && item.images && item.images.detail")
     .item-preview__top
-      Slick(ref="slickTop" :options="topSliderSettings").item-preview__top-slider
+      Slick(ref="slickTop"
+        :options="topSliderSettings"
+        @afterChange="handleAfterChange"
+      ).item-preview__top-slider
         div(v-for="(imageItem, index) in item.images.detail" :key="index" :class="{'--video': imageItem.isVideo }").item-preview__top-slide
           img(:src="imageItem.url")
+      .item-preview__counter {{selectedIndex + 1}}/ {{item.images.detail.length}}
     .item-preview__bottom
       div(
         v-for="(imageItem, index) in item.images.detail" :key="index"
@@ -47,6 +51,13 @@ export default class ItemPreview extends Vue {
     this.selectedIndex = index;
     (this.$refs.slickTop as any).goTo(index);
   }
+
+  handleAfterChange(event, slick, currentSlide) {
+    this.selectedIndex = currentSlide;
+  }
+
+  mounted() {
+  }
 }
 
 </script>
@@ -56,27 +67,56 @@ export default class ItemPreview extends Vue {
     background: white;
     max-width: 686px;
     border-radius: 8px;
-    border: solid 1px #dfdfdf;
-    padding: 34px 40px 45px;
+    padding: 14px 16px;
     box-sizing: border-box;
+
+    @include laptop() {
+      border: solid 1px #dfdfdf;
+      padding: 34px 40px 45px;
+    }
 
     img {
       max-width: 100%;
     }
 
+    &__counter {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      background-color: #00000066;
+      padding: 4px 13px 4px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 20px;
+    }
+
+    &__top {
+      position: relative;
+    }
+
     &__bottom {
-      margin-top: 32px;
+      margin-top: 30px;
       display: flex;
       align-items: center;
+      overflow: auto;
+      padding: 2px 0;
     }
 
     &__bottom-slide {
-      width: 60px;
-      max-width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 2px;
       margin-right: 8px;
+      flex-shrink: 0;
       position: relative;
+
+      @include laptop() {
+        width: 60px;
+        height: 60px;
+      }
 
       &:after {
         content: '';

@@ -35,6 +35,7 @@ export interface ProductOption {
   values: {
     label: string;
     value: string;
+    selected?: boolean;
   }[];
 }
 
@@ -70,4 +71,14 @@ export interface Product {
   groupPrice: number;
   orders: number;
   isFavourite: boolean;
+}
+
+export interface Group {
+  id: string;
+  isJoined: boolean;
+  avatar: string;
+  allUsers: number;
+  joinedUsers: number;
+  title: string;
+  time: number;
 }

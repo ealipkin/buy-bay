@@ -1,0 +1,238 @@
+<template lang="pug">
+  .item-info
+    .item-info__title {{item.title}}
+    .item-info__info
+      span.item-info__orders
+        img(src="../assets/icons/order-package.svg")
+        span Заказов: {{divideNumberWithSpaces(this.item.orders)}}
+      span.item-info__rate
+        img(src="../assets/icons/star.svg")
+        span {{item.rate}}
+    .item-info__prices
+      span.item-info__group-price {{divideNumberWithSpaces(item.groupPrice)}} ₽
+      span.item-info__self-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
+    ul(v-if="item.options && item.options.length").item-info__options
+      li(v-for="option in item.options").item-info__option
+        h3.item-info__option-title {{option.title}}
+        .item-info__option-list
+          label(v-for="value in option.values").item-info__option-label
+            input(type="radio" :name="'option['+option.id+']'" :checked="value.selected").visually-hidden
+            span {{value.label}}
+    .item-info__actions
+      button(type="button" :class="{'item-info__fav--active': item.isFavourite}" @click="toggleFav").item-info__fav
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22"><path d="M14.2 20.6C-9.601 8.946 7.612-5.544 14.2 4.215c6.588-9.759 23.802 4.73 0 16.385z" stroke="currentColor" stroke-width="2" fill="none" fill-rule="evenodd"/></svg>
+      button(type="button" @click="buySelf").item-info__buy
+        span.item-info__buy-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
+        span.item-info__buy-text Купить одному
+      button(type="button" @click="buyGroup").item-info__buy.item-info__buy--grouped
+        span.item-info__buy-price {{divideNumberWithSpaces(item.groupPrice)}} ₽
+        span.item-info__buy-text Купить вместе
+
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Product } from '@/utils/models';
+import { divideNumberWithSpaces } from '@/utils/common';
+
+@Component({
+  components: {},
+})
+export default class ItemInfo extends Vue {
+  @Prop() public item!: Product;
+
+  toggleFav = () => {
+    console.log('toggleFav');
+    this.item.isFavourite = !this.item.isFavourite;
+  };
+
+  buySelf = () => {
+    console.log('buySelf');
+  };
+
+  buyGroup = () => {
+    console.log('buyGroup');
+  };
+
+  divideNumberWithSpaces(number) {
+    return divideNumberWithSpaces(number);
+  }
+}
+
+</script>
+
+<style lang="scss" scoped>
+  .item-info {
+    background: white;
+    padding: 27px 15px;
+
+    &__title {
+      font-size: 16px;
+      line-height: normal;
+      font-weight: bold;
+      color: #222222;
+      margin-bottom: 14px;
+    }
+
+    &__orders {
+      font-size: 14px;
+      line-height: normal;
+      letter-spacing: normal;
+      color: #7b8197;
+      display: flex;
+      align-items: center;
+
+      img {
+        margin-right: 12px;
+      }
+    }
+
+    &__rate {
+      font-size: 14px;
+      line-height: normal;
+      color: #7b8197;
+
+      display: flex;
+      align-items: center;
+
+      img {
+        margin-right: 7px;
+      }
+
+      span {
+        opacity: 0.9;
+      }
+    }
+
+    &__info {
+      display: flex;
+      align-items: center;
+    }
+
+    &__orders {
+      margin-right: 26px;
+    }
+
+    &__prices {
+      display: none;
+    }
+
+    &__options {
+      @include clearList();
+      margin-top: 30px;
+    }
+
+    &__option {
+      margin-bottom: 11px;
+      border-bottom: 1px solid #ededed;
+      padding-bottom: 7px;
+
+      &:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+    }
+
+    &__option-title {
+      font-size: 14px;
+      font-weight: bold;
+      line-height: normal;
+      color: #222222;
+      margin: 0;
+
+      margin-bottom: 14px;
+    }
+
+    &__option-label {
+      span {
+        border-radius: 4px;
+        border: solid 1px #e1e1e1;
+        font-size: 14px;
+        line-height: normal;
+        text-align: center;
+        color: #222222;
+
+        padding: 5px 14px;
+        display: flex;
+        align-items: center;
+        margin-right: 9px;
+        margin-bottom: 9px;
+
+        &:last-child {
+          /*margin-right: 0;*/
+        }
+      }
+
+      input:checked + span {
+        background-color: #222222;
+        color: white;
+        border-color: black;
+      }
+    }
+
+    &__option-list {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    &__actions {
+      display: flex;
+      border-top: 1px solid #ede9e9;
+      border-bottom: 1px solid #ede9e9;
+      margin-top: 16px;
+      margin-left: -15px;
+      margin-right: -15px;
+    }
+
+    &__fav, &__buy {
+      background: none;
+      box-shadow: none;
+      border: none;
+      display: block;
+    }
+
+    &__fav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #496cff;
+      border-right: 1px solid #ede9e9;
+      padding: 19px 12px;
+    }
+
+    &__buy {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
+      padding: 0;
+
+      &-price {
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
+        color: #452608;
+        display: block;
+      }
+
+      &-text {
+        margin-top: 5px;
+        font-size: 12px;
+        line-height: normal;
+        color: #8c8782;
+        display: block;
+      }
+
+      &--grouped {
+        background: #496cff;
+        color: white;
+      }
+
+      &--grouped &-text, &--grouped &-price {
+        color: white;
+      }
+    }
+  }
+</style>

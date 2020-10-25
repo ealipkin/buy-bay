@@ -5,6 +5,8 @@ import store from './store';
 
 import './scss/style.scss';
 import './assets/fonts/opensans.css';
+import vueAwesomeCountdown from 'vue-awesome-countdown'
+Vue.use(vueAwesomeCountdown, 'vac');
 
 Vue.config.productionTip = false;
 
