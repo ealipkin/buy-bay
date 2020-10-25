@@ -23,8 +23,9 @@
           include ../assets/icons/heart.svg
           span.header-main__favorites-number 23
           p.header-main__favorites-text избранное
-        a.header-main__user-block-text Регистрация
-        a.header-main__user-block-text.header-main__user-block-text--login Войти
+        .header-main__user-wrap
+          a.header-main__user-block-text Регистрация
+          a.header-main__user-block-text.header-main__user-block-text--login Войти
 
     .header-bottom.container
       ul.header-bottom__navigation-list
@@ -61,6 +62,10 @@ export default class Header extends Vue {
     padding: 18px 0;
     background-color: #f5f7fb;
 
+    @include mobile() {
+      display: none;
+    }
+
     &__inner {
       display: flex;
     }
@@ -91,21 +96,52 @@ export default class Header extends Vue {
     display: flex;
     align-items: center;
     padding: 12px 10px;
+    //@media(max-width: 970px) {
+    //  flex-wrap: wrap;
+    //}
 
     &__logo {
       margin-right: 55px;
+      @include mobile() {
+        margin-right: 15px;
+      }
+    }
+
+    &__logo-img {
+      @include mobile() {
+        width: 97px;
+      }
     }
 
     &__user-block {
       margin-left: auto;
       align-items: center;
       display: flex;
+      @media(max-width: 970px) {
+        margin-left: 0;
+      }
+
+      @include mobile() {
+        display: none;
+      }
+    }
+
+    &__user-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
     }
 
     &__user-block-favorites{
       text-decoration: none;
       position: relative;
       margin-right: 30px;
+      display: flex;
+      flex-direction: column;
+      svg {
+        display: flex;
+      }
     }
 
     &__favorites-number {
@@ -136,14 +172,15 @@ export default class Header extends Vue {
       font-size: 14px;
       color: #6c6c6c;
       font-weight: bold;
+      &:not(:last-child) {
+        margin-right: 25px;
+      }
 
       &--login {
         color: #222222;
         background-color: #f5f5f5;
         padding: 11px 27px;
         border-radius: 4px;
-
-        margin-left: 25px;
       }
     }
   }
@@ -151,12 +188,35 @@ export default class Header extends Vue {
   .input-search {
     display: flex;
     height: 44px;
+    @include mobile() {
+      height: 28px;
+      width: 100%;
+    }
+    //@media(max-width: 970px) {
+    //  order: 1;
+    //  margin-left: auto;
+    //  margin-right: auto;
+    //  margin-top: 13px;
+    //}
+
+    @include laptop() {
+      order: unset;
+    }
 
     &__inner {
       border: 2px solid #496cff;
       border-radius: 4px 0 0 4px;
       display: flex;
       position: relative;
+
+      @include mobile() {
+        border: none;
+        width: 100%;
+      }
+
+      @include laptop() {
+        flex-grow: 1;
+      }
 
       &::before {
         content: '';
@@ -166,6 +226,10 @@ export default class Header extends Vue {
         width: 16px;
         height: 16px;
         background-image: url('../assets/icons/find.svg');
+
+        @include mobile() {
+          top: 7px;
+        }
       }
     }
 
@@ -173,7 +237,14 @@ export default class Header extends Vue {
       border: none;
       border-right: 1px solid #ece1e1;
       padding: 0 10px 0 43px;
-      width: 307px;
+      max-width: 307px;
+      min-width: 200px;
+
+      @include mobile() {
+        border: 1px solid #496cff;
+        border-radius: 14px;
+        width: 100%;
+      }
 
       &:focus {
         outline: none;
@@ -200,6 +271,14 @@ export default class Header extends Vue {
       &:focus {
         outline: none;
       }
+
+      @media(max-width: 970px) {
+        display: none;
+      }
+
+      @include mobile() {
+        display: none;
+      }
     }
 
     &__submit-button {
@@ -215,6 +294,10 @@ export default class Header extends Vue {
       &:focus {
         outline: none;
       }
+
+      @include mobile() {
+        display: none;
+      }
     }
   }
 
@@ -225,11 +308,18 @@ export default class Header extends Vue {
       display: flex;
       padding: 0;
       list-style-type: none;
+
+      @include mobile() {
+        overflow: hidden;
+      }
     }
 
     &__navigation-list-item {
       &:not(:last-child) {
         margin-right: 40px;
+      }
+      @include mobile() {
+        flex-shrink: 0;
       }
     }
 

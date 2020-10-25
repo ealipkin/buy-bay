@@ -196,6 +196,8 @@ export default class Index extends Vue {
 
     &__list {
       display: flex;
+      flex-wrap: wrap;
+      gap: 70px;
       padding: 0;
       margin: 0;
       list-style-type: none;
@@ -205,10 +207,6 @@ export default class Index extends Vue {
     &__list-item {
       max-width: 333px;
       display: flex;
-
-      &:not(:first-child) {
-        margin-left: 77px;
-      }
     }
 
     &__list-img {

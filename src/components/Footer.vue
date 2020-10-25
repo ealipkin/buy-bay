@@ -17,21 +17,13 @@
             p.footer__description Мы в соц.сетях
 
             ul.footer__contacts-list.contacts-list
-              li.contacts-list__item
-                a.contacts-list__link
-                  img.contacts__logo-img(src="http://placehold.it/30x20")
-              li.contacts-list__item
-                a.contacts-list__link
-                  img.contacts__logo-img(src="http://placehold.it/30x20")
-              li.contacts-list__item
-                a.contacts-list__link
-                  img.contacts__logo-img(src="http://placehold.it/30x20")
-              li.contacts-list__item
-                a.contacts-list__link
-                  img.contacts__logo-img(src="http://placehold.it/30x20")
+              li(v-for="item in contacts").contacts-list__item
+                a.contacts-list__link(:href="item.href")
+                  img.contacts-list__link-img(:src="item.icon")
 
         .footer__col.footer__category
           p.footer__title.footer__category-title Категории
+          a.footer__title.footer__category-title-link Категории товаров
 
           ul.footer__category-list.footer__list
             li(v-for="item in categoryList").footer__category-item.footer__list-item
@@ -65,6 +57,25 @@ import { Component, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Footer extends Vue {
+  contacts = [
+    {
+      href: '',
+      icon: require('../assets/icons/ok.svg'),
+    },
+    {
+      href: '',
+      icon: require('../assets/icons/mail-icon.svg'),
+    },
+    {
+      href: '',
+      icon: require('../assets/icons/ok.svg'),
+    },
+    {
+      href: '',
+      icon: require('../assets/icons/mail-icon.svg'),
+    },
+  ]
+
   categoryList = [
     {
       title: 'Красота и здоровье',
@@ -209,6 +220,10 @@ export default class Footer extends Vue {
       text-align: left;
       margin-top: 10px;
       padding: 0;
+
+      @include mobile() {
+        margin-top: 0;
+      }
     }
 
     &__list-item {
@@ -223,16 +238,27 @@ export default class Footer extends Vue {
 
     &__inner {
       display: flex;
+
+      @include mobile() {
+        flex-direction: column;
+      }
     }
 
     &__content {
       display: flex;
       flex-direction: column;
+      @include mobile() {
+        align-items: center;
+      }
     }
 
     &__payments {
       margin-top: 35px;
       margin-bottom: 25px;
+
+      @include mobile() {
+        display: none;
+      }
     }
 
     &__payments-img {
@@ -267,15 +293,50 @@ export default class Footer extends Vue {
     &__category {
       margin-left: 62px;
       padding-top: 9px;
+
+      @include mobile() {
+        margin-left: 24px;
+        margin-top: 15px;
+      }
     }
 
     &__category-title {
+      @include mobile() {
+        display: none;
+      }
+    }
+
+    &__category-title-link {
+      font-size: 14px;
+      color: #ffffff;
+      font-weight: bold;
+      position: relative;
+      text-align: left;
+      display: none;
+
+      @include mobile() {
+        display: unset;
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        top: 3px;
+        left: -22px;
+        background-image: url('../assets/icons/show-more.svg');
+      }
     }
 
     &__category-list {
       display: flex;
       max-width: 703px;
       flex-wrap: wrap;
+
+      @include mobile() {
+        display: none;
+      }
     }
 
     &__category-item {
@@ -286,6 +347,12 @@ export default class Footer extends Vue {
       padding-top: 9px;
     }
 
+    &__assistance-title {
+      @include mobile() {
+        display: none;
+      }
+    }
+
     &__app {
       margin-top: 36px;
     }
@@ -294,6 +361,10 @@ export default class Footer extends Vue {
       list-style-type: none;
       padding: 0;
       margin: 0;
+
+      @include mobile() {
+        display: flex;
+      }
     }
 
     &__app-item {
@@ -303,6 +374,10 @@ export default class Footer extends Vue {
       height: 40px;
       width: 128px;
       padding: 6px 10px;
+
+      @include mobile() {
+        margin-right: 9px;
+      }
 
       &:not(:last-child) {
         margin-bottom: 8px;
@@ -319,7 +394,26 @@ export default class Footer extends Vue {
     &__item {
       &:not(:last-child) {
         margin-right: 18px;
+
+        @include mobile() {
+          margin-right: 9px;
+        }
       }
+    }
+
+    &__link {
+      @include mobile() {
+        width: 60px;
+        height: 36px;
+        background-color: #4a4a4a;
+        border-radius: 8px;
+        display: flex;
+      }
+
+    }
+
+    &__link-img {
+      margin: auto;
     }
   }
 </style>
