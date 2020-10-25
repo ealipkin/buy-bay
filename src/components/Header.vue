@@ -77,8 +77,8 @@ export default class Header extends Vue {
   .header {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.19);
 
-    @include tablet() {
-      outline: 2px solid red;
+    @include mobile() {
+      outline: 1px solid red;
     }
   }
 

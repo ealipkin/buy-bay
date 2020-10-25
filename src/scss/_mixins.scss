@@ -12,6 +12,12 @@
   }
 }
 
+@mixin mobile {
+  @media #{$mobile} {
+    @content;
+  }
+}
+
 @mixin desktop {
   @media #{$desktop} {
     @content;
