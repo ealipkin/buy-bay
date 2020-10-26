@@ -6,8 +6,7 @@
         img(src="../assets/icons/order-package.svg")
         span Заказов: {{divideNumberWithSpaces(this.item.orders)}}
       span.item-info__rate
-        img(src="../assets/icons/star.svg")
-        span {{item.rate}}
+
     .item-info__prices
       span.item-info__group-price {{divideNumberWithSpaces(item.groupPrice)}} ₽
       span.item-info__self-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
@@ -64,7 +63,8 @@ export default class ItemInfo extends Vue {
 <style lang="scss" scoped>
   .item-info {
     background: white;
-    padding: 27px 15px;
+    padding: 27px 15px 0;
+    margin-bottom: 12px;
 
     &__title {
       font-size: 16px;

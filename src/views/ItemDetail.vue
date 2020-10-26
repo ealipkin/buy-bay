@@ -4,6 +4,8 @@
       ItemPreview(:item="item")
       ItemInfo(:item="item")
       ItemGroups(:groups="groups")
+      ItemDescription(:item="item")
+      ItemShopCard(v-if="item.shop" :shop="item.shop")
 </template>
 
 <script lang="ts">
@@ -14,12 +16,16 @@ import { generateGroups, generateProducts } from '@/utils/data';
 import ItemPreview from '@/components/ItemPreview.vue';
 import ItemInfo from '@/components/ItemInfo.vue';
 import ItemGroups from '@/components/ItemGroups.vue';
+import ItemDescription from '@/components/ItemDescription.vue';
+import ItemShopCard from '@/components/ItemShopCard.vue';
 
 @Component({
   components: {
+    ItemShopCard,
     ItemInfo,
     ItemPreview,
     ItemGroups,
+    ItemDescription,
     Slick,
   },
 })

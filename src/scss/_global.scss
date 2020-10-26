@@ -10,3 +10,83 @@
 button, input {
   font-family: inherit;
 }
+
+
+.button {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: normal;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  min-height: 40px;
+  border-radius: 4px;
+  background-color: $blue;
+  box-shadow: none;
+  border: none;
+  padding: 0 20px;
+
+  &--disabled {
+    color: #222222;
+    background: #f5f5f5;
+  }
+}
+
+
+.content-title {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: normal;
+  letter-spacing: normal;
+  color: #222222;
+
+  @include laptop() {
+    font-size: 18px;
+  }
+}
+
+.slick-dots li {
+  width: 6px;
+  height: 6px;
+  box-sizing: border-box;
+  margin: 0 3px;
+}
+
+.slick-dots {
+  bottom: -32px;
+}
+
+.slick-dots li button {
+  width: 6px;
+  height: 6px;
+  background-color: #d8d8d8;
+  border-radius: 50%;
+  box-sizing: border-box;
+  padding: 0;
+
+  &:after, &:before {
+    display: none;
+  }
+}
+
+
+.slick-dots li.slick-active button {
+  background-color: $blue;
+}
+
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border: solid 1px #eee5e5;
+  border-radius: 50%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    display: block;
+  }
+}
+

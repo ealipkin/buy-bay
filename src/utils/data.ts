@@ -9,6 +9,7 @@ const featureDate = () => {
 };
 
 const PRODUCT_IMAGES = [''];
+const DESCRIPTION = '1. Внутри с отражающим серебром и поставляется с передним полупрозрачный диффузор, отлично подходит для speedlite, monolight, стробоскопа или раба.\n 2. Быстрый и легкий способ производства красивого рассеянного света.\n 3. Специально разработан для speedlites и strobist, необходимо иметь для съемки местоположения.\n 4. Независимый моноблок вспышки\n 5. Предназначен для цифровых и пленочных камер.\n 6. Все металлические конструкции высокого качества.\n 7. Встроены в рабские устройства-нет грязных проводов.\n 8. Совместимость с большинством вспышек камеры (толщина вспышки должна быть более 47 мм, если ниже 47 мм, пожалуйста, используйте некоторые карты, чтобы сделать его более толстым)';
 const PRODUCT_TITLES = ['Магнитный кабель с адаптером или адаптер', 'Просто кабель', 'Фото камера сумка через плечо крест цифровой'];
 const FEATURES: ProductFeature[] = [
   {
@@ -35,10 +36,13 @@ const createFeatures = () => {
   const featuresLength = getRandomNumberBetween(0, FEATURES.length);
   return FEATURES.slice(0, featuresLength);
 };
+
+const getRate = () => parseFloat(`${getRandomNumberBetween(0, 9)}.${getRandomNumberBetween(0, 9)}`);
+
 const createProduct = (item, index): Product => ({
   id: nanoid(),
   title: getRandomArrayElement(PRODUCT_TITLES),
-  rate: parseFloat(`${getRandomNumberBetween(0, 9)}.${getRandomNumberBetween(0, 9)}`),
+  rate: getRate(),
   groups: getRandomNumberBetween(0, 999),
   images: {
     preview: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/300`,
@@ -61,11 +65,18 @@ const createProduct = (item, index): Product => ({
       id: '2',
       values: [{ label: 'S (47)', value: 's' }, { label: 'M (48-50)', value: 'm', selected: true }, { label: 'L (50-52)', value: 'l' }]
     }],
-  description: '',
+  description: DESCRIPTION,
   selfPrice: getRandomNumberBetween(1000, 400000),
   groupPrice: getRandomNumberBetween(1000, 300000),
   orders: getRandomNumberBetween(1000, 700000),
   isFavourite: Boolean(getRandomNumberBetween(0, 1)),
+  shop: {
+    name: 'Nike',
+    image: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/50`,
+    orders: getRandomNumberBetween(100000, 500000),
+    rate: getRate(),
+    isFavourite: Boolean(getRandomNumberBetween(0, 1)),
+  }
 });
 
 const createGroup = (item, index): Group => ({

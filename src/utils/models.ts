@@ -58,6 +58,14 @@ export interface ProductImage {
   detail?: ProductDetailImage[];
 }
 
+export interface ProductShop {
+  name: string;
+  image: string;
+  orders: number;
+  rate: number;
+  isFavourite: boolean;
+}
+
 export interface Product {
   id: string;
   title: string;
@@ -71,6 +79,7 @@ export interface Product {
   groupPrice: number;
   orders: number;
   isFavourite: boolean;
+  shop?: ProductShop
 }
 
 export interface Group {
