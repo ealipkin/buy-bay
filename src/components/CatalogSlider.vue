@@ -44,12 +44,19 @@ export default class BigSlider extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 
   .catalog-slider {
     & > div {
       display: flex;
       overflow: auto;
+
+      @include laptop() {
+        overflow: visible;
+      }
+    }
+    .slick-prev, .slick-next {
+      background: red;
     }
   }
 </style>
