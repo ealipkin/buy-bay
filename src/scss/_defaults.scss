@@ -1,0 +1,55 @@
+.modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #222222;
+    margin-bottom: 10px;
+  }
+
+  &__text {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #222222;
+  }
+
+  &__content {
+    overflow: auto;
+    flex: 1;
+  }
+
+  &__header {
+    margin-bottom: 15px;
+
+    @include laptop() {
+      margin-bottom: 30px;
+    }
+  }
+
+  &__close.close {
+    position: absolute !important;
+    right: 23px;
+    top: 12px;
+    @include clearButton();
+
+    @include laptop() {
+      right: 34px;
+      top: 33px;
+      width: 25px !important;
+      height: 25px !important;
+    }
+  }
+}
+
+.v--modal-box {
+  background: white;
+  border-radius: 4px;
+
+  @include laptop() {
+    border-radius: 8px;
+  }
+}

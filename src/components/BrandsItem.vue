@@ -1,66 +1,118 @@
 <template lang="pug">
   .brands-item
     .brands-item__header
-      img.brands-item__logo-img(src="http://placehold.it/60x60")
+      img.brands-item__logo(:src="brand.image")
       .brands-item__header-inner
-        h3.brands-item__title Adidas
-        p.brands-item__category Спортивные товары
-
+        h3.brands-item__title {{brand.title}}
+        p.brands-item__category {{brand.category}}
+      Rate(:list="true" :rate="brand.rate").brands-item__rate
     ul.brands-item__list
-      li(v-for="item in items").brands-item__card
+      li(v-for="(item, index) in brand.items" :key="index").brands-item__card
         CatalogCardItem(:is-outlined="true" :item="item")
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
-import { generateProducts } from '@/utils/data';
+import Rate from '@/components/Rate.vue';
 
 @Component({
   components: {
+    Rate,
     CatalogCardItem,
   },
 })
 export default class BrandsItem extends Vue {
-  items = generateProducts(3)
+  @Prop() public brand!: any;
 }
 </script>
 
+<style lang="scss">
+  .brands-item {
+    .rate__item {
+      @include laptop() {
+        margin: 0 3px;
+        img {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+  }
+</style>
+
 <style scoped lang="scss">
   .brands-item {
-    padding: 24px 32px 45px 32px;
     background-color: #ffffff;
-    max-width: 569px;
     border-radius: 8px;
+    border: solid 1px #e7e7e7;
+    text-align: center;
+    padding: 10px 15px 15px 15px;
+    min-width: 136px;
+    @include laptop() {
+      min-width: 350px;
+    }
+    @include desktop() {
+      box-shadow: inset 0 -1px 0 0 #00000014;
+      border: none;
+      padding: 24px 32px 18px;
+      text-align: left;
+    }
 
-    &__logo-img {
+    &__logo {
       border-radius: 50%;
-      margin-right: 17px;
     }
 
     &__header {
-      display: flex;
-      align-items: center;
-      text-align: left;
-      margin-bottom: 32px;
+      @include laptop() {
+        display: flex;
+        align-items: center;
+      }
+
+      @include desktop() {
+        margin-bottom: 32px;
+      }
+
+      &-inner {
+        @include desktop() {
+
+        }
+      }
     }
 
     &__header-inner {
       display: flex;
       flex-direction: column;
+      @include laptop() {
+        margin-left: 18px;
+      }
     }
 
     &__title {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 14px;
       color: #222222;
-      margin: 0 0 4px 0;
+      margin: 0;
+      margin-top: 9px;
+      margin-bottom: 10px;
+
+      @include laptop() {
+        font-size: 18px;
+        margin: 0;
+      }
     }
 
     &__category {
-      font-size: 14px;
+      font-size: 11px;
+      line-height: 1.18;
       color: #7b8197;
       margin: 0;
+      margin-bottom: 9px;
+
+      @include laptop() {
+        font-size: 14px;
+        margin: 0;
+      }
     }
 
     &__list {
@@ -69,16 +121,28 @@ export default class BrandsItem extends Vue {
       list-style: none;
       display: none;
 
-      @include laptop() {
+      @include desktop() {
         display: flex;
       }
     }
 
     &__card {
-      width: 152px;
+      display: flex;
+      @include laptop() {
+        width: 30.8%;
+        margin-right: 3.6%;
 
-      &:not(:last-child) {
-        margin-right: 20px;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+
+    &__rate {
+      @include laptop() {
+        margin-left: auto;
+        align-self: flex-start;
+        margin-top: 15px;
       }
     }
   }

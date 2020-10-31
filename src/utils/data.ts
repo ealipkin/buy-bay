@@ -1,8 +1,8 @@
 import { Group, Product, PRODUCT_FEATURES, ProductFeature } from '@/utils/models';
 import { nanoid } from 'nanoid';
 
-const getRandomArrayElement = (array: any[]) => array[Math.floor(Math.random() * array.length)];
-const getRandomNumberBetween = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
+export const getRandomArrayElement = (array: any[]) => array[Math.floor(Math.random() * array.length)];
+export const getRandomNumberBetween = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
 
 const featureDate = () => {
   return new Date().getTime() + ((getRandomNumberBetween(10, 24) * 60 * 60 * 1000) * 0.9);
@@ -15,20 +15,14 @@ const FEATURES: ProductFeature[] = [
   {
     type: PRODUCT_FEATURES.DELIVERY,
     icon: '',
-    border: '#ffffff4c',
-    background: '#ffcc01',
   },
   {
     type: PRODUCT_FEATURES.DISCOUNT,
     icon: '',
-    border: '#ffffff4c',
-    background: '#5a9bff',
   },
   {
     type: PRODUCT_FEATURES.HOT,
     icon: '',
-    border: '#ffffff4c',
-    background: '#ef4141',
     time: featureDate(),
   }];
 
@@ -76,6 +70,11 @@ const createProduct = (item, index): Product => ({
     orders: getRandomNumberBetween(100000, 500000),
     rate: getRate(),
     isFavourite: Boolean(getRandomNumberBetween(0, 1)),
+  },
+  delivery: {
+    freeDelivery: '15-60 дней',
+    refundFrom: '15 дек. 2018',
+    refundTo: '22 янв. 2019',
   }
 });
 

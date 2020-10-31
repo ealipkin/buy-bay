@@ -19,6 +19,7 @@ export interface MenuItem {
   href: string;
   icon: string;
   inGeneralMenu?: boolean;
+  isActive?: boolean;
   brands?: BrandMenuItem[];
   children?: ChildItem[];
 }
@@ -42,8 +43,6 @@ export interface ProductOption {
 export interface ProductFeature {
   type: PRODUCT_FEATURES;
   icon: string;
-  border: string;
-  background: string;
   time?: number;
 }
 
@@ -56,6 +55,12 @@ export interface ProductDetailImage {
 export interface ProductImage {
   preview: string;
   detail?: ProductDetailImage[];
+}
+
+export interface ProductDelivery {
+  freeDelivery: string;
+  refundFrom: string;
+  refundTo: string;
 }
 
 export interface ProductShop {
@@ -79,7 +84,8 @@ export interface Product {
   groupPrice: number;
   orders: number;
   isFavourite: boolean;
-  shop?: ProductShop
+  shop?: ProductShop;
+  delivery?: ProductDelivery;
 }
 
 export interface Group {
@@ -90,4 +96,10 @@ export interface Group {
   joinedUsers: number;
   title: string;
   time: number;
+}
+
+export interface BreadcrumbLink {
+  href: string,
+  label: string,
+  current?: boolean,
 }

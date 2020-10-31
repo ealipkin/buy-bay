@@ -5,11 +5,13 @@
       span.item-info__orders
         img(src="../assets/icons/order-package.svg")
         span Заказов: {{divideNumberWithSpaces(this.item.orders)}}
-      span.item-info__rate
+      Rate(:rate="item.rate").item-info__rate
 
     .item-info__prices
       span.item-info__group-price {{divideNumberWithSpaces(item.groupPrice)}} ₽
-      span.item-info__self-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
+      span.item-info__self-price
+        span.item-info__self-price-value {{divideNumberWithSpaces(item.selfPrice)}}
+        span  ₽
     ul(v-if="item.options && item.options.length").item-info__options
       li(v-for="option in item.options").item-info__option
         h3.item-info__option-title {{option.title}}
@@ -33,9 +35,10 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Product } from '@/utils/models';
 import { divideNumberWithSpaces } from '@/utils/common';
+import Rate from '@/components/Rate.vue';
 
 @Component({
-  components: {},
+  components: { Rate },
 })
 export default class ItemInfo extends Vue {
   @Prop() public item!: Product;
@@ -66,12 +69,25 @@ export default class ItemInfo extends Vue {
     padding: 27px 15px 0;
     margin-bottom: 12px;
 
+    @include tablet() {
+      border-radius: 8px;
+      border: solid 1px #dfdfdf;
+      overflow: hidden;
+      padding: 23px 32px 0;
+      margin-bottom: 17px;
+    }
+
     &__title {
       font-size: 16px;
       line-height: normal;
       font-weight: bold;
       color: #222222;
       margin-bottom: 14px;
+
+      @include tablet() {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
     }
 
     &__orders {
@@ -87,23 +103,6 @@ export default class ItemInfo extends Vue {
       }
     }
 
-    &__rate {
-      font-size: 14px;
-      line-height: normal;
-      color: #7b8197;
-
-      display: flex;
-      align-items: center;
-
-      img {
-        margin-right: 7px;
-      }
-
-      span {
-        opacity: 0.9;
-      }
-    }
-
     &__info {
       display: flex;
       align-items: center;
@@ -115,17 +114,28 @@ export default class ItemInfo extends Vue {
 
     &__prices {
       display: none;
+
+      @include tablet() {
+        display: flex;
+      }
     }
 
     &__options {
       @include clearList();
       margin-top: 30px;
+
+      @include tablet() {
+        margin-top: 20px;
+      }
     }
 
     &__option {
       margin-bottom: 11px;
       border-bottom: 1px solid #ededed;
       padding-bottom: 7px;
+      @include tablet() {
+        margin-bottom: 17px;
+      }
 
       &:last-child {
         margin-bottom: 0;
@@ -174,6 +184,10 @@ export default class ItemInfo extends Vue {
     &__option-list {
       display: flex;
       flex-wrap: wrap;
+
+      @include tablet() {
+        padding-bottom: 10px;
+      }
     }
 
     &__actions {
@@ -183,6 +197,31 @@ export default class ItemInfo extends Vue {
       margin-top: 16px;
       margin-left: -15px;
       margin-right: -15px;
+
+      @include tablet() {
+        margin-left: -32px;
+        margin-right: -32px;
+        border-bottom: none;
+      }
+    }
+
+    &__group-price {
+      font-size: 32px;
+      font-weight: 600;
+      color: $blue;
+      margin-right: 22px;
+    }
+
+    &__self-price {
+      font-size: 18px;
+      font-weight: 600;
+      color: #7b8197;
+
+      padding-bottom: 5px;
+
+      &-value {
+        text-decoration: line-through;
+      }
     }
 
     &__fav, &__buy {
@@ -199,6 +238,10 @@ export default class ItemInfo extends Vue {
       color: #496cff;
       border-right: 1px solid #ede9e9;
       padding: 19px 12px;
+
+      @include tablet() {
+        padding: 24px 22px;
+      }
     }
 
     &__buy {
@@ -215,6 +258,10 @@ export default class ItemInfo extends Vue {
         text-align: center;
         color: #452608;
         display: block;
+
+        @include tablet() {
+          font-size: 24px;
+        }
       }
 
       &-text {

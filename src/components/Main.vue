@@ -15,6 +15,6 @@ export default class Main extends Vue {
 
 <style scoped lang="scss">
   .main {
-    padding-top: 40px;
+    /*padding-top: 40px;*/
   }
 </style>

@@ -65,7 +65,7 @@ export default class ItemPreview extends Vue {
 <style lang="scss" scoped>
   .item-preview {
     background: white;
-    max-width: 686px;
+    /*max-width: 686px;*/
     border-radius: 8px;
     padding: 14px 16px;
     box-sizing: border-box;
@@ -102,7 +102,7 @@ export default class ItemPreview extends Vue {
       display: flex;
       align-items: center;
       overflow: auto;
-      padding: 2px 0;
+      padding: 2px 1px;
     }
 
     &__bottom-slide {

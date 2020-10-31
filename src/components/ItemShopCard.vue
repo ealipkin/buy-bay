@@ -21,5 +21,20 @@ export default class ItemShopCard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .item-shop-card {}
+  .item-shop-card {
+    background: white;
+    margin-top: 16px;
+    padding: 17px 15px 14px;
+
+    @include tablet() {
+      border-radius: 8px;
+      border: solid 1px #dfdfdf;
+      overflow: hidden;
+      padding: 22px 31px 31px;
+    }
+
+    &__title {
+      margin-bottom: 22px;
+    }
+  }
 </style>

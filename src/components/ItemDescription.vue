@@ -1,7 +1,7 @@
 <template lang="pug">
   .item-description
     .item-description__title.content-title Описание товара
-    ShowMoreText(:text="item.description" :lines="12" @click="change" moreText='Показать полностью' lessText='Скрыть').item-description__text
+    ShowMoreText(:text="item.description" :lines="12" moreText='Показать полностью' lessText='Скрыть').item-description__text
 
 </template>
 
@@ -24,6 +24,13 @@ export default class ItemDescription extends Vue {
     background: white;
     padding: 15px;
     margin-top: 12px;
+
+    @include tablet() {
+      margin-top: 17px;
+      border-radius: 8px;
+      border: solid 1px #dfdfdf;
+      padding: 34px 40px 45px;
+    }
 
     &__text {
       font-size: 14px;

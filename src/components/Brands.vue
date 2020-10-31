@@ -1,19 +1,13 @@
 <template lang="pug">
-  section.brands
-    .container
-      h2.brands__title Лучшие бренды
-
+  .brands
+    .brands__pane
       Slick(ref="slick" :options="sliderSettings").brands__slider
-        BrandsItem
-        BrandsItem
-        BrandsItem
-        BrandsItem
-        BrandsItem
-        BrandsItem
+        span(v-for="brand in brands" :key="brand.id").brands__item
+          BrandsItem(:brand="brand")
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import BrandsItem from '@/components/BrandsItem.vue';
 import Slick from 'vue-slick';
 
@@ -24,17 +18,17 @@ import Slick from 'vue-slick';
   },
 })
 export default class Brands extends Vue {
+  @Prop() public brands!: any[];
   sliderSettings = {
     mobileFirst: true,
     responsive: [
       {
-        breakpoint: '320',
+        breakpoint: '300',
         settings: 'unslick',
       },
       {
         breakpoint: '1200',
         settings: {
-          rows: 1,
           slidesToShow: 2,
           slidesToScroll: 1,
         },
@@ -44,11 +38,40 @@ export default class Brands extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
-
+<style lang="scss">
   .brands {
-    background-color: #f7f7fa;
-    padding: 36px 0 80px;
+    .slick-prev {
+      @include desktop() {
+        left: -63px;
+        margin-top: -85px;
+      }
+    }
+
+    .slick-next {
+      @include desktop() {
+        right: -69px;
+        margin-top: -85px;
+      }
+    }
+
+    .catalog-card {
+      @include desktop() {
+        border: solid 1px #e7e7e7 !important;
+      }
+    }
+  }
+</style>
+
+<style scoped lang="scss">
+  .brands {
+    /*background-color: #f7f7fa;*/
+    background-color: white;
+    overflow: hidden;
+
+    @include desktop() {
+      background: transparent;
+      overflow: visible;
+    }
 
     &__title {
       text-align: left;
@@ -58,10 +81,29 @@ export default class Brands extends Vue {
       margin-bottom: 42px;
     }
 
+    &__pane {
+      margin-bottom: -30px;
+    }
+
     &__slider {
       display: flex;
       justify-content: space-between;
       overflow: auto;
+      padding-bottom: 30px;
+
+      @include desktop() {
+        overflow: visible;
+        margin-left: -10px;
+        margin-right: -10px;
+      }
+    }
+
+    &__item {
+      padding-left: 10px;
+
+      &:last-child {
+        padding-right: 10px;
+      }
     }
   }
 </style>

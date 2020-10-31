@@ -3,8 +3,8 @@
     .container.footer__content
       .footer__inner
         .footer__col.footer__info
-          a.footer__logo
-            img.footer__logo-img(src="http://placehold.it/130x40")
+          router-link(to="/").footer__logo
+            include ../assets/icons/logo.svg
 
           .footer__payments
             p.footer__payments-title.footer__description Мы принимаем
@@ -60,21 +60,21 @@ export default class Footer extends Vue {
   contacts = [
     {
       href: '',
+      icon: require('../assets/icons/vk.svg'),
+    },
+    {
+      href: '',
+      icon: require('../assets/icons/fb.svg'),
+    },
+    {
+      href: '',
       icon: require('../assets/icons/ok.svg'),
     },
     {
       href: '',
       icon: require('../assets/icons/mail-icon.svg'),
     },
-    {
-      href: '',
-      icon: require('../assets/icons/ok.svg'),
-    },
-    {
-      href: '',
-      icon: require('../assets/icons/mail-icon.svg'),
-    },
-  ]
+  ];
 
   categoryList = [
     {
@@ -169,7 +169,7 @@ export default class Footer extends Vue {
       title: 'Игрушки',
       href: '#',
     },
-  ]
+  ];
 
   assistanceList = [
     {
@@ -188,23 +188,48 @@ export default class Footer extends Vue {
       title: 'Участие в исследованиях',
       href: '#',
     },
-  ]
+  ];
 }
 </script>
 
 <style scoped lang="scss">
   .footer {
     background-color: #353535;
-    padding-top: 32px;
+    padding-top: 18px;
+    padding-bottom: 35px;
+
+    @include laptop() {
+      padding-top: 31px;
+      padding-bottom: 12px;
+    }
+
+    &__col {
+      @include tablet() {
+        width: 28%;
+      }
+
+      @include laptop() {
+        width: auto;
+      }
+    }
 
     &__logo {
       margin-right: auto;
+      width: 140px;
+      color: white;
+
+      svg {
+        width: 100%;
+      }
     }
 
     &__info {
-      max-width: 175px;
       display: flex;
       flex-direction: column;
+      @include desktop() {
+        width: 20.7%;
+      }
+
     }
 
     &__title {
@@ -216,18 +241,19 @@ export default class Footer extends Vue {
     }
 
     &__list {
+      @include clearList();
       list-style-type: none;
       text-align: left;
-      margin-top: 10px;
-      padding: 0;
+      margin-top: 13px;
 
-      @include mobile() {
-        margin-top: 0;
-      }
     }
 
     &__list-item {
-      padding-top: 17px;
+      margin-bottom: 13px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
     &__list-link {
@@ -238,26 +264,27 @@ export default class Footer extends Vue {
 
     &__inner {
       display: flex;
+      margin-left: 7px;
+      flex-direction: column;
 
-      @include mobile() {
-        flex-direction: column;
+      @include tablet() {
+        margin-left: 0;
+        flex-direction: row;
+        justify-content: space-between;
       }
     }
 
     &__content {
-      display: flex;
-      flex-direction: column;
-      @include mobile() {
-        align-items: center;
-      }
     }
 
     &__payments {
-      margin-top: 35px;
-      margin-bottom: 25px;
 
-      @include mobile() {
-        display: none;
+      display: none;
+      margin-top: 24px;
+      margin-bottom: 21px;
+
+      @include desktop() {
+        display: block;
       }
     }
 
@@ -275,13 +302,21 @@ export default class Footer extends Vue {
       font-size: 14px;
       color: #7b8197;
       text-align: left;
+      margin: 0;
+      margin-top: 18px;
+      margin-bottom: 10px;
     }
 
     &__copyright {
-      padding-top: 14px;
-      margin-top: 39px;
+      padding-top: 9px;
+      margin-top: 32px;
       border-top: 1px solid #d9d9e7;
       opacity: 0.2;
+      display: none;
+
+      @include laptop() {
+        display: block;
+      }
     }
 
     &__copyright-text {
@@ -291,32 +326,29 @@ export default class Footer extends Vue {
     }
 
     &__category {
-      margin-left: 62px;
-      padding-top: 9px;
-
-      @include mobile() {
-        margin-left: 24px;
-        margin-top: 15px;
+      @include desktop() {
+        margin-top: 9px;
       }
     }
 
     &__category-title {
-      @include mobile() {
-        display: none;
+      display: none;
+
+      @include desktop() {
+        display: block;
+        margin-bottom: 23px;
       }
     }
 
     &__category-title-link {
+      margin-top: 25px;
+      display: block;
       font-size: 14px;
       color: #ffffff;
       font-weight: bold;
       position: relative;
       text-align: left;
-      display: none;
-
-      @include mobile() {
-        display: unset;
-      }
+      padding-left: 27px;
 
       &::before {
         content: '';
@@ -324,8 +356,12 @@ export default class Footer extends Vue {
         width: 15px;
         height: 15px;
         top: 3px;
-        left: -22px;
+        left: 0;
         background-image: url('../assets/icons/show-more.svg');
+      }
+
+      @include tablet() {
+        display: none;
       }
     }
 
@@ -348,13 +384,17 @@ export default class Footer extends Vue {
     }
 
     &__assistance-title {
-      @include mobile() {
-        display: none;
+      display: none;
+      @include desktop() {
+        display: block;
+        margin-bottom: 21px;
       }
     }
 
     &__app {
-      margin-top: 36px;
+      @include laptop() {
+        margin-top: 36px;
+      }
     }
 
     &__app-list {
@@ -362,8 +402,10 @@ export default class Footer extends Vue {
       padding: 0;
       margin: 0;
 
-      @include mobile() {
-        display: flex;
+      display: flex;
+
+      @include tablet() {
+        display: block;
       }
     }
 
@@ -374,13 +416,12 @@ export default class Footer extends Vue {
       height: 40px;
       width: 128px;
       padding: 6px 10px;
+      margin: 0;
+      margin-right: 9px;
 
-      @include mobile() {
-        margin-right: 9px;
-      }
-
-      &:not(:last-child) {
-        margin-bottom: 8px;
+      @include tablet() {
+        margin-right: 0;
+        margin-bottom: 9px;
       }
     }
   }
@@ -390,30 +431,40 @@ export default class Footer extends Vue {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    flex-wrap: wrap;
 
     &__item {
-      &:not(:last-child) {
-        margin-right: 18px;
+      margin-right: 9px;
 
-        @include mobile() {
-          margin-right: 9px;
-        }
+      &:last-child {
+        margin-right: 0;
       }
     }
 
     &__link {
-      @include mobile() {
-        width: 60px;
-        height: 36px;
-        background-color: #4a4a4a;
-        border-radius: 8px;
-        display: flex;
-      }
+      margin-bottom: 10px;
+      width: 60px;
+      height: 36px;
+      background-color: #4a4a4a;
+      border-radius: 8px;
+      display: flex;
 
+      @include desktop() {
+        width: 40px;
+        background: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.5;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
 
     &__link-img {
       margin: auto;
     }
+
   }
 </style>

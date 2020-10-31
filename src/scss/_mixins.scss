@@ -37,6 +37,13 @@
   list-style: none;
 }
 
+@mixin favButton() {
+  border: none;
+  padding: 0;
+  background: none;
+  color: $blue;
+}
+
 @mixin loader($color: $red) {
   border: 4px double;
   border-radius: 50%;
@@ -52,6 +59,52 @@
   border-right: 0;
   transform: rotate(-45deg);
 }
+
+@mixin clearButton() {
+  padding: 0;
+  margin: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+}
+
+@mixin close() {
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  border-radius: 50%;
+
+  flex-shrink: 0;
+  font-size: 0;
+  cursor: pointer;
+  display: block;
+  transition: opacity .5s ease;
+  position: relative;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &:after, &:before {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: #a6acc2;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &:after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+}
+
+.close {
+  @include close();
+}
+
 
 @keyframes loader-spin {
   100% {
