@@ -1,5 +1,5 @@
-export default function(element, action) {
-  document.addEventListener('click', function(e) {
+export default function (element, action) {
+  document.addEventListener('click', (e) => {
     let target;
     if (typeof element === 'string') {
       target = document.querySelector(element);

@@ -1,12 +1,12 @@
-import { Group, Product, PRODUCT_FEATURES, ProductFeature } from '@/utils/models';
+import {
+  Group, Product, PRODUCT_FEATURES, ProductFeature,
+} from '@/utils/models';
 import { nanoid } from 'nanoid';
 
 export const getRandomArrayElement = (array: any[]) => array[Math.floor(Math.random() * array.length)];
 export const getRandomNumberBetween = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
 
-const featureDate = () => {
-  return new Date().getTime() + ((getRandomNumberBetween(10, 24) * 60 * 60 * 1000) * 0.9);
-};
+const featureDate = () => new Date().getTime() + ((getRandomNumberBetween(10, 24) * 60 * 60 * 1000) * 0.9);
 
 const PRODUCT_IMAGES = [''];
 const DESCRIPTION = '1. Внутри с отражающим серебром и поставляется с передним полупрозрачный диффузор, отлично подходит для speedlite, monolight, стробоскопа или раба.\n 2. Быстрый и легкий способ производства красивого рассеянного света.\n 3. Специально разработан для speedlites и strobist, необходимо иметь для съемки местоположения.\n 4. Независимый моноблок вспышки\n 5. Предназначен для цифровых и пленочных камер.\n 6. Все металлические конструкции высокого качества.\n 7. Встроены в рабские устройства-нет грязных проводов.\n 8. Совместимость с большинством вспышек камеры (толщина вспышки должна быть более 47 мм, если ниже 47 мм, пожалуйста, используйте некоторые карты, чтобы сделать его более толстым)';
@@ -42,7 +42,7 @@ const createProduct = (item, index): Product => ({
     preview: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/300`,
     detail: new Array(getRandomNumberBetween(1, 5)).fill({}).map(() => ({
       url: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/700`,
-    }))
+    })),
   },
   features: createFeatures(),
   options: [
@@ -51,13 +51,13 @@ const createProduct = (item, index): Product => ({
       id: '1',
       values: [{ label: 'Красный', value: 'red' }, { label: 'Розовый', value: 'pink', selected: true }, {
         label: 'Фиолетовый',
-        value: 'cyan'
-      }]
+        value: 'cyan',
+      }],
     },
     {
       title: 'Размер',
       id: '2',
-      values: [{ label: 'S (47)', value: 's' }, { label: 'M (48-50)', value: 'm', selected: true }, { label: 'L (50-52)', value: 'l' }]
+      values: [{ label: 'S (47)', value: 's' }, { label: 'M (48-50)', value: 'm', selected: true }, { label: 'L (50-52)', value: 'l' }],
     }],
   description: DESCRIPTION,
   selfPrice: getRandomNumberBetween(1000, 400000),
@@ -75,7 +75,7 @@ const createProduct = (item, index): Product => ({
     freeDelivery: '15-60 дней',
     refundFrom: '15 дек. 2018',
     refundTo: '22 янв. 2019',
-  }
+  },
 });
 
 const createGroup = (item, index): Group => ({
@@ -88,6 +88,6 @@ const createGroup = (item, index): Group => ({
   time: featureDate(),
 });
 
-export const generateProducts = (count: number) => new Array(count).fill({}).map(createProduct);
+export const generateProducts = (count: number): Product[] => new Array(count).fill({}).map(createProduct);
 
 export const generateGroups = (count: number) => new Array(count).fill({}).map(createGroup);

@@ -55,13 +55,12 @@ export default {
     };
   },
   computed: {
-    additionalCss: function () {
+    additionalCss() {
       if (this.expanded) {
         return this.additionalContentCss;
-      } else {
-        return this.additionalContentExpandedCss;
       }
-    }
+      return this.additionalContentExpandedCss;
+    },
   },
   mounted() {
     this.$nextTick(function () {
@@ -79,8 +78,8 @@ export default {
       this.$emit('click', this.expanded);
     },
     determineShowMore() {
-      this.triggerShowMore = this.$refs.detail &&
-        this.$refs.detail.offsetHeight < this.$refs.detail.scrollHeight;
+      this.triggerShowMore = this.$refs.detail
+        && this.$refs.detail.offsetHeight < this.$refs.detail.scrollHeight;
     },
   },
 };

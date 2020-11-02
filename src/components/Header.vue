@@ -39,7 +39,7 @@ import MainNav from '@/components/MainNav.vue';
 import router from '@/router';
 
 @Component({
-  components: { MainNav }
+  components: { MainNav },
 })
 export default class Header extends Vue {
   search = '';
@@ -51,7 +51,6 @@ export default class Header extends Vue {
     if (this.search && this.search.length) {
       router.push({ path: '/search', query: { q: this.search } });
     }
-    return;
   }
 }
 </script>

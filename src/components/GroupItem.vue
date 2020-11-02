@@ -24,7 +24,6 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Group } from '@/utils/models';
 
-
 @Component({})
 export default class GroupItem extends Vue {
   @Prop() public group!: Group;

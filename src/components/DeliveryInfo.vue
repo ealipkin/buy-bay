@@ -11,7 +11,6 @@
           span {{deliveryItem.refundTo}}
         .delivery-info__text Вернем деньги в спортных случаях
 
-
 </template>
 
 <script lang="ts">

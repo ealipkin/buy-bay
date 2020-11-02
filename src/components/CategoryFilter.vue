@@ -16,14 +16,12 @@
                   include ../assets/icons/search.svg
                 input(type="search" @input="handleSearch" placeholder="Поиск").category-filter__search-field.input__field
 
-
             div(v-if="filter.type === 'checkbox'").category-filter__block.category-filter__block--checkbox
               label(v-for="item in filter.items").checkbox
                 input(type="checkbox" :checked="item.selected" :value="item.value").visually-hidden
                 span.checkbox__icon
                 span.checkbox__text {{item.label}}
                 span.checkbox__count {{item.count}}
-
 
             div(v-if="filter.type === 'accordion'").category-filter__block.category-filter__block--accordion
               .accordion.category-filter__accordion
@@ -33,10 +31,8 @@
                   div(:class="{'accordion__content--open': accordion.isOpen}").accordion__content.category-filter__accordion-items
                     button(v-for="item in accordion.items" type="button").category-filter__accordion-item {{item.label}}
 
-
             div(v-if="filter.type === 'color'").category-filter__block.category-filter__block--color
               ColorSelect(:colors="filter.items").category-filter__colors
-
 
             div(v-if="filter.type === 'radio'").category-filter__block.category-filter__block--radio
               label(v-for="item in filter.items").radio
@@ -46,7 +42,6 @@
 
         button(type="button" @click="handleSumbit").button.category-filter__submit Применить
 
-
 </template>
 
 <script lang="ts">
@@ -54,7 +49,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import ColorSelect from '@/components/ColorSelect.vue';
 
 @Component({
-  components: { ColorSelect }
+  components: { ColorSelect },
 })
 export default class CategoryFilter extends Vue {
   @Prop() public filters!: any[];
@@ -90,14 +85,17 @@ export default class CategoryFilter extends Vue {
 </script>
 
 <style lang="scss">
-  .radio {
-    margin-bottom: 20px;
-
-    &:last-child {
+  .category-filter {
+    .radio {
       margin-bottom: 20px;
+
+      &:last-child {
+        margin-bottom: 20px;
+      }
     }
   }
 </style>
+
 <style scoped lang="scss">
   .category-filter {
     border-radius: 8px;

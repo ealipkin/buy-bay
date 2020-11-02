@@ -12,7 +12,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class ColorSelect extends Vue {
-  @Prop() public colors!: { id: string | number, color: string, selected: boolean }[];
+  @Prop() public colors!: { id: string | number; color: string; selected: boolean }[];
+
   visibleCount = 6;
 
   showAll() {

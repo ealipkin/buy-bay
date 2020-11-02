@@ -34,7 +34,7 @@ export default class BigSlider extends Vue {
         breakpoint: '300',
         settings: {
           dots: true,
-        }
+        },
       },
       {
         breakpoint: '1023',
@@ -174,7 +174,6 @@ export default class BigSlider extends Vue {
         margin-bottom: -5px;
       }
     }
-
 
     &__link {
       display: block;

@@ -10,7 +10,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import Select from '@/components/Select.vue';
 
 @Component({
-  components: { Select }
+  components: { Select },
 })
 export default class SortSelect extends Vue {
   @Prop() public options!: any[];

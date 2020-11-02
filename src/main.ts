@@ -9,10 +9,10 @@ import vueAwesomeCountdown from 'vue-awesome-countdown';
 import Paginate from 'vuejs-paginate';
 import VueTruncate from 'vue-truncate-filter';
 
+import VModal from 'vue-js-modal';
+
 Vue.use(vueAwesomeCountdown, 'vac');
 Vue.use(VueTruncate);
-
-import VModal from 'vue-js-modal'
 
 Vue.config.productionTip = false;
 Vue.use(VModal);

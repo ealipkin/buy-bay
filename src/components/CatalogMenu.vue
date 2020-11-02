@@ -39,7 +39,6 @@
                 router-link(:to="brand.href" :title="brand.title")
                   img(:src="require('@/assets/' + brand.imageUrl + '')")
 
-
 </template>
 
 <script lang="ts">
@@ -49,9 +48,10 @@ import { MenuItem } from '@/utils/models';
 @Component
 export default class CatalogMenu extends Vue {
   @Prop() public links!: MenuItem[];
+
   childMenu: MenuItem | null = null;
 
-  subMenuOpen: boolean = false;
+  subMenuOpen = false;
 
   mounted() {
     this.childMenu = this.links[0];
@@ -151,7 +151,6 @@ export default class CatalogMenu extends Vue {
     &__brands {
       display: none;
       @include clearList();
-
 
       img {
         max-width: 100%;

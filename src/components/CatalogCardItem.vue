@@ -40,7 +40,7 @@ import { divideNumberWithSpaces } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
 
 @Component({
-  components: { Rate }
+  components: { Rate },
 })
 export default class CatalogCardItem extends Vue {
   @Prop({ type: Boolean, default: false }) public isOutlined!: boolean;
@@ -134,7 +134,6 @@ export default class CatalogCardItem extends Vue {
     &__group-text {
       margin: 0;
     }
-
 
     &__price {
       display: flex;

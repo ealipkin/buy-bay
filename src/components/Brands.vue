@@ -22,6 +22,7 @@ import Slick from 'vue-slick';
 })
 export default class Brands extends Vue {
   @Prop() public brands!: any[];
+
   windowWidth = 0;
 
   sliderSettings = {
@@ -41,7 +42,6 @@ export default class Brands extends Vue {
   get isMobile() {
     return this.windowWidth < 1296;
   }
-
 
   handleResize() {
     this.windowWidth = window.innerWidth;

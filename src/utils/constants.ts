@@ -4,7 +4,7 @@ export const breakPoints = {
   mobile: 320,
   tablet: 768,
   laptop: 1024,
-  desktop: 1296
+  desktop: 1296,
 };
 
 export const MENU_ITEMS: MenuItem[] = [
@@ -185,79 +185,79 @@ export const FILTERS = [
         label: 'Banana Republic',
         count: 342,
         selected: true,
-        value: '1'
+        value: '1',
       },
       {
         id: 2,
         label: 'Calvin Klein',
         count: 13,
         selected: true,
-        value: '2'
+        value: '2',
       },
       {
         id: 3,
         label: 'Casio',
         count: 119,
         selected: false,
-        value: '3'
+        value: '3',
       },
       {
         id: 4,
         label: 'Adidas',
         count: 119,
         selected: false,
-        value: '4'
+        value: '4',
       },
       {
         id: 5,
         label: 'Dolce & Gabbana',
         count: 13,
         selected: true,
-        value: '5'
+        value: '5',
       },
       {
         id: 6,
         label: 'Nike',
         count: 119,
         selected: false,
-        value: '6'
+        value: '6',
       },
       {
         id: 7,
         label: 'Puma',
         count: 1,
         selected: false,
-        value: '7'
+        value: '7',
       },
       {
         id: 8,
         label: 'Adidas',
         count: 119,
         selected: false,
-        value: '8'
+        value: '8',
       },
       {
         id: 9,
         label: 'Dolce & Gabbana',
         count: 13,
         selected: true,
-        value: '9'
+        value: '9',
       },
       {
         id: 10,
         label: 'Nike',
         count: 119,
         selected: false,
-        value: '10'
+        value: '10',
       },
       {
         id: 11,
         label: 'Puma',
         count: 1,
         selected: false,
-        value: '11'
+        value: '11',
       },
-    ]
+    ],
   },
   {
     label: 'Категории',
@@ -271,7 +271,7 @@ export const FILTERS = [
           { id: 3, label: 'Pants & Jeans' },
           { id: 4, label: 'T-shirts & Shirts' },
           { id: 5, label: 'Shoes' },
-        ]
+        ],
       },
       {
         label: 'Women',
@@ -281,7 +281,7 @@ export const FILTERS = [
           { id: 3, label: 'Pants & Jeans' },
           { id: 4, label: 'T-shirts & Shirts' },
           { id: 5, label: 'Shoes' },
-        ]
+        ],
       },
       {
         label: 'Kids',
@@ -291,7 +291,7 @@ export const FILTERS = [
           { id: 3, label: 'Pants & Jeans' },
           { id: 4, label: 'T-shirts & Shirts' },
           { id: 5, label: 'Shoes' },
-        ]
+        ],
       },
       {
         label: 'Accessories',
@@ -301,9 +301,9 @@ export const FILTERS = [
           { id: 3, label: 'Pants & Jeans' },
           { id: 4, label: 'T-shirts & Shirts' },
           { id: 5, label: 'Shoes' },
-        ]
+        ],
       },
-    ]
+    ],
   },
   {
     label: 'Цвета',
@@ -361,16 +361,18 @@ export const FILTERS = [
         id: 12,
         color: '#467cff',
       },
-    ]
+    ],
   },
   {
     label: 'Доставка',
     type: 'radio',
     name: 'delivery',
     items: [
-      { id: 1, label: 'Бесплатная доставка', value: 'free', selected: true },
+      {
+        id: 1, label: 'Бесплатная доставка', value: 'free', selected: true,
+      },
       { id: 2, label: 'Быстрая доставка', value: 'fast' },
       { id: 3, label: 'DHL доставка', value: 'dhl' },
-    ]
-  }
+    ],
+  },
 ];

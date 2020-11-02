@@ -28,9 +28,13 @@ import { Product } from '@/utils/models';
 })
 export default class BigSlider extends Vue {
   @Prop() public items!: Product[];
+
   windowWidth;
+
   isMobile = false;
+
   isLaptop = false;
+
   isDesktop = false;
 
   public reInit() {

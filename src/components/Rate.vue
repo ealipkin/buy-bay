@@ -15,6 +15,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component({})
 export default class Rate extends Vue {
   @Prop() public rate!: number;
+
   @Prop() public list!: boolean;
 }
 

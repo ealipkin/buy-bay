@@ -20,7 +20,6 @@
           router-link(to="#").section-link Показать еще
         TopCategories(:categories="topCategories")
 
-
     section.section.section--catalog-slider
       .section-header.section-header--hide-desktop
         .section-title Горящие группы
@@ -78,10 +77,15 @@ import Advantages from '@/components/Advantages.vue';
 })
 export default class Index extends Vue {
   slidersMap = {};
+
   selectedTab = 1;
+
   popularItems = generateProducts(30);
+
   hotItems = generateProducts(30);
+
   bestItems = generateProducts(30);
+
   seoBlockDescription = [
     'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
     'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
@@ -163,7 +167,7 @@ export default class Index extends Vue {
       title: 'Adidas',
       category: 'Спортивные товары',
       rate: 5,
-      items: generateProducts(3)
+      items: generateProducts(3),
     },
     {
       id: 2,
@@ -171,7 +175,7 @@ export default class Index extends Vue {
       title: 'Calvin klein',
       category: 'Мужская и женская одежда',
       rate: 4,
-      items: generateProducts(3)
+      items: generateProducts(3),
     },
     {
       id: 3,
@@ -179,7 +183,7 @@ export default class Index extends Vue {
       title: 'Adidas',
       category: 'Спортивные товары',
       rate: 3,
-      items: generateProducts(3)
+      items: generateProducts(3),
     },
     {
       id: 4,
@@ -187,8 +191,8 @@ export default class Index extends Vue {
       title: 'Calvin klein',
       category: 'Мужская и женская одежда',
       rate: 2,
-      items: generateProducts(3)
-    }
+      items: generateProducts(3),
+    },
   ];
 
   tabs = [
@@ -204,7 +208,7 @@ export default class Index extends Vue {
     {
       id: 3,
       label: 'Бестселлеры',
-    }
+    },
   ];
 
   mounted() {
@@ -212,7 +216,7 @@ export default class Index extends Vue {
       1: { ref: this.$refs.slickPopular, init: false },
       2: { ref: this.$refs.slickHot, init: false },
       3: { ref: this.$refs.slickBest, init: false },
-    }
+    };
   }
 
   selectTab(tabId) {

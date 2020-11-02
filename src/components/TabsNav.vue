@@ -16,7 +16,7 @@ export default class TabsNav extends Vue {
     if (tab.isActive) {
       return;
     }
-    this.tabs.forEach(tab => tab.isActive = false);
+    this.tabs.forEach((tab) => tab.isActive = false);
     tab.isActive = true;
     console.log(this.$refs);
     this.$emit('change', tab.id);

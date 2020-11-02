@@ -3,11 +3,11 @@ export const divideNumberWithSpaces = (number: number): string => String(number)
 export const debounce = (fn, time) => {
   let timeout;
 
-  return function() {
+  return function () {
     // @ts-ignore
     const functionCall = () => fn.apply(this, arguments);
 
     clearTimeout(timeout);
     timeout = setTimeout(functionCall, time);
-  }
+  };
 };

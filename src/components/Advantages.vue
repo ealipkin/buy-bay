@@ -16,7 +16,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class Advantages extends Vue {
   @Prop() public advantagesList!: any[];
-
 }
 </script>
 

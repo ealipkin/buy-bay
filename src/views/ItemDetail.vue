@@ -63,7 +63,7 @@ export default class ItemDetail extends Vue {
 
   get isMobile() {
     return this.window.width < breakPoints.tablet;
-  };
+  }
 
   get isTablet() {
     return this.window.width >= breakPoints.tablet && this.window.width < breakPoints.laptop;
@@ -71,11 +71,13 @@ export default class ItemDetail extends Vue {
 
   window = {
     width: 0,
-    height: 0
+    height: 0,
   };
 
   item = generateProducts(1).pop();
+
   groups = generateGroups(12);
+
   similarItems = generateProducts(8);
 
   seoBlockDescription = [

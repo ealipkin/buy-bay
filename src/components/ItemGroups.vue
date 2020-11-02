@@ -12,8 +12,6 @@
     .item-groups__footer
       button(type="button" v-if="groups.length" @click="showModal").item-groups__show-all Всего {{groups.length}} групп
 
-
-
     modal(name="group-modal" @closed="modalClose" :height="modalHeight" :adaptive="true" :classes="'groups-modal'")
       .modal.item-groups__modal
         button(type="button" @click="closeModal").modal__close.close
@@ -42,14 +40,15 @@ const LIST_VISIBLE_GROUPS = 3;
 })
 export default class ItemGroups extends Vue {
   @Prop() public groups!: Group[];
-  showMobile: boolean = false;
+
+  showMobile = false;
 
   get visibleSliderGroups(): Group[] {
     return this.groups.length > SLIDER_VISIBLE_GROUPS ? this.groups.slice(0, SLIDER_VISIBLE_GROUPS) : this.groups;
   }
 
   get visibleListGroups(): number {
-    return LIST_VISIBLE_GROUPS
+    return LIST_VISIBLE_GROUPS;
   }
 
   get modalHeight(): number {

@@ -49,7 +49,7 @@ export interface ProductFeature {
 export interface ProductDetailImage {
   url: string;
   isVideo?: boolean;
-  videoLink?: string
+  videoLink?: string;
 }
 
 export interface ProductImage {
@@ -99,7 +99,7 @@ export interface Group {
 }
 
 export interface BreadcrumbLink {
-  href: string,
-  label: string,
-  current?: boolean,
+  href: string;
+  label: string;
+  current?: boolean;
 }

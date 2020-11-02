@@ -21,10 +21,11 @@ import CatalogMenu from '@/components/CatalogMenu.vue';
 import clickOutside from '@/utils/clickOutside';
 
 @Component({
-  components: { CatalogMenu }
+  components: { CatalogMenu },
 })
 export default class MainNav extends Vue {
   isMenuVisible = false;
+
   menuItems = MENU_ITEMS;
 
   navigationList = this.menuItems.filter((item) => item.inGeneralMenu);
