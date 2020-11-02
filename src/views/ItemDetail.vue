@@ -14,9 +14,9 @@
 
     .item-detail__section
       .item-detail__title Похожие товары
-      Slick(ref="slick" :options="sliderSettings").item-detail__similar-slider
-        div(v-for="item in similarItems"  :key="item.id").item-detail__slide-wrapper
-          CatalogCardItem(:item="item").catalog-card--similar.item-detail__slide
+      Slick(ref="slick" :options="sliderSettings").similar-slider
+        div(v-for="item in similarItems"  :key="item.id").similar-slider__wrapper
+          CatalogCardItem(:item="item").catalog-card--similar.similar-slider__slide
 
     SeoTexts(:texts="seoBlockDescription").item-detail__seo
 
@@ -85,6 +85,7 @@ export default class ItemDetail extends Vue {
 
   sliderSettings = {
     mobileFirst: true,
+    arrows: false,
     responsive: [
       {
         breakpoint: '300',
@@ -93,6 +94,16 @@ export default class ItemDetail extends Vue {
       {
         breakpoint: '767',
         settings: {
+          dots: true,
+          slidesToShow: 5,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: '1296',
+        settings: {
+          dots: false,
+          arrows: true,
           slidesToShow: 5,
           slidesToScroll: 1,
         },
@@ -116,19 +127,6 @@ export default class ItemDetail extends Vue {
 }
 </script>
 
-<style lang="scss">
-  .item-detail {
-    .slick-next {
-      right: -81px;
-      margin-top: 12px;
-    }
-
-    .slick-prev {
-      left: -65px;
-      margin-top: 12px;
-    }
-  }
-</style>
 <style lang="scss" scoped>
   .item-detail {
     @include container();
@@ -149,36 +147,6 @@ export default class ItemDetail extends Vue {
     &__delivery {
       background: white;
       margin-top: 16px;
-    }
-
-    &__similar-slider {
-      display: flex;
-      flex-wrap: wrap;
-
-      @include tablet() {
-        margin-left: -8px;
-        margin-right: -8px;
-      }
-    }
-
-    &__slide {
-      &-wrapper {
-        width: 48%;
-        margin-right: 4%;
-        margin-bottom: 8px;
-
-        &:nth-child(2n) {
-          margin-right: 0;
-        }
-
-        @include tablet() {
-          width: auto;
-          margin-right: 0;
-        }
-        @include tablet() {
-          padding: 0 8px;
-        }
-      }
     }
 
     &__title {

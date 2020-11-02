@@ -1,7 +1,13 @@
 <template lang="pug">
   section.catalog-slider.container
     .catalog-slider__inner
-      Slick(ref="slick" :options="sliderSettings").catalog-slider__slider
+      div(v-if="isMobile").catalog-slider__slider
+        div(v-for="(item, index) in items" :key="index").catalog-slider__item
+          CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
+      Slick(v-if="!isMobile && isLaptop" ref="slick" :options="laptopSettings").catalog-slider__slider
+        div(v-for="(item, index) in items" :key="index").catalog-slider__item
+          CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
+      Slick(v-if="!isMobile && isDesktop" ref="slick" :options="desktopSettings").catalog-slider__slider
         div(v-for="(item, index) in items" :key="index").catalog-slider__item
           CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
 </template>
@@ -22,42 +28,50 @@ import { Product } from '@/utils/models';
 })
 export default class BigSlider extends Vue {
   @Prop() public items!: Product[];
+  windowWidth;
+  isMobile = false;
+  isLaptop = false;
+  isDesktop = false;
 
   public reInit() {
     (this.$refs.slick as any).reSlick();
   }
 
-  sliderSettings = {
-    mobileFirst: true,
-    responsive: [
-      {
-        breakpoint: 300,
-        settings: 'unslick' // destroys slick
-      },
-      {
-        breakpoint: 1023,
-        settings: {
-          dots: true,
-          arrows: false,
-          rows: 2,
-          slidesPerRow: 5,
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 1295,
-        settings: {
-          dots: false,
-          arrows: true,
-          rows: 2,
-          slidesPerRow: 5,
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+  laptopSettings = {
+    dots: true,
+    arrows: false,
+    rows: 2,
+    slidesPerRow: 5,
+    slidesToShow: 1,
+    slidesToScroll: 1,
   };
+
+  desktopSettings = {
+    dots: false,
+    arrows: true,
+    rows: 2,
+    slidesPerRow: 5,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
+  handleResize() {
+    this.windowWidth = window.innerWidth;
+    this.$nextTick(() => {
+      this.isMobile = this.windowWidth < 1023;
+      this.isLaptop = this.windowWidth > 1023 && this.windowWidth < 1296;
+      this.isDesktop = this.windowWidth > 1296;
+    });
+  }
+
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  }
+
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  }
 }
 </script>
 
@@ -142,10 +156,10 @@ export default class BigSlider extends Vue {
       margin-left: -10px;
       margin-right: -10px;
       padding-right: 10px;
-      display: flex;
       flex-wrap: nowrap;
       overflow: auto;
       padding-bottom: 30px;
+      display: flex;
 
       @include laptop() {
         margin-left: 0;

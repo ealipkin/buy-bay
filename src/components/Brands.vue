@@ -1,7 +1,10 @@
 <template lang="pug">
   .brands
     .brands__pane
-      Slick(ref="slick" :options="sliderSettings").brands__slider
+      div(v-if="isMobile").brands__slider
+        span(v-for="brand in brands" :key="brand.id").brands__item
+          BrandsItem(:brand="brand")
+      Slick(v-else ref="slick" :options="sliderSettings" ).brands__slider
         span(v-for="brand in brands" :key="brand.id").brands__item
           BrandsItem(:brand="brand")
 </template>
@@ -19,13 +22,12 @@ import Slick from 'vue-slick';
 })
 export default class Brands extends Vue {
   @Prop() public brands!: any[];
+  windowWidth = 0;
+
   sliderSettings = {
     mobileFirst: true,
+    arrow: false,
     responsive: [
-      {
-        breakpoint: '300',
-        settings: 'unslick',
-      },
       {
         breakpoint: '1200',
         settings: {
@@ -35,6 +37,24 @@ export default class Brands extends Vue {
       },
     ],
   };
+
+  get isMobile() {
+    return this.windowWidth < 1296;
+  }
+
+
+  handleResize() {
+    this.windowWidth = window.innerWidth;
+  }
+
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  }
+
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  }
 }
 </script>
 

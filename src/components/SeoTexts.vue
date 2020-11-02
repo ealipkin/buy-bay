@@ -16,6 +16,7 @@ export default class SeoTexts extends Vue {
 
 <style lang="scss" scoped>
   .seo {
+    padding-top: 16px;
     &__title {
       font-size: 18px;
       font-weight: 600;

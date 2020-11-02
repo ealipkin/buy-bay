@@ -5,6 +5,16 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
+    path: '/category',
+    name: 'Category',
+    component: () => import('../views/Category.vue'),
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: () => import('../views/Search.vue'),
+  },
+  {
     path: '/product/:id',
     name: 'ItemDetail',
     component: () => import('../views/ItemDetail.vue'),

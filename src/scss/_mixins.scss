@@ -102,6 +102,7 @@
 }
 
 .close {
+  @include clearButton();
   @include close();
 }
 

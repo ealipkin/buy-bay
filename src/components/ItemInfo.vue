@@ -117,6 +117,8 @@ export default class ItemInfo extends Vue {
 
       @include tablet() {
         display: flex;
+        align-items: flex-end;
+        margin-top: 6px;
       }
     }
 

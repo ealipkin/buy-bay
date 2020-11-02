@@ -23,6 +23,7 @@
     "vue-router": "^3.2.0",
     "vue-slick": "^1.1.15",
     "vue-truncate-filter": "^1.1.7",
+    "vuejs-paginate": "^2.1.0",
     "vuex": "^3.4.0",
     "vuex-class": "^0.3.2"
   },

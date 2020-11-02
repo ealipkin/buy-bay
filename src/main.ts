@@ -5,7 +5,8 @@ import store from './store';
 
 import './scss/style.scss';
 import './assets/fonts/opensans.css';
-import vueAwesomeCountdown from 'vue-awesome-countdown'
+import vueAwesomeCountdown from 'vue-awesome-countdown';
+import Paginate from 'vuejs-paginate';
 import VueTruncate from 'vue-truncate-filter';
 
 Vue.use(vueAwesomeCountdown, 'vac');
@@ -15,6 +16,8 @@ import VModal from 'vue-js-modal'
 
 Vue.config.productionTip = false;
 Vue.use(VModal);
+
+Vue.component('paginate', Paginate);
 
 new Vue({
   router,

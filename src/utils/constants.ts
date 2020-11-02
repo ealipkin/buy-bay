@@ -173,3 +173,204 @@ export const MENU_ITEMS: MenuItem[] = [
     icon: 'heart',
   },
 ];
+
+export const FILTERS = [
+  {
+    label: 'Бренд',
+    isSearch: true,
+    type: 'checkbox',
+    items: [
+      {
+        id: 1,
+        label: 'Banana Republic',
+        count: 342,
+        selected: true,
+        value: '1'
+      },
+      {
+        id: 2,
+        label: 'Calvin Klein',
+        count: 13,
+        selected: true,
+        value: '2'
+      },
+      {
+        id: 3,
+        label: 'Casio',
+        count: 119,
+        selected: false,
+        value: '3'
+      },
+      {
+        id: 4,
+        label: 'Adidas',
+        count: 119,
+        selected: false,
+        value: '4'
+      },
+      {
+        id: 5,
+        label: 'Dolce & Gabbana',
+        count: 13,
+        selected: true,
+        value: '5'
+      },
+      {
+        id: 6,
+        label: 'Nike',
+        count: 119,
+        selected: false,
+        value: '6'
+      },
+      {
+        id: 7,
+        label: 'Puma',
+        count: 1,
+        selected: false,
+        value: '7'
+      },
+      {
+        id: 8,
+        label: 'Adidas',
+        count: 119,
+        selected: false,
+        value: '8'
+      },
+      {
+        id: 9,
+        label: 'Dolce & Gabbana',
+        count: 13,
+        selected: true,
+        value: '9'
+      },
+      {
+        id: 10,
+        label: 'Nike',
+        count: 119,
+        selected: false,
+        value: '10'
+      },
+      {
+        id: 11,
+        label: 'Puma',
+        count: 1,
+        selected: false,
+        value: '11'
+      },
+    ]
+  },
+  {
+    label: 'Категории',
+    type: 'accordion',
+    items: [
+      {
+        label: 'Men',
+        items: [
+          { id: 1, label: 'Outerwear' },
+          { id: 2, label: 'Jumpers & Cardigans' },
+          { id: 3, label: 'Pants & Jeans' },
+          { id: 4, label: 'T-shirts & Shirts' },
+          { id: 5, label: 'Shoes' },
+        ]
+      },
+      {
+        label: 'Women',
+        items: [
+          { id: 1, label: 'Outerwear' },
+          { id: 2, label: 'Jumpers & Cardigans' },
+          { id: 3, label: 'Pants & Jeans' },
+          { id: 4, label: 'T-shirts & Shirts' },
+          { id: 5, label: 'Shoes' },
+        ]
+      },
+      {
+        label: 'Kids',
+        items: [
+          { id: 1, label: 'Outerwear' },
+          { id: 2, label: 'Jumpers & Cardigans' },
+          { id: 3, label: 'Pants & Jeans' },
+          { id: 4, label: 'T-shirts & Shirts' },
+          { id: 5, label: 'Shoes' },
+        ]
+      },
+      {
+        label: 'Accessories',
+        items: [
+          { id: 1, label: 'Outerwear' },
+          { id: 2, label: 'Jumpers & Cardigans' },
+          { id: 3, label: 'Pants & Jeans' },
+          { id: 4, label: 'T-shirts & Shirts' },
+          { id: 5, label: 'Shoes' },
+        ]
+      },
+    ]
+  },
+  {
+    label: 'Цвета',
+    type: 'color',
+    items: [
+      {
+        id: 1,
+        color: '#ffab38',
+        selected: true,
+      },
+      {
+        id: 2,
+        color: '#496cff',
+      },
+      {
+        id: 3,
+        color: '#222222',
+        selected: true,
+      },
+      {
+        id: 4,
+        color: '#c9c9d4',
+      },
+      {
+        id: 5,
+        color: '#36ba40',
+      },
+      {
+        id: 6,
+        color: '#467cff',
+      },
+      {
+        id: 7,
+        color: '#ffab38',
+        selected: true,
+      },
+      {
+        id: 8,
+        color: '#496cff',
+      },
+      {
+        id: 9,
+        color: '#222222',
+        selected: true,
+      },
+      {
+        id: 10,
+        color: '#c9c9d4',
+      },
+      {
+        id: 11,
+        color: '#36ba40',
+      },
+      {
+        id: 12,
+        color: '#467cff',
+      },
+    ]
+  },
+  {
+    label: 'Доставка',
+    type: 'radio',
+    name: 'delivery',
+    items: [
+      { id: 1, label: 'Бесплатная доставка', value: 'free', selected: true },
+      { id: 2, label: 'Быстрая доставка', value: 'fast' },
+      { id: 3, label: 'DHL доставка', value: 'dhl' },
+    ]
+  }
+];

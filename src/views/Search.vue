@@ -1,48 +1,37 @@
 <template lang="pug">
-  .index.index--flex
-    section.section.section--slider.container
-      BigSlider
-      FeaturesSlider.index__features-slider
-
+  .search
+    .container
+      Breadcrumbs(:links="breadCrumbs").page__breadcrumbs
+      .search__result Результаты поиска «{{searchQuery}}»
     .container.index__tabs
       TabsNav(:tabs="tabs" v-on:change="selectTab")
 
-    section.section.section--catalog-slider
+    section.index__section.index__section--catalog-slider
       .section-header.section-header--hide-desktop
-        .section-title Популярные
-        router-link(to="#").section-link Показать еще
+        .index__section-title Популярные
+        router-link(to="#").index__link Показать еще
       CatalogSlider(:items="popularItems" :class="{'tab--active': selectedTab === 1}" ref="slickPopular").tab
 
-    section.section.section--white.section--categories
-      .section__container
-        .section-header
-          .section-title Топ категории
-          router-link(to="#").section-link Показать еще
-        TopCategories(:categories="topCategories")
-
-
-    section.section.section--catalog-slider
+    section.index__section.index__section--catalog-slider
       .section-header.section-header--hide-desktop
-        .section-title Горящие группы
-        router-link(to="#").section-link Показать еще
+        .index__section-title Горящие группы
+        router-link(to="#").index__link Показать еще
       CatalogSlider(:items="hotItems" :class="{'tab--active': selectedTab === 2}" ref="slickHot").tab
 
-    Advantages(:advantagesList="advantagesList")
-
-    section.section.section--catalog-slider
+    section.index__section.index__section--catalog-slider
       .section-header.section-header--hide-desktop
-        .section-title Бестселлеры
-        router-link(to="#").section-link Показать еще
+        .index__section-title Бестселлеры
+        router-link(to="#").index__link Показать еще
       CatalogSlider(:items="bestItems" :class="{'tab--active': selectedTab === 3}" ref="slickBest").tab
 
-    section.section.section--brands
-      .section__container
+    section.index__section.index__section--brands
+      .index__container
         .section-header
-          .section-title Лучшие бренды
-          router-link(to="#").section-link Показать еще
+          .index__section-title Лучшие бренды
+          router-link(to="#").index__link Показать еще
         Brands(:brands="brands")
 
-    section.section.section--seo
+    section.index__section.index__section--seo
       SeoTexts(:texts="seoBlockDescription").container.index__seo
 
 </template>
@@ -60,11 +49,12 @@ import FeaturesSlider from '@/components/FeaturesSlider.vue';
 import TopCategories from '@/components/TopCategories.vue';
 import { generateProducts, getRandomNumberBetween } from '@/utils/data';
 import TabsNav from '@/components/TabsNav.vue';
-import Advantages from '@/components/Advantages.vue';
+import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import { BreadcrumbLink } from '@/utils/models';
 
 @Component({
   components: {
-    Advantages,
+    Breadcrumbs,
     TabsNav,
     TopCategories,
     FeaturesSlider,
@@ -77,6 +67,14 @@ import Advantages from '@/components/Advantages.vue';
   },
 })
 export default class Index extends Vue {
+  searchQuery = '';
+  breadCrumbs: BreadcrumbLink[] = [
+    { href: '/', label: 'Главная' },
+    { href: '/product/123', label: 'Мужской гардероб' },
+    { href: '/product/123', label: 'Сумки и рюкзаки' },
+    { href: '/', label: 'Рюкзаки', current: true },
+  ];
+
   slidersMap = {};
   selectedTab = 1;
   popularItems = generateProducts(30);
@@ -85,75 +83,6 @@ export default class Index extends Vue {
   seoBlockDescription = [
     'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
     'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-  ];
-
-  topCategories = [
-    {
-      title: 'Спортивный инвентарь',
-      src: require('../assets/images/top-01.png'),
-      position: 'bottom',
-      positionMobile: 'right-center',
-      type: 'red',
-      color: 'pink',
-    },
-    {
-      title: 'Cмарфтоны',
-      src: require('../assets/images/top-02.png'),
-      position: 'center',
-      positionMobile: 'center-bottom',
-      type: 'brown',
-      color: 'yellow',
-    },
-    {
-      title: 'Компьютеры и офис',
-      src: require('../assets/images/top-03.png'),
-      position: 'top',
-      positionMobile: 'right-top',
-      type: 'blue',
-      color: 'cyan',
-    },
-    {
-      title: 'Женский гардероб',
-      src: require('../assets/images/top-04.png'),
-      position: 'bottom',
-      positionMobile: 'center-bottom',
-      type: 'light-blue',
-      color: 'pink',
-    },
-    {
-      title: 'Спортивный инвентарь',
-      src: require('../assets/images/top-01.png'),
-      position: 'bottom',
-      positionMobile: 'right-center',
-      type: 'red',
-      color: 'cyan',
-    },
-    {
-      title: 'Cмарфтоны',
-      src: require('../assets/images/top-02.png'),
-      position: 'center',
-      positionMobile: 'center-bottom',
-      type: 'brown',
-      color: 'yellow',
-    },
-  ];
-
-  advantagesList = [
-    {
-      type: 'cart',
-      title: 'Ультра дискаунтер',
-      text: 'Мы собрали супер товары из Китая по супер ценам',
-    },
-    {
-      type: 'group',
-      title: 'Вместе дешевле',
-      text: 'Объединяйтесь с друзьями в группы и покупайте по супер цене',
-    },
-    {
-      type: 'warranty',
-      title: 'Гарантия',
-      text: 'Мы стоим за вас стеной гарантируем возврат денег и бесплатную доставку',
-    },
   ];
 
   brands = [
@@ -212,7 +141,8 @@ export default class Index extends Vue {
       1: { ref: this.$refs.slickPopular, init: false },
       2: { ref: this.$refs.slickHot, init: false },
       3: { ref: this.$refs.slickBest, init: false },
-    }
+    };
+    this.searchQuery = this.$route.query.q as string;
   }
 
   selectTab(tabId) {
@@ -229,12 +159,22 @@ export default class Index extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .index {
-    &--flex {
-      @include desktop() {
-        display: flex;
-        flex-direction: column;
+  .search {
+    &__result {
+      font-size: 24px;
+      font-weight: 600;
+      color: #222222;
+      margin-bottom: 20px;
+      @include laptop() {
+        margin-bottom: 42px;
+        font-size: 32px;
       }
+    }
+  }
+  .index {
+    @include desktop() {
+      display: flex;
+      flex-direction: column;
     }
 
     &__tabs {
@@ -245,6 +185,120 @@ export default class Index extends Vue {
         display: flex;
         margin-top: 49px;
         margin-bottom: 50px;
+      }
+    }
+
+    &__section {
+      background: white;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      width: 100%;
+      @include desktop() {
+        background: transparent;
+      }
+
+      &--categories {
+        @include desktop() {
+          margin-top: 73px;
+          padding-bottom: 70px;
+        }
+      }
+
+      &--seo {
+        @include desktop() {
+          order: 2;
+          margin-top: 31px;
+          margin-bottom: 73px;
+        }
+      }
+
+      &--slider {
+        padding-top: 12px;
+
+        @include desktop() {
+          padding-top: 40px;
+          order: -1;
+        }
+      }
+
+      &--catalog-slider {
+        @include desktop() {
+          order: -1;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      &--offset {
+      }
+
+      &--white {
+        @include laptop() {
+          background: white;
+        }
+      }
+
+      &-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #222222;
+
+        @include laptop() {
+          font-size: 32px;
+        }
+      }
+
+      &-header {
+        display: flex;
+        align-items: center;
+        padding: 17px 12px;
+        justify-content: space-between;
+        max-width: 1170px;
+        margin-left: auto;
+        margin-right: auto;
+        @include desktop() {
+          padding: 0;
+          padding-top: 41px;
+          margin-bottom: 68px;
+        }
+
+        &--hide-desktop {
+          @include desktop() {
+            display: none;
+          }
+        }
+      }
+    }
+
+    &__section--brands & {
+      @include desktop() {
+        &__link {
+          display: none;
+        }
+
+        &__section-header {
+          margin-bottom: 39px;
+        }
+      }
+    }
+
+    &__container {
+      @include desktop() {
+        @include container();
+      }
+    }
+
+    &__link {
+      font-size: 12px;
+      color: #496cff;
+
+      @include laptop() {
+        font-size: 14px;
+      }
+
+      @include desktop() {
+        margin-top: 11px;
+        margin-right: 16px;
       }
     }
 

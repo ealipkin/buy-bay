@@ -1,7 +1,7 @@
 <template lang="pug">
   .tabs-nav
     .tabs-nav__pane
-      button(v-for="tab in tabs" @click="selectTab(tab)" type="button" :class="{'tabs-nav__tab--active': isTabActive(tab)}").tabs-nav__tab {{tab.label}}
+      button(v-for="(tab, index) in tabs" :key="index" @click="selectTab(tab)" type="button" :class="{'tabs-nav__tab--active': isTabActive(tab)}").tabs-nav__tab {{tab.label}}
 
 </template>
 
@@ -13,13 +13,13 @@ export default class TabsNav extends Vue {
   @Prop() public tabs!: any[];
 
   selectTab(tab) {
-    console.log('selectTab');
     if (tab.isActive) {
       return;
     }
     this.tabs.forEach(tab => tab.isActive = false);
     tab.isActive = true;
-    this.$emit('change', tab.id)
+    console.log(this.$refs);
+    this.$emit('change', tab.id);
   }
 
   isTabActive(tab) {

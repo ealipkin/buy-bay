@@ -139,3 +139,14 @@ body {
 main {
   //padding-top: 12px;
 }
+
+
+
+.tab {
+  @include desktop() {
+    display: none;
+    &--active {
+      display: block;
+    }
+  }
+}
