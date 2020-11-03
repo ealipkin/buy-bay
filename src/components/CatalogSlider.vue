@@ -44,6 +44,7 @@ export default class BigSlider extends Vue {
   laptopSettings = {
     dots: true,
     arrows: false,
+    draggable: false,
     rows: 2,
     slidesPerRow: 5,
     slidesToShow: 1,
@@ -53,6 +54,7 @@ export default class BigSlider extends Vue {
   desktopSettings = {
     dots: false,
     arrows: true,
+    draggable: false,
     rows: 2,
     slidesPerRow: 5,
     slidesToShow: 1,

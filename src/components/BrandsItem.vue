@@ -49,6 +49,8 @@ export default class BrandsItem extends Vue {
     text-align: center;
     padding: 10px 15px 15px 15px;
     min-width: 136px;
+    display: flex;
+    flex-direction: column;
     @include laptop() {
       min-width: 350px;
     }
@@ -67,6 +69,7 @@ export default class BrandsItem extends Vue {
       @include laptop() {
         display: flex;
         align-items: center;
+        min-height: 60px;
       }
 
       @include desktop() {

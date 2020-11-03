@@ -379,7 +379,10 @@
   }
 }
 
-
+.slick-track {
+  display: flex;
+  height: 100%;
+}
 .similar-slider {
   display: flex;
   flex-wrap: wrap;

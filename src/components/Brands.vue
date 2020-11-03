@@ -28,6 +28,7 @@ export default class Brands extends Vue {
   sliderSettings = {
     mobileFirst: true,
     arrow: false,
+    draggable: false,
     responsive: [
       {
         breakpoint: '1200',
@@ -79,6 +80,18 @@ export default class Brands extends Vue {
         border: solid 1px #e7e7e7 !important;
       }
     }
+
+    .slick-slide {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .slick-slide > div {
+      flex: 1;
+      height: 100%;
+    }
+
   }
 </style>
 
