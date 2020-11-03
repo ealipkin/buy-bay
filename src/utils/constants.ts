@@ -10,7 +10,7 @@ export const breakPoints = {
 export const MENU_ITEMS: MenuItem[] = [
   {
     title: 'Электроника',
-    href: '#',
+    href: 'category',
     icon: 'user',
     inGeneralMenu: true,
     brands: [
@@ -66,7 +66,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     title: 'Смартфоны',
-    href: '#',
+    href: 'category',
     icon: 'users',
     inGeneralMenu: true,
     isActive: true,
@@ -95,7 +95,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     title: 'Бытовая техника',
-    href: '#',
+    href: 'category',
     icon: 'users',
     isActive: true,
     inGeneralMenu: true,
@@ -115,61 +115,61 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     title: 'Женский гардероб',
     inGeneralMenu: true,
-    href: '#',
+    href: 'category',
     icon: 'bag',
   },
   {
     title: 'Гаджеты',
     inGeneralMenu: true,
-    href: '#',
+    href: 'category',
     icon: 'heart',
   },
   {
     title: 'Детские товары',
-    href: '#',
+    href: 'category',
     icon: 'heart',
     inGeneralMenu: true,
   },
   {
     title: 'Хобби',
     inGeneralMenu: true,
-    href: '#',
+    href: 'category',
     icon: 'heart',
   },
   {
     title: 'Красота',
-    href: '#',
+    href: 'category',
     icon: 'heart',
   },
   {
     title: 'Красота',
-    href: '#',
+    href: 'category',
     icon: 'heart',
   },
   {
     title: 'Здоровье',
-    href: '#',
+    href: 'category',
     icon: 'heart',
   },
   {
     title: 'Продукты',
-    href: '#',
+    href: 'category',
     icon: 'heart',
   },
   {
     title: 'Детские товары',
-    href: '#',
+    href: 'category',
     icon: 'heart',
   },
   {
     title: 'Зоотовары',
-    href: '#',
+    href: 'category',
     icon: 'heart',
   },
   {
     title: 'Дача',
     inGeneralMenu: true,
-    href: '#',
+    href: 'category',
     icon: 'heart',
   },
 ];

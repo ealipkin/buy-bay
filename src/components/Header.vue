@@ -19,7 +19,7 @@
         button(type="submit").input-search__submit-button.button Найти
 
       .header-main__user-block
-        a(href="#").header-main__user-block-favorites
+        router-link(to="#").header-main__user-block-favorites
           span.header-main__favorites-icon
             include ../assets/icons/heart.svg
             span.header-main__favorites-number 23
