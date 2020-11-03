@@ -1,6 +1,5 @@
 <template lang="pug">
-
-  .catalog-menu
+  .catalog-menu(:style="{top: headerHeight + 'px'}")
     .catalog-menu__container
       div(:class="{'catalog-menu__container-primary--hidden': subMenuOpen}").catalog-menu__container-primary
         .catalog-menu__nav-wrapper
@@ -48,13 +47,19 @@ import { MenuItem } from '@/utils/models';
 @Component
 export default class CatalogMenu extends Vue {
   @Prop() public links!: MenuItem[];
-
+  headerHeight: number = 0;
   childMenu: MenuItem | null = null;
+  header: any;
 
   subMenuOpen = false;
 
   mounted() {
+    this.header = document.querySelector('.header');
+    this.headerHeight = this.header.offsetHeight;
     this.childMenu = this.links[0];
+    window.addEventListener('resize', () => {
+      this.headerHeight = this.header.offsetHeight;
+    });
   }
 
   menuLinkClick(link) {
@@ -83,7 +88,7 @@ export default class CatalogMenu extends Vue {
     max-height: calc(100vh - 82px);
     overflow: auto;
     height: auto;
-    z-index: 10;
+    z-index: 20;
 
     @include laptop() {
       top: 175px;

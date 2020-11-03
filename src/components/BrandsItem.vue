@@ -1,6 +1,6 @@
 <template lang="pug">
   .brands-item
-    .brands-item__header
+    router-link(:to="{ path: `/shop/${brand.id}` }").brands-item__header
       img.brands-item__logo(:src="brand.image")
       .brands-item__header-inner
         h3.brands-item__title {{brand.title}}
@@ -66,6 +66,7 @@ export default class BrandsItem extends Vue {
     }
 
     &__header {
+      text-decoration: none;
       @include laptop() {
         display: flex;
         align-items: center;

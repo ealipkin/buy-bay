@@ -1,0 +1,8 @@
+.tab {
+  @include desktop() {
+    display: none;
+    &--active {
+      display: block;
+    }
+  }
+}

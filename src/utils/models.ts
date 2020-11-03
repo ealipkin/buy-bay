@@ -64,17 +64,19 @@ export interface ProductDelivery {
 }
 
 export interface ProductShop {
+  id: string,
   name: string;
+  description: string;
   image: string;
   orders: number;
-  rate: number;
+  rate: number | string;
   isFavourite: boolean;
 }
 
 export interface Product {
   id: string;
   title: string;
-  rate: number;
+  rate: number | string;
   groups: number;
   images: ProductImage;
   features: ProductFeature[];

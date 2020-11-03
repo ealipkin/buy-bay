@@ -27,7 +27,8 @@
         .header-main__user-wrap
           a.header-main__user-block-text Регистрация
           a.header-main__user-block-text.header-main__user-block-text--login Войти
-
+    .header-inner
+      HeaderShopCard(:shop="selectedShop" v-if="selectedShop")
     .header-bottom
       MainNav.container
 
@@ -37,13 +38,21 @@
 import { Component, Vue } from 'vue-property-decorator';
 import MainNav from '@/components/MainNav.vue';
 import router from '@/router';
+import HeaderShopCard from '@/components/HeaderShopCard.vue';
+import { mapGetters, mapState } from 'vuex';
+import { ProductShop } from '@/utils/models';
 
 @Component({
-  components: { MainNav },
+  components: { HeaderShopCard, MainNav },
+  computed: {
+    ...mapGetters({
+      selectedShop: 'app/getSelectedShop'
+    }),
+  }
 })
 export default class Header extends Vue {
   search = '';
-
+  selectedShop;
   searchSubmit(event) {
     event.preventDefault();
     console.log('searchSubmit');

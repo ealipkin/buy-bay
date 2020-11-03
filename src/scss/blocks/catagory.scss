@@ -1,0 +1,152 @@
+
+
+.category {
+
+  &__inner {
+    background: white;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    @include laptop() {
+      padding-bottom: 0;
+      margin-bottom: 0;
+      background: transparent;
+    }
+  }
+
+  &__breadcrumbs {
+    display: none;
+    @include laptop() {
+      display: flex;
+    }
+  }
+
+  &__filters {
+  }
+
+  &__advantages {
+    @include laptop() {
+      display: none;
+    }
+  }
+
+  &__aside {
+    @include laptop() {
+      width: 285px;
+      margin-right: 16px;
+      flex-shrink: 0;
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    margin-bottom: 24px;
+    align-items: center;
+  }
+
+  &__title {
+    font-weight: 600;
+    color: #222222;
+    font-size: 16px;
+    margin-top: 20px;
+    @include laptop() {
+      margin-top: 0;
+      font-size: 32px;
+    }
+  }
+
+  &__content {
+    @include laptop() {
+      display: flex;
+    }
+  }
+
+  &__items {
+    @include laptop() {
+      flex: 1;
+    }
+  }
+
+  &__item {
+    width: 48%;
+    margin-right: 4%;
+    border: solid 1px #e7e7e7;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    @media (max-width: $tablet-max-width) {
+      &:nth-child(2n) {
+        margin-right: 0;
+      }
+    }
+    @include tablet() {
+      width: 32%;
+      margin-right: 2%;
+      margin-bottom: 16px;
+
+      @media (max-width: $laptop-max-width) {
+        &:nth-child(3n) {
+          margin-right: 0;
+        }
+      }
+
+    }
+    @include laptop() {
+      border: none;
+      width: 23.3%;
+      margin-right: 16px;
+      margin-bottom: 16px;
+
+      &:nth-child(4n) {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &__list {
+    flex-wrap: wrap;
+    display: flex;
+  }
+
+  &__pagination {
+    display: none;
+    margin-top: 24px;
+    @include laptop() {
+      display: flex;
+    }
+  }
+
+  &__similar-slider {
+    display: none;
+    background: transparent;
+
+    .similar-slider {
+      margin: 0;
+    }
+
+    @include laptop() {
+      display: block;
+      margin-top: 103px;
+      margin-bottom: 50px;
+    }
+
+    @include desktop() {
+      margin-bottom: 0;
+    }
+  }
+
+  .section-header {
+    @include desktop() {
+      margin-bottom: 39px;
+    }
+  }
+
+  &__sort {
+    display: none;
+    margin-left: auto;
+    @include laptop() {
+      display: flex;
+    }
+  }
+
+}
