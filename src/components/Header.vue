@@ -25,13 +25,14 @@
             span.header-main__favorites-number 23
           p.header-main__favorites-text Избранное
         .header-main__user-wrap
-          a.header-main__user-block-text Регистрация
-          a.header-main__user-block-text.header-main__user-block-text--login Войти
+          button(type="button" @click="openLoginModal()").header-main__user-block-text Регистрация
+          button(type="button" @click="openLoginModal()").header-main__user-block-text.header-main__user-block-text--login Войти
     .header-inner
       HeaderShopCard(:shop="selectedShop" v-if="selectedShop")
     .header-bottom
       MainNav.container
 
+    LoginModal(ref="loginModal")
 </template>
 
 <script lang="ts">
@@ -40,9 +41,10 @@ import MainNav from '@/components/MainNav.vue';
 import router from '@/router';
 import HeaderShopCard from '@/components/HeaderShopCard.vue';
 import { mapGetters } from 'vuex';
+import LoginModal from '@/components/LoginModal.vue';
 
 @Component({
-  components: { HeaderShopCard, MainNav },
+  components: { LoginModal, HeaderShopCard, MainNav },
   computed: {
     ...mapGetters({
       selectedShop: 'app/getSelectedShop',
@@ -61,6 +63,15 @@ export default class Header extends Vue {
     if (this.search && this.search.length) {
       router.push({ path: '/search', query: { q: this.search } });
     }
+  }
+
+  openLoginModal() {
+    const modalComponent: any = this.$refs.loginModal;
+    modalComponent.showModal();
+  }
+
+  mounted() {
+    this.openLoginModal();
   }
 }
 </script>
@@ -214,6 +225,7 @@ export default class Header extends Vue {
     }
 
     &__user-block-text {
+      @include clearButton();
       font-size: 14px;
       color: #6c6c6c;
       font-weight: bold;

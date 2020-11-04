@@ -1,7 +1,5 @@
 <template lang="pug">
-  main.main
-    slot
-
+  .main
 </template>
 
 <script lang="ts">
@@ -15,6 +13,5 @@ export default class Main extends Vue {
 
 <style scoped lang="scss">
   .main {
-    /*padding-top: 40px;*/
   }
 </style>

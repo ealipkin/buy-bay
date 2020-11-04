@@ -217,6 +217,15 @@ export default class Index extends Vue {
 }
 </script>
 
+<style lang="scss">
+  .index {
+    @media (max-width: 1295px) {
+      .tab {
+        display: block;
+      }
+    }
+  }
+</style>
 <style lang="scss" scoped>
   .index {
     &--flex {

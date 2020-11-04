@@ -56,7 +56,6 @@ export default class ItemGroups extends Vue {
   }
 
   showModal() {
-    console.log('show');
     this.$modal.show('group-modal');
     document.body.classList.add('_hidden');
   }

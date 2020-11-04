@@ -62,5 +62,24 @@ export default class TabsNav extends Vue {
         }
       }
     }
+
+    &--small &__tab {
+      font-size: 14px;
+      padding-bottom: 10px;
+      padding-left: 17px;
+      padding-right: 4px;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      @include tablet() {
+        font-size: 18px;
+
+        padding-left: 30px;
+        padding-right: 4px;
+        padding-bottom: 20px;
+      }
+    }
   }
 </style>

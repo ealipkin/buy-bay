@@ -44,7 +44,7 @@
   color: $blue;
 }
 
-@mixin loader($color: $red) {
+@mixin loader($color: $blue) {
   border: 4px double;
   border-radius: 50%;
   border-color: transparent $color $color;
@@ -90,6 +90,7 @@
     width: 100%;
     height: 2px;
     background: #a6acc2;
+    border-radius: 2px;
     position: absolute;
     left: 50%;
     top: 50%;
