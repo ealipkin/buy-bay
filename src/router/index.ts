@@ -24,6 +24,11 @@ const routes: Array<RouteConfig> = [
     name: 'Index',
     component: () => import('../views/Index.vue'),
   },
+  {
+    path: '/success',
+    name: 'Success',
+    component: () => import('../views/Success.vue'),
+  },
 ];
 
 const router = new VueRouter({
