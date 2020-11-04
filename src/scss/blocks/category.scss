@@ -6,6 +6,7 @@
     background: white;
     margin-bottom: 16px;
     padding-bottom: 16px;
+    border-top: 1px solid transparent;
     @include laptop() {
       padding-bottom: 0;
       margin-bottom: 0;
@@ -13,58 +14,9 @@
     }
   }
 
-  &__breadcrumbs {
-    display: none;
-    @include laptop() {
-      display: flex;
-    }
-  }
-
-  &__filters {
-  }
-
   &__advantages {
     @include laptop() {
       display: none;
-    }
-  }
-
-  &__aside {
-    @include laptop() {
-      width: 285px;
-      margin-right: 16px;
-      flex-shrink: 0;
-    }
-  }
-
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 25px;
-    margin-bottom: 24px;
-    align-items: center;
-  }
-
-  &__title {
-    font-weight: 600;
-    color: #222222;
-    font-size: 16px;
-    margin-top: 20px;
-    @include laptop() {
-      margin-top: 0;
-      font-size: 32px;
-    }
-  }
-
-  &__content {
-    @include laptop() {
-      display: flex;
-    }
-  }
-
-  &__items {
-    @include laptop() {
-      flex: 1;
     }
   }
 

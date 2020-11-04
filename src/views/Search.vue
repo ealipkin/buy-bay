@@ -1,7 +1,7 @@
 <template lang="pug">
   .search
-    .container
-      Breadcrumbs(:links="breadCrumbs").page__breadcrumbs
+    .container.item-detail__breadcrumbs
+      Breadcrumbs(:links="breadCrumbs")
       .search__result Результаты поиска «{{searchQuery}}»
     .container.index__tabs
       TabsNav(:tabs="tabs" v-on:change="selectTab")

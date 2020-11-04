@@ -28,9 +28,9 @@ import { Group } from '@/utils/models';
 export default class GroupItem extends Vue {
   @Prop() public group!: Group;
 
-  mounted() {
-    // console.log(this.group.time);
-  }
+  mounted = () => {
+    console.log('mounted');
+  };
 
   handleClick() {
     this.group.isJoined = !this.group.isJoined;

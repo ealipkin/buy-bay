@@ -1,16 +1,15 @@
 <template lang="pug">
   .category
-    .container.category__inner
-      .category__header
-        SortSelect(:options="selectOptions").category__sort
-      .category__content
-        .category__aside
-          CategoryFilter(:filters="filters").category__filters
-        .category__items
-          .category__list
-            .category__item(v-for="(item, index) in items" :key="index")
-              CatalogCardItem(:item="item")
-          Pagination(:moreCount="50").category__pagination
+    .page__header.container
+      SortSelect(:options="selectOptions").category__sort
+    .container.category__inner.page__layout
+      .page__aside
+        CategoryFilter(:filters="filters").category__filters
+      .page__content
+        .category__list
+          .category__item(v-for="(item, index) in items" :key="index")
+            CatalogCardItem(:item="item")
+        Pagination(:moreCount="50").category__pagination
 
     section.section.section--seo
       SeoTexts(:texts="seoBlockDescription").container
@@ -21,19 +20,12 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
-import Brands from '@/components/Brands.vue';
-import CatalogSlider from '@/components/CatalogSlider.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
-import TopCategories from '@/components/TopCategories.vue';
-import { generateProducts, getRandomNumberBetween, getShop } from '@/utils/data';
-import Advantages from '@/components/Advantages.vue';
-import { BreadcrumbLink } from '@/utils/models';
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import { generateProducts, getShop } from '@/utils/data';
 import SortSelect from '@/components/SortSelect.vue';
 import CategoryFilter from '@/components/CategoryFilter.vue';
 import { FILTERS } from '@/utils/constants';
 import Pagination from '@/components/Pagination.vue';
-import Slick from 'vue-slick';
 import { Action } from 'vuex-class';
 
 @Component({
@@ -41,14 +33,8 @@ import { Action } from 'vuex-class';
     Pagination,
     CategoryFilter,
     SortSelect,
-    Breadcrumbs,
-    Advantages,
-    TopCategories,
     SeoTexts,
-    CatalogSlider,
-    Brands,
     CatalogCardItem,
-    Slick,
   },
 })
 export default class Index extends Vue {

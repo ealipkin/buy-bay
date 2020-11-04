@@ -27,11 +27,7 @@ export default class HeaderShopCard extends Vue {
   @Prop() public shop!: ProductShop;
 
   writeToShop() {
-  }
-
-  created() {
-    console.log('created');
-    console.log(this.shop);
+    console.log('writeToShop');
   }
 }
 </script>
@@ -84,8 +80,10 @@ export default class HeaderShopCard extends Vue {
         margin-left: 35px;
       }
     }
+
     &__button {
     }
+
     &__aside {
       margin-left: auto;
       display: flex;

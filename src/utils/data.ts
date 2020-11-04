@@ -104,7 +104,7 @@ const createOrder = (item, index): OrderItem => ({
   image: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/200`,
   date: '12 декабря 2019',
   title: 'Фото камера сумка через плечо крестовой срез через плечо через плечо',
-  status: getRandomNumberBetween(0, 1) ? ORDER_STATUSES.SUCCESS : ORDER_STATUSES.SUCCESS,
+  status: getRandomNumberBetween(0, 1) ? ORDER_STATUSES.SUCCESS : ORDER_STATUSES.FAIL,
   time: getRandomNumberBetween(0, 1) ? featureDate() : undefined,
   price: getRandomNumberBetween(100000, 500000),
   users: getRandomNumberBetween(0, 1) ? new Array(getRandomNumberBetween(1, 3)).fill({}).map(createUser) : [],

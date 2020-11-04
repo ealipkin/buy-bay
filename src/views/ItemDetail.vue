@@ -1,6 +1,7 @@
 <template lang="pug">
   div.item-detail
-    Breadcrumbs(:links="breadCrumbs").item-detail__breadcrumbs
+    .item-detail__breadcrumbs
+      Breadcrumbs(:links="breadCrumbs")
     .item-detail__main
       .item-detail__left-col
         ItemPreview(:item="item").item-detail__item.item-detail__item--preview
@@ -56,8 +57,8 @@ import { BreadcrumbLink } from '@/utils/models';
 export default class ItemDetail extends Vue {
   breadCrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
-    { href: '/product/123', label: 'Мужской гардероб' },
-    { href: '/product/123', label: 'Сумки и рюкзаки' },
+    { href: '/category', label: 'Мужской гардероб' },
+    { href: '/category', label: 'Сумки и рюкзаки' },
     { href: '/', label: 'Рюкзаки', current: true },
   ];
 

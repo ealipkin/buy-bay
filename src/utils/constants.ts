@@ -1,4 +1,4 @@
-import { BaseMenuItem, MenuItem } from '@/utils/models';
+import { BaseMenuItem, MenuChildItem, MenuItem } from '@/utils/models';
 
 export const breakPoints = {
   mobile: 320,
@@ -29,11 +29,71 @@ export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
     icon: 'bag',
   },
 ];
+export const ADVANTAGES = [
+  {
+    type: 'cart',
+    title: 'Ультра дискаунтер',
+    text: 'Мы собрали супер товары из Китая по супер ценам',
+  },
+  {
+    type: 'group',
+    title: 'Вместе дешевле',
+    text: 'Объединяйтесь с друзьями в группы и покупайте по супер цене',
+  },
+  {
+    type: 'warranty',
+    title: 'Гарантия',
+    text: 'Мы стоим за вас стеной гарантируем возврат денег и бесплатную доставку',
+  },
+];
+
+export const MENU_CHILD_ITEMS: MenuChildItem[] = [
+  {
+    main: { title: 'Смартфоны и умные часы', href: '#' },
+    links: [
+      { title: 'Мобильные телефоны', href: '#' },
+      { title: 'Смартфоны', href: '#' },
+      { title: 'Кнопочные мобильные телефоны', href: '#' },
+      { title: 'Умные часы и браслеты', href: '#' },
+      { title: 'Аксессуары для телефонов', href: '#' },
+    ],
+  },
+  {
+    main: { title: 'Портативная техника', href: '#' },
+    links: [
+      { title: 'Наушники и Bluetooth-гарнитуры', href: '#' },
+      { title: 'Портативная акустика', href: '#' },
+      { title: 'Очки виртуальной реальности', href: '#' },
+      { title: 'Планшеты', href: '#' },
+      { title: 'Умные колонки', href: '#' },
+    ],
+  },
+  {
+    main: { title: 'Аудио- и видеотехника', href: '#' },
+    links: [
+      { title: 'Телевизоры', href: '#' },
+      { title: 'Онлайн подписки и карты оплаты', href: '#' },
+      { title: 'Аудиотехника', href: '#' },
+      { title: 'TV-тюнеры', href: '#' },
+      { title: 'ТВ-приставки и медиаплееры', href: '#' },
+    ],
+  },
+  {
+    main: { title: 'Фото- и видеокамеры', href: '#' },
+    links: [
+      { title: 'Фотоаппараты', href: '#' },
+      { title: 'Объективы', href: '#' },
+      { title: 'Экшн-камеры', href: '#' },
+      { title: 'Видеокамеры', href: '#' },
+      { title: 'Квадрокоптеры с камерой', href: '#' },
+    ],
+  },
+];
 
 export const MENU_ITEMS: MenuItem[] = [
   {
     title: 'Мой профиль',
-    href: '/category',
+    href: '/catalog',
     icon: 'user',
     inGeneralMenu: true,
     brands: [
@@ -44,52 +104,11 @@ export const MENU_ITEMS: MenuItem[] = [
       { title: 'Sony', imageUrl: 'brands/sony.jpg', href: '#' },
       { title: 'JBL', imageUrl: 'brands/jbl.jpg', href: '#' },
     ],
-    children: [
-      {
-        main: { title: 'Смартфоны и умные часы', href: '#' },
-        links: [
-          { title: 'Мобильные телефоны', href: '#' },
-          { title: 'Смартфоны', href: '#' },
-          { title: 'Кнопочные мобильные телефоны', href: '#' },
-          { title: 'Умные часы и браслеты', href: '#' },
-          { title: 'Аксессуары для телефонов', href: '#' },
-        ],
-      },
-      {
-        main: { title: 'Портативная техника', href: '#' },
-        links: [
-          { title: 'Наушники и Bluetooth-гарнитуры', href: '#' },
-          { title: 'Портативная акустика', href: '#' },
-          { title: 'Очки виртуальной реальности', href: '#' },
-          { title: 'Планшеты', href: '#' },
-          { title: 'Умные колонки', href: '#' },
-        ],
-      },
-      {
-        main: { title: 'Аудио- и видеотехника', href: '#' },
-        links: [
-          { title: 'Телевизоры', href: '#' },
-          { title: 'Онлайн подписки и карты оплаты', href: '#' },
-          { title: 'Аудиотехника', href: '#' },
-          { title: 'TV-тюнеры', href: '#' },
-          { title: 'ТВ-приставки и медиаплееры', href: '#' },
-        ],
-      },
-      {
-        main: { title: 'Фото- и видеокамеры', href: '#' },
-        links: [
-          { title: 'Фотоаппараты', href: '#' },
-          { title: 'Объективы', href: '#' },
-          { title: 'Экшн-камеры', href: '#' },
-          { title: 'Видеокамеры', href: '#' },
-          { title: 'Квадрокоптеры с камерой', href: '#' },
-        ],
-      },
-    ],
+    children: MENU_CHILD_ITEMS,
   },
   {
     title: 'Смартфоны',
-    href: '/category',
+    href: '/catalog',
     icon: 'users',
     inGeneralMenu: true,
     isActive: true,
@@ -118,7 +137,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     title: 'Бытовая техника',
-    href: '/category',
+    href: '/catalog',
     icon: 'users',
     isActive: true,
     inGeneralMenu: true,
@@ -138,61 +157,61 @@ export const MENU_ITEMS: MenuItem[] = [
   {
     title: 'Женский гардероб',
     inGeneralMenu: true,
-    href: '/category',
+    href: '/catalog',
     icon: 'bag',
   },
   {
     title: 'Гаджеты',
     inGeneralMenu: true,
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
   },
   {
     title: 'Детские товары',
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
     inGeneralMenu: true,
   },
   {
     title: 'Хобби',
     inGeneralMenu: true,
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
   },
   {
     title: 'Красота',
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
   },
   {
     title: 'Красота',
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
   },
   {
     title: 'Здоровье',
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
   },
   {
     title: 'Продукты',
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
   },
   {
     title: 'Детские товары',
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
   },
   {
     title: 'Зоотовары',
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
   },
   {
     title: 'Дача',
     inGeneralMenu: true,
-    href: '/category',
+    href: '/catalog',
     icon: 'heart',
   },
 ];

@@ -60,6 +60,7 @@ import TopCategories from '@/components/TopCategories.vue';
 import { generateProducts, getRandomNumberBetween } from '@/utils/data';
 import TabsNav from '@/components/TabsNav.vue';
 import Advantages from '@/components/Advantages.vue';
+import { ADVANTAGES } from '@/utils/constants';
 
 @Component({
   components: {
@@ -142,23 +143,7 @@ export default class Index extends Vue {
     },
   ];
 
-  advantagesList = [
-    {
-      type: 'cart',
-      title: 'Ультра дискаунтер',
-      text: 'Мы собрали супер товары из Китая по супер ценам',
-    },
-    {
-      type: 'group',
-      title: 'Вместе дешевле',
-      text: 'Объединяйтесь с друзьями в группы и покупайте по супер цене',
-    },
-    {
-      type: 'warranty',
-      title: 'Гарантия',
-      text: 'Мы стоим за вас стеной гарантируем возврат денег и бесплатную доставку',
-    },
-  ];
+  advantagesList = ADVANTAGES;
 
   brands = [
     {

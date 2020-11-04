@@ -60,12 +60,12 @@ export default class CategoryFilter extends Vue {
     console.log('querySelector');
   };
 
-  toggleAccordion(accordion, index, filter) {
+  toggleAccordion = (accordion, index, filter) => {
     accordion.isOpen = !accordion.isOpen;
     Vue.set(filter.items, index, accordion);
   }
 
-  toggleHeader(filter, index) {
+  toggleHeader = (filter, index) => {
     filter.isOpen = !filter.isOpen;
     Vue.set(this.filters, index, filter);
   }

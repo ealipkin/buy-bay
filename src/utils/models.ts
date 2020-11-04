@@ -9,7 +9,7 @@ export interface ChildMenuItem {
   href: string;
 }
 
-export interface ChildItem {
+export interface MenuChildItem {
   main: ChildMenuItem;
   links: ChildMenuItem[];
 }
@@ -24,7 +24,7 @@ export interface BaseMenuItem {
 export interface MenuItem extends BaseMenuItem {
   inGeneralMenu?: boolean;
   brands?: BrandMenuItem[];
-  children?: ChildItem[];
+  children?: MenuChildItem[];
 }
 
 export enum PRODUCT_FEATURES {
@@ -104,7 +104,7 @@ export interface Group {
 }
 
 export interface BreadcrumbLink {
-  href: string;
+  href?: string;
   label: string;
   current?: boolean;
 }
