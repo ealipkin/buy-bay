@@ -1,19 +1,17 @@
 <template lang="pug">
   ul.success-page__social.social
-    li.social__item fb
-    li.social__item fb
-    li.social__item fb
-    li.social__item fb
-    li.social__item fb
-    li.social__item fb
+    li(v-for="(social, i) in socials" :key="i").social__item
+      a(:href="social.href" :title="social.title").social__link
+        img(:src="require('@/assets/' + social.icon + '')").social__icon
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { SocialLink } from '@/utils/models';
 
 @Component
 export default class Social extends Vue {
-
+  @Prop() public socials!: SocialLink[];
 }
 </script>
 
@@ -30,6 +28,7 @@ export default class Social extends Vue {
       border-radius: 50%;
       background-color: #ccc;
       margin-right: 19px;
+      display: flex;
 
       @include tablet() {
         width: 40px;
@@ -40,6 +39,11 @@ export default class Social extends Vue {
       &:last-child {
         margin-right: 0;
       }
+    }
+
+    &__icon {
+      max-width: 100%;
+      height: auto;
     }
   }
 </style>

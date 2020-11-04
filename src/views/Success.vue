@@ -9,12 +9,12 @@
       hr.success-page__hr
 
       .success-page__share-box
-        Timer.success-page__timer
+        Timer(:time="shareTimer").success-page__timer
 
         span.success-page__action Зови друзей скорее
-        Social.success-page__social
+        Social(:socials="socials").success-page__social
 
-        Share
+        Share(:link="shareLink")
 
 </template>
 
@@ -24,6 +24,8 @@ import Timer from '@/components/Timer.vue';
 import Social from '@/components/Social.vue';
 import Share from '@/components/Share.vue';
 
+import { SOCIALS, SHARE_TIMER, SHARE_LINK } from '@/utils/constants';
+
 @Component({
   components: {
     Timer,
@@ -32,7 +34,11 @@ import Share from '@/components/Share.vue';
   },
 })
 export default class Success extends Vue {
+  socials = SOCIALS;
 
+  shareTimer = SHARE_TIMER;
+
+  shareLink = SHARE_LINK;
 }
 </script>
 
@@ -47,8 +53,8 @@ export default class Success extends Vue {
       padding: 34px 0 112px;
       background-color: $grey-3;
       background-image: url("../assets/success-background.png");
-    background-repeat: no-repeat;
-    background-position: center -300px;
+      background-repeat: no-repeat;
+      background-position: center -300px;
     }
 
     &__wrapper {

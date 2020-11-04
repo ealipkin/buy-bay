@@ -105,3 +105,10 @@ export interface BreadcrumbLink {
   label: string;
   current?: boolean;
 }
+
+export interface SocialLink {
+  href: string,
+  icon: string,
+  type: string,
+  title: string,
+}

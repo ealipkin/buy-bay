@@ -1,15 +1,19 @@
 <template lang="pug">
   p.timer
     span.timer__message Мы вернем деньги, если никто не присоединиться в течении 24 часов.
-    span.timer__tick 23:59:23
+    vac(:end-time="time").timer__tick
+      template(v-slot:process="{ timeObj }")
+        span {{ `${timeObj.h}:${timeObj.m}:${timeObj.s}`}}
+      template(v-slot:finish)
+
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Timer extends Vue {
-
+@Prop() public time!: number;
 }
 </script>
 

@@ -2,16 +2,16 @@
   p.share
     label(for="copy").share__action Или скопируй ссылку, чтобы ей поделиться
     span.share__box
-      input(value="http://vmdesh.ru/8dbuf3")#copy.share__input
+      input(:value="link")#copy.share__input
       button.share__copy Скопировать
 </template>
 
 <script lang="ts">
-import {Component, Vue} from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Share extends Vue {
-
+@Prop() public link!: string;
 }
 </script>
 
