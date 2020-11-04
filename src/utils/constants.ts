@@ -376,3 +376,42 @@ export const FILTERS = [
     ],
   },
 ];
+
+export const SOCIALS = [
+  {
+    href: '#',
+    icon: '/assets/socials/facebook.svg',
+    type: 'facebook',
+    title: 'Facebook',
+  },
+  {
+    href: '#',
+    icon: '/assets/socials/odnoklassniki.svg',
+    type: 'ok',
+    title: 'OK',
+  },
+  {
+    href: '#',
+    icon: '/assets/socials/vk.svg',
+    type: 'vk',
+    title: 'VK',
+  },
+  {
+    href: '#',
+    icon: '/assets/socials/whatsapp.svg',
+    type: 'whatsapp',
+    title: 'Whatsapp',
+  },
+  {
+    href: '#',
+    icon: '/assets/socials/telegram.svg',
+    type: 'telegram',
+    title: 'Telegram',
+  },
+  {
+    href: '#',
+    icon: '/assets/socials/viber.svg',
+    type: 'viber',
+    title: 'Viber',
+  },
+];
