@@ -47,8 +47,11 @@ import { MenuItem } from '@/utils/models';
 @Component
 export default class CatalogMenu extends Vue {
   @Prop() public links!: MenuItem[];
-  headerHeight: number = 0;
+
+  headerHeight = 0;
+
   childMenu: MenuItem | null = null;
+
   header: any;
 
   subMenuOpen = false;
@@ -71,8 +74,8 @@ export default class CatalogMenu extends Vue {
     this.subMenuOpen = false;
   }
 
-  searchClick() {
-
+  searchClick = () => {
+    console.log('searchClick');
   }
 }
 </script>

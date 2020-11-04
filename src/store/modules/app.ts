@@ -1,7 +1,7 @@
 import { ProductShop } from '@/utils/models';
 
 interface AppState {
-  selectedShop: ProductShop | null,
+  selectedShop: ProductShop | null;
 }
 
 const state: AppState = {
@@ -11,7 +11,6 @@ const state: AppState = {
 const getters = {
   getSelectedShop: (state: AppState) => state.selectedShop,
 };
-
 
 const mutationTypes = {
   SET_SELECTED_SHOP: 'SET_SELECTED_SHOP',
@@ -23,11 +22,10 @@ const mutations = {
   },
 };
 
-
 const actions = {
   async setSelectedShop({ commit, state }, props) {
     commit('SET_SELECTED_SHOP', props);
-  }
+  },
 };
 
 export default {
@@ -35,5 +33,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

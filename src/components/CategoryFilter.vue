@@ -40,7 +40,7 @@
                 span.radio__icon
                 span.radio__text {{item.label}}
 
-        button(type="button" @click="handleSumbit").button.category-filter__submit Применить
+        button(type="button" @click="handleSubmit").button.category-filter__submit Применить
 
 </template>
 
@@ -56,9 +56,9 @@ export default class CategoryFilter extends Vue {
 
   closed = true;
 
-  handleSearch() {
-
-  }
+  handleSearch = () => {
+    console.log('querySelector');
+  };
 
   toggleAccordion(accordion, index, filter) {
     accordion.isOpen = !accordion.isOpen;
@@ -78,7 +78,7 @@ export default class CategoryFilter extends Vue {
     this.closed = false;
   }
 
-  handleSumbit() {
+  handleSubmit() {
     this.closed = true;
   }
 }

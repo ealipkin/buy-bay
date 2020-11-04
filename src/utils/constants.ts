@@ -1,4 +1,4 @@
-import { MenuItem } from '@/utils/models';
+import { BaseMenuItem, MenuItem } from '@/utils/models';
 
 export const breakPoints = {
   mobile: 320,
@@ -7,9 +7,32 @@ export const breakPoints = {
   desktop: 1296,
 };
 
+export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
+  {
+    title: 'Мой профиль',
+    href: '/profile',
+    icon: 'user',
+  },
+  {
+    title: 'Мои группы',
+    href: '/profile/group',
+    icon: 'users',
+  },
+  {
+    title: 'Мои заказы',
+    href: '/profile/orders',
+    icon: 'bag',
+  },
+  {
+    title: 'Мои группы',
+    href: '/profile/settings',
+    icon: 'bag',
+  },
+];
+
 export const MENU_ITEMS: MenuItem[] = [
   {
-    title: 'Электроника',
+    title: 'Мой профиль',
     href: '/category',
     icon: 'user',
     inGeneralMenu: true,

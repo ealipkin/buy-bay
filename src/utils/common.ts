@@ -5,7 +5,7 @@ export const debounce = (fn, time) => {
 
   return function () {
     // @ts-ignore
-    const functionCall = () => fn.apply(this, arguments);
+    const functionCall = () => fn.apply(this, ...rest);
 
     clearTimeout(timeout);
     timeout = setTimeout(functionCall, time);

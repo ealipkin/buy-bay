@@ -39,20 +39,21 @@ import { Component, Vue } from 'vue-property-decorator';
 import MainNav from '@/components/MainNav.vue';
 import router from '@/router';
 import HeaderShopCard from '@/components/HeaderShopCard.vue';
-import { mapGetters, mapState } from 'vuex';
-import { ProductShop } from '@/utils/models';
+import { mapGetters } from 'vuex';
 
 @Component({
   components: { HeaderShopCard, MainNav },
   computed: {
     ...mapGetters({
-      selectedShop: 'app/getSelectedShop'
+      selectedShop: 'app/getSelectedShop',
     }),
-  }
+  },
 })
 export default class Header extends Vue {
   search = '';
+
   selectedShop;
+
   searchSubmit(event) {
     event.preventDefault();
     console.log('searchSubmit');

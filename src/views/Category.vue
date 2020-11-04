@@ -175,9 +175,6 @@ export default class Index extends Vue {
       items: generateProducts(3),
     },
   ];
-
-  mounted() {
-  }
 }
 </script>
 

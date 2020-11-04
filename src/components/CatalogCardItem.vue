@@ -47,9 +47,7 @@ export default class CatalogCardItem extends Vue {
 
   @Prop() public item!: Product;
 
-  divideNumberWithSpaces(number) {
-    return divideNumberWithSpaces(number);
-  }
+  divideNumberWithSpaces = (number) => divideNumberWithSpaces(number)
 }
 </script>
 

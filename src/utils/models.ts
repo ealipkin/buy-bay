@@ -14,12 +14,15 @@ export interface ChildItem {
   links: ChildMenuItem[];
 }
 
-export interface MenuItem {
+export interface BaseMenuItem {
   title: string;
   href: string;
   icon: string;
-  inGeneralMenu?: boolean;
   isActive?: boolean;
+}
+
+export interface MenuItem extends BaseMenuItem {
+  inGeneralMenu?: boolean;
   brands?: BrandMenuItem[];
   children?: ChildItem[];
 }
@@ -64,7 +67,7 @@ export interface ProductDelivery {
 }
 
 export interface ProductShop {
-  id: string,
+  id: string;
   name: string;
   description: string;
   image: string;
@@ -104,4 +107,28 @@ export interface BreadcrumbLink {
   href: string;
   label: string;
   current?: boolean;
+}
+
+export enum ORDER_STATUSES {
+  SUCCESS = 'success',
+  FAIL = 'fail',
+}
+
+export interface OrderUser {
+  id: string;
+  orderId: string;
+  name: string;
+  avatar: string;
+}
+
+export interface OrderItem {
+  id: string;
+  image: string;
+  date: string;
+  title: string;
+  status: ORDER_STATUSES;
+  time?: number | undefined;
+  price: number;
+  users?: OrderUser[];
+  maxUsers?: number;
 }
