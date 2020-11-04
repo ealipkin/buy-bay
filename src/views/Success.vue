@@ -8,34 +8,27 @@
 
       hr.success-page__hr
 
-      .success-page__share
-        p.success-page__timer.timer
-          span.timer__message Мы вернем деньги, если никто не присоединиться в течении 24 часов.
-          span.timer__tick 23:59:23
+      .success-page__share-box
+        Timer.success-page__timer
 
         span.success-page__action Зови друзей скорее
-        ul.success-page__social.social
-          li.social__item fb
-          li.social__item fb
-          li.social__item fb
-          li.social__item fb
-          li.social__item fb
-          li.social__item fb
+        Social.success-page__social
 
-        p.alternate-share
-          label(for="copy").alternate-share__action Или скопируй ссылку, чтобы ей поделиться
-          span.alternate-share__box
-            input(value="http://vmdesh.ru/8dbuf3")#copy.alternate-share__input
-            button.alternate-share__copy Скопировать
+        Share
 
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import Timer from '@/components/Timer.vue';
+import Social from '@/components/Social.vue';
+import Share from '@/components/Share.vue';
 
 @Component({
   components: {
-
+    Timer,
+    Social,
+    Share,
   },
 })
 export default class Success extends Vue {
@@ -45,20 +38,26 @@ export default class Success extends Vue {
 
 <style lang="scss" scoped>
   .success-page {
-    background-color: $grey-3;
+    background-color: #fff;
+    background-image: url("../assets/success-background-mobile.png");
+    background-repeat: no-repeat;
+    background-position: center -215px;
 
     @include tablet() {
       padding: 34px 0 112px;
+      background-color: $grey-3;
+      background-image: url("../assets/success-background.png");
+    background-repeat: no-repeat;
+    background-position: center -300px;
     }
 
     &__wrapper {
-      background-color: #fff;
-
       @include tablet() {
         max-width: 884px;
         margin: 0 auto;
         border-radius: 8px;
         padding: 38px 150px 52px;
+        background-color: #fff;
       }
     }
 
@@ -123,7 +122,7 @@ export default class Success extends Vue {
       }
     }
 
-    &__share {
+    &__share-box {
       margin: 0 auto;
       padding: 16px 16px 46px;
 
@@ -160,117 +159,6 @@ export default class Success extends Vue {
 
       @include tablet() {
         margin-bottom: 51px;
-      }
-    }
-  }
-
-  .timer {
-    text-align: center;
-
-    &__message {
-      display: inline-block;
-      margin-bottom: 6px;
-      font-size: 12px;
-      text-align: center;
-
-      @include tablet() {
-        font-size: 14px;
-        line-height: 24px;
-        margin-bottom: 18px;
-        max-width: 280px;
-      }
-    }
-
-    &__tick {
-      display: block;
-      font-weight: 600;
-      font-size: 36px;
-      color: $blue;
-
-      @include tablet() {
-        font-size: 48px;
-      }
-    }
-  }
-
-  .social {
-    padding: 0;
-    list-style: none;
-    display: flex;
-    justify-content: center;
-
-    &__item {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: #ccc;
-      margin-right: 19px;
-
-      @include tablet() {
-        width: 40px;
-        height: 40px;
-        margin-right: 24px;
-      }
-
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-  }
-
-  .alternate-share {
-    &__action {
-      text-align: center;
-      display: block;
-      font-size: 12px;
-      color: $grey-2;
-      margin-bottom: 14px;
-
-      @include tablet() {
-        font-size: 14px;
-      }
-    }
-
-    &__box {
-      display: flex;
-      width: 100%;
-      max-width: 100%;
-    }
-
-    &__input {
-      box-sizing: border-box;
-      padding: 11px 14px 12px 19px;
-      font-size: 12px;
-      border: none;
-      background-color: $grey-1;
-      color: $grey-2;
-      flex-grow: 1;
-      flex-shrink: 1;
-      border-top-left-radius: 4px;
-      border-bottom-left-radius: 4px;
-
-      @include tablet() {
-        font-size: 16px;
-        padding: 20px;
-      }
-    }
-
-    &__copy {
-      box-sizing: border-box;
-      width: 44.28%;
-      border: none;
-      background-color: $blue;
-      padding: 11px 14px 12px 19px;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
-
-      @include tablet() {
-        font-size: 18px;
-        padding: 20px;
-        width: 42%;
       }
     }
   }
