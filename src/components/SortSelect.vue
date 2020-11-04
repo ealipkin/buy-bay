@@ -31,5 +31,15 @@ export default class SortSelect extends Vue {
       color: #7b8197;
       margin-right: 16px;
     }
+
+    &__select {
+      font-family: inherit;
+      font-size: 14px;
+      color: #222222;
+      border-radius: 2px;
+      border: solid 1px #ece1e1;
+      background-color: #ffffff;
+      padding: 9px 5px 9px 21px;
+    }
   }
 </style>

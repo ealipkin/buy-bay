@@ -1,5 +1,5 @@
 import {
-  Group, Product, PRODUCT_FEATURES, ProductFeature,
+  Group, Product, PRODUCT_FEATURES, ProductFeature, ProductShop,
 } from '@/utils/models';
 import { nanoid } from 'nanoid';
 
@@ -31,7 +31,7 @@ const createFeatures = () => {
   return FEATURES.slice(0, featuresLength);
 };
 
-const getRate = () => parseFloat(`${getRandomNumberBetween(0, 9)}.${getRandomNumberBetween(0, 9)}`);
+const getRate = () => `${getRandomNumberBetween(0, 9)},${getRandomNumberBetween(0, 9)}`;
 
 const createProduct = (item, index): Product => ({
   id: nanoid(),
@@ -64,13 +64,7 @@ const createProduct = (item, index): Product => ({
   groupPrice: getRandomNumberBetween(1000, 300000),
   orders: getRandomNumberBetween(1000, 700000),
   isFavourite: Boolean(getRandomNumberBetween(0, 1)),
-  shop: {
-    name: 'Nike',
-    image: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/50`,
-    orders: getRandomNumberBetween(100000, 500000),
-    rate: getRate(),
-    isFavourite: Boolean(getRandomNumberBetween(0, 1)),
-  },
+  shop: getShop(),
   delivery: {
     freeDelivery: '15-60 дней',
     refundFrom: '15 дек. 2018',
@@ -86,6 +80,16 @@ const createGroup = (item, index): Group => ({
   joinedUsers: getRandomNumberBetween(0, 20),
   title: 'Фото камера сумка через плечо крест цифровой',
   time: featureDate(),
+});
+
+export const getShop = (): ProductShop => ({
+  id: nanoid(),
+  name: 'Nike',
+  description: 'Магазин электроники в котором есть все',
+  image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/100`,
+  orders: getRandomNumberBetween(100000, 500000),
+  rate: getRate(),
+  isFavourite: Boolean(getRandomNumberBetween(0, 1)),
 });
 
 export const generateProducts = (count: number): Product[] => new Array(count).fill({}).map(createProduct);

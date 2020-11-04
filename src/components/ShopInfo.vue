@@ -1,5 +1,5 @@
 <template lang="pug">
-  .shop-info
+  router-link(:to="{ path: `/shop/${shop.id}` }").shop-info
     .shop-info__avatar.avatar
       img(:src="shop.image")
     .shop-info__info
@@ -31,6 +31,7 @@ export default class ShopInfo extends Vue {
 
 <style lang="scss" scoped>
   .shop-info {
+    text-decoration: none;
     display: flex;
     /*align-items: center;*/
 

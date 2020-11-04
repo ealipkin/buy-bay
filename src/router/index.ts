@@ -5,6 +5,11 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
+    path: '/shop/:id',
+    name: 'Shop',
+    component: () => import('../views/Shop.vue'),
+  },
+  {
     path: '/category',
     name: 'Category',
     component: () => import('../views/Category.vue'),
@@ -35,6 +40,13 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 });
 
 export default router;
