@@ -132,3 +132,10 @@ export interface OrderItem {
   users?: OrderUser[];
   maxUsers?: number;
 }
+
+export interface SocialLink {
+  href: string,
+  icon: string,
+  type: string,
+  title: string,
+}
