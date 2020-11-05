@@ -85,15 +85,21 @@ export default class TabsNav extends Vue {
     &--inner {
       display: inline-block;
       margin-bottom: 28px;
-    }
 
-    &--inner &__pane {
-
+      @include laptop() {
+        margin-bottom: 19px;
+      }
     }
 
     &--inner &__tab {
       font-size: 16px;
       padding: 0 8px 8px;
+
+      @include laptop() {
+        font-size: 18px;
+        font-weight: bold;
+        padding: 0 10px 10px;
+      }
 
       &:first-child {
         padding-left: 0;

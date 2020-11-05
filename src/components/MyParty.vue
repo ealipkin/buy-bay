@@ -1,10 +1,14 @@
 <template lang="pug">
-  span(v-if="status === ORDER_STATUSES.SUCCESS").my-party
+  span(v-if="status === ORDER_STATUSES.PENDING").my-party
     img(v-for="user in users" :src="user.avatar").my-party__img
     span участников: {{users.length}} из {{maxUsers}}
 
-  span(v-else).my-party.my-party--not
-    img(src="@/assets/icons/my-group-failed.svg").my-party__img
+  span(v-else-if="status === ORDER_STATUSES.SUCCESS").my-party.my-party--success
+    img(src="@/assets/icons/my-success.svg").my-party__img
+    span Группа сформирована
+
+  span(v-else).my-party.my-party--fail
+    img(src="@/assets/icons/my-failed.svg").my-party__img
     span Группа не сформирована
 </template>
 
@@ -29,15 +33,28 @@ export default class MyParty extends Vue {
     font-size: 12px;
     color: $grey-2;
     display: flex;
+    align-items: center;
 
-    &--not {
+    @include laptop() {
+      display: inline-flex;
+      min-height: 24px;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    &--fail {
       color: $red-1;
+      font-weight: bold;
+    }
+
+    &--success {
+      color: $green-1;
       font-weight: bold;
     }
 
     &__img {
       width: 18px;
-      height: auto;
+      height: 18px;
       border-radius: 50%;
       border: 1px solid #fff;
       margin-right: -9px;
@@ -51,6 +68,15 @@ export default class MyParty extends Vue {
       &:last-of-type {
         margin-right: 8px;
         z-index: 0;
+      }
+
+      @include laptop() {
+        width: 24px;
+        height: 24px;
+
+        &:last-of-type {
+          margin-right: 16px;
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 <template lang="pug">
   .my-groups
-    .page
+    .page.page--aside-tablet
       Breadcrumbs(:links="Breadcrumbs").my-groups__breadcrumbs
       .page__layout
         .page__aside.my-groups__aside
@@ -67,12 +67,24 @@ export default class MyGroups extends Vue {
   padding-top: 16px;
   background-color: #fff;
 
+  @include laptop() {
+    background-color: $grey-3;
+  }
+
   &__breadcrumbs {
     display: none;
+
+    @include tablet() {
+      display: flex;
+    }
   }
 
   &__aside {
     display: none;
+
+    @include tablet() {
+      display: block;
+    }
   }
 }
 
