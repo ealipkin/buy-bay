@@ -39,6 +39,11 @@ const routes: Array<RouteConfig> = [
     name: 'Success',
     component: () => import('../views/Success.vue'),
   },
+  {
+    path: '/my-groups',
+    name: 'MyGroups',
+    component: () => import('../views/MyGroups.vue'),
+  },
 ];
 
 const router = new VueRouter({

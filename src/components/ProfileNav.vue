@@ -1,16 +1,16 @@
 <template lang="pug">
-  p tabs
-
+  div here ProfileNav
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
-export default class Tabs extends Vue {
+export default class ProfileNav extends Vue {
 
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+
 </style>
