@@ -4,15 +4,14 @@
       .success-page__info
         span.success-page__nice Ура!
         h1.success-page__title Группа покупки создана
-        p.success-page__message Теперь зовите друзей в группу и они получат супер-цену на данный товар. Достаточно 1 друга, чтобы товар был отправлен.
+        p.success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Достаточно 1 друга, чтобы товар был отправлен.
 
       hr.success-page__hr
 
       .success-page__share-box
         Timer(:time="shareTimer").success-page__timer
 
-        span.success-page__action Зови друзей скорее
-        Social(:socials="socials").success-page__social
+        SocialList(:socials="socials").success-page__social-list
 
         Share(:link="shareLink")
 
@@ -21,7 +20,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Timer from '@/components/Timer.vue';
-import Social from '@/components/Social.vue';
+import SocialList from '@/components/SocialList.vue';
 import Share from '@/components/Share.vue';
 
 import { SOCIALS, SHARE_TIMER, SHARE_LINK } from '@/utils/constants';
@@ -29,7 +28,7 @@ import { SOCIALS, SHARE_TIMER, SHARE_LINK } from '@/utils/constants';
 @Component({
   components: {
     Timer,
-    Social,
+    SocialList,
     Share,
   },
 })
@@ -105,7 +104,7 @@ export default class Success extends Vue {
       }
     }
 
-    &__message {
+    &__text {
       margin: 0;
       color: $black-1;
       font-size: 12px;
@@ -150,17 +149,8 @@ export default class Success extends Vue {
       }
     }
 
-    &__action {
-      font-size: 14px;
-      color: $black-1;
-      font-weight: bold;
-      display: block;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    &__social {
-    margin: 0;
+    &__social-list {
+    @include clearList();
     margin-bottom: 46px;
 
       @include tablet() {

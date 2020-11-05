@@ -1,9 +1,9 @@
 <template lang="pug">
-  p.share
-    label(for="copy").share__action Или скопируй ссылку, чтобы ей поделиться
-    span.share__box
-      input(:value="link")#copy.share__input
-      button.share__copy Скопировать
+  .share
+    span.share__message Или скопируй ссылку, чтобы ей поделиться
+    .share__box
+      span(v-model="link").share__field {{link}}
+      button(type="button" v-clipboard:copy="link").share__button Скопировать
 </template>
 
 <script lang="ts">
@@ -11,13 +11,13 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Share extends Vue {
-@Prop() public link!: string;
+  @Prop() public link!: string;
 }
 </script>
 
 <style lang="scss">
   .share {
-    &__action {
+    &__message {
       text-align: center;
       display: block;
       font-size: 12px;
@@ -35,7 +35,7 @@ export default class Share extends Vue {
       max-width: 100%;
     }
 
-    &__input {
+    &__field {
       box-sizing: border-box;
       padding: 11px 14px 12px 19px;
       font-size: 12px;
@@ -53,7 +53,8 @@ export default class Share extends Vue {
       }
     }
 
-    &__copy {
+    &__button {
+      @include clearButton();
       box-sizing: border-box;
       width: 44.28%;
       border: none;

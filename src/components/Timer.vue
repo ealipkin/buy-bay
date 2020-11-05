@@ -1,6 +1,6 @@
 <template lang="pug">
-  p.timer
-    span.timer__message Мы вернем деньги, если никто не присоединиться в течении 24 часов.
+  .timer
+    span.timer__text Мы вернем деньги, если никто не присоединиться в течении 24 часов.
     vac(:end-time="time").timer__tick
       template(v-slot:process="{ timeObj }")
         span {{ `${timeObj.h}:${timeObj.m}:${timeObj.s}`}}
@@ -21,7 +21,7 @@ export default class Timer extends Vue {
     .timer {
     text-align: center;
 
-    &__message {
+    &__text {
       display: inline-block;
       margin-bottom: 6px;
       font-size: 12px;
