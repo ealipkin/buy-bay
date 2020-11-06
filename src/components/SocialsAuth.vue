@@ -44,6 +44,7 @@ export default class SocialsAuth extends Vue {
       text-align: center;
       color: #7b8197;
       margin-bottom: 24px;
+      padding: 0 15px;
 
       @include tablet() {
         font-size: 14px;

@@ -4,7 +4,8 @@
       Breadcrumbs(:links="breadCrumbs")
     .page__header.container
       .page__title Сумки и рюкзаки
-      SortSelect(:options="selectOptions").category__sort
+      .category__sort
+        SortSelect(:options="selectOptions")
     .container.category__inner
       .page__layout
         .page__aside
@@ -13,7 +14,8 @@
           .category__list
             .category__item(v-for="(item, index) in items" :key="index")
               CatalogCardItem(:item="item")
-          Pagination(:moreCount="50").category__pagination
+          .category__pagination
+            Pagination(:moreCount="50")
 
     Advantages(:advantagesList="advantagesList").category__advantages
 

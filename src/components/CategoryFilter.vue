@@ -11,17 +11,13 @@
 
           div(:class="{'category-filter__category-wrapper--open': filter.isOpen}").category-filter__category-wrapper
             div(v-if="filter.isSearch").category-filter__search
-              .input.input--search
-                .input__icon.input__icon--search
+              .input-search
+                .input-search__icon
                   include ../assets/icons/search.svg
-                input(type="search" @input="handleSearch" placeholder="Поиск").category-filter__search-field.input__field
+                input(type="search" @input="handleSearch" placeholder="Поиск").category-filter__search-field.input-search__field
 
             div(v-if="filter.type === 'checkbox'").category-filter__block.category-filter__block--checkbox
-              label(v-for="item in filter.items").checkbox
-                input(type="checkbox" :checked="item.selected" :value="item.value").visually-hidden
-                span.checkbox__icon
-                span.checkbox__text {{item.label}}
-                span.checkbox__count {{item.count}}
+              Checkbox(v-for="(item, i) in filter.items" :key="i" :checked="item.selected" :value="item.value" :name="item.label" :label="item.label" :count="item.count")
 
             div(v-if="filter.type === 'accordion'").category-filter__block.category-filter__block--accordion
               .accordion.category-filter__accordion
@@ -35,10 +31,7 @@
               ColorSelect(:colors="filter.items").category-filter__colors
 
             div(v-if="filter.type === 'radio'").category-filter__block.category-filter__block--radio
-              label(v-for="item in filter.items").radio
-                input(type="radio" :checked="item.selected" :value="item.value" :name="filter.name").visually-hidden
-                span.radio__icon
-                span.radio__text {{item.label}}
+              Radio(v-for="(item, i) in filter.items" :key="i" :checked="item.selected" :value="item.value" :name="filter.name" :label="item.label")
 
         button(type="button" @click="handleSubmit").button.category-filter__submit Применить
 
@@ -47,9 +40,11 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ColorSelect from '@/components/ColorSelect.vue';
+import Checkbox from '@/components/Checkbox.vue';
+import Radio from '@/components/Radio.vue';
 
 @Component({
-  components: { ColorSelect },
+  components: { Radio, Checkbox, ColorSelect },
 })
 export default class CategoryFilter extends Vue {
   @Prop() public filters!: any[];

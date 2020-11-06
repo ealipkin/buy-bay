@@ -1,16 +1,16 @@
 <template lang="pug">
-  .form-input
-    input(v-if="required" :type="type || 'text'" required :value="value" :placeholder="label").form-input__field
-    input(v-if="!required" :type="type || 'text'" :value="value"  :placeholder="label").form-input__field
-    label(v-if="label" :data-placeholder="label").form-input__label {{label}}
-      sup(v-if="required").form-input__required-mark *
+  .input
+    input(v-if="required" :type="type || 'text'" required :value="value" :placeholder="label").input__field
+    input(v-if="!required" :type="type || 'text'" :value="value"  :placeholder="label").input__field
+    label(v-if="label" :data-placeholder="label").input__label {{label}}
+      sup(v-if="required").input__required-mark *
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
-export default class FormInput extends Vue {
+export default class Input extends Vue {
   @Prop() public name!: string;
 
   @Prop() public label!: string;
@@ -24,7 +24,7 @@ export default class FormInput extends Vue {
 </script>
 
 <style scoped lang="scss">
-  .form-input {
+  .input {
     position: relative;
 
     &:last-child {
@@ -84,7 +84,7 @@ export default class FormInput extends Vue {
       color: #61a7ff;
       letter-spacing: 0.1px;
 
-      .form-input__required-mark {
+      .input__required-mark {
         margin-left: 4px;
         top: -0.1em;
       }

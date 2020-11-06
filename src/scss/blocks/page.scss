@@ -1,3 +1,9 @@
+@mixin visible-aside() {
+  width: 285px;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
 .page {
   &__header {
     display: flex;
@@ -23,6 +29,7 @@
       font-size: 32px;
     }
   }
+
   &__catalog-nav {
     display: none;
     @include laptop() {
@@ -38,15 +45,33 @@
 
   &__aside {
     @include laptop() {
-      width: 285px;
-      margin-right: 16px;
-      flex-shrink: 0;
+      @include visible-aside();
     }
   }
 
   &__content {
     @include laptop() {
       flex: 1;
+    }
+  }
+
+  &--aside-tablet & {
+    &__layout {
+      @include tablet() {
+        display: flex;
+      }
+    }
+
+    &__aside {
+      @include tablet() {
+        @include visible-aside()
+      }
+    }
+
+    &__content {
+      @include tablet() {
+        flex: 1;
+      }
     }
   }
 }

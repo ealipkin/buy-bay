@@ -1,0 +1,30 @@
+.input-search {
+  position: relative;
+  width: 100%;
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    left: 16px;
+    width: 14px;
+    color: #d4d3d3;
+  }
+
+  &__field {
+    padding-top: 0;
+    height: 36px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: solid 1px #ededed;
+
+    font-size: 14px;
+    color: #7b8197;
+  }
+
+  &__icon + &__field {
+    padding-left: 44px;
+  }
+}

@@ -1,31 +1,41 @@
 <template lang="pug">
-  modal(name="login-modal" @closed="modalClose" :adaptive="true" :classes="'login-modal'" width="90%" minWidth="290" maxWidth="450" height="auto")
+  modal(name="login-modal" @closed="modalClose" :adaptive="true" :classes="'login-modal'" width="90%" :minWidth="290" :maxWidth="450" height="auto")
     .modal
       button(type="button" @click="closeModal").modal__close.close
       .modal__content.login-modal__content
         TabsNav(:tabs="tabs" v-on:change="selectTab").tabs-nav--small.login-modal__tabs
         div(:class="{'tab--active': selectedTab === 'login'}").tab.login-modal__login
-          .login-modal__inner
-            FormInput(:required="true" label="Телефон или адрес эл.почты" name="login").login-modal__input
-            FormInput(:required="true" label="Пароль" name="password" type="password").login-modal__input
-            button(type="button" @click="login").button.login-modal__login-button Войти
+          .login-modal__inner.form
+            Input(:required="true" label="Телефон или адрес эл.почты" name="login").form__input
+            Input(:required="true" label="Пароль" name="password" type="password").form__input
+            button(type="button" @click="login").button.form__login-button Войти
             .login-modal__forgot
               button(type="button" @click="forgotPassword").link Забыли пароль?
-      SocialsAuth(title="Войти, используя социальные сети").login-modal__social-auth
+
+        div(:class="{'tab--active': selectedTab === 'register'}").tab.login-modal__register
+          Registration(@register="handleRegister" @later="closeModal").login-modal__inner
+      SocialsAuth(:title="socialsTitle" v-if="showSocialsAuth").login-modal__social-auth
 
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import FormInput from '@/components/FormInput.vue';
+import Input from '@/components/Input.vue';
 import TabsNav from '@/components/TabsNav.vue';
 import SocialsAuth from '@/components/SocialsAuth.vue';
+import Registration from '@/components/Registration.vue';
 
 @Component({
-  components: { SocialsAuth, TabsNav, FormInput },
+  components: { Registration, SocialsAuth, TabsNav, Input },
 })
 export default class LoginModal extends Vue {
   selectedTab = 'login';
+  showSocialsAuth = true;
+  accountCreated = false;
+
+  get socialsTitle() {
+    return this.selectedTab === 'login' ? 'Войти, используя социальные сети' : 'Создать аккаунт, используя социальные сети';
+  }
 
   showModal() {
     console.log('show');
@@ -40,6 +50,11 @@ export default class LoginModal extends Vue {
 
   login() {
     // login here
+  }
+
+  handleRegister() {
+    this.showSocialsAuth = false;
+    this.accountCreated = true;
   }
 
   forgotPassword() {
@@ -64,6 +79,9 @@ export default class LoginModal extends Vue {
 
   selectTab(tabId) {
     this.selectedTab = tabId;
+    if (!this.accountCreated) {
+      this.showSocialsAuth = true;
+    }
   }
 }
 </script>
@@ -130,22 +148,12 @@ export default class LoginModal extends Vue {
       }
     }
 
-    &__input {
-      margin-bottom: 20px;
-
-      @include tablet() {
-        margin-bottom: 25px;
-      }
-    }
-
-    &__login-button {
-      width: 100%;
-      font-size: 18px;
-      height: 60px;
-      margin-top: 24px;
-
-      @include tablet() {
-        margin-top: 32px;
+    &__register {
+      padding-bottom: 25px;
+      margin-top: -10px;
+      @include laptop() {
+        margin-top: -13px;
+        padding-bottom: 40px;
       }
     }
 
