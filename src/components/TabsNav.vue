@@ -87,7 +87,7 @@ export default class TabsNav extends Vue {
       margin-bottom: 28px;
 
       @include laptop() {
-        margin-bottom: 19px;
+        margin-bottom: 21px;
       }
     }
 

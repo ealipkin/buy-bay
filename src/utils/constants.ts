@@ -15,7 +15,7 @@ export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
   },
   {
     title: 'Мои группы',
-    href: '/profile/group',
+    href: '/profile/groups',
     icon: 'users',
   },
   {
@@ -24,9 +24,9 @@ export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
     icon: 'bag',
   },
   {
-    title: 'Мои группы',
+    title: 'Настройки сервиса',
     href: '/profile/settings',
-    icon: 'bag',
+    icon: 'settings',
   },
 ];
 export const ADVANTAGES = [

@@ -5,12 +5,13 @@
       .page__layout
         .page__aside.my-orders__aside
           h1.page__title Мои заказы
-          ProfileNav
+          ProfileNav(:items="profileMenuItems")
 
         .page__content
           TabsNav(:tabs="tabs" @change="selectTab").tabs-nav--inner
           ul.my-orders__list
             MyItem(v-for="order in myOrders" :order="order" :key="order.id").my-orders__item
+          Pagination(:moreCount="100").my-orders__pagination
 
 </template>
 
@@ -21,7 +22,9 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import ProfileNav from '@/components/ProfileNav.vue';
 import TabsNav from '@/components/TabsNav.vue';
 import MyItem from '@/components/MyItem.vue';
+import Pagination from '@/components/Pagination.vue';
 import { BreadcrumbLink } from '@/utils/models';
+import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
 import { generateOrders } from '@/utils/data';
 
@@ -31,16 +34,19 @@ import { generateOrders } from '@/utils/data';
     ProfileNav,
     TabsNav,
     MyItem,
+    Pagination,
   },
 })
 export default class MyOrders extends Vue {
   Breadcrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
-    { href: '/my-profile', label: 'Мой профиль' },
+    { href: '/profile', label: 'Мой профиль' },
     { label: 'Мои заказы', current: true },
   ];
 
   myOrders = generateOrders(10);
+
+  profileMenuItems = PROFILE_MENU_ITEMS;
 
   selectedTab = 1;
 
@@ -66,10 +72,12 @@ export default class MyOrders extends Vue {
 .my-orders {
   @include container();
   padding-top: 16px;
+  padding-bottom: 10px;
   background-color: #fff;
 
   @include laptop() {
     background-color: $grey-3;
+    padding-bottom: 155px;
   }
 
   &__breadcrumbs {
@@ -90,7 +98,7 @@ export default class MyOrders extends Vue {
 
   &__list {
     @include clearList();
-    padding-bottom: 92px;
+    margin-bottom: 92px;
   }
 
   &__item {
@@ -104,6 +112,14 @@ export default class MyOrders extends Vue {
       margin-bottom: 0;
       padding-bottom: 0;
       border-bottom: 0;
+    }
+  }
+
+  &__pagination {
+    display: none;
+
+    @include laptop() {
+      display: flex;
     }
   }
 }

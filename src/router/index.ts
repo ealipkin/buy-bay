@@ -40,12 +40,12 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/Success.vue'),
   },
   {
-    path: '/my-groups',
+    path: '/profile/groups',
     name: 'MyGroups',
     component: () => import('../views/MyGroups.vue'),
   },
   {
-    path: '/my-orders',
+    path: '/profile/orders',
     name: 'MyOrders',
     component: () => import('../views/MyOrders.vue'),
   },
