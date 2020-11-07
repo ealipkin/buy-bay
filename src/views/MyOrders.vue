@@ -1,16 +1,16 @@
 <template lang="pug">
-  .my-groups
+  .my-orders
     .page.page--aside-tablet
-      Breadcrumbs(:links="Breadcrumbs").my-groups__breadcrumbs
+      Breadcrumbs(:links="Breadcrumbs").my-orders__breadcrumbs
       .page__layout
-        .page__aside.my-groups__aside
-          h1.page__title Мои группы
+        .page__aside.my-orders__aside
+          h1.page__title Мои заказы
           ProfileNav
 
         .page__content
           TabsNav(:tabs="tabs" @change="selectTab").tabs-nav--inner
-          ul.my-groups__list
-            MyItem(v-for="order in myOrders" :order="order" :key="order.id").my-groups__item
+          ul.my-orders__list
+            MyItem(v-for="order in myOrders" :order="order" :key="order.id").my-orders__item
 
 </template>
 
@@ -33,11 +33,11 @@ import { generateOrders } from '@/utils/data';
     MyItem,
   },
 })
-export default class MyGroups extends Vue {
+export default class MyOrders extends Vue {
   Breadcrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/my-profile', label: 'Мой профиль' },
-    { label: 'Мои группы', current: true },
+    { label: 'Мои заказы', current: true },
   ];
 
   myOrders = generateOrders(10);
@@ -52,7 +52,7 @@ export default class MyGroups extends Vue {
     },
     {
       id: 2,
-      label: 'Прошедшие',
+      label: 'Завершенные',
     },
   ];
 
@@ -63,7 +63,7 @@ export default class MyGroups extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.my-groups {
+.my-orders {
   @include container();
   padding-top: 16px;
   background-color: #fff;

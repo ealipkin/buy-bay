@@ -44,6 +44,11 @@ const routes: Array<RouteConfig> = [
     name: 'MyGroups',
     component: () => import('../views/MyGroups.vue'),
   },
+  {
+    path: '/my-orders',
+    name: 'MyOrders',
+    component: () => import('../views/MyOrders.vue'),
+  },
 ];
 
 const router = new VueRouter({

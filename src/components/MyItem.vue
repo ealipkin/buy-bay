@@ -1,34 +1,36 @@
 <template lang="pug">
-  ul.my-list
-    li(v-for="order in myOrders").my-list__item.order
-      img(:src="order.image").order__img
-      span.order__content
-        span.order__date {{order.date}}
-        h3.order__title {{order.title | truncate(45)}}
-        MyParty(:users="order.users" :status="order.status" :maxUsers="order.maxUsers").order__party
+  li.order
+    img(:src="order.image").order__img
+    span.order__content
+      span.order__date {{order.date}}
+      h3.order__title {{order.title | truncate(45)}}
+      MyItemStatus(:users="order.users" :status="order.status" :maxUsers="order.maxUsers").order__status
 
-        MyItemTimer(:time="order.time")
-        span.order__box
-          include ../assets/icons/group-button.svg
-          span.order__price {{divideNumberWithSpaces(order.price)}} ₽
-          button(type="button").order__button Пригласить друзей
+      MyItemTimer(v-if="order.status === ORDER_STATUSES.PENDING" :time="order.time")
+      span.order__box
+        include ../assets/icons/group-button.svg
+        span.order__price {{divideNumberWithSpaces(order.price)}} ₽
+        button(type="button" v-if="order.status === ORDER_STATUSES.PENDING").order__button Пригласить друзей
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import MyItemTimer from '@/components/MyItemTimer.vue';
-import MyParty from '@/components/MyParty.vue';
+import MyItemStatus from '@/components/MyItemStatus.vue';
 
 import { divideNumberWithSpaces } from '@/utils/common';
+import { ORDER_STATUSES } from '@/utils/models';
 
 @Component({
   components: {
     MyItemTimer,
-    MyParty,
+    MyItemStatus,
   },
 })
-export default class MyList extends Vue {
-  @Prop() public myOrders!: object[];
+export default class MyItem extends Vue {
+  @Prop() public order!: object;
+
+  ORDER_STATUSES = ORDER_STATUSES;
 
   divideNumberWithSpaces(number) {
     return divideNumberWithSpaces(number);
@@ -37,25 +39,6 @@ export default class MyList extends Vue {
 </script>
 
 <style lang="scss">
-  .my-list {
-    @include clearList();
-    padding-bottom: 92px;
-
-    &__item {
-      margin-bottom: 20px;
-
-      @include laptop() {
-        margin-bottom: 16px;
-      }
-
-      &:last-child {
-        margin-bottom: 0;
-        padding-bottom: 0;
-        border-bottom: 0;
-      }
-    }
-  }
-
   .order {
     display: flex;
     align-items: flex-start;
@@ -116,7 +99,7 @@ export default class MyList extends Vue {
       }
     }
 
-    &__party {
+    &__status {
       margin-bottom: 13px;
 
       @include laptop() {

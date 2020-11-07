@@ -1,14 +1,26 @@
 <template lang="pug">
-  span(v-if="status === ORDER_STATUSES.PENDING").my-party
-    img(v-for="user in users" :src="user.avatar").my-party__img
+  span(v-if="status === ORDER_STATUSES.PENDING").item-status
+    img(v-for="user in users" :src="user.avatar").item-status__img
     span участников: {{users.length}} из {{maxUsers}}
 
-  span(v-else-if="status === ORDER_STATUSES.SUCCESS").my-party.my-party--success
-    img(src="@/assets/icons/my-success.svg").my-party__img
+  span(v-else-if="status === ORDER_STATUSES.SUCCESS").item-status.item-status--success
+    img(src="@/assets/icons/my-success.svg").item-status__img
+    span Заказ доставлен
+
+  span(v-else-if="status === ORDER_STATUSES.SEND").item-status.item-status--success
+    img(src="@/assets/icons/my-success.svg").item-status__img
+    span Заказ отправлен
+
+  span(v-else-if="status === ORDER_STATUSES.FULFILL").item-status.item-status--success
+    img(src="@/assets/icons/my-success.svg").item-status__img
     span Группа сформирована
 
-  span(v-else).my-party.my-party--fail
-    img(src="@/assets/icons/my-failed.svg").my-party__img
+  span(v-else-if="status === ORDER_STATUSES.REJECT").item-status.item-status--fail
+    img(src="@/assets/icons/my-failed.svg").item-status__img
+    span Заказ отменен
+
+  span(v-else).item-status.item-status--fail
+    img(src="@/assets/icons/my-failed.svg").item-status__img
     span Группа не сформирована
 </template>
 
@@ -17,7 +29,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { ORDER_STATUSES } from '@/utils/models';
 
 @Component
-export default class MyParty extends Vue {
+export default class MyItemStatus extends Vue {
   @Prop() public users!: object[];
 
   @Prop() public status!: string;
@@ -29,7 +41,7 @@ export default class MyParty extends Vue {
 </script>
 
 <style lang="scss">
-  .my-party {
+  .item-status{
     font-size: 12px;
     color: $grey-2;
     display: flex;

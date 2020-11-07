@@ -115,6 +115,7 @@ export enum ORDER_STATUSES {
   FULFILL = 'fulfill', // группа сформирована
   FAIL = 'fail', // группа не сформирована
   SEND = 'send', // заказ отправлен
+  REJECT = 'reject', // заказ отменен
 }
 
 export interface OrderUser {
