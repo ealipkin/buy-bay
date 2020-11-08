@@ -19,6 +19,7 @@ export default class Select extends Vue {
 
 <style scoped lang="scss">
   .select {
-
+    width: 200px;
+    height: 40px;
   }
 </style>

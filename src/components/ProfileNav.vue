@@ -11,6 +11,9 @@
         template(v-if="item.icon === 'bag'")
           include ../assets/icons/bag.svg
 
+        template(v-if="item.icon === 'heart'")
+          include ../assets/icons/heart.svg
+
         template(v-if="item.icon === 'settings'")
           include ../assets/icons/settings.svg
 

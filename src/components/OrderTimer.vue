@@ -1,13 +1,13 @@
 <template lang="pug">
   span(v-if="time").order-timer
-    include ../assets/icons/my-list-timer.svg
+    include ../assets/icons/order-timer.svg
     vac(:end-time="time")
       template(v-slot:process="{ timeObj }")
         span {{ `${timeObj.h}:${timeObj.m}:${timeObj.s}`}}
       template(v-slot:finish)
 
   span(v-else).order-timer.order-timer--not
-    include ../assets/icons/my-list-timer.svg
+    include ../assets/icons/order-timer.svg
     span 00:00:00
 </template>
 
