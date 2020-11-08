@@ -4,9 +4,9 @@
     span.order__content
       span.order__date {{order.date}}
       h3.order__title {{order.title | truncate(45)}}
-      MyItemStatus(:users="order.users" :status="order.status" :maxUsers="order.maxUsers").order__status
+      OrderStatus(:users="order.users" :status="order.status" :maxUsers="order.maxUsers").order__status
 
-      MyItemTimer(v-if="order.status === ORDER_STATUSES.PENDING" :time="order.time")
+      OrderTimer(v-if="order.status === ORDER_STATUSES.PENDING" :time="order.time")
       span.order__box
         include ../assets/icons/group-button.svg
         span.order__price {{divideNumberWithSpaces(order.price)}} ₽
@@ -15,19 +15,19 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import MyItemTimer from '@/components/MyItemTimer.vue';
-import MyItemStatus from '@/components/MyItemStatus.vue';
+import OrderTimer from '@/components/OrderTimer.vue';
+import OrderStatus from '@/components/OrderStatus.vue';
 
 import { divideNumberWithSpaces } from '@/utils/common';
 import { ORDER_STATUSES } from '@/utils/models';
 
 @Component({
   components: {
-    MyItemTimer,
-    MyItemStatus,
+    OrderTimer,
+    OrderStatus,
   },
 })
-export default class MyItem extends Vue {
+export default class OrderItem extends Vue {
   @Prop() public order!: object;
 
   ORDER_STATUSES = ORDER_STATUSES;

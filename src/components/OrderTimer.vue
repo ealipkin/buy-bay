@@ -1,12 +1,12 @@
 <template lang="pug">
-  span(v-if="time").my-item-timer
+  span(v-if="time").order-timer
     include ../assets/icons/my-list-timer.svg
     vac(:end-time="time")
       template(v-slot:process="{ timeObj }")
         span {{ `${timeObj.h}:${timeObj.m}:${timeObj.s}`}}
       template(v-slot:finish)
 
-  span(v-else).my-item-timer.my-item-timer--not
+  span(v-else).order-timer.order-timer--not
     include ../assets/icons/my-list-timer.svg
     span 00:00:00
 </template>
@@ -15,13 +15,13 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
-export default class MyItemTimer extends Vue {
+export default class OrderTimer extends Vue {
 @Prop() public time!: number;
 }
 </script>
 
 <style scoped lang="scss">
-  .my-item-timer {
+  .order-timer {
     font-size: 12px;
     display: flex;
     color: $grey-2;

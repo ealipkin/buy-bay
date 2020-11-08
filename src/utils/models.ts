@@ -138,8 +138,8 @@ export interface OrderItem {
 }
 
 export interface SocialLink {
-  href: string,
-  icon: string,
-  type: string,
-  title: string,
+  href: string;
+  icon: string;
+  type: string;
+  title: string;
 }
