@@ -110,8 +110,12 @@ export interface BreadcrumbLink {
 }
 
 export enum ORDER_STATUSES {
-  SUCCESS = 'success',
-  FAIL = 'fail',
+  SUCCESS = 'success', // заказ доставлен
+  PENDING = 'pending', // ожидаем участников группы
+  FULFILL = 'fulfill', // группа сформирована
+  FAIL = 'fail', // группа не сформирована
+  SEND = 'send', // заказ отправлен
+  REJECT = 'reject', // заказ отменен
 }
 
 export interface OrderUser {
@@ -134,8 +138,8 @@ export interface OrderItem {
 }
 
 export interface SocialLink {
-  href: string,
-  icon: string,
-  type: string,
-  title: string,
+  href: string;
+  icon: string;
+  type: string;
+  title: string;
 }
