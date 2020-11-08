@@ -24,6 +24,11 @@ export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
     icon: 'bag',
   },
   {
+    title: 'Избранное',
+    href: '/profile/favourites',
+    icon: 'heart',
+  },
+  {
     title: 'Настройки сервиса',
     href: '/profile/settings',
     icon: 'settings',

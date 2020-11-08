@@ -49,6 +49,11 @@ const routes: Array<RouteConfig> = [
     name: 'MyOrders',
     component: () => import('../views/MyOrders.vue'),
   },
+  {
+    path: '/profile/favourites',
+    name: 'MyFavourites',
+    component: () => import('../views/MyFavourites.vue'),
+  },
 ];
 
 const router = new VueRouter({
