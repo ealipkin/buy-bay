@@ -27,6 +27,7 @@ export default class DeliveryInfo extends Vue {
 <style lang="scss" scoped>
   .delivery-info {
     padding: 16px 15px 21px;
+    background-color: #fff;
 
     @include tablet() {
       border-radius: 8px;

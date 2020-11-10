@@ -76,6 +76,21 @@ export interface ProductShop {
   isFavourite: boolean;
 }
 
+export interface Location {
+  street: string;
+  house: string;
+  flat: string;
+  city: string;
+  county: string;
+  index: string;
+}
+
+export interface Contacts {
+  name: string;
+  phone: string;
+  address: Location;
+}
+
 export interface Product {
   id: string;
   title: string;
@@ -91,6 +106,10 @@ export interface Product {
   isFavourite: boolean;
   shop?: ProductShop;
   delivery?: ProductDelivery;
+  status: ORDER_STATUSES;
+  contacts: Contacts;
+  users: OrderUser[];
+  messages: Message[];
 }
 
 export interface Group {
@@ -123,6 +142,12 @@ export interface OrderUser {
   orderId: string;
   name: string;
   avatar: string;
+}
+
+export interface Message {
+  userId: string;
+  date: string;
+  text: string;
 }
 
 export interface OrderItem {

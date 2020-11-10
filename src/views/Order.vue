@@ -3,20 +3,15 @@
     .order__breadcrumbs
       Breadcrumbs(:links="breadCrumbs")
     .order__main
-      .order__product
-        h2.order__product-title Фото камера сумка через плечоФото камера сумка через плечоФото камера сумка через плечоФото камера сумка через плечоФото камера сумка через плечо
-
-      .order__status
-        h3.order__status-title Статус заказа
-
-      .order__delivery-address
-        h3.order__address-title Адрес доставкиАдрес доставкиАдрес доставкиАдрес доставкиАдрес доставкиАдрес доставкиАдрес доставкиАдрес доставкиАдрес доставкиАдрес доставкиАдрес доставки
-
-      .order__dilivery-time
-        h3.order__time-title Бесплатная доставка 15-60 дней
-
-      .order__chat
-        h3.order__chat-title Связь с продавцом
+      .order__left-col
+        OrderProduct(:item="item").order__product.order__item
+        OrderStatusFull(:item="item" v-if="isMobile").order__status.order__item
+        DeliveryAddress(:contacts="item.contacts").order__address.order__item
+        DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").order__delivery.order__item
+        Chat(:users="item.users" :messages="item.messages").order__item
+      .order__aside
+        OrderStatusFull(:item="item" v-if="!isMobile").order__status.order__item
+        DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").order__delivery.order__item.order__item--delivery
 
 </template>
 
@@ -24,25 +19,23 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import { generateGroups, generateProducts } from '@/utils/data';
-import ItemPreview from '@/components/ItemPreview.vue';
-import ItemInfo from '@/components/ItemInfo.vue';
-import ItemGroups from '@/components/ItemGroups.vue';
-import ItemDescription from '@/components/ItemDescription.vue';
-import ItemShopCard from '@/components/ItemShopCard.vue';
 import DeliveryInfo from '@/components/DeliveryInfo.vue';
 import { breakPoints } from '@/utils/constants';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import OrderProduct from '@/components/OrderProduct.vue';
+import DeliveryAddress from '@/components/DeliveryAddress.vue';
+import OrderStatusFull from '@/components/OrderStatusFull.vue';
+import Chat from '@/components/Chat.vue';
 import { BreadcrumbLink } from '@/utils/models';
 
 @Component({
   components: {
     Breadcrumbs,
     DeliveryInfo,
-    ItemShopCard,
-    ItemInfo,
-    ItemPreview,
-    ItemGroups,
-    ItemDescription,
+    OrderProduct,
+    OrderStatusFull,
+    DeliveryAddress,
+    Chat,
   },
 })
 export default class Order extends Vue {
@@ -91,96 +84,68 @@ export default class Order extends Vue {
     @include container();
     padding-left: 15px;
     padding-right: 15px;
-    padding-bottom: 85px;
 
-    &__product,
-    &__status,
-    &__delivery-address,
-    &__dilivery-time,
-    &__chat {
-      background-color: #fff;
-      border-radius: 8px;
-      padding: 30px;
-
+    @include tablet() {
+      padding-bottom: 85px;
     }
 
-    &__product {
-      grid-column: 1 / 2;
-      grid-row: 1 / 3;
-    }
-
-    &__status {
-      grid-column: 2 / 3;
-      grid-row: 1 / 2;
-    }
-
-    &__delivery-address {
-      grid-column: 1 / 2;
-      grid-row: 3 / 5;
-    }
-
-    &__dilivery-time {
-      grid-column: 2 / 3;
-      grid-row: 2 / 4;
-    }
-
-    &__chat {
-      grid-column: 1 / 2;
-      grid-row: 5 / auto;
-    }
-
-    // &__item {
-    //   margin-left: -15px;
-    //   margin-right: -15px;
-
-    //   @include tablet() {
-    //     margin-left: 0;
-    //     margin-right: 0;
-    //   }
-    // }
-
-    // &__delivery {
-    //   background: white;
-    //   margin-top: 16px;
-    // }
-
-    &__main {
-      /*display: flex;*/
+    &__item {
+      margin-left: -15px;
+      margin-right: -15px;
 
       @include tablet() {
-        // display: flex;
-        display: grid;
-        grid-template-columns: 686px 438px;
-        grid-template-rows: auto auto auto auto auto;
-        grid-gap: 16px;
-        align-items: flex-start;
-
+        margin-left: 0;
+        margin-right: 0;
+        border-radius: 8px;
+        border: 1px solid $grey-6;
       }
     }
 
-    // &__left-col {
-    //   @include tablet() {
-    //     /*width: calc(100% - 300px - 15px);*/
-    //     width: 1px;
-    //     flex: 1;
-    //     margin-right: 10px;
-    //     max-width: 686px;
-    //   }
+    &__product {
+      margin-bottom: 12px;
+    }
 
-    //   @include laptop() {
-    //     margin-right: 16px;
-    //   }
-    // }
+    &__status {
+      margin-bottom: 12px;
+    }
 
-    // &__aside {
-    //   @include tablet() {
-    //     width: 300px;
-    //   }
+    &__address {
+      margin-bottom: 12px;
+    }
 
-    //   @include laptop() {
-    //     width: 438px;
-    //   }
-    // }
+    &__delivery {
+      margin-bottom: 12px;
+    }
+
+    &__main {
+
+      @include tablet() {
+        display: flex;
+      }
+    }
+
+    &__left-col {
+      @include tablet() {
+        width: 1px;
+        flex: 1;
+        margin-right: 10px;
+        max-width: 686px;
+      }
+
+      @include laptop() {
+        margin-right: 16px;
+      }
+    }
+
+    &__aside {
+      @include tablet() {
+        width: 300px;
+      }
+
+      @include laptop() {
+        width: 438px;
+      }
+    }
 
     &__breadcrumbs {
       display: none;
@@ -190,14 +155,4 @@ export default class Order extends Vue {
       }
     }
   }
-
-        //- .order__left-col
-      //-   ItemPreview(:item="item").order__item.order__item--preview
-      //-   ItemDescription(:item="item" v-if="!isMobile").order__item.order__item--description
-      //- .order__aside
-      //-   ItemInfo(:item="item").order__item.order__item--info
-      //-   ItemGroups(:groups="groups").order__item.order__item--groups
-      //-   ItemDescription(:item="item" v-if="isMobile").order__item.order__item--description
-      //-   ItemShopCard(v-if="item.shop" :shop="item.shop").order__item.order__item--shop
-      //-   DeliveryInfo(:deliveryItem="item.delivery").order__delivery.order__item.order__item--delivery
 </style>

@@ -68,18 +68,93 @@ const createProduct = (item, index): Product => ({
       title: 'Размер',
       id: '2',
       values: [{ label: 'S (47)', value: 's' }, { label: 'M (48-50)', value: 'm', selected: true }, { label: 'L (50-52)', value: 'l' }],
-    }],
+    },
+    {
+      title: 'Дата заказа',
+      id: '3',
+      values: [{ label: Date.now().toString(), value: Date.now().toString(), selected: true }],
+    },
+    {
+      title: 'Номер',
+      id: '4',
+      values: [{ label: 'Z635Y635', value: 'Z635Y635', selected: true }],
+    },
+    {
+      title: 'Статус',
+      id: '5',
+      values: [{ label: 'Отправлен', value: ORDER_STATUSES.SEND, selected: true }],
+    },
+    {
+      title: 'Количество',
+      id: '6',
+      values: [{ label: '1', value: '1', selected: true }],
+    },
+    {
+      title: 'Доставка',
+      id: '7',
+      values: [{
+        label: `20.02.2020 —  23.03.2020
+      Chine Standard Shipping
+      230 ₽ `, value: `20.02.2020 —  23.03.2020
+      Chine Standard Shipping
+      230 ₽ `, selected: true
+      }],
+    },
+    {
+      title: 'Итоговая стоимость',
+      id: '8',
+      values: [{ label: '244 585 ₽', value: '244 585', selected: true }],
+    },],
   description: DESCRIPTION,
   selfPrice: getRandomNumberBetween(1000, 400000),
   groupPrice: getRandomNumberBetween(1000, 300000),
   orders: getRandomNumberBetween(1000, 700000),
   isFavourite: Boolean(getRandomNumberBetween(0, 1)),
+  status: ORDER_STATUSES.SEND,
   shop: getShop(),
+  contacts: {
+    name: 'Nikulin Alexander Ivanovich',
+    phone: '+7 995 115-55-16',
+    address: {
+      street: 'Lenina street',
+      house: 'dom 34',
+      flat: 'kv 24',
+      city: 'Moscow',
+      county: 'Russian Federation',
+      index: '129343',
+    },
+  },
   delivery: {
     freeDelivery: '15-60 дней',
     refundFrom: '15 дек. 2018',
     refundTo: '22 янв. 2019',
   },
+  users: [
+    {
+      id: '1',
+      orderId: '1',
+      name: 'Вы',
+      avatar: `https://picsum.photos/id/${2 + getRandomNumberBetween(0, 100)}/50`,
+    },
+    {
+      id: '2',
+      orderId: '1',
+      name: 'Сабина Фатулина',
+      avatar: `https://picsum.photos/id/${2 + getRandomNumberBetween(0, 100)}/50`,
+    },
+  ],
+  messages: [
+    {
+      userId: '1',
+      date: '27 декбря 2018',
+      text: 'Так, а че когда доставят товар?',
+    },
+    {
+      userId: '2',
+      date: '16 марта 2018',
+      text: 'Добрый день. Простите, просто забыли отправить. Сейчас все сделаем.',
+    },
+  ]
 });
 
 const createGroup = (item, index): Group => ({
