@@ -5,36 +5,38 @@
 
   span(v-else-if="status === ORDER_STATUSES.SUCCESS").order-status.order-status--success
     img(src="@/assets/icons/success.svg").order-status__img
-    span Заказ доставлен
+    span Заказ доставлен {{optionalText}}
 
   span(v-else-if="status === ORDER_STATUSES.SEND").order-status.order-status--success
     img(src="@/assets/icons/success.svg").order-status__img
-    span Заказ отправлен
+    span Заказ отправлен {{optionalText}}
 
   span(v-else-if="status === ORDER_STATUSES.FULFILL").order-status.order-status--success
     img(src="@/assets/icons/success.svg").order-status__img
-    span Группа сформирована
+    span Группа сформирована {{optionalText}}
 
   span(v-else-if="status === ORDER_STATUSES.REJECT").order-status.order-status--fail
     img(src="@/assets/icons/fail.svg").order-status__img
-    span Заказ отменен
+    span Заказ отменен {{optionalText}}
 
   span(v-else).order-status.order-status--fail
     img(src="@/assets/icons/fail.svg").order-status__img
-    span Группа не сформирована
+    span Группа не сформирована {{optionalText}}
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { ORDER_STATUSES } from '@/utils/models';
+import { ORDER_STATUSES, OrderUser } from '@/utils/models';
 
 @Component
 export default class OrderStatus extends Vue {
-  @Prop() public users!: object[];
+  @Prop() public users!: OrderUser[];
 
   @Prop() public status!: string;
 
   @Prop() public maxUsers!: number;
+
+  @Prop() public optionalText!: string;
 
   ORDER_STATUSES = ORDER_STATUSES;
 }
@@ -46,6 +48,10 @@ export default class OrderStatus extends Vue {
     color: $grey-2;
     display: flex;
     align-items: center;
+
+    &--big {
+      font-size: 14px;
+    }
 
     @include laptop() {
       display: inline-flex;
@@ -89,6 +95,13 @@ export default class OrderStatus extends Vue {
         &:last-of-type {
           margin-right: 16px;
         }
+      }
+    }
+
+    &--big &{
+      &__img {
+        width: 20px;
+        height: 20px;
       }
     }
   }

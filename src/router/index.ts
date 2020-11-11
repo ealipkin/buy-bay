@@ -50,6 +50,11 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/MyOrders.vue'),
   },
   {
+    path: '/profile/orders/:id',
+    name: 'OrderDetail',
+    component: () => import('../views/OrderDetail.vue'),
+  },
+  {
     path: '/profile/favourites',
     name: 'MyFavourites',
     component: () => import('../views/MyFavourites.vue'),
