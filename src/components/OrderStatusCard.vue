@@ -1,12 +1,12 @@
 <template lang="pug">
-  .order-status-full
-    h3.order-status-full__title Статус заказа
-    OrderStatus(:status="item.status" :optionalText="'продавцом'").order-status-full__status.order-status--big
+  .order-status-card
+    h3.order-status-card__title Статус заказа
+    OrderStatus(:status="item.meta.status.value.value" :optionalText="'продавцом'").order-status-card__status.order-status--big
 
-    p.order-status-full__text Это означает, что скоро, посылка дойдет до вас. Если это уже произошло, вы можете оставить отзыв
+    p.order-status-card__text Это означает, что скоро, посылка дойдет до вас. Если это уже произошло, вы можете оставить отзыв
 
-    OrderTableFull(:options="item.options").order-status-full__table
-    router-link(to="#").order-status-full__link Пожаловаться
+    OrderResultTable(:meta="item.meta").order-status-card__table
+    router-link(to="#").order-status-card__link Пожаловаться
 
 </template>
 
@@ -14,21 +14,21 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Product } from '@/utils/models';
 import OrderStatus from '@/components/OrderStatus.vue';
-import OrderTableFull from '@/components/OrderTableFull.vue';
+import OrderResultTable from '@/components/OrderResultTable.vue';
 
 @Component({
   components: {
     OrderStatus,
-    OrderTableFull,
+    OrderResultTable,
   },
 })
-export default class OrderStatusFull extends Vue {
+export default class OrderStatusCard extends Vue {
   @Prop() public item!: Product;
 }
 </script>
 
 <style scoped lang="scss">
-  .order-status-full {
+  .order-status-card {
     padding: 24px 16px;
     background-color: #fff;
 

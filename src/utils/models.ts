@@ -91,6 +91,22 @@ export interface Contacts {
   address: Location;
 }
 
+export interface ProductMetaItem {
+  title: string;
+  value: object;
+}
+
+export interface ProductMeta {
+  date: ProductMetaItem;
+  index: ProductMetaItem;
+  status: ProductMetaItem;
+  color: ProductMetaItem;
+  size: ProductMetaItem;
+  quantity: ProductMetaItem;
+  delivery: ProductMetaItem;
+  resultCost: ProductMetaItem;
+}
+
 export interface Product {
   id: string;
   title: string;
@@ -98,6 +114,7 @@ export interface Product {
   groups: number;
   images: ProductImage;
   features: ProductFeature[];
+  meta: ProductMeta;
   options: ProductOption[];
   description: string;
   selfPrice: number;
@@ -106,7 +123,6 @@ export interface Product {
   isFavourite: boolean;
   shop?: ProductShop;
   delivery?: ProductDelivery;
-  status: ORDER_STATUSES;
   contacts: Contacts;
   users: OrderUser[];
   messages: Message[];

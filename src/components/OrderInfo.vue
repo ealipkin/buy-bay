@@ -1,18 +1,18 @@
 <template lang="pug">
-  .order-product
-    img(:src="item.images.preview").order-product__img
-    .order-product__box
-      h2.order-product__title {{item.title}}
+  .order-info
+    img(:src="item.images.preview").order-info__img
+    .order-info__box
+      h2.order-info__title {{item.title}}
 
-      span.order-product__orders
+      span.order-info__orders
         img(src="../assets/icons/order-package.svg")
         span Заказов: {{divideNumberWithSpaces(this.item.orders)}}
-      Rate(:rate="item.rate").order-product__rate
+      Rate(:rate="item.rate").order-info__rate
 
-      OrderTableShort(:options="item.options" :optionIds="['1', '2', '6',]").order-product__table
+      PickedOptionsBox(:options="item.options").order-info__picked-options
 
-      span.order-product__label Групповая цена
-      span.order-product__price {{divideNumberWithSpaces(item.groupPrice)}} ₽
+      span.order-info__label Групповая цена
+      span.order-info__price {{divideNumberWithSpaces(item.groupPrice)}} ₽
 </template>
 
 <script lang="ts">
@@ -20,27 +20,24 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { divideNumberWithSpaces } from '@/utils/common';
 import { Product } from '@/utils/models';
 import Rate from '@/components/Rate.vue';
-import OrderTableShort from '@/components/OrderTableShort.vue';
+import PickedOptionsBox from '@/components/PickedOptionsBox.vue';
 
 @Component({
   components: {
     Rate,
-    OrderTableShort,
+    PickedOptionsBox,
   },
 })
-export default class OrderProduct extends Vue {
+export default class OrderInfo extends Vue {
   @Prop() public item!: Product;
 
-  divideNumberWithSpaces(number) {
-    return divideNumberWithSpaces(number);
-  }
+  divideNumberWithSpaces = (number) => divideNumberWithSpaces(number);
 }
 </script>
 
 <style scoped lang="scss">
-  .order-product {
+  .order-info {
     display: flex;
-    justify-content: center;
     align-items: flex-start;
     padding: 20px 16px 24px;
     background-color: #fff;
@@ -87,7 +84,7 @@ export default class OrderProduct extends Vue {
       }
     }
 
-    &__table {
+    &__picked-options {
       margin-bottom: 24px;
     }
 
@@ -142,11 +139,11 @@ export default class OrderProduct extends Vue {
       }
     }
 
-    &__table {
+    &__picked-options {
       display: none;
 
       @include tablet() {
-        display: table;
+        display: flex;
       }
     }
 

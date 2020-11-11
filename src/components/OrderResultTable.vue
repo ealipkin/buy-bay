@@ -1,26 +1,26 @@
 <template lang="pug">
-  table.order-table
+  table.order-result-table
     tbody
-      tr(v-for="option in options").order-table__row
-        td.order-table__data {{option.title}}
-        td.order-table__data {{selectedValue(option).label}}
+      tr(v-for="metaItem in metaValues").order-result-table__row
+        td.order-result-table__data {{metaItem.title}}
+        td.order-result-table__data {{metaItem.value.label}}
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProductOption } from '@/utils/models';
+import { ProductMeta } from '@/utils/models';
 
 @Component
-export default class OrderTableFull extends Vue {
-  @Prop() public options!: ProductOption[];
+export default class OrderResultTable extends Vue {
+  @Prop() public meta!: ProductMeta;
 
-  selectedValue = (option) => option.values.find((value) => value.selected);
+  metaValues = Object.values(this.meta);
 }
 </script>
 
 <style scoped lang="scss">
-  .order-table {
+  .order-result-table {
     border-collapse: collapse;
 
     &__data {

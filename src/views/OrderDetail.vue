@@ -1,17 +1,17 @@
 <template lang="pug">
-  .order
-    .order__breadcrumbs
+  .order-detail
+    .order-detail__breadcrumbs
       Breadcrumbs(:links="breadCrumbs")
-    .order__main
-      .order__left-col
-        OrderProduct(:item="item").order__product.order__item
-        OrderStatusFull(:item="item" v-if="isMobile").order__status.order__item
-        DeliveryAddress(:contacts="item.contacts").order__address.order__item
-        DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").order__delivery.order__item
-        Chat(:users="item.users" :messages="item.messages").order__item
-      .order__aside
-        OrderStatusFull(:item="item" v-if="!isMobile").order__status.order__item
-        DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").order__delivery.order__item.order__item--delivery
+    .order-detail__main
+      .order-detail__left-col
+        OrderInfo(:item="item").order-detail__product.order-detail__item
+        OrderStatusCard(:item="item" v-if="isMobile").order-detail__status.order-detail__item
+        DeliveryAddress(:contacts="item.contacts").order-detail__address.order-detail__item
+        DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").order-detail__delivery.order-detail__item
+        Chat(:users="item.users" :messages="item.messages").order-detail__item
+      .order-detail__aside
+        OrderStatusCard(:item="item" v-if="!isMobile").order-detail__status.order-detail__item
+        DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").order-detail__delivery.order-detail__item
 
 </template>
 
@@ -22,9 +22,9 @@ import { generateGroups, generateProducts } from '@/utils/data';
 import DeliveryInfo from '@/components/DeliveryInfo.vue';
 import { breakPoints } from '@/utils/constants';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import OrderProduct from '@/components/OrderProduct.vue';
+import OrderInfo from '@/components/OrderInfo.vue';
 import DeliveryAddress from '@/components/DeliveryAddress.vue';
-import OrderStatusFull from '@/components/OrderStatusFull.vue';
+import OrderStatusCard from '@/components/OrderStatusCard.vue';
 import Chat from '@/components/Chat.vue';
 import { BreadcrumbLink } from '@/utils/models';
 
@@ -32,13 +32,13 @@ import { BreadcrumbLink } from '@/utils/models';
   components: {
     Breadcrumbs,
     DeliveryInfo,
-    OrderProduct,
-    OrderStatusFull,
+    OrderInfo,
+    OrderStatusCard,
     DeliveryAddress,
     Chat,
   },
 })
-export default class Order extends Vue {
+export default class OrderDetail extends Vue {
   breadCrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
@@ -80,7 +80,7 @@ export default class Order extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .order {
+  .order-detail {
     @include container();
     padding-left: 15px;
     padding-right: 15px;

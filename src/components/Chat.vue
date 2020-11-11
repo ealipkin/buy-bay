@@ -12,7 +12,7 @@
     form(@submit.prevent).chat__form
       label
         span.chat__form-label Ваше сообщение
-        textarea(placeholder="Вот это поворот, давайте быстрее").chat__form-textarea
+        textarea.chat__form-textarea Вот это поворот, давайте быстрее
       button(type="submit").chat__form-submit Отправить
 </template>
 
@@ -24,7 +24,7 @@ import { OrderUser, Message } from '@/utils/models';
 export default class Chat extends Vue {
   @Prop() public users!: OrderUser[];
 
-  @Prop() public Message!: Message[];
+  @Prop() public messages!: Message[];
 
   getUserById = (id) => this.users.find((user) => user.id === id);
 }

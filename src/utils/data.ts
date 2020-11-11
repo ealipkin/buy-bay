@@ -55,6 +55,68 @@ const createProduct = (item, index): Product => ({
     })),
   },
   features: createFeatures(),
+  meta: {
+    date: {
+      title: 'Дата заказа',
+      value: {
+        label: Date.now().toString(),
+        value: Date.now().toString(),
+      },
+    },
+    index: {
+      title: 'Номер',
+      value: {
+        label: 'Z635Y635',
+        value: 'Z635Y635',
+      },
+    },
+    status: {
+      title: 'Статус',
+      value: {
+        label: 'Отправлен',
+        value: ORDER_STATUSES.SEND,
+      },
+    },
+    color: {
+      title: 'Цвет',
+      value: {
+        label: 'Черный',
+        value: 'black',
+      },
+    },
+    size: {
+      title: 'Размер',
+      value: {
+        label: 'M (48-50)',
+        value: 'm',
+      },
+    },
+    quantity: {
+      title: 'Количество',
+      value: {
+        label: '1',
+        value: '1',
+      },
+    },
+    delivery: {
+      title: 'Доставка',
+      value: {
+        label: `20.02.2020 —  23.03.2020
+        Chine Standard Shipping
+        230 ₽ `,
+        value: `20.02.2020 —  23.03.2020
+        Chine Standard Shipping
+        230 ₽ `,
+      },
+    },
+    resultCost: {
+      title: 'Итоговая стоимость',
+      value: {
+        label: '244 585',
+        value: '244 585',
+      },
+    },
+  },
   options: [
     {
       title: 'Цвета',
@@ -70,47 +132,15 @@ const createProduct = (item, index): Product => ({
       values: [{ label: 'S (47)', value: 's' }, { label: 'M (48-50)', value: 'm', selected: true }, { label: 'L (50-52)', value: 'l' }],
     },
     {
-      title: 'Дата заказа',
-      id: '3',
-      values: [{ label: Date.now().toString(), value: Date.now().toString(), selected: true }],
-    },
-    {
-      title: 'Номер',
-      id: '4',
-      values: [{ label: 'Z635Y635', value: 'Z635Y635', selected: true }],
-    },
-    {
-      title: 'Статус',
-      id: '5',
-      values: [{ label: 'Отправлен', value: ORDER_STATUSES.SEND, selected: true }],
-    },
-    {
       title: 'Количество',
-      id: '6',
-      values: [{ label: '1', value: '1', selected: true }],
-    },
-    {
-      title: 'Доставка',
-      id: '7',
-      values: [{
-        label: `20.02.2020 —  23.03.2020
-      Chine Standard Shipping
-      230 ₽ `, value: `20.02.2020 —  23.03.2020
-      Chine Standard Shipping
-      230 ₽ `, selected: true
-      }],
-    },
-    {
-      title: 'Итоговая стоимость',
-      id: '8',
-      values: [{ label: '244 585 ₽', value: '244 585', selected: true }],
+      id: '3',
+      values: [{ label: '1', value: '1', selected: true },],
     },],
   description: DESCRIPTION,
   selfPrice: getRandomNumberBetween(1000, 400000),
   groupPrice: getRandomNumberBetween(1000, 300000),
   orders: getRandomNumberBetween(1000, 700000),
   isFavourite: Boolean(getRandomNumberBetween(0, 1)),
-  status: ORDER_STATUSES.SEND,
   shop: getShop(),
   contacts: {
     name: 'Nikulin Alexander Ivanovich',
