@@ -158,10 +158,19 @@ export default class BigSlider extends Vue {
       pointer-events: none;
       width: 100%;
       border-radius: 6px;
+
+      @include laptop() {
+        border-radius: 8px;
+        overflow: hidden;
+      }
     }
 
     &__slide {
       padding: 0 7px;
+      @include laptop() {
+        border-radius: 8px;
+        overflow: hidden;
+      }
       @include desktop() {
         padding: 0;
       }
@@ -188,7 +197,6 @@ export default class BigSlider extends Vue {
         position: absolute;
         right: 0;
         display: block;
-        border-radius: 8px;
       }
 
       img {

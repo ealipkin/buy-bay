@@ -28,7 +28,9 @@
       a.catalog-card__title-link
         h3.catalog-card__title {{item.title | truncate(35)}}
       .catalog-card__price
-        p.catalog-card__actual-price {{divideNumberWithSpaces(item.groupPrice)}}
+        p.catalog-card__actual-price
+          include ../assets/icons/group-button.svg
+          span {{divideNumberWithSpaces(item.groupPrice)}}
           span ₽
         p.catalog-card__old-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
 </template>
@@ -176,14 +178,23 @@ export default class CatalogCardItem extends Vue {
       min-width: 67px;
       border-radius: 4px;
       text-align: center;
-
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      svg {
+        display: none;
+      }
       @include laptop() {
         padding: 3px 7px;
-        padding-left: 29px;
-        background-image: url(../assets/icons/group-button.svg);
         background-position: 8px center;
         font-size: 16px;
         font-weight: 600;
+
+        svg {
+          display: block;
+          margin-right: 2px;
+          opacity: 0.7;
+        }
       }
     }
 

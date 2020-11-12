@@ -19,19 +19,32 @@
         button(type="submit").header-search__submit-button.button Найти
 
       .header-main__user-block
-        router-link(to="#").header-main__user-block-favorites
-          span.header-main__favorites-icon
+        router-link(to="#").notification-button.header__fav-btn
+          span.notification-button__icon
             include ../assets/icons/heart.svg
-            span.header-main__favorites-number 23
-          p.header-main__favorites-text Избранное
-        .header-main__user-wrap
+            span.notification-button__number 23
+          p.notification-button__text Избранное
+        div(v-if="!showLogin").header-main__user-wrap
           button(type="button" @click="openLoginModal()").header-main__user-block-text Регистрация
           button(type="button" @click="openLoginModal()").header-main__user-block-text.header-main__user-block-text--login Войти
+
+        div(v-if="showLogin").header-main__user-wrap
+          button(type="button" @click="toggleNotifications").notification-button
+            span.notification-button__icon
+              include ../assets/icons/bell.svg
+              span.notification-button__number 9
+            p.notification-button__text Уведомления
+
+          button(type="button" @click="toggleUserMenu").header__user-btn
+            span.header__user-name {{user.name}}
+            span.header__user-avatar
+              img(:src="user.avatar")
+          Notifications(:notifications="notifications").header__notifications
     .header-inner
       HeaderShopCard(:shop="selectedShop" v-if="selectedShop")
     .header-bottom
       MainNav.container
-
+    .container
     LoginModal(ref="loginModal")
 </template>
 
@@ -42,9 +55,10 @@ import router from '@/router';
 import HeaderShopCard from '@/components/HeaderShopCard.vue';
 import { mapGetters } from 'vuex';
 import LoginModal from '@/components/LoginModal.vue';
+import Notifications from '@/components/Notifications.vue';
 
 @Component({
-  components: { LoginModal, HeaderShopCard, MainNav },
+  components: { Notifications, LoginModal, HeaderShopCard, MainNav },
   computed: {
     ...mapGetters({
       selectedShop: 'app/getSelectedShop',
@@ -53,13 +67,32 @@ import LoginModal from '@/components/LoginModal.vue';
 })
 export default class Header extends Vue {
   search = '';
+  user = {
+    name: 'Владимир',
+    avatar: '',
+  };
 
   selectedShop;
+  isAuthenticated = false;
+
+  get showLogin() {
+    return this.isAuthenticated;
+  }
+
+  set showLogin(value) {
+    this.isAuthenticated = value;
+  }
+
+  toggleUserMenu() {
+    console.log('toggleUserMenu');
+  }
+
+  toggleNotifications() {
+    console.log('toggleNotifications');
+  }
 
   searchSubmit(event) {
     event.preventDefault();
-    console.log('searchSubmit');
-    console.log(this.search);
     if (this.search && this.search.length) {
       router.push({ path: '/search', query: { q: this.search } });
     }
@@ -71,7 +104,7 @@ export default class Header extends Vue {
   }
 
   mounted() {
-    console.log('mounted');
+    this.showLogin = true;
   }
 }
 </script>
@@ -83,6 +116,15 @@ export default class Header extends Vue {
     background: white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.19);
     position: relative;
+
+    &__fav-btn {
+      margin-right: 15px;
+      margin-left: 15px;
+      @include tablet() {
+        margin-left: 12px;
+        margin-right: 37px;
+      }
+    }
   }
 
   .header-top {
@@ -175,53 +217,6 @@ export default class Header extends Vue {
       /*flex-wrap: wrap;*/
       align-items: center;
       justify-content: space-between;
-    }
-
-    &__favorites-icon {
-      display: block;
-      margin: 0 auto;
-      width: 28px;
-      color: $blue;
-      position: relative;
-    }
-
-    &__user-block-favorites {
-      text-decoration: none;
-      position: relative;
-      margin-right: 15px;
-      margin-left: 15px;
-      text-align: center;
-
-      svg {
-        display: flex;
-      }
-
-      @include tablet() {
-        margin-left: 12px;
-        text-align: center;
-        margin-top: 6px;
-        margin-right: 37px;
-      }
-    }
-
-    &__favorites-text {
-      font-size: 12px;
-      color: #496cff;
-      margin-top: 3px;
-      margin-bottom: 0;
-    }
-
-    &__favorites-number {
-      font-size: 12px;
-      font-weight: bold;
-      height: 18px;
-      border-radius: 9px;
-      color: #ffffff;
-      background-color: #496cff;
-      position: absolute;
-      padding: 0 6px;
-      top: 2px;
-      transform: translateY(-50%);
     }
 
     &__user-block-text {
