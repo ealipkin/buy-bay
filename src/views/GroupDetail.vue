@@ -1,32 +1,30 @@
 <template lang="pug">
-  .order-detail
-    .order-detail__breadcrumbs
+  .group-detail
+    .group-detail__breadcrumbs
       Breadcrumbs(:links="breadCrumbs")
-    h1.order-detail__title Заказ отправлен продавцом
-    .order-detail__main
-      .order-detail__left-col
-        OrderInfo(:item="item").order-detail__product.order-detail__item
-        OrderStatusCard(:item="item" v-if="isMobile").order-detail__status.order-detail__item
-        DeliveryAddress(:contacts="item.contacts").order-detail__address.order-detail__item
-        DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").order-detail__delivery.order-detail__item
-        Chat(:users="item.users" :messages="item.messages").order-detail__item
-      .order-detail__aside
-        OrderStatusCard(:item="item" v-if="!isMobile").order-detail__status.order-detail__item
-        DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").order-detail__delivery.order-detail__item
+    h1.group-detail__title Группа на покупку
+    .group-detail__main
+      .group-detail__left-col
+        OrderInfo(:item="item").group-detail__product.group-detail__item.order-info--group
+        GroupInfo(:users="users").group-detail__info.group-detail__item
+        GroupAction(:selfPrice="item.selfPrice" v-if="isMobile").group-detail__action.group-detail__item
+        DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").group-detail__delivery.group-detail__item
+      .group-detail__aside
+        GroupAction(:selfPrice="item.selfPrice" v-if="!isMobile").group-detail__action.group-detail__item
+        DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").group-detail__delivery.group-detail__item
 
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import { generateProducts } from '@/utils/data';
+import { generateGroups, generateUsers, generateProducts } from '@/utils/data';
 import DeliveryInfo from '@/components/DeliveryInfo.vue';
 import { breakPoints } from '@/utils/constants';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import OrderInfo from '@/components/OrderInfo.vue';
-import DeliveryAddress from '@/components/DeliveryAddress.vue';
-import OrderStatusCard from '@/components/OrderStatusCard.vue';
-import Chat from '@/components/Chat.vue';
+import GroupInfo from '@/components/GroupInfo.vue';
+import GroupAction from '@/components/GroupAction.vue';
 import { BreadcrumbLink } from '@/utils/models';
 
 @Component({
@@ -34,17 +32,16 @@ import { BreadcrumbLink } from '@/utils/models';
     Breadcrumbs,
     DeliveryInfo,
     OrderInfo,
-    OrderStatusCard,
-    DeliveryAddress,
-    Chat,
+    GroupInfo,
+    GroupAction,
   },
 })
-export default class OrderDetail extends Vue {
+export default class GroupDetail extends Vue {
   breadCrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
-    { href: '/profile/orders', label: 'Мои заказы' },
-    { href: '/profile/orders/:id', label: 'order title?', current: true },
+    { href: '/profile/groups', label: 'Мои группы' },
+    { href: '/profile/groups/:id', label: 'group title?', current: true },
   ];
 
   get isMobile() {
@@ -61,6 +58,10 @@ export default class OrderDetail extends Vue {
   };
 
   item = generateProducts(1).pop();
+
+  groups = generateGroups(12);
+
+  users = generateUsers(4);
 
   handleResize() {
     this.window.width = window.innerWidth;
@@ -79,26 +80,13 @@ export default class OrderDetail extends Vue {
 </script>
 
 <style lang="scss" scoped>
-  .order-detail {
+  .group-detail {
     @include container();
     padding-left: 15px;
     padding-right: 15px;
 
     @include tablet() {
       padding-bottom: 85px;
-    }
-
-    &__title {
-      display: none;
-
-      @include tablet() {
-        font-size: 32px;
-        margin: 0;
-        margin-bottom: 24px;
-        font-weight: 600;
-        color: $black-1;
-        display: block;
-      }
     }
 
     &__item {
@@ -118,21 +106,18 @@ export default class OrderDetail extends Vue {
       }
     }
 
-    // &__product {
-    //   margin-bottom: 12px;
-    // }
+    &__title {
+      display: none;
 
-    // &__status {
-    //   margin-bottom: 12px;
-    // }
-
-    // &__address {
-    //   margin-bottom: 12px;
-    // }
-
-    // &__delivery {
-    //   margin-bottom: 12px;
-    // }
+      @include tablet() {
+        font-size: 32px;
+        margin: 0;
+        margin-bottom: 24px;
+        font-weight: 600;
+        color: $black-1;
+        display: block;
+      }
+    }
 
     &__main {
 

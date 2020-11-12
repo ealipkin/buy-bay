@@ -150,8 +150,7 @@ export default class Success extends Vue {
     }
 
     &__social-list {
-    @include clearList();
-    margin-bottom: 46px;
+      margin-bottom: 46px;
 
       @include tablet() {
         margin-bottom: 51px;

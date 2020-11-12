@@ -21,8 +21,29 @@ export default class PickedOptionsBox extends Vue {
   .picked-options-box {
     font-size: 14px;
     color: $black-1;
-    display: flex;
+    display: none;
     flex-wrap: wrap;
+
+    @include tablet() {
+      display: flex;
+    }
+
+    &--group {
+      display: flex;
+      width: 100%;
+
+      @include tablet() {
+        display: none;
+      }
+
+      .picked-options-box__item {
+        padding-right: 39px;
+
+        &:last-child {
+          padding-right: 0;
+        }
+      }
+    }
 
     &__item {
       margin: 0;

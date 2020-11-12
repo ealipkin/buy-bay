@@ -220,3 +220,5 @@ export const generateProducts = (count: number): Product[] => new Array(count).f
 export const generateOrders = (count: number): OrderItem[] => new Array(count).fill({}).map(createOrder);
 
 export const generateGroups = (count: number) => new Array(count).fill({}).map(createGroup);
+
+export const generateUsers = (count: number) => new Array(count).fill({}).map(createUser);
