@@ -204,6 +204,13 @@ const createUser = (item, index): OrderUser => ({
   avatar: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/50`,
 });
 
+const createDefaultUser = (item, index): object => ({
+  id: null,
+  orderId: null,
+  name: null,
+  avatar: getRandomNumberBetween(0, 1) ? require(`../assets/icons/default-user-man.svg`) : require(`../assets/icons/default-user-women.svg`),
+});
+
 const createOrder = (item, index): OrderItem => ({
   id: nanoid(),
   image: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/200`,
@@ -220,3 +227,7 @@ export const generateProducts = (count: number): Product[] => new Array(count).f
 export const generateOrders = (count: number): OrderItem[] => new Array(count).fill({}).map(createOrder);
 
 export const generateGroups = (count: number) => new Array(count).fill({}).map(createGroup);
+
+export const generateUsers = (count: number) => new Array(count).fill({}).map(createUser);
+
+export const generateDefaultUsers = (count: number) => new Array(count).fill({}).map(createDefaultUser);

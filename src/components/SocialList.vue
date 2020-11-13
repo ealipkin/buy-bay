@@ -19,10 +19,12 @@ export default class SocialList extends Vue {
 
 <style lang="scss">
   .social-list {
+    @include clearList();
     display: flex;
     justify-content: center;
 
     &__title {
+      margin: 0;
       font-size: 14px;
       color: $black-1;
       font-weight: bold;

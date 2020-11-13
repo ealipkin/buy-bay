@@ -13,6 +13,8 @@
 
       span.order-info__label Групповая цена
       span.order-info__price {{divideNumberWithSpaces(item.groupPrice)}} ₽
+
+    PickedOptionsBox(:options="item.options").order-info__picked-options.picked-options-box--group
 </template>
 
 <script lang="ts">
@@ -38,6 +40,7 @@ export default class OrderInfo extends Vue {
 <style scoped lang="scss">
   .order-info {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     padding: 20px 16px 24px;
     background-color: #fff;
@@ -63,6 +66,7 @@ export default class OrderInfo extends Vue {
 
     &__box {
       padding-left: 16px;
+      max-width: 60%;
 
       @include tablet() {
         padding-left: 0;
@@ -86,6 +90,11 @@ export default class OrderInfo extends Vue {
 
     &__picked-options {
       margin-bottom: 24px;
+    }
+
+    &--group > .picked-options-box--group {
+      margin: 0;
+      margin-top: 24px;
     }
 
     &__label {
@@ -138,14 +147,5 @@ export default class OrderInfo extends Vue {
         display: inline-flex;
       }
     }
-
-    &__picked-options {
-      display: none;
-
-      @include tablet() {
-        display: flex;
-      }
-    }
-
   }
 </style>
