@@ -40,6 +40,11 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/Success.vue'),
   },
   {
+    path: '/profile',
+    name: 'MyProfile',
+    component: () => import('../views/MyProfile.vue'),
+  },
+  {
     path: '/profile/groups',
     name: 'MyGroups',
     component: () => import('../views/MyGroups.vue'),

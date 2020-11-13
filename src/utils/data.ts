@@ -211,6 +211,80 @@ const createDefaultUser = (item, index): object => ({
   avatar: getRandomNumberBetween(0, 1) ? require(`../assets/icons/default-user-man.svg`) : require(`../assets/icons/default-user-women.svg`),
 });
 
+export const createProfileUser = (item, index): object => ({
+  id: nanoid(),
+  name: getRandomArrayElement(NAMES),
+  surname: 'Меньшов',
+  patronymic: 'Иванович',
+  gender: 'Мужчина',
+  age: '24',
+  contacts: {
+    phone: '+7 (927) 636-22-13',
+    email: 'Blakhdb@khd.ru',
+  },
+  avatar: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/50`,
+  receivers: [
+    {
+      addressId: 'address1',
+      fullName: {
+        surname: 'Nikulin',
+        name: 'Alexander',
+        patronymic: 'Ivanovich',
+      },
+      location: {
+        street: 'Lenina street',
+        house: 'dom 34',
+        building: null,
+        part: null,
+        flat: 'kv 24',
+      },
+      email: 'Blakhdb@khd.ru',
+      phone: '+7 (927) 636-22-13',
+      global: {
+        city: 'Moscow',
+        district: 'Moscow',
+        country: 'Russian Federation',
+        index: '129343',
+      },
+    },
+    {
+      addressId: 'address2',
+      fullName: {
+        surname: 'Nikulin',
+        name: 'Alexander',
+        patronymic: 'Ivanovich',
+      },
+      location: {
+        street: 'Lenina street',
+        house: 'dom 34',
+        building: null,
+        part: null,
+        flat: 'kv 24',
+      },
+      email: 'Blakhdb@khd.ru',
+      phone: '+7 (927) 636-22-13',
+      global: {
+        city: 'Moscow',
+        district: 'Moscow',
+        country: 'Russian Federation',
+        index: '129343',
+      },
+    },
+  ],
+  cards: [
+    {
+      cardId: 'card1',
+      type: 'master',
+      number: '5645',
+    },
+    {
+      cardId: 'card2',
+      type: 'visa',
+      number: '3322',
+    },
+  ]
+});
+
 const createOrder = (item, index): OrderItem => ({
   id: nanoid(),
   image: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/200`,

@@ -19,6 +19,7 @@ export interface BaseMenuItem {
   href: string;
   icon: string;
   isActive?: boolean;
+  value?: string;
 }
 
 export interface MenuItem extends BaseMenuItem {
