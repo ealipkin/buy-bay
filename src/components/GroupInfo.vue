@@ -1,9 +1,10 @@
 <template lang="pug">
   .group-info
     .group-info__header
-      h2.group-info__title Нужно еще 2 человека
-      router-link(to="#").group-info__link Покинуть группу
-    UsersList(:users="users").group-info__users
+      h2.group-info__title Нужно еще {{needUsersCount}} человека
+      button(type="button").group-info__link.link Покинуть
+    CustomScrollWrapper.custom-scroll-wrapper--mobile-only
+      UsersList(:users="usersToRender").group-info__users
     hr.group-info__hr
     SocialList(:socials="socials").group-info__social
     Share(:link="shareLink")
@@ -12,15 +13,18 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { SOCIALS, SHARE_LINK } from '@/utils/constants';
+import { generateDefaultUsers } from '@/utils/data';
 import UsersList from '@/components/UsersList.vue';
 import SocialList from '@/components/SocialList.vue';
 import Share from '@/components/Share.vue';
+import CustomScrollWrapper from '@/components/CustomScrollWrapper.vue';
 
 @Component({
   components: {
     UsersList,
     SocialList,
     Share,
+    CustomScrollWrapper,
   },
 })
 export default class GroupInfo extends Vue {
@@ -29,6 +33,10 @@ export default class GroupInfo extends Vue {
   socials = SOCIALS;
 
   shareLink = SHARE_LINK;
+
+  needUsersCount = 2;
+
+  usersToRender = Array(0).concat(this.users).concat(generateDefaultUsers(this.needUsersCount));
 }
 </script>
 
@@ -61,15 +69,6 @@ export default class GroupInfo extends Vue {
       @include tablet() {
         font-size: 16px;
         max-width: initial;
-      }
-    }
-
-    &__link {
-      color: $blue;
-      font-size: 12px;
-
-      @include tablet() {
-        font-size: 14px;
       }
     }
 
