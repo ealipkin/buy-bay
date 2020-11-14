@@ -1,32 +1,32 @@
 <template lang="pug">
-  .my-contacts
-    h3.my-contacts__title Moи контакты
-    ul.my-contacts__list
-      li.my-contacts__item
+  .contacts
+    h3.contacts__title Moи контакты
+    ul.contacts__list
+      li.contacts__item
         include ../assets/icons/phone.svg
         span
-          span.my-contacts__item-label телефон
-          span.my-contacts__item-value {{contacts.phone}}
-      li.my-contacts__item
+          span.contacts__item-label телефон
+          span.contacts__item-value {{contacts.phone}}
+      li.contacts__item
         include ../assets/icons/mail.svg
         span
-          span.my-contacts__item-label email
-          span.my-contacts__item-value {{contacts.email}}
+          span.contacts__item-label email
+          span.contacts__item-value {{contacts.email}}
 
-    button(type="button").my-contacts__button.link Изменить данные
+    button(type="button").contacts__button.link Изменить данные
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
-export default class MyContacts extends Vue {
+export default class Contacts extends Vue {
   @Prop() public contacts!: object;
 }
 </script>
 
 <style scoped lang="scss">
-  .my-contacts {
+  .contacts {
     background-color: #fff;
     padding: 16px;
     padding-bottom: 24px;

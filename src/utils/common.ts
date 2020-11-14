@@ -11,3 +11,5 @@ export const debounce = (fn, time) => {
     timeout = setTimeout(functionCall, time);
   };
 };
+
+export const getIfExist = (field: any) => field || '';

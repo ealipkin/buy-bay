@@ -18,7 +18,7 @@
           include ../assets/icons/settings.svg
 
         span {{item.title}}
-        span(v-if="item.value").profile-nav__item-count ({{item.value}})
+        span(v-if="item.count").profile-nav__item-count ({{item.count}})
 
 </template>
 

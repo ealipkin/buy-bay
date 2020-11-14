@@ -1,7 +1,7 @@
 <template lang="pug">
-  li.address-item
-    input(type="radio" name="address" :value="item.addressId" :id="item.addressId" checked).visually-hidden
-    label(:for="item.addressId").address-item__box
+  .address-item
+    input(type="radio" name="address" :value="item.id" :id="item.id" :checked="item.isActive" @change="change").visually-hidden
+    label(:for="item.id").address-item__box
       span.address-item__custom-input
       span.address-item__content
         span.address-item__name {{fullName}}
@@ -9,24 +9,44 @@
         span.address-item__address {{addressLine1}}
         span.address-item__address {{addressLine2}}
       span.address-item__controls
-        button(type="button" aria-label="редактировать")
+        button(type="button" aria-label="редактировать" @click="edit")
           include ../assets/icons/pen.svg
-        button(type="button" aria-label="удалить")
+        button(type="button" aria-label="удалить" @click="remove")
           include ../assets/icons/trash.svg
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue, Emit,
+} from 'vue-property-decorator';
+import { AddressItem as ItemType } from '@/utils/models';
 
 @Component
 export default class AddressItem extends Vue {
-  @Prop() public item!: object;
+  @Prop() public item!: ItemType;
 
-  fullName = `${Object.values(this.item.fullName).join(' ')}, `;
+  @Prop() public i!: number;
 
-  addressLine1 = Object.values(this.item.location).filter((it) => it).join(', ');
+  fullName = this.item.getFullName?.() || '';
 
-  addressLine2 = Object.values(this.item.global).join(', ');
+  addressLine1 = this.item.getLocation?.() || '';
+
+  addressLine2 = this.item.getGlobal?.() || '';
+
+  @Emit()
+  change(evt) {
+    return { item: this.item, index: this.i };
+  }
+
+  @Emit()
+  remove(evt) {
+    return this.item.id;
+  }
+
+  @Emit()
+  edit(evt) {
+    return this.item.id;
+  }
 }
 </script>
 

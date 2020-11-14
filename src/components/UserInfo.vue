@@ -10,10 +10,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { ProfileUser } from '@/utils/models';
 
 @Component
 export default class UserInfo extends Vue {
-  @Prop() public user!: object;
+  @Prop() public user!: ProfileUser;
 
   title = `${this.user.surname} ${this.user.name}`;
 }

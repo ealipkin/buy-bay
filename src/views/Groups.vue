@@ -1,17 +1,17 @@
 <template lang="pug">
-.my-groups
+.groups
   .page.page--aside-tablet
-    Breadcrumbs.my-groups__breadcrumbs(:links="Breadcrumbs")
+    Breadcrumbs.groups__breadcrumbs(:links="Breadcrumbs")
     .page__layout
-      .page__aside.my-groups__aside
+      .page__aside.groups__aside
         h1.page__title Мои группы
         ProfileNav(:items="profileMenuItems")
 
       .page__content
         TabsNav.tabs-nav--inner(:tabs="tabs", @change="selectTab")
-        ul.my-groups__list
-          OrderItem.my-groups__item(v-for="order in myFilteredOrders", :order="order", :key="order.id")
-        Pagination.my-groups__pagination(:moreCount="100")
+        ul.groups__list
+          OrderItem.groups__item(v-for="order in myFilteredOrders", :order="order", :key="order.id")
+        Pagination.groups__pagination(:moreCount="100")
 </template>
 
 <script lang="ts">
@@ -36,7 +36,7 @@ import { generateOrders } from '@/utils/data';
     Pagination,
   },
 })
-export default class MyGroups extends Vue {
+export default class Groups extends Vue {
   Breadcrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
@@ -75,7 +75,7 @@ export default class MyGroups extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.my-groups {
+.groups {
   @include container();
   padding-top: 16px;
   padding-bottom: 10px;

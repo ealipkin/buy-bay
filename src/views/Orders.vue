@@ -1,17 +1,17 @@
 <template lang="pug">
-  .my-orders
+  .orders
     .page.page--aside-tablet
-      Breadcrumbs(:links="Breadcrumbs").my-orders__breadcrumbs
+      Breadcrumbs(:links="Breadcrumbs").orders__breadcrumbs
       .page__layout
-        .page__aside.my-orders__aside
+        .page__aside.orders__aside
           h1.page__title Мои заказы
           ProfileNav(:items="profileMenuItems")
 
         .page__content
           TabsNav(:tabs="tabs" @change="selectTab").tabs-nav--inner
-          ul.my-orders__list
-            OrderItem(v-for="order in myFilteredOrders" :order="order" :key="order.id").my-orders__item
-          Pagination(:moreCount="100").my-orders__pagination
+          ul.orders__list
+            OrderItem(v-for="order in myFilteredOrders" :order="order" :key="order.id").orders__item
+          Pagination(:moreCount="100").orders__pagination
 
 </template>
 
@@ -37,7 +37,7 @@ import { generateOrders } from '@/utils/data';
     Pagination,
   },
 })
-export default class MyOrders extends Vue {
+export default class Orders extends Vue {
   Breadcrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
@@ -76,7 +76,7 @@ export default class MyOrders extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.my-orders {
+.orders {
   @include container();
   padding-top: 16px;
   padding-bottom: 10px;
