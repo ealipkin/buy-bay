@@ -17,16 +17,19 @@ export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
     title: 'Мои группы',
     href: '/profile/groups',
     icon: 'users',
+    count: '5',
   },
   {
     title: 'Мои заказы',
     href: '/profile/orders',
     icon: 'bag',
+    count: '2',
   },
   {
     title: 'Избранное',
     href: '/profile/favourites',
     icon: 'heart',
+    count: '173',
   },
   {
     title: 'Настройки сервиса',

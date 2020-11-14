@@ -18,6 +18,7 @@
           include ../assets/icons/settings.svg
 
         span {{item.title}}
+        span(v-if="item.count").profile-nav__item-count ({{item.count}})
 
 </template>
 
@@ -40,10 +41,31 @@ export default class ProfileNav extends Vue {
 
   &__item {
     border-bottom: 1px solid $grey-5;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 22px;
+      width: 7px;
+      height: 7px;
+      border: 1px solid $grey-2;
+      border-top: none;
+      border-left: none;
+      transform: translate(0, -50%) rotate(-45deg);
+    }
 
     &:last-child {
       border-bottom: none;
     }
+  }
+
+  &__item-count {
+    font-weight: 400;
+    font-size: 14px;
+    color: $grey-2;
+    margin-left: 5px;
   }
 
   &__link {

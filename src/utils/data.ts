@@ -1,5 +1,6 @@
+import { getIfExist } from './common';
 import {
-  Group, ORDER_STATUSES, OrderItem, OrderUser, Product, PRODUCT_FEATURES, ProductFeature, ProductShop,
+  Group, ORDER_STATUSES, OrderItem, OrderUser, Product, PRODUCT_FEATURES, ProductFeature, ProductShop, REQUIRED_ADDRESS_FIELDS, ProfileUser
 } from '@/utils/models';
 import { nanoid } from 'nanoid';
 
@@ -209,6 +210,96 @@ const createDefaultUser = (item, index): object => ({
   orderId: null,
   name: null,
   avatar: getRandomNumberBetween(0, 1) ? require(`../assets/icons/default-user-man.svg`) : require(`../assets/icons/default-user-women.svg`),
+});
+
+export const createProfileUser = (item, index): ProfileUser => ({
+  id: nanoid(),
+  name: getRandomArrayElement(NAMES),
+  surname: 'Меньшов',
+  patronymic: 'Иванович',
+  gender: 'Мужчина',
+  age: '24',
+  contacts: {
+    phone: '+7 (927) 636-22-13',
+    email: 'Blakhdb@khd.ru',
+  },
+  avatar: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/50`,
+  addresses: [
+    {
+      id: nanoid(),
+      isActive: true,
+      [REQUIRED_ADDRESS_FIELDS.SURNAME]: 'Nikulin',
+      [REQUIRED_ADDRESS_FIELDS.NAME]: 'Alexander',
+      patronymic: 'Ivanovich',
+      street: 'Lenina street',
+      house: 'dom 34',
+      building: undefined,
+      part: undefined,
+      flat: 'kv 24',
+      [REQUIRED_ADDRESS_FIELDS.EMAIL]: 'Blakhdb@khd.ru',
+      phone: '+7 (927) 636-22-13',
+      [REQUIRED_ADDRESS_FIELDS.CITY]: 'Moscow',
+      district: 'Moscow',
+      [REQUIRED_ADDRESS_FIELDS.COUNTRY]: 'Russian Federation',
+      [REQUIRED_ADDRESS_FIELDS.INDEX]: '129343',
+      getFullName() {
+        return `${this.surname} ${this.name} ${getIfExist(this.patronymic)}`;
+      },
+      getLocation() {
+        return `${getIfExist(this.street)} ${getIfExist(this.house)} ${getIfExist(this.building)} ${getIfExist(this.part)} ${getIfExist(this.flat)}`
+      },
+      getGlobal() {
+        return `${this.city} ${getIfExist(this.district)} ${this.country} ${this.index}`
+      },
+    },
+    {
+      id: nanoid(),
+      isActive: false,
+      [REQUIRED_ADDRESS_FIELDS.SURNAME]: 'Nikulin',
+      [REQUIRED_ADDRESS_FIELDS.NAME]: 'Alexander',
+      patronymic: 'Ivanovich',
+      street: 'Lenina street',
+      house: 'dom 34',
+      building: undefined,
+      part: undefined,
+      flat: 'kv 24',
+      [REQUIRED_ADDRESS_FIELDS.EMAIL]: 'Blakhdb@khd.ru',
+      phone: '+7 (927) 636-22-13',
+      [REQUIRED_ADDRESS_FIELDS.CITY]: 'Moscow',
+      district: 'Moscow',
+      [REQUIRED_ADDRESS_FIELDS.COUNTRY]: 'Russian Federation',
+      [REQUIRED_ADDRESS_FIELDS.INDEX]: '129343',
+      getFullName() {
+        return `${this.surname} ${this.name} ${getIfExist(this.patronymic)}`;
+      },
+      getLocation() {
+        return `${getIfExist(this.street)} ${getIfExist(this.house)} ${getIfExist(this.building)} ${getIfExist(this.part)} ${getIfExist(this.flat)}`
+      },
+      getGlobal() {
+        return `${this.city} ${getIfExist(this.district)} ${this.country} ${this.index}`
+      },
+    },
+  ],
+  cards: [
+    {
+      id: nanoid(),
+      isActive: true,
+      type: 'master',
+      number: '5645',
+      owner: 'owner',
+      date: '04/22',
+      cvv: '344',
+    },
+    {
+      id: nanoid(),
+      isActive: false,
+      type: 'visa',
+      number: '3322',
+      owner: 'owner',
+      date: '04/22',
+      cvv: '344',
+    },
+  ]
 });
 
 const createOrder = (item, index): OrderItem => ({

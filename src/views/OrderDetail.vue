@@ -118,22 +118,6 @@ export default class OrderDetail extends Vue {
       }
     }
 
-    // &__product {
-    //   margin-bottom: 12px;
-    // }
-
-    // &__status {
-    //   margin-bottom: 12px;
-    // }
-
-    // &__address {
-    //   margin-bottom: 12px;
-    // }
-
-    // &__delivery {
-    //   margin-bottom: 12px;
-    // }
-
     &__main {
 
       @include tablet() {

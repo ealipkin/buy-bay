@@ -19,6 +19,7 @@ export interface BaseMenuItem {
   href: string;
   icon: string;
   isActive?: boolean;
+  count?: string;
 }
 
 export interface MenuItem extends BaseMenuItem {
@@ -153,6 +154,15 @@ export enum ORDER_STATUSES {
   REJECT = 'reject', // заказ отменен
 }
 
+export enum REQUIRED_ADDRESS_FIELDS {
+  SURNAME = 'surname',
+  NAME = 'name',
+  EMAIL = 'email',
+  COUNTRY = 'country',
+  CITY = 'city',
+  INDEX = 'index',
+}
+
 export interface OrderUser {
   id: string;
   orderId: string;
@@ -183,4 +193,49 @@ export interface SocialLink {
   icon: string;
   type: string;
   title: string;
+}
+
+export interface AddressItem {
+  id: string;
+  isActive: boolean;
+  [REQUIRED_ADDRESS_FIELDS.SURNAME]: string;
+  [REQUIRED_ADDRESS_FIELDS.NAME]: string;
+  patronymic: string;
+  street?: string;
+  house?: string;
+  building?: string;
+  part?: string;
+  flat?: string;
+  [REQUIRED_ADDRESS_FIELDS.EMAIL]: string,
+  phone?: string,
+  [REQUIRED_ADDRESS_FIELDS.CITY]: string,
+  district?: string,
+  [REQUIRED_ADDRESS_FIELDS.COUNTRY]: string,
+  [REQUIRED_ADDRESS_FIELDS.INDEX]: string,
+  getFullName?: () => string;
+  getLocation?: () => string;
+  getGlobal?: () => string;
+}
+
+export interface CardItem {
+  id: string;
+  isActive: boolean;
+  type: string;
+  number: string;
+  owner: string;
+  date: string;
+  cvv: string;
+}
+
+export interface ProfileUser {
+  id: string;
+  name: string;
+  surname: string;
+  patronymic?: string;
+  gender?: string;
+  age?: string;
+  contacts: { phone: string; email: string; }
+  avatar?: string;
+  addresses: AddressItem[];
+  cards: CardItem[];
 }
