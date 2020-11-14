@@ -23,7 +23,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import Input from '@/components/Input.vue';
 
 @Component({
-  components: { Input }
+  components: { Input },
 })
 export default class Recipient extends Vue {
   @Prop() public prop!: boolean;

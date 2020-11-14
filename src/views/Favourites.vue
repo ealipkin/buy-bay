@@ -1,24 +1,22 @@
 <template lang="pug">
-.favourites
-  .page.page--aside-tablet.category
-    .container.page__breadcrumbs
-      Breadcrumbs.favourites__breadcrumbs(:links="Breadcrumbs")
-    .category__inner.container
-      .page__layout
-        .page__aside.favourites__aside
-          h1.page__title Избранное
-          ProfileNav(:items="profileMenuItems")
+  .favourites
+    .page.page--aside-tablet.category
+      .container.page__breadcrumbs
+        Breadcrumbs.favourites__breadcrumbs(:links="Breadcrumbs")
+      .category__inner.container
+        .page__layout
+          .page__aside.favourites__aside
+            h1.page__title Избранное
+            ProfileNav(:items="profileMenuItems")
 
-        .page__content.category__items
-          TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.favourites__tabs
-          .favourites__select
-            span Сортировать по
-            Select(:options="options")
-          .category__list
-            .category__item(v-for="(item, index) in myFilteredFavourites" :key="index")
-              CatalogCardItem(:item="item")
-          .category__pagination
-            Pagination(:moreCount="50")
+          .page__content.category__items
+            TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.favourites__tabs
+            SortSelect(:options="options").favourites__select
+            .category__list
+              .category__item(v-for="(item, index) in myFilteredFavourites" :key="index")
+                CatalogCardItem(:item="item")
+            .category__pagination
+              Pagination(:moreCount="50")
 </template>
 
 <script lang="ts">
@@ -30,13 +28,15 @@ import TabsNav from '@/components/TabsNav.vue';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Select from '@/components/Select.vue';
 import Pagination from '@/components/Pagination.vue';
-import { BreadcrumbLink, ORDER_STATUSES } from '@/utils/models';
+import { BreadcrumbLink } from '@/utils/models';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
 import { generateProducts } from '@/utils/data';
+import SortSelect from '@/components/SortSelect.vue';
 
 @Component({
   components: {
+    SortSelect,
     Breadcrumbs,
     ProfileNav,
     TabsNav,
@@ -75,15 +75,15 @@ export default class Favourites extends Vue {
   options = [
     {
       value: 'some val1',
-      lable: 'label 1',
+      label: 'По цене',
     },
     {
       value: 'some val2',
-      lable: 'label 2',
+      label: 'По дату',
     },
     {
       value: 'some val3',
-      lable: 'label 3',
+      label: 'По умолчанию',
     },
   ];
 
@@ -99,54 +99,53 @@ export default class Favourites extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.favourites {
-  padding-top: 16px;
-  padding-bottom: 10px;
-  background-color: #fff;
+  .favourites {
+    padding-top: 16px;
+    padding-bottom: 10px;
+    background-color: #fff;
 
-  @include laptop() {
-    background-color: $grey-3;
-    padding-bottom: 155px;
-  }
-
-  &__breadcrumbs {
-    display: none;
-
-    @include tablet() {
-      display: flex;
+    @include laptop() {
+      background-color: $grey-3;
+      padding-bottom: 155px;
     }
-  }
 
-  &__aside {
-    display: none;
-
-    @include tablet() {
-      display: block;
-    }
-  }
-
-  &__tabs {
-    @include tablet() {
+    &__breadcrumbs {
       display: none;
+
+      @include tablet() {
+        display: flex;
+      }
     }
-  }
 
-  &__select {
-    display: none;
+    &__aside {
+      display: none;
 
-    @include tablet() {
-      display: block;
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
+      @include tablet() {
+        display: block;
+      }
+    }
 
-      span {
-        margin-right: 20px;
-        font-size: 14px;
-        color: $grey-2;
+    &__tabs {
+      @include tablet() {
+        display: none;
+      }
+    }
+
+    &__select {
+      display: none;
+
+      @include tablet() {
+        margin-bottom: 14px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        span {
+          margin-right: 20px;
+          font-size: 14px;
+          color: $grey-2;
+        }
       }
     }
   }
-}
 </style>

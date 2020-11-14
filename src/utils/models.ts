@@ -206,12 +206,12 @@ export interface AddressItem {
   building?: string;
   part?: string;
   flat?: string;
-  [REQUIRED_ADDRESS_FIELDS.EMAIL]: string,
-  phone?: string,
-  [REQUIRED_ADDRESS_FIELDS.CITY]: string,
-  district?: string,
-  [REQUIRED_ADDRESS_FIELDS.COUNTRY]: string,
-  [REQUIRED_ADDRESS_FIELDS.INDEX]: string,
+  [REQUIRED_ADDRESS_FIELDS.EMAIL]: string;
+  phone?: string;
+  [REQUIRED_ADDRESS_FIELDS.CITY]: string;
+  district?: string;
+  [REQUIRED_ADDRESS_FIELDS.COUNTRY]: string;
+  [REQUIRED_ADDRESS_FIELDS.INDEX]: string;
   getFullName?: () => string;
   getLocation?: () => string;
   getGlobal?: () => string;
@@ -234,7 +234,7 @@ export interface ProfileUser {
   patronymic?: string;
   gender?: string;
   age?: string;
-  contacts: { phone: string; email: string; }
+  contacts: { phone: string; email: string };
   avatar?: string;
   addresses: AddressItem[];
   cards: CardItem[];

@@ -1,8 +1,8 @@
-import { getIfExist } from './common';
 import {
-  Group, ORDER_STATUSES, OrderItem, OrderUser, Product, PRODUCT_FEATURES, ProductFeature, ProductShop, REQUIRED_ADDRESS_FIELDS, ProfileUser
+  Group, ORDER_STATUSES, OrderItem, OrderUser, Product, PRODUCT_FEATURES, ProductFeature, ProductShop, REQUIRED_ADDRESS_FIELDS, ProfileUser,
 } from '@/utils/models';
 import { nanoid } from 'nanoid';
+import { getIfExist } from './common';
 
 export const getRandomArrayElement = (array: any[]) => array[Math.floor(Math.random() * array.length)];
 export const getRandomNumberBetween = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
@@ -246,10 +246,10 @@ export const createProfileUser = (item, index): ProfileUser => ({
         return `${this.surname} ${this.name} ${getIfExist(this.patronymic)}`;
       },
       getLocation() {
-        return `${getIfExist(this.street)} ${getIfExist(this.house)} ${getIfExist(this.building)} ${getIfExist(this.part)} ${getIfExist(this.flat)}`
+        return `${getIfExist(this.street)} ${getIfExist(this.house)} ${getIfExist(this.building)} ${getIfExist(this.part)} ${getIfExist(this.flat)}`;
       },
       getGlobal() {
-        return `${this.city} ${getIfExist(this.district)} ${this.country} ${this.index}`
+        return `${this.city} ${getIfExist(this.district)} ${this.country} ${this.index}`;
       },
     },
     {
@@ -273,10 +273,10 @@ export const createProfileUser = (item, index): ProfileUser => ({
         return `${this.surname} ${this.name} ${getIfExist(this.patronymic)}`;
       },
       getLocation() {
-        return `${getIfExist(this.street)} ${getIfExist(this.house)} ${getIfExist(this.building)} ${getIfExist(this.part)} ${getIfExist(this.flat)}`
+        return `${getIfExist(this.street)} ${getIfExist(this.house)} ${getIfExist(this.building)} ${getIfExist(this.part)} ${getIfExist(this.flat)}`;
       },
       getGlobal() {
-        return `${this.city} ${getIfExist(this.district)} ${this.country} ${this.index}`
+        return `${this.city} ${getIfExist(this.district)} ${this.country} ${this.index}`;
       },
     },
   ],
@@ -299,7 +299,7 @@ export const createProfileUser = (item, index): ProfileUser => ({
       date: '04/22',
       cvv: '344',
     },
-  ]
+  ],
 });
 
 const createOrder = (item, index): OrderItem => ({

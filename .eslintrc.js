@@ -19,5 +19,8 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'global-require': 'off',
     'max-len': 'off',
+    'class-methods-use-this': 'off',
+    'no-param-reassign': 'off',
+    'no-return-assign': 'off',
   },
 };

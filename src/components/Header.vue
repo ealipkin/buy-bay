@@ -1,5 +1,8 @@
 <template lang="pug">
   header.header
+    div(v-if="showLogin").header__mobile-nav
+      MobileNav(@toggle-notifications="toggleNotifications")
+      Notifications(:notifications="notifications" v-if="showNotifications").header__mobile-notifications
     .header-top
       .header-top__inner.container
         .header-top__text Групповые покупки без наценок
@@ -19,7 +22,7 @@
         button(type="submit").header-search__submit-button.button Найти
 
       .header-main__user-block
-        router-link(to="#").notification-button.header__fav-btn
+        router-link(to="/profile/favourites").notification-button.header__fav-btn
           span.notification-button__icon
             include ../assets/icons/heart.svg
             span.notification-button__number 23
@@ -30,7 +33,7 @@
 
         div(v-if="showLogin").header-main__user-wrap
           .header__item
-            Popper(popper trigger="clickToToggle" :options="{placement: 'bottom'}")
+            Popper(popper trigger="clickToToggle" :options="{placement: 'bottom'}" ref="notificationsPopper")
               button(type="button" slot="reference").notification-button.header__notification-toggle
                 span.notification-button__icon
                   include ../assets/icons/bell.svg
@@ -40,7 +43,7 @@
                 Notifications(:notifications="notifications").header__notifications
 
           Popper(popper trigger="clickToToggle" :options="{placement: 'bottom-end'}" )
-            button(type="button" @click="toggleUserMenu" slot="reference").header__user-btn
+            button(type="button" slot="reference").header__user-btn
               span.header__user-name {{user.name}}
               span.header__user-avatar
                 img(:src="user.avatar")
@@ -70,10 +73,17 @@ import { getRandomNumberBetween } from '@/utils/data';
 import { NOTIFICATIONS, PROFILE_MENU_ITEMS } from '@/utils/constants';
 import { NotificationItem } from '@/utils/models';
 import ProfileNav from '@/components/ProfileNav.vue';
+import MobileNav from '@/components/MobileNav.vue';
 
 @Component({
   components: {
-    ProfileNav, Notifications, LoginModal, HeaderShopCard, MainNav, Popper,
+    MobileNav,
+    ProfileNav,
+    Notifications,
+    LoginModal,
+    HeaderShopCard,
+    MainNav,
+    Popper,
   },
   computed: {
     ...mapGetters({
@@ -82,7 +92,14 @@ import ProfileNav from '@/components/ProfileNav.vue';
   },
 })
 export default class Header extends Vue {
+  // isAuthenticated = false;
+  isAuthenticated = true;
+
+  showNotifications = false;
+
   search = '';
+
+  body: HTMLBodyElement | null = null;
 
   user = {
     name: 'Владимир',
@@ -91,13 +108,9 @@ export default class Header extends Vue {
 
   selectedShop;
 
-  isAuthenticated = false;
-
   notifications: NotificationItem[] = NOTIFICATIONS;
 
   profileMenuItems = PROFILE_MENU_ITEMS;
-
-  notificationsVisible = false;
 
   get showLogin() {
     return this.isAuthenticated;
@@ -115,13 +128,18 @@ export default class Header extends Vue {
   };
 
   openLoginModal = (type) => {
-    console.log('openLoginModal -> ', type);
     const modalComponent: any = this.$refs.loginModal;
     modalComponent.showModal(type);
   };
 
   mounted() {
     // this.showLogin = true;
+    this.body = document.querySelector('body');
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        (this.body as HTMLBodyElement).classList.remove('_hidden');
+      }
+    });
   }
 
   loginSuccess = () => {
@@ -130,6 +148,11 @@ export default class Header extends Vue {
 
   registerSuccess = () => {
     this.showLogin = true;
+  };
+
+  toggleNotifications() {
+    this.showNotifications = !this.showNotifications;
+    (this.body as HTMLBodyElement).classList.toggle('_hidden', this.showNotifications);
   }
 }
 </script>
@@ -152,6 +175,12 @@ export default class Header extends Vue {
       }
     }
   }
+
+  .header {
+    .notifications__inner {
+      max-height: none;
+    }
+  }
 </style>
 <style scoped lang="scss">
   @import "src/scss/_mixins.scss";
@@ -160,6 +189,27 @@ export default class Header extends Vue {
     background: white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.19);
     position: relative;
+
+    &__mobile-nav {
+      @include tablet() {
+        display: none;
+      }
+    }
+
+    &__mobile-notifications {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: calc(100% - 49px);
+      z-index: 1;
+      background: white;
+      @include tablet() {
+        display: none;
+      }
+    }
 
     &__dropdown {
       margin-top: 25px;

@@ -1,30 +1,30 @@
 <template lang="pug">
-.profile
-  .page.page--aside-tablet
-    Breadcrumbs.profile__breadcrumbs(:links="Breadcrumbs")
-    .page__layout
-      .page__aside.profile__aside
-        h1.page__title Мой профиль
-        ProfileNav(:items="profileMenuItems")
+  .profile
+    .page.page--aside-tablet
+      Breadcrumbs.profile__breadcrumbs(:links="Breadcrumbs")
+      .page__layout
+        .page__aside.profile__aside
+          h1.page__title Мой профиль
+          ProfileNav(:items="profileMenuItems")
 
-      .page__content.profile__content
-        UserInfo(:user="user").profile__item.profile__user-info
-        ProfileNav(:items="profileMenuItems").profile__item.profile__nav-mobile-only
-        Contacts(:contacts="user.contacts").profile__item.profile__contacts
-        .profile__address.profile__item
-          h3.profile__address-title Адреса доставки
-          ul.profile__address-list
-            li(v-for="(item, i) in user.addresses" :key="item.id").profile__address-item
-              AddressItem(:item="item" :i="i" @change="addressChange" @remove="removeAddress" @edit="openAddressEditor")
-          button(type="button" @click="addAddress").link + Добавить адрес
+        .page__content.profile__content
+          UserInfo(:user="user").profile__item.profile__user-info
+          ProfileNav(:items="profileMenuItems").profile__item.profile__nav-mobile-only
+          Contacts(:contacts="user.contacts").profile__item.profile__contacts
+          .profile__address.profile__item
+            h3.profile__address-title Адреса доставки
+            ul.profile__address-list
+              li(v-for="(item, i) in user.addresses" :key="item.id").profile__address-item
+                AddressItem(:item="item" :i="i" @change="addressChange" @remove="removeAddress" @edit="openAddressEditor")
+            button(type="button" @click="addAddress").link + Добавить адрес
 
-        .profile__cards.profile__item
-          h3.profile__cards-title Мои карты
-          ul.profile__cards-list
-            li(v-for="(item, i) in user.cards" :key="item.id").profile__cards-item
-              CreditCardItem(:item="item" :i="i" @change="cardChange" @remove="removeCard")
+          .profile__cards.profile__item
+            h3.profile__cards-title Мои карты
+            ul.profile__cards-list
+              li(v-for="(item, i) in user.cards" :key="item.id").profile__cards-item
+                CreditCardItem(:item="item" :i="i" @change="cardChange" @remove="removeCard")
 
-          button(type="button" @click="addCard").link + Добавить карту
+            button(type="button" @click="addCard").link + Добавить карту
 </template>
 
 <script lang="ts">
@@ -62,7 +62,7 @@ export default class Profile extends Vue {
 
   addAddress = () => {
     console.log('addAddress');
-  }
+  };
 
   addressChange = ({ item, index }) => {
     if (item.isActive) {
@@ -70,21 +70,20 @@ export default class Profile extends Vue {
     }
 
     this.user.addresses.forEach((address) => address.isActive = false);
-    item.isActive = true;
-    Vue.set(this.user.addresses, index, item);
-  }
+    Vue.set(this.user.addresses, index, { ...item, isActive: true });
+  };
 
   removeAddress = (id: string) => {
     this.user.addresses = this.user.addresses.filter((address) => address.id !== id);
-  }
+  };
 
   openAddressEditor = (id: string) => {
     console.log('edit address:', id);
-  }
+  };
 
   addCard = () => {
     console.log('addCard');
-  }
+  };
 
   cardChange = ({ item, index }) => {
     if (item.isActive) {
@@ -92,9 +91,8 @@ export default class Profile extends Vue {
     }
 
     this.user.cards.forEach((card) => card.isActive = false);
-    item.isActive = true;
-    Vue.set(this.user.cards, index, item);
-  }
+    Vue.set(this.user.cards, index, { ...item, isActive: true });
+  };
 
   removeCard = (id: string) => {
     this.user.cards = this.user.cards.filter((card) => card.id !== id);
@@ -103,144 +101,144 @@ export default class Profile extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.profile {
-  @include container();
-  padding-bottom: 10px;
+  .profile {
+    @include container();
+    padding-bottom: 10px;
 
-  @include laptop() {
-    background-color: $grey-3;
-    padding-bottom: 155px;
-  }
+    @include laptop() {
+      background-color: $grey-3;
+      padding-bottom: 155px;
+    }
 
-  &__nav-mobile-only {
-    @include tablet() {
+    &__nav-mobile-only {
+      @include tablet() {
+        display: none;
+      }
+    }
+
+    &__breadcrumbs {
       display: none;
+
+      @include tablet() {
+        display: flex;
+      }
     }
-  }
 
-  &__breadcrumbs {
-    display: none;
+    &__aside {
+      display: none;
 
-    @include tablet() {
-      display: flex;
+      @include tablet() {
+        display: block;
+      }
     }
-  }
 
-  &__aside {
-    display: none;
-
-    @include tablet() {
-      display: block;
+    &__content {
+      @include tablet() {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 32px 40px 115px;
+        margin-top: 53px;
+      }
     }
-  }
 
-  &__content {
-    @include tablet() {
+    &__item {
+      margin-right: -10px;
+      margin-left: -10px;
+      margin-bottom: 12px;
+      border-radius: 0;
+
+      @include tablet() {
+        margin-right: 0;
+        margin-left: 0;
+        margin-bottom: 0;
+      }
+    }
+
+    &__user-info {
+      @include tablet() {
+        margin-bottom: 58px;
+      }
+    }
+
+    &__contacts {
+      @include tablet() {
+        margin-bottom: 68px;
+      }
+    }
+
+    &__address {
+      padding: 16px;
+      padding-bottom: 24px;
       background-color: #fff;
-      border-radius: 8px;
-      padding: 32px 40px 115px;
-      margin-top: 53px;
     }
-  }
 
-  &__item {
-    margin-right: -10px;
-    margin-left: -10px;
-    margin-bottom: 12px;
-    border-radius: 0;
+    &__address-title {
+      margin: 0;
+      margin-bottom: 19px;
+      font-size: 16px;
+      color: $black-1;
+      font-weight: 600;
 
-    @include tablet() {
-      margin-right: 0;
-      margin-left: 0;
-      margin-bottom: 0;
+      @include tablet() {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 24px;
+      }
     }
-  }
 
-  &__user-info {
-    @include tablet() {
-      margin-bottom: 58px;
-    }
-  }
-
-  &__contacts {
-    @include tablet() {
-      margin-bottom: 68px;
-    }
-  }
-
-  &__address {
-    padding: 16px;
-    padding-bottom: 24px;
-    background-color: #fff;
-  }
-
-  &__address-title {
-    margin: 0;
-    margin-bottom: 19px;
-    font-size: 16px;
-    color: $black-1;
-    font-weight: 600;
-
-    @include tablet() {
-      font-size: 18px;
-      font-weight: bold;
+    &__address-list {
+      @include clearList();
       margin-bottom: 24px;
     }
-  }
 
-  &__address-list {
-    @include clearList();
-    margin-bottom: 24px;
-  }
+    &__address-item {
+      margin-bottom: 13px;
 
-  &__address-item {
-    margin-bottom: 13px;
+      @include tablet() {
+        margin-bottom: 8px;
+      }
 
-    @include tablet() {
-      margin-bottom: 8px;
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
-    &:last-child {
-      margin-bottom: 0;
+    &__cards {
+      padding: 16px;
+      padding-bottom: 24px;
+      background-color: #fff;
     }
-  }
 
-  &__cards {
-    padding: 16px;
-    padding-bottom: 24px;
-    background-color: #fff;
-  }
+    &__cards-title {
+      margin: 0;
+      margin-bottom: 19px;
+      font-size: 16px;
+      color: $black-1;
+      font-weight: 600;
 
-  &__cards-title {
-    margin: 0;
-    margin-bottom: 19px;
-    font-size: 16px;
-    color: $black-1;
-    font-weight: 600;
+      @include tablet() {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 24px;
+      }
+    }
 
-    @include tablet() {
-      font-size: 18px;
-      font-weight: bold;
+    &__cards-list {
+      @include clearList();
       margin-bottom: 24px;
     }
-  }
 
-  &__cards-list {
-    @include clearList();
-    margin-bottom: 24px;
-  }
+    &__cards-item {
+      margin-bottom: 12px;
 
-  &__cards-item {
-    margin-bottom: 12px;
+      @include tablet() {
+        margin-bottom: 8px;
+      }
 
-    @include tablet() {
-      margin-bottom: 8px;
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
 
-    &:last-child {
-      margin-bottom: 0;
-    }
   }
-
-}
 </style>
