@@ -7,44 +7,39 @@
         option(value="USA") USA
       span.destination__label Страна
 
-    label.destination__input-box
-      input(name="city" placeholder="Город *" value="Москва" required).destination__input
-      span.destination__label Город
+    .destination__input-box
+      Input(name="city" label="Город" value="Москва" :required="true")
 
-    label.destination__input-box
-      input(name="district" placeholder="Область").destination__input
-      span.destination__label Область
+    .destination__input-box
+      Input(name="district" label="Область")
 
-    label.destination__input-box
-      input(name="street" placeholder="Улица").destination__input
-      span.destination__label Улица
+    .destination__input-box
+      Input(name="street" label="Улица")
 
-    label.destination__input-box.destination__input-box--half
-      input(name="house" placeholder="Дом").destination__input
-      span.destination__label Дом
+    .destination__input-box.destination__input-box--half
+      Input(name="house" label="Дом")
 
-    label.destination__input-box.destination__input-box--half
-      input(name="part" placeholder="Корпус").destination__input
-      span.destination__label Корпус
+    .destination__input-box.destination__input-box--half
+      Input(name="part" label="Корпус")
 
-    label.destination__input-box.destination__input-box--half
-      input(name="flat" placeholder="Квартира").destination__input
-      span.destination__label Квартира
+    .destination__input-box.destination__input-box--half
+      Input(name="flat" label="Строение")
 
-    label.destination__input-box.destination__input-box--half
-      input(name="building" placeholder="Строение").destination__input
-      span.destination__label Строение
+    .destination__input-box.destination__input-box--half
+      Input(name="building" label="Квартира/офис")
 
-    label.destination__input-box
-      input(name="index" placeholder="Индекс *" required).destination__input
-      span.destination__label Индекс
+    .destination__input-box
+      Input(name="index" label="Индекс" :required="true")
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import Input from '@/components/Input.vue';
 
-@Component
+@Component({
+  components: { Input }
+})
 export default class Destination extends Vue {
   @Prop() public prop!: boolean;
 }
@@ -125,11 +120,11 @@ export default class Destination extends Vue {
   }
 
   .destination__input:not(:placeholder-shown) + .destination__label {
-      display: inline;
+    display: inline;
   }
 
   .destination__input:focus + .destination__label {
-      color: $blue-2;
+    color: $blue-2;
   }
 
   .destination__input:focus {

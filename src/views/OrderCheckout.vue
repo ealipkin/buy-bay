@@ -51,7 +51,7 @@ export default class OrderCheckout extends Vue {
     { href: '/', label: 'Главная' },
     { href: '/category', label: 'Мужской гардероб' },
     { href: '/category', label: 'Сумки и рюкзаки' },
-    { href: '/product/:id/checkout', label: 'order title?', current: true },
+    { href: '/product/:id/checkout', label: 'Рюкзак', current: true },
   ];
 
   get isMobile() {

@@ -1,32 +1,30 @@
 <template lang="pug">
   .recipient
     legend.recipient__legend Получатель
-    label.recipient__input-box
-      input(name="surname"  value="фамилия" placeholder="Фамилия *" required).recipient__input
-      span.recipient__label Фамилия
+    .recipient__input-box
+      Input(name="surname" label="Фамилия" value="фамилия" :required="true")
 
-    label.recipient__input-box
-      input(name="name" placeholder="Имя *" required).recipient__input
-      span.recipient__label Имя
+    .recipient__input-box
+      Input(name="surname" label="Имя" :required="true")
 
-    label.recipient__input-box
-      input(name="patronymic" placeholder="Отчество").recipient__input
-      span.recipient__label Отчество
+    .recipient__input-box
+      Input(name="patronymic" label="Отчество")
 
-    label.recipient__input-box
-      input(name="email" placeholder="Электнонная почта").recipient__input
-      span.recipient__label Электнонная почта
+    .recipient__input-box
+      Input(name="email" label="Электнонная почта")
 
-    label.recipient__input-box
-      input(name="phone" placeholder="Мобильный телефон").recipient__input
-      span.recipient__label Мобильный телефон
+    .recipient__input-box
+      Input(name="phone" label="Мобильный телефон")
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import Input from '@/components/Input.vue';
 
-@Component
+@Component({
+  components: { Input }
+})
 export default class Recipient extends Vue {
   @Prop() public prop!: boolean;
 }
@@ -73,46 +71,5 @@ export default class Recipient extends Vue {
       }
     }
 
-    &__input {
-      padding: 15px 20px;
-      border: 1px solid $grey-11;
-      border-radius: 4px;
-      font-size: 16px;
-      color: $black-1;
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    &__label {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 15px;
-      padding: 0 5px;
-      transform: translate(0, -50%);
-      font-size: 12px;
-      color: $grey-2;
-      background-color: #fff;
-    }
-  }
-
-  .recipient__input:not(:placeholder-shown) + .recipient__label {
-      display: inline;
-  }
-
-  .recipient__input:focus + .recipient__label {
-      color: $blue-2;
-  }
-
-  .recipient__input:focus {
-    border: 1px solid $blue-2;
-    outline: none;
-  }
-
-  .recipient__input:required + .recipient__label::after {
-    content: " *";
-    font-size: 12px;
-    color: $red-1;
   }
 </style>
