@@ -30,6 +30,11 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/ItemDetail.vue'),
   },
   {
+    path: '/product/:id/checkout',
+    name: 'OrderCheckout',
+    component: () => import('../views/OrderCheckout.vue'),
+  },
+  {
     path: '/',
     name: 'Index',
     component: () => import('../views/Index.vue'),
