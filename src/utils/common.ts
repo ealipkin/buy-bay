@@ -12,3 +12,5 @@ export const debounce = (func, wait) => {
     if (callNow) func(...args);
   };
 };
+
+export const getIfExist = (field: any) => field || '';

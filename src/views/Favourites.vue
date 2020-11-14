@@ -1,17 +1,17 @@
 <template lang="pug">
-.my-favourites
+.favourites
   .page.page--aside-tablet.category
     .container.page__breadcrumbs
-      Breadcrumbs.my-favourites__breadcrumbs(:links="Breadcrumbs")
+      Breadcrumbs.favourites__breadcrumbs(:links="Breadcrumbs")
     .category__inner.container
       .page__layout
-        .page__aside.my-favourites__aside
+        .page__aside.favourites__aside
           h1.page__title Избранное
           ProfileNav(:items="profileMenuItems")
 
         .page__content.category__items
-          TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.my-favourites__tabs
-          .my-favourites__select
+          TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.favourites__tabs
+          .favourites__select
             span Сортировать по
             Select(:options="options")
           .category__list
@@ -45,7 +45,7 @@ import { generateProducts } from '@/utils/data';
     Pagination,
   },
 })
-export default class MyFavourites extends Vue {
+export default class Favourites extends Vue {
   Breadcrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
@@ -99,7 +99,7 @@ export default class MyFavourites extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.my-favourites {
+.favourites {
   padding-top: 16px;
   padding-bottom: 10px;
   background-color: #fff;
