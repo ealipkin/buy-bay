@@ -10,8 +10,10 @@
             p.footer__payments-title.footer__description Мы принимаем
 
             .footer__payments-list
-              img.footer__payments-img(src="http://placehold.it/56x20")
-              img.footer__payments-img(src="http://placehold.it/56x20")
+              span.footer__payments-img
+                include ../assets/icons/visa.svg
+              span.footer__payments-img
+                include ../assets/icons/visa.svg
 
           .footer__contacts
             p.footer__description Мы в соц.сетях

@@ -27,6 +27,7 @@ export default class Pagination extends Vue {
 
     &__show-more {
       margin-right: 28px;
+      white-space: nowrap;
 
       font-size: 14px;
       font-weight: bold;
