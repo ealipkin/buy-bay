@@ -9,9 +9,15 @@
         span Заказов: {{divideNumberWithSpaces(this.item.orders)}}
       Rate(:rate="item.rate").order-info__rate
 
+      template(v-if="!type")
+        PickedOptionsBox(:options="item.options").order-info__picked-options
+
+        span.order-info__label Групповая цена
+        span.order-info__price {{divideNumberWithSpaces(item.groupPrice)}} ₽
+    template(v-if="type === 'checkout'")
       PickedOptionsBox(:options="item.options").order-info__picked-options
 
-      span.order-info__label Групповая цена
+      span.order-info__label Итого к оплате
       span.order-info__price {{divideNumberWithSpaces(item.groupPrice)}} ₽
 
     PickedOptionsBox(:options="item.options").order-info__picked-options.picked-options-box--group
@@ -33,11 +39,37 @@ import PickedOptionsBox from '@/components/PickedOptionsBox.vue';
 export default class OrderInfo extends Vue {
   @Prop() public item!: Product;
 
+  @Prop() public type!: string;
+
   divideNumberWithSpaces = (number) => divideNumberWithSpaces(number);
 }
 </script>
 
 <style scoped lang="scss">
+  .order-info.order-info--checkout {
+    padding: 32px;
+
+    .order-info__img {
+      order: 1;
+      width: 150px;
+      height: 150px;
+      margin-bottom: 28px;
+    }
+
+    .order-info__picked-options {
+      order: 2;
+    }
+
+    .order-info__label {
+      order: 3;
+      width: 100%;
+    }
+
+    .order-info__price {
+      order: 4;
+    }
+  }
+
   .order-info {
     display: flex;
     flex-wrap: wrap;
