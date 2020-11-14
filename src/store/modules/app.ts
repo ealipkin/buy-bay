@@ -4,7 +4,7 @@ interface AppState {
   selectedShop: ProductShop | null;
 }
 
-const state: AppState = {
+const appState: AppState = {
   selectedShop: null,
 };
 
@@ -30,7 +30,7 @@ const actions = {
 
 export default {
   namespaced: true,
-  state,
+  state: appState,
   getters,
   actions,
   mutations,

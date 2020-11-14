@@ -1,0 +1,29 @@
+.popper {
+  border-radius: 8px;
+  box-shadow: 0 12px 24px 0 #00000020;
+  border: solid 1px #ece1e1;
+  background-color: #ffffff;
+  //overflow: hidden;
+  padding: 0;
+
+  &[x-placement^="bottom"] .popper__arrow {
+    border-width: 0 11px 11px 11px;
+    top: -11px;
+    border-color: transparent transparent #ece1e1 transparent;
+
+    &:before {
+      content: '';
+      position: absolute;
+      margin-top: 0;
+      margin-bottom: 0;
+      width: 0;
+      height: 0;
+      border: 10px solid white;
+      border-top: 0;
+      border-left-color: transparent;
+      border-right-color: transparent;
+      left: -10px;
+      top: 1px;
+    }
+  }
+}

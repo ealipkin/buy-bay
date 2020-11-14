@@ -1,16 +1,17 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import store from './store';
-
-import './scss/style.scss';
-import './assets/fonts/opensans.css';
+import VModal from 'vue-js-modal';
 import vueAwesomeCountdown from 'vue-awesome-countdown';
 import Paginate from 'vuejs-paginate';
 import VueTruncate from 'vue-truncate-filter';
 import VueClipboard from 'vue-clipboard2';
 
-import VModal from 'vue-js-modal';
+import Vue from 'vue';
+import App from './App.vue';
+import store from './store';
+
+import './scss/style.scss';
+import './assets/fonts/opensans.css';
+
+import router from './router';
 
 Vue.use(vueAwesomeCountdown, 'vac');
 Vue.use(VueTruncate);

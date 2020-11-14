@@ -36,22 +36,27 @@ enum REG_STEPS {
   FINISH = 'finish'
 }
 
-@Component({ components: { InputDate, Radio, AvatarEdit, Input } })
+@Component({
+  components: {
+    InputDate, Radio, AvatarEdit, Input,
+  },
+})
 export default class Registration extends Vue {
   currentStep: string = REG_STEPS.START;
+
   regSteps = REG_STEPS;
 
-  submit() {
+  submit = () => {
     console.log('finish');
-  }
+  };
 
-  register() {
+  register = () => {
     this.currentStep = REG_STEPS.FINISH;
-    this.$emit('register')
-  }
+    this.$emit('register');
+  };
 
-  doLater() {
-    this.$emit('later')
+  doLater = () => {
+    this.$emit('later');
   }
 }
 </script>

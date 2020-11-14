@@ -184,3 +184,16 @@ export interface SocialLink {
   type: string;
   title: string;
 }
+
+export enum NOTIFICATIONS_TYPES {
+  MESSAGE = 'message',
+  GROUP = 'group',
+  DELIVERY = 'delivery',
+}
+
+export interface NotificationItem {
+  type: NOTIFICATIONS_TYPES;
+  title: string;
+  text: string;
+  read: boolean;
+}

@@ -17,8 +17,8 @@ import Input from '@/components/Input.vue';
 
 @Component({
   components: {
-    Input, DatePicker
-  }
+    Input, DatePicker,
+  },
 })
 export default class InputDate extends Vue {
   @Prop() public name!: string;

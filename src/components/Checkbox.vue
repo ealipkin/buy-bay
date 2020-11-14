@@ -12,9 +12,13 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class Checkbox extends Vue {
   @Prop() public checked!: boolean;
+
   @Prop() public value!: string;
+
   @Prop() public name!: string;
+
   @Prop() public label!: string;
+
   @Prop() public count!: string;
 
   handleChange(event) {

@@ -134,8 +134,8 @@ const createProduct = (item, index): Product => ({
     {
       title: 'Количество',
       id: '3',
-      values: [{ label: '1', value: '1', selected: true },],
-    },],
+      values: [{ label: '1', value: '1', selected: true }],
+    }],
   description: DESCRIPTION,
   selfPrice: getRandomNumberBetween(1000, 400000),
   groupPrice: getRandomNumberBetween(1000, 300000),
@@ -184,7 +184,7 @@ const createProduct = (item, index): Product => ({
       date: '16 марта 2018',
       text: 'Добрый день. Простите, просто забыли отправить. Сейчас все сделаем.',
     },
-  ]
+  ],
 });
 
 const createGroup = (item, index): Group => ({
@@ -204,11 +204,11 @@ const createUser = (item, index): OrderUser => ({
   avatar: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/50`,
 });
 
-const createDefaultUser = (item, index): object => ({
+const createDefaultUser = (): object => ({
   id: null,
   orderId: null,
   name: null,
-  avatar: getRandomNumberBetween(0, 1) ? require(`../assets/icons/default-user-man.svg`) : require(`../assets/icons/default-user-women.svg`),
+  avatar: getRandomNumberBetween(0, 1) ? require('../assets/icons/default-user-man.svg') : require('../assets/icons/default-user-women.svg'),
 });
 
 const createOrder = (item, index): OrderItem => ({

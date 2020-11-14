@@ -1,7 +1,8 @@
 <template lang="pug">
   ul.profile-nav
     li(v-for="item in items").profile-nav__item
-      router-link(:to="item.href").profile-nav__link.profile-nav__link--active
+      //router-link(:to="item.href").profile-nav__link.profile-nav__link--active
+      router-link(:to="item.href").profile-nav__link
         template(v-if="item.icon === 'user'")
           include ../assets/icons/user.svg
 

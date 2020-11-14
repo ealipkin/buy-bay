@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import ImageUploader from 'vue-image-upload-resize'
+import ImageUploader from 'vue-image-upload-resize';
 
 @Component({ components: { ImageUploader } })
 export default class Main extends Vue {

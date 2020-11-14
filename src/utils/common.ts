@@ -1,13 +1,14 @@
 export const divideNumberWithSpaces = (number: number): string => String(number).replace(/(\d)(?=(\d{3})+$)/g, '$1 ');
 
-export const debounce = (fn, time) => {
+export const debounce = (func, wait) => {
   let timeout;
-
-  return function () {
-    // @ts-ignore
-    const functionCall = () => fn.apply(this, ...rest);
-
+  return (...args) => {
+    const later = () => {
+      timeout = null;
+    };
+    const callNow = !timeout;
     clearTimeout(timeout);
-    timeout = setTimeout(functionCall, time);
+    timeout = setTimeout(later, wait);
+    if (callNow) func(...args);
   };
 };

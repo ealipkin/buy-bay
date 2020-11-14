@@ -16,15 +16,13 @@ export default class TabsNav extends Vue {
     if (tab.isActive) {
       return;
     }
-    this.tabs.forEach((tab) => tab.isActive = false);
+    this.tabs.forEach((t) => t.isActive = false);
     tab.isActive = true;
     Vue.set(this.tabs, index, tab);
     this.$emit('change', tab.id);
   }
 
-  isTabActive(tab) {
-    return Boolean(tab.isActive);
-  }
+  isTabActive = (tab) => Boolean(tab.isActive)
 }
 </script>
 

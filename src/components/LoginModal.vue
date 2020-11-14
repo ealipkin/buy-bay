@@ -26,44 +26,55 @@ import SocialsAuth from '@/components/SocialsAuth.vue';
 import Registration from '@/components/Registration.vue';
 
 @Component({
-  components: { Registration, SocialsAuth, TabsNav, Input },
+  components: {
+    Registration, SocialsAuth, TabsNav, Input,
+  },
 })
 export default class LoginModal extends Vue {
   selectedTab = 'login';
-  showSocialsAuth = true;
+
   accountCreated = false;
 
   get socialsTitle() {
     return this.selectedTab === 'login' ? 'Войти, используя социальные сети' : 'Создать аккаунт, используя социальные сети';
   }
 
-  showModal() {
-    console.log('show');
-    this.$modal.show('login-modal');
-    // document.body.classList.add('_hidden');
+  get showSocialsAuth() {
+    return this.selectedTab === 'login' ? true : !this.accountCreated;
   }
 
-  closeModal() {
+  showModal = (type) => {
+    console.log('showModal', type);
+    this.$modal.show('login-modal');
+    if (type) {
+      this.selectTab(type);
+    }
+    // document.body.classList.add('_hidden');
+  };
+
+  closeModal = () => {
     this.$modal.hide('login-modal');
     this.modalClose();
-  }
+  };
 
-  login() {
+  login = () => {
     // login here
-  }
+    this.closeModal();
+    this.$emit('login-success');
+  };
 
-  handleRegister() {
-    this.showSocialsAuth = false;
+  handleRegister = () => {
     this.accountCreated = true;
-  }
+    this.$emit('register-success');
+  };
 
-  forgotPassword() {
+  forgotPassword = () => {
     // forgotPassword here
-  }
+  };
 
-  modalClose() {
+  modalClose = () => {
     document.body.classList.remove('_hidden');
-  }
+  };
 
   tabs = [
     {
@@ -77,11 +88,14 @@ export default class LoginModal extends Vue {
     },
   ];
 
-  selectTab(tabId) {
+  selectTab = (tabId) => {
+    const tabIndex = this.tabs.findIndex((tab) => tab.id === tabId);
+    const tab = this.tabs[tabIndex];
+    this.tabs.forEach((t) => t.isActive = false);
+    tab.isActive = true;
     this.selectedTab = tabId;
-    if (!this.accountCreated) {
-      this.showSocialsAuth = true;
-    }
+
+    Vue.set(this.tabs, tabIndex, tab);
   }
 }
 </script>

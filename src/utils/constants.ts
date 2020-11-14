@@ -1,4 +1,6 @@
-import { BaseMenuItem, MenuChildItem, MenuItem } from '@/utils/models';
+import {
+  BaseMenuItem, MenuChildItem, MenuItem, NOTIFICATIONS_TYPES, NotificationItem,
+} from '@/utils/models';
 
 export const breakPoints = {
   mobile: 320,
@@ -464,5 +466,38 @@ export const SOCIALS = [
     icon: 'socials/viber.svg',
     type: 'viber',
     title: 'Viber',
+  },
+];
+
+export const NOTIFICATIONS: NotificationItem[] = [
+  {
+    type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: false,
+  },
+  {
+    type: NOTIFICATIONS_TYPES.GROUP, title: 'Группа сформирована', text: 'в группе «Стиральная машина…»', read: false,
+  },
+  {
+    type: NOTIFICATIONS_TYPES.DELIVERY, title: 'Заказ отправлен продавцом', text: '«Фотоаппарат sony a7m3»', read: false,
+  },
+  {
+    type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: false,
+  },
+  {
+    type: NOTIFICATIONS_TYPES.GROUP, title: 'Группа сформирована', text: 'в группе «iPhone 12 Pro»', read: true,
+  },
+  {
+    type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: true,
+  },
+  {
+    type: NOTIFICATIONS_TYPES.DELIVERY, title: 'Заказ отправлен продавцом', text: '«Фотоаппарат sony a7m3»', read: false,
+  },
+  {
+    type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: false,
+  },
+  {
+    type: NOTIFICATIONS_TYPES.GROUP, title: 'Группа сформирована', text: 'в группе «iPhone 12 Pro»', read: true,
+  },
+  {
+    type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: true,
   },
 ];

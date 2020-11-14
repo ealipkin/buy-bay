@@ -63,12 +63,12 @@ export default {
     },
   },
   mounted() {
-    this.$nextTick(function () {
+    this.$nextTick(() => {
       this.determineShowMore();
     });
   },
   updated() {
-    this.$nextTick(function () {
+    this.$nextTick(() => {
       this.determineShowMore();
     });
   },
