@@ -32,9 +32,6 @@ export default class Recipient extends Vue {
 
 <style scoped lang="scss">
   .recipient {
-    padding: 0;
-    margin: 0;
-
     @include tablet() {
       display: flex;
       flex-wrap: wrap;

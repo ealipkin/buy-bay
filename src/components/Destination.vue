@@ -47,8 +47,7 @@ export default class Destination extends Vue {
 
 <style scoped lang="scss">
   .destination {
-    padding: 0;
-    margin: 0;
+
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -104,6 +103,10 @@ export default class Destination extends Vue {
       display: block;
       width: 100%;
       box-sizing: border-box;
+    }
+
+    &__select {
+      margin-bottom: 25px;
     }
 
     &__label {
