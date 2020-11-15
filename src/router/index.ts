@@ -35,6 +35,11 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/OrderCheckout.vue'),
   },
   {
+    path: '/product/:id/payment',
+    name: 'OrderPayment',
+    component: () => import('../views/OrderPayment.vue'),
+  },
+  {
     path: '/',
     name: 'Index',
     component: () => import('../views/Index.vue'),
