@@ -8,7 +8,7 @@
       Rate(:list="true" :rate="brand.rate").brands-item__rate
     ul.brands-item__list
       li(v-for="(item, index) in brand.items" :key="index").brands-item__card
-        CatalogCardItem(:is-outlined="true" :item="item")
+        CatalogCardItem(:is-outlined="true" :item="item" title-length="25")
 </template>
 
 <script lang="ts">
@@ -51,14 +51,15 @@ export default class BrandsItem extends Vue {
     min-width: 136px;
     display: flex;
     flex-direction: column;
+
     @include laptop() {
       min-width: 350px;
-    }
-    @include desktop() {
-      box-shadow: inset 0 -1px 0 0 #00000014;
-      border: none;
-      padding: 24px 32px 18px;
+      border: 1px solid #00000014;
       text-align: left;
+    }
+
+    @include desktop() {
+      padding: 24px 32px 18px;
     }
 
     &__logo {
@@ -71,16 +72,10 @@ export default class BrandsItem extends Vue {
         display: flex;
         align-items: center;
         min-height: 60px;
-      }
-
-      @include desktop() {
         margin-bottom: 32px;
       }
 
       &-inner {
-        @include desktop() {
-
-        }
       }
     }
 
@@ -125,7 +120,7 @@ export default class BrandsItem extends Vue {
       list-style: none;
       display: none;
 
-      @include desktop() {
+      @include laptop() {
         display: flex;
       }
     }
@@ -144,9 +139,12 @@ export default class BrandsItem extends Vue {
 
     &__rate {
       @include laptop() {
+      }
+
+      @include laptop() {
         margin-left: auto;
-        align-self: flex-start;
         margin-top: 15px;
+        align-self: flex-start;
       }
     }
   }

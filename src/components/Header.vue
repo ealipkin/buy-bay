@@ -92,8 +92,7 @@ import MobileNav from '@/components/MobileNav.vue';
   },
 })
 export default class Header extends Vue {
-  // isAuthenticated = false;
-  isAuthenticated = true;
+  isAuthenticated = false;
 
   showNotifications = false;
 
@@ -163,8 +162,19 @@ export default class Header extends Vue {
       min-width: 213px;
     }
 
+    .profile-nav__item-count {
+      display: none;
+    }
+
+    .profile-nav__item {
+      &:after {
+        display: none;
+      }
+    }
+
     .profile-nav__link {
       padding: 14px 26px 14px 17px;
+
 
       svg {
         margin-right: 10px;

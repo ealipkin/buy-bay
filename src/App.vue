@@ -34,7 +34,7 @@ export default class Index extends Vue {
     flex-direction: column;
     min-height: 100vh;
 
-    margin-bottom: 49px;
+    /*margin-bottom: 49px;*/
 
     @include tablet() {
       margin-bottom: 0;
@@ -60,9 +60,7 @@ export default class Index extends Vue {
   }
 
   .container {
-    max-width: 1170px;
-    padding: 0 10px;
-    margin: 0 auto;
+    @include container();
   }
 
   html {

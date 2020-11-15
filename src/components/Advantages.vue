@@ -108,6 +108,8 @@ export default class Advantages extends Vue {
         text-align: left;
         padding-left: 6px;
         align-items: center;
+      }
+      @include desktop() {
         width: 30%;
       }
     }
@@ -118,6 +120,9 @@ export default class Advantages extends Vue {
 
     &__inner {
       @include laptop() {
+        margin-left: 20px;
+      }
+      @include desktop() {
         margin-left: 39px;
         margin-top: -23px;
       }

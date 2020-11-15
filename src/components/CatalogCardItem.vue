@@ -22,11 +22,11 @@
     .catalog-card__bottom
       .catalog-card__group
         p.catalog-card__group-text {{item.groups}} групп
-          span на покупку
+          span  на покупку
         Rate(:rate="item.rate").catalog-card__group-rating.rate--small-star
 
       a.catalog-card__title-link
-        h3.catalog-card__title {{item.title | truncate(35)}}
+        h3.catalog-card__title {{item.title | truncate(truncateLength)}}
       .catalog-card__price
         p.catalog-card__actual-price
           include ../assets/icons/group-button.svg
@@ -48,6 +48,11 @@ export default class CatalogCardItem extends Vue {
   @Prop({ type: Boolean, default: false }) public isOutlined!: boolean;
 
   @Prop() public item!: Product;
+  @Prop() public titleLength!: number;
+
+  get truncateLength() {
+    return this.titleLength || 35;
+  }
 
   divideNumberWithSpaces = (number) => divideNumberWithSpaces(number)
 }
@@ -139,6 +144,7 @@ export default class CatalogCardItem extends Vue {
       display: flex;
       align-items: center;
       margin-top: auto;
+      justify-content: space-between;
 
       @include laptop() {
         justify-content: space-between;
@@ -167,7 +173,7 @@ export default class CatalogCardItem extends Vue {
       }
       @include desktop() {
         order: -1;
-        margin-bottom: 7px;
+        /*margin-bottom: 7px;*/
       }
     }
 
@@ -180,10 +186,11 @@ export default class CatalogCardItem extends Vue {
       text-align: center;
       display: flex;
       align-items: center;
-      justify-content: center;
+
       svg {
         display: none;
       }
+
       @include laptop() {
         padding: 3px 7px;
         background-position: 8px center;
@@ -334,8 +341,6 @@ export default class CatalogCardItem extends Vue {
       }
 
       &__actual-price {
-        padding-left: 29px;
-        background-image: url(../assets/icons/group-button.svg);
         background-size: 11px;
         background-position: 9px center;
         font-size: 16px;

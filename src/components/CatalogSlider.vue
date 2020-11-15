@@ -4,10 +4,10 @@
       div(v-if="isMobile").catalog-slider__slider
         div(v-for="(item, index) in items" :key="index").catalog-slider__item
           CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
-      Slick(v-if="!isMobile && isLaptop" ref="slick" :options="laptopSettings").catalog-slider__slider
+      Slick(v-if="!isMobile && isLaptop" ref="slickLaptop" :options="laptopSettings").catalog-slider__slider
         div(v-for="(item, index) in items" :key="index").catalog-slider__item
           CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
-      Slick(v-if="!isMobile && isDesktop" ref="slick" :options="desktopSettings").catalog-slider__slider
+      Slick(v-if="!isLaptop && isDesktop" ref="slickDesktop" :options="desktopSettings").catalog-slider__slider
         div(v-for="(item, index) in items" :key="index").catalog-slider__item
           CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
 </template>
@@ -19,6 +19,8 @@ import Slick from 'vue-slick';
 import { generateProducts } from '@/utils/data';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import { Product } from '@/utils/models';
+import { debounce } from '@/utils/common';
+import { breakPoints } from '@/utils/constants';
 
 @Component({
   components: {
@@ -38,7 +40,7 @@ export default class BigSlider extends Vue {
   isDesktop = false;
 
   public reInit() {
-    (this.$refs.slick as any).reSlick();
+    this.updateSliders();
   }
 
   laptopSettings = {
@@ -46,7 +48,7 @@ export default class BigSlider extends Vue {
     arrows: false,
     draggable: false,
     rows: 2,
-    slidesPerRow: 5,
+    slidesPerRow: 4,
     slidesToShow: 1,
     slidesToScroll: 1,
   };
@@ -61,22 +63,33 @@ export default class BigSlider extends Vue {
     slidesToScroll: 1,
   };
 
+  updateSliders = () => {
+    if (this.$refs.slickDesktop) {
+      (this.$refs.slickDesktop as any).reSlick();
+    }
+    if (this.$refs.slickLaptop) {
+      (this.$refs.slickLaptop as any).reSlick();
+    }
+  };
+
   handleResize() {
     this.windowWidth = window.innerWidth;
     this.$nextTick(() => {
-      this.isMobile = this.windowWidth < 1023;
-      this.isLaptop = this.windowWidth > 1023 && this.windowWidth < 1296;
-      this.isDesktop = this.windowWidth > 1296;
+      this.isMobile = this.windowWidth < breakPoints.laptop;
+      this.isLaptop = this.windowWidth >= breakPoints.laptop && this.windowWidth < breakPoints.desktopSliders;
+      this.isDesktop = this.windowWidth >= breakPoints.desktopSliders;
     });
   }
 
   created() {
     window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', debounce(this.updateSliders.bind(this), 500));
     this.handleResize();
   }
 
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', debounce(this.updateSliders.bind(this), 500));
   }
 }
 </script>

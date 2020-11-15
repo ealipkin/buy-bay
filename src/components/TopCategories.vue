@@ -31,7 +31,9 @@ export default class TopCategories extends Vue {
   .top-categories {
     overflow: hidden;
     margin-top: -6px;
-
+    @include laptop() {
+      @include container();
+    }
     @include desktop() {
       overflow: auto;
     }

@@ -6,7 +6,8 @@ export const breakPoints = {
   mobile: 320,
   tablet: 768,
   laptop: 1024,
-  desktop: 1296,
+  desktop: 1210,
+  desktopSliders: 1340,
 };
 
 export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [

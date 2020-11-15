@@ -107,6 +107,9 @@ export default class MainNav extends Vue {
         width: 1%;
         overflow: hidden;
         margin-right: -10px;
+        @include laptop() {
+          margin-right: 0;
+        }
       }
 
       &-inner {

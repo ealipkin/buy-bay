@@ -4,7 +4,10 @@
       div(v-if="isMobile").brands__slider
         span(v-for="brand in brands" :key="brand.id").brands__item
           BrandsItem(:brand="brand")
-      Slick(v-else ref="slick" :options="sliderSettings" ).brands__slider
+      Slick(v-if="!isMobile && isLaptop" ref="slickLaptop" :options="laptopSettings" ).brands__slider
+        span(v-for="brand in brands" :key="brand.id").brands__item
+          BrandsItem(:brand="brand")
+      Slick(v-if="!isLaptop && isDesktop" ref="slickDesktop" :options="desktopSettings" ).brands__slider
         span(v-for="brand in brands" :key="brand.id").brands__item
           BrandsItem(:brand="brand")
 </template>
@@ -13,6 +16,8 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import BrandsItem from '@/components/BrandsItem.vue';
 import Slick from 'vue-slick';
+import { debounce } from '@/utils/common';
+import { breakPoints } from '@/utils/constants';
 
 @Component({
   components: {
@@ -25,23 +30,43 @@ export default class Brands extends Vue {
 
   windowWidth = 0;
 
-  sliderSettings = {
+  laptopSettings = {
     mobileFirst: true,
-    arrow: false,
+    arrows: false,
     draggable: false,
-    responsive: [
-      {
-        breakpoint: '1200',
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 1,
-        },
-      },
-    ],
+    dots: true,
+    slidesToShow: 2,
+    slidesToScroll: 2,
+  };
+
+  desktopSettings = {
+    mobileFirst: true,
+    arrows: true,
+    dots: false,
+    draggable: false,
+    slidesToShow: 2,
+    slidesToScroll: 2,
+  };
+
+
+  updateSliders = () => {
+    if (this.$refs.slickDesktop) {
+      (this.$refs.slickDesktop as any).reSlick();
+    }
+    if (this.$refs.slickLaptop) {
+      (this.$refs.slickLaptop as any).reSlick();
+    }
   };
 
   get isMobile() {
-    return this.windowWidth < 1296;
+    return this.windowWidth < breakPoints.laptop;
+  }
+
+  get isLaptop() {
+    return this.windowWidth >= breakPoints.laptop && this.windowWidth < breakPoints.desktopSliders;
+  }
+  get isDesktop() {
+    return this.windowWidth >= breakPoints.desktopSliders
   }
 
   handleResize() {
@@ -50,17 +75,28 @@ export default class Brands extends Vue {
 
   created() {
     window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', debounce(this.updateSliders.bind(this), 500));
     this.handleResize();
   }
 
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', debounce(this.updateSliders.bind(this), 500));
   }
 }
 </script>
 
 <style lang="scss">
   .brands {
+    .catalog-card__group-text span {
+      display: none;
+    }
+
+    .slick-dots {
+      position: relative;
+      bottom: 0;
+    }
+
     .slick-prev {
       @include desktop() {
         left: -63px;
@@ -101,7 +137,7 @@ export default class Brands extends Vue {
     background-color: white;
     overflow: hidden;
 
-    @include desktop() {
+    @include laptop() {
       background: transparent;
       overflow: visible;
     }
@@ -116,6 +152,9 @@ export default class Brands extends Vue {
 
     &__pane {
       margin-bottom: -30px;
+      @include laptop() {
+        margin-bottom: 0;
+      }
     }
 
     &__slider {
@@ -124,8 +163,13 @@ export default class Brands extends Vue {
       overflow: auto;
       padding-bottom: 30px;
 
-      @include desktop() {
+      @include laptop() {
         overflow: visible;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        display: block;
+      }
+      @include desktop() {
         margin-left: -10px;
         margin-right: -10px;
       }
@@ -133,6 +177,7 @@ export default class Brands extends Vue {
 
     &__item {
       padding-left: 10px;
+      margin-bottom: 1px;
 
       &:last-child {
         padding-right: 10px;

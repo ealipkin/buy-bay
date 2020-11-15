@@ -228,10 +228,24 @@ export default class Footer extends Vue {
     &__info {
       display: flex;
       flex-direction: column;
+      @include tablet() {
+        width: 40%;
+      }
+      @include laptop() {
+        width: 27%;
+      }
       @include desktop() {
         width: 20.7%;
       }
+    }
 
+    &__category {
+      @include laptop() {
+        width: 47%;
+      }
+      @include desktop() {
+        width: 64%;
+      }
     }
 
     &__title {
@@ -315,6 +329,7 @@ export default class Footer extends Vue {
       border-top: 1px solid #d9d9e7;
       opacity: 0.2;
       display: none;
+      color: #f5f5f5;
 
       @include laptop() {
         display: block;
@@ -324,7 +339,7 @@ export default class Footer extends Vue {
     &__copyright-text {
       text-align: left;
       font-size: 14px;
-      color: rgba(245, 245, 245, 0.4);
+      color: #f5f5f5;
     }
 
     &__category {
@@ -336,7 +351,7 @@ export default class Footer extends Vue {
     &__category-title {
       display: none;
 
-      @include desktop() {
+      @include laptop() {
         display: block;
         margin-bottom: 23px;
       }
@@ -383,11 +398,15 @@ export default class Footer extends Vue {
 
     &__assistance {
       padding-top: 9px;
+      @include desktop() {
+        width: 21%;
+      }
     }
 
     &__assistance-title {
       display: none;
-      @include desktop() {
+
+      @include laptop() {
         display: block;
         margin-bottom: 21px;
       }

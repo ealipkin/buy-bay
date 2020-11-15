@@ -73,30 +73,20 @@ export default class BigSlider extends Vue {
     .slick-arrow {
       width: 32px;
       height: 32px;
-
-      @include laptop() {
-
-      }
     }
 
     .slick-next {
       @include laptop() {
-        right: 30px;
-      }
-      @include desktop() {
         right: -8px;
       }
     }
 
     .slick-prev {
       @include laptop() {
-        left: 30px;
         z-index: 1;
-      }
-
-      @include desktop() {
         left: -8px;
       }
+
     }
 
     @include laptop() {
@@ -144,7 +134,7 @@ export default class BigSlider extends Vue {
     margin-right: -10px;
     margin-bottom: 36px;
 
-    @include desktop() {
+    @include laptop() {
       position: relative;
       margin-left: 0;
       margin-right: 0;
@@ -170,14 +160,12 @@ export default class BigSlider extends Vue {
       @include laptop() {
         border-radius: 8px;
         overflow: hidden;
-      }
-      @include desktop() {
         padding: 0;
       }
     }
 
     &__slider {
-      @include desktop() {
+      @include laptop() {
         width: 61%;
         margin-right: 16px;
         margin-bottom: -5px;
@@ -190,8 +178,10 @@ export default class BigSlider extends Vue {
 
     &__promo-image {
       display: none;
+      border-radius: 8px;
+      overflow: hidden;
       background-size: cover;
-      @include desktop() {
+      @include laptop() {
         width: calc(39% - 16px);
         height: 100%;
         position: absolute;
