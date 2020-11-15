@@ -1,6 +1,13 @@
 <template lang="pug">
   .top-categories(v-if="groupedCategories")
     .top-categories__pane
+      .top-categories__list.top-categories__list--laptop
+        router-link(v-for="(item, index) in categories" :key="index" to="#" v-bind:class="'top-categories__link--'+item.type +''" ).top-categories__link
+          p.top-categories__title {{ item.title }}
+          span(
+            v-bind:class="'top-categories__img-wrapper--'+item.position +' top-categories__img-wrapper--'+ item.color +'  top-categories__img-wrapper--mobile-'+ item.positionMobile + ''"
+            :style="{backgroundImage: 'url('+item.src+')'}"
+          ).top-categories__img-wrapper
       .top-categories__list
         div(v-for="group in groupedCategories").top-categories__col
           router-link(v-for="(item, index) in group" :key="index" to="#" v-bind:class="'top-categories__link--'+item.type +''" ).top-categories__link
@@ -55,10 +62,36 @@ export default class TopCategories extends Vue {
       padding-bottom: 30px;
       overflow: auto;
 
+      &--laptop {
+        display: none;
+      }
+
+      @include laptop() {
+        display: none;
+
+        &--laptop {
+          display: flex;
+
+          flex-wrap: wrap;
+          justify-content: space-between;
+
+          .top-categories__link {
+            width: 30%;
+            max-width: none;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+          }
+        }
+      }
       @include desktop() {
         overflow: visible;
         padding-bottom: 0;
         justify-content: space-between;
+        display: flex;
+
+        &--laptop {
+          display: none;
+        }
       }
     }
 
