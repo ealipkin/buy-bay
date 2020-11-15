@@ -14,14 +14,14 @@
           ul.order-payment__address-list
             li(v-for="(item, i) in user.addresses" :key="item.id").order-payment__address-item
               AddressItem(:item="item" :i="i" @change="addressChange" @remove="removeAddress" @edit="openAddressEditor")
-          button(type="button" @click="addAddress").link + Добавить адрес
+          button(type="button" @click="openAddressModal").link + Добавить адрес
 
         .order-payment__cards.order-payment__item
           h3.order-payment__cards-title Мои карты
           ul.order-payment__cards-list
             li(v-for="(item, i) in user.cards" :key="item.id").order-payment__cards-item
               CreditCardItem(:item="item" :i="i" @change="cardChange" @remove="removeCard")
-          button(type="button" @click="addCard").link + Добавить карту
+          button(type="button" @click="openCreditCardModal").link + Добавить карту
 
         .order-payment__item.order-payment__item--last
           button(type="button").order-payment__button Оплатить
@@ -30,6 +30,8 @@
         OrderInfo(:item="item" v-if="!isMobile" :type="'checkout'").order-payment__product.order-payment__item.order-info--checkout
         DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").order-payment__delivery.order-payment__item
 
+    AddressModal(ref="addressModal")
+    CreditCardModal(ref="creditCardModal")
 </template>
 
 <script lang="ts">
@@ -42,8 +44,8 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import OrderInfo from '@/components/OrderInfo.vue';
 import AddressItem from '@/components/AddressItem.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
-import Recipient from '@/components/Recipient.vue';
-import Destination from '@/components/Destination.vue';
+import AddressModal from '@/components/AddressModal.vue';
+import CreditCardModal from '@/components/CreditCardModal.vue';
 import { BreadcrumbLink } from '@/utils/models';
 
 @Component({
@@ -53,8 +55,8 @@ import { BreadcrumbLink } from '@/utils/models';
     OrderInfo,
     AddressItem,
     CreditCardItem,
-    Recipient,
-    Destination,
+    AddressModal,
+    CreditCardModal,
   },
 })
 export default class OrderPayment extends Vue {
@@ -67,8 +69,10 @@ export default class OrderPayment extends Vue {
 
     user = createProfileUser(null, 1);
 
-  addAddress = () => {
-    console.log('addAddress');
+  openAddressModal = () => {
+    const modalComponent: any = this.$refs.addressModal;
+    modalComponent.showModal();
+    console.log('open address modal');
   };
 
   addressChange = ({ item, index }) => {
@@ -88,8 +92,10 @@ export default class OrderPayment extends Vue {
     console.log('edit address:', id);
   };
 
-  addCard = () => {
-    console.log('addCard');
+  openCreditCardModal = () => {
+    const modalComponent: any = this.$refs.creditCardModal;
+    modalComponent.showModal();
+    console.log('open creditCard modal');
   };
 
   cardChange = ({ item, index }) => {
