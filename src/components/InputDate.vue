@@ -31,7 +31,7 @@ export default class InputDate extends Vue {
 
   @Prop() public required!: boolean;
 
-  date = '';
+  date = this.value;
 }
 </script>
 

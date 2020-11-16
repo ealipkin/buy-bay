@@ -16,7 +16,7 @@
             ul.profile__address-list
               li(v-for="(item, i) in user.addresses" :key="item.id").profile__address-item
                 AddressItem(:item="item" :i="i" @change="addressChange" @remove="removeAddress" @edit="openAddressEditor")
-            button(type="button" @click="addAddress").link + Добавить адрес
+            button(type="button" @click="openAddressModal").link + Добавить адрес
 
           .profile__cards.profile__item
             h3.profile__cards-title Мои карты
@@ -24,7 +24,9 @@
               li(v-for="(item, i) in user.cards" :key="item.id").profile__cards-item
                 CreditCardItem(:item="item" :i="i" @change="cardChange" @remove="removeCard")
 
-            button(type="button" @click="addCard").link + Добавить карту
+            button(type="button" @click="openCreditCardModal").link + Добавить карту
+    AddressModal(ref="addressModal")
+    CreditCardModal(ref="creditCardModal")
 </template>
 
 <script lang="ts">
@@ -36,6 +38,8 @@ import UserInfo from '@/components/UserInfo.vue';
 import Contacts from '@/components/Contacts.vue';
 import AddressItem from '@/components/AddressItem.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
+import AddressModal from '@/components/AddressModal.vue';
+import CreditCardModal from '@/components/CreditCardModal.vue';
 import { BreadcrumbLink } from '@/utils/models';
 import { createProfileUser } from '@/utils/data';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
@@ -48,6 +52,8 @@ import { PROFILE_MENU_ITEMS } from '@/utils/constants';
     Contacts,
     AddressItem,
     CreditCardItem,
+    AddressModal,
+    CreditCardModal,
   },
 })
 export default class Profile extends Vue {
@@ -60,8 +66,10 @@ export default class Profile extends Vue {
 
   user = createProfileUser(null, 1);
 
-  addAddress = () => {
-    console.log('addAddress');
+  openAddressModal = () => {
+    const modalComponent: any = this.$refs.addressModal;
+    modalComponent.showModal();
+    console.log('open address modal');
   };
 
   addressChange = ({ item, index }) => {
@@ -81,8 +89,10 @@ export default class Profile extends Vue {
     console.log('edit address:', id);
   };
 
-  addCard = () => {
-    console.log('addCard');
+  openCreditCardModal = () => {
+    const modalComponent: any = this.$refs.creditCardModal;
+    modalComponent.showModal();
+    console.log('open creditCard modal');
   };
 
   cardChange = ({ item, index }) => {

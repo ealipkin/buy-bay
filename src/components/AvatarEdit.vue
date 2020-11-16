@@ -9,13 +9,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 import ImageUploader from 'vue-image-upload-resize';
 
 @Component({ components: { ImageUploader } })
 export default class Main extends Vue {
-  selectedImage: string | null = null;
+  @Prop() public selectedImage!: string | null;
 
   setImage(output) {
     this.selectedImage = output.dataUrl;
