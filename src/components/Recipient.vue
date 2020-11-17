@@ -2,31 +2,32 @@
   .recipient
     legend.recipient__legend Получатель
     .recipient__input-box
-      Input(name="surname" label="Фамилия" value="фамилия" :required="true")
+      Input(name="surname" label="Фамилия" :value="addressItem.surname" :required="true")
 
     .recipient__input-box
-      Input(name="surname" label="Имя" :required="true")
+      Input(name="surname" label="Имя" :value="addressItem.name" :required="true")
 
     .recipient__input-box
-      Input(name="patronymic" label="Отчество")
+      Input(name="patronymic" :value="addressItem.patronymic" label="Отчество")
 
     .recipient__input-box
-      Input(name="email" label="Электнонная почта")
+      Input(name="email" :value="addressItem.email" label="Электнонная почта")
 
     .recipient__input-box
-      Input(name="phone" label="Мобильный телефон")
+      Input(name="phone" :value="addressItem.phone" label="Мобильный телефон")
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { AddressItem } from '@/utils/models';
 import Input from '@/components/Input.vue';
 
 @Component({
   components: { Input },
 })
 export default class Recipient extends Vue {
-  @Prop() public prop!: boolean;
+  @Prop() public addressItem!: AddressItem | object;
 }
 </script>
 

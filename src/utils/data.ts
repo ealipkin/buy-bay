@@ -270,7 +270,7 @@ export const createProfileUser = (item, index): ProfileUser => ({
       isActive: false,
       [REQUIRED_ADDRESS_FIELDS.SURNAME]: 'Nikulin',
       [REQUIRED_ADDRESS_FIELDS.NAME]: 'Alexander',
-      patronymic: 'Ivanovich',
+      patronymic: '',
       street: 'Lenina street',
       house: 'dom 34',
       building: undefined,

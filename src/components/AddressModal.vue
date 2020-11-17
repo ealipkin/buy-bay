@@ -5,17 +5,18 @@
       button(type="button" @click="closeModal").modal__close.close
       form.modal__form
         fieldset.modal__form-fieldset
-          Recipient.modal__recipient
+          Recipient(:addressItem="addressItem").modal__recipient
 
         fieldset.modal__form-fieldset
-          Destination.modal__destination
+          Destination(:addressItem="addressItem").modal__destination
 
         button(type="submit" @click.prevent="addAddress").modal__button Добавить адрес
 
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
+import { AddressItem } from '@/utils/models';
 import Recipient from '@/components/Recipient.vue';
 import Destination from '@/components/Destination.vue';
 
@@ -26,16 +27,23 @@ import Destination from '@/components/Destination.vue';
   },
 })
 export default class AddressModal extends Vue {
+  addressItem: AddressItem | object = {};
+
   addAddress = () => {
     console.log('add address');
     this.closeModal();
   }
 
-  showModal = () => {
-    this.$modal.show('address-modal');
+  showModal(data) {
+    if (data) {
+      this.addressItem = data;
+    } else {
+      this.addressItem = {};
+    }
 
+    this.$modal.show('address-modal');
     console.log('show');
-  };
+  }
 
   closeModal = () => {
     this.$modal.hide('address-modal');
