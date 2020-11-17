@@ -10,19 +10,21 @@
         Input(:required="true" label="Email" :value="user.contacts.email" name="email" type="text").form__input
 
         button(type="submit" @click.prevent="saveData").modal__button Сохранить данные
-
+    Toasted(ref="toasted")
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import UserEdit from '@/components/UserEdit.vue';
 import Input from '@/components/Input.vue';
+import Toasted from '@/components/Toasted.vue';
 import { createProfileUser } from '@/utils/data';
 
 @Component({
   components: {
     UserEdit,
     Input,
+    Toasted,
   },
 })
 export default class ProfileModal extends Vue {
@@ -30,6 +32,8 @@ export default class ProfileModal extends Vue {
 
   saveData = () => {
     console.log('save data');
+    const modalComponent: any = this.$refs.toasted;
+    modalComponent.showSuccess();
     this.closeModal();
   }
 
