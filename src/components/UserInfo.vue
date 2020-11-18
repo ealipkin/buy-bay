@@ -2,7 +2,7 @@
   .user-info
     .user-info__box
       h2.user-info__title {{title}}
-      span.user-info__gender {{user.gender}},
+      span.user-info__gender {{user.sex.label}},
       span.user-info__age {{user.age}} года
     img(:src="user.avatar").user-info__img
 

@@ -8,40 +8,41 @@
       span.destination__label Страна
 
     .destination__input-box
-      Input(name="city" label="Город" value="Москва" :required="true")
+      Input(name="city" label="Город" :value="addressItem.city" :required="true")
 
     .destination__input-box
-      Input(name="district" label="Область")
+      Input(name="district" :value="addressItem.district" label="Область")
 
     .destination__input-box
-      Input(name="street" label="Улица")
+      Input(name="street" :value="addressItem.street" label="Улица")
 
     .destination__input-box.destination__input-box--half
-      Input(name="house" label="Дом")
+      Input(name="house" :value="addressItem.house" label="Дом")
 
     .destination__input-box.destination__input-box--half
-      Input(name="part" label="Корпус")
+      Input(name="part" :value="addressItem.part" label="Корпус")
 
     .destination__input-box.destination__input-box--half
-      Input(name="flat" label="Строение")
+      Input(name="building" :value="addressItem.building" label="Строение")
 
     .destination__input-box.destination__input-box--half
-      Input(name="building" label="Квартира/офис")
+      Input(name="flat" :value="addressItem.flat" label="Квартира/офис")
 
     .destination__input-box
-      Input(name="index" label="Индекс" :required="true")
+      Input(name="index" label="Индекс" :value="addressItem.index" :required="true")
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { AddressItem } from '@/utils/models';
 import Input from '@/components/Input.vue';
 
 @Component({
   components: { Input },
 })
 export default class Destination extends Vue {
-  @Prop() public prop!: boolean;
+  @Prop() public addressItem!: AddressItem | object;
 }
 </script>
 

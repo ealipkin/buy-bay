@@ -1,5 +1,6 @@
 import {
   Group, ORDER_STATUSES, OrderItem, OrderUser, Product, PRODUCT_FEATURES, ProductFeature, ProductShop, REQUIRED_ADDRESS_FIELDS, ProfileUser,
+  SEX_TYPES
 } from '@/utils/models';
 import { nanoid } from 'nanoid';
 import { getIfExist } from './common';
@@ -33,6 +34,8 @@ const createFeatures = () => {
 };
 
 const getRate = () => `${getRandomNumberBetween(0, 9)},${getRandomNumberBetween(0, 9)}`;
+
+const getDate = () => new Date(getRandomNumberBetween(1970, 2010), getRandomNumberBetween(0, 11), getRandomNumberBetween(1, 31));
 
 export const getShop = (): ProductShop => ({
   id: nanoid(),
@@ -217,8 +220,18 @@ export const createProfileUser = (item, index): ProfileUser => ({
   name: getRandomArrayElement(NAMES),
   surname: 'Меньшов',
   patronymic: 'Иванович',
-  gender: 'Мужчина',
-  age: '24',
+  sex: {
+    label: 'Мужчина',
+    value: SEX_TYPES.MALE,
+  },
+  birthday: getDate(),
+  getFormatDate() {
+    return `${this.birthday?.getDate().toString().padStart(2, '0')}.${this.birthday?.getMonth().toString().padStart(2, '0')}.${this.birthday?.getFullYear()}` || '';
+  },
+  get age() {
+    const now = new Date(Date.now());
+    return (now.getFullYear() - (this.birthday?.getFullYear() || NaN)).toString();
+  },
   contacts: {
     phone: '+7 (927) 636-22-13',
     email: 'Blakhdb@khd.ru',
@@ -257,7 +270,7 @@ export const createProfileUser = (item, index): ProfileUser => ({
       isActive: false,
       [REQUIRED_ADDRESS_FIELDS.SURNAME]: 'Nikulin',
       [REQUIRED_ADDRESS_FIELDS.NAME]: 'Alexander',
-      patronymic: 'Ivanovich',
+      patronymic: '',
       street: 'Lenina street',
       house: 'dom 34',
       building: undefined,

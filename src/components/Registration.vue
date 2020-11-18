@@ -9,14 +9,7 @@
     .registration__step(v-if="currentStep === regSteps.FINISH")
       .registration__title Почти все готово
       .registration__text Пожалуйста, добавьте аватар и некоторые данные о себе
-      .registration__image
-        AvatarEdit
-      Input(:required="true" label="Ваше имя" name="name" type="text").form__input.registration__input
-      //Input(:required="true" label="Дата рождения" name="name" type="text").form__input.registration__input
-      InputDate(:required="true" label="Дата рождения" name="birthday").form__input.registration__input
-      .registration__sex
-        Radio(label="Я мужчина" :checked="true" name="sex" value="male").radio--style--2.registration__radio
-        Radio(label="Я женщина" name="sex" value="female").radio--style--2.registration__radio
+      UserEdit
 
       button(type="button" @click="submit" disabled).button.form__login-button.registration__button Завершить
       .registration__bottom
@@ -27,9 +20,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Input from '@/components/Input.vue';
-import AvatarEdit from '@/components/AvatarEdit.vue';
-import Radio from '@/components/Radio.vue';
-import InputDate from '@/components/InputDate.vue';
+import UserEdit from '@/components/UserEdit.vue';
 
 enum REG_STEPS {
   START = 'start',
@@ -38,7 +29,7 @@ enum REG_STEPS {
 
 @Component({
   components: {
-    InputDate, Radio, AvatarEdit, Input,
+    Input, UserEdit,
   },
 })
 export default class Registration extends Vue {
@@ -76,16 +67,6 @@ export default class Registration extends Vue {
       }
     }
 
-    &__sex {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      @include tablet() {
-        max-width: 70%;
-      }
-
-    }
-
     &__link {
       font-size: 14px;
     }
@@ -110,22 +91,6 @@ export default class Registration extends Vue {
     &__bottom {
       text-align: center;
       margin-top: 26px;
-    }
-
-    &__image {
-      margin-bottom: 43px;
-
-      @include tablet() {
-        margin-bottom: 32px;
-      }
-    }
-
-    &__input {
-      margin-bottom: 9px;
-
-      @include tablet() {
-        margin-bottom: 24px;
-      }
     }
 
     &__button {

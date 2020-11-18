@@ -232,18 +232,28 @@ export interface ProfileUser {
   name: string;
   surname: string;
   patronymic?: string;
-  gender?: string;
+  sex?: {
+    label: string;
+    value: SEX_TYPES;
+  };
   age?: string;
+  birthday?: Date;
   contacts: { phone: string; email: string };
   avatar?: string;
   addresses: AddressItem[];
   cards: CardItem[];
+  getFormatDate?: () => string;
 }
 
 export enum NOTIFICATIONS_TYPES {
   MESSAGE = 'message',
   GROUP = 'group',
   DELIVERY = 'delivery',
+}
+
+export enum SEX_TYPES {
+  MALE = 'male',
+  FEMALE = 'female',
 }
 
 export interface NotificationItem {

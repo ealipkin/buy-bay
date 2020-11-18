@@ -13,15 +13,29 @@
           span.contacts__item-label email
           span.contacts__item-value {{contacts.email}}
 
-    button(type="button").contacts__button.link Изменить данные
+    button(type="button" @click="openProfileModal").contacts__button.link Изменить данные
+
+    ProfileModal(ref="profileModal")
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import ProfileModal from '@/components/ProfileModal.vue';
+import { createProfileUser } from '@/utils/data';
 
-@Component
+@Component({
+  components: {
+    ProfileModal,
+  },
+})
 export default class Contacts extends Vue {
   @Prop() public contacts!: object;
+
+  openProfileModal = () => {
+    const modalComponent: any = this.$refs.profileModal;
+    modalComponent.showModal();
+    console.log('open profile modal');
+  };
 }
 </script>
 
