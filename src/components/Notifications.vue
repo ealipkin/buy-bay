@@ -8,7 +8,7 @@
             template(v-if="item.type === NOTIFICATIONS_TYPES.MESSAGE")
               include ../assets/icons/mail.svg
             template(v-if="item.type === NOTIFICATIONS_TYPES.GROUP")
-              include ../assets/icons/ckeck.svg
+              include ../assets/icons/check.svg
             template(v-if="item.type === NOTIFICATIONS_TYPES.DELIVERY")
               include ../assets/icons/delivery.svg
           span.notifications__info
@@ -22,7 +22,7 @@
             template(v-if="item.type === NOTIFICATIONS_TYPES.MESSAGE")
               include ../assets/icons/mail.svg
             template(v-if="item.type === NOTIFICATIONS_TYPES.GROUP")
-              include ../assets/icons/ckeck.svg
+              include ../assets/icons/check.svg
             template(v-if="item.type === NOTIFICATIONS_TYPES.DELIVERY")
               include ../assets/icons/delivery.svg
           span.notifications__info
