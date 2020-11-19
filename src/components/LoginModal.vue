@@ -88,7 +88,7 @@ export default class LoginModal extends Vue {
     },
   ];
 
-  selectTab = (tabId) => {
+  selectTab(tabId) {
     const tabIndex = this.tabs.findIndex((tab) => tab.id === tabId);
     const tab = this.tabs[tabIndex];
     this.tabs.forEach((t) => t.isActive = false);
