@@ -1,9 +1,10 @@
 <template lang="pug">
   .input
-    input(v-if="required" :type="type || 'text'" required :value="value" :placeholder="label").input__field
-    input(v-if="!required" :type="type || 'text'" :value="value"  :placeholder="label").input__field
-    label(v-if="label" :data-placeholder="label").input__label {{label}}
-      sup(v-if="required").input__required-mark *
+    ValidationProvider(:name="name" rules="required" v-slot="{ errors }")
+      input(:type="type || 'text'" :required="isRequired" :placeholder="label" v-model="myValue").input__field
+      label(v-if="label" :data-placeholder="label").input__label {{label}}
+        sup(v-if="isRequired").input__required-mark *
+      <span>{{ errors[0] }}</span>
 </template>
 
 <script lang="ts">
@@ -19,7 +20,13 @@ export default class Input extends Vue {
 
   @Prop() public value!: string | number;
 
-  @Prop() public required!: boolean;
+  @Prop() public isRequired!: boolean;
+
+  data() {
+    return {
+      myValue: this.value,
+    };
+  }
 }
 </script>
 

@@ -2,10 +2,10 @@
   .recipient
     legend.recipient__legend Получатель
     .recipient__input-box
-      Input(name="surname" label="Фамилия" :value="addressItem.surname" :required="true")
+      Input(name="surname" label="Фамилия" :value="addressItem.surname" :isRequired="true")
 
     .recipient__input-box
-      Input(name="surname" label="Имя" :value="addressItem.name" :required="true")
+      Input(name="surname" label="Имя" :value="addressItem.name" :isRequired="true")
 
     .recipient__input-box
       Input(name="patronymic" :value="addressItem.patronymic" label="Отчество")
