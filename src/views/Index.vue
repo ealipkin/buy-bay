@@ -1,8 +1,5 @@
 <template lang="pug">
   .index.index--flex
-    validation-provider( rules="required" v-slot="{ errors }")
-      input(v-model="value" name="myinput" type="text")
-      span {{ errors[0] }}
     section.section.section--slider.container
       BigSlider
       FeaturesSlider.index__features-slider
@@ -80,7 +77,6 @@ import { ADVANTAGES } from '@/utils/constants';
   },
 })
 export default class Index extends Vue {
-  value = '1';
   slidersMap = {};
 
   selectedTab = 1;
