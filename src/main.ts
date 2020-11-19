@@ -5,8 +5,6 @@ import VueTruncate from 'vue-truncate-filter';
 import VueClipboard from 'vue-clipboard2';
 import Toasted from 'vue-toasted';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
-import { required } from 'vee-validate/dist/rules.umd';
-// import { ValidationProvider } from 'vee-validate/dist/vee-validate.full.esm';
 
 import Vue from 'vue';
 import App from './App.vue';
@@ -16,6 +14,7 @@ import './scss/style.scss';
 import './assets/fonts/opensans.css';
 
 import router from './router';
+import { addBasicValidations } from '@/validations';
 
 Vue.use(vueAwesomeCountdown, 'vac');
 Vue.use(VueTruncate);
@@ -23,6 +22,7 @@ Vue.use(VueClipboard);
 Vue.use(Toasted);
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+addBasicValidations();
 
 Vue.config.productionTip = false;
 Vue.use(VModal);
