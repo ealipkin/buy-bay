@@ -1,9 +1,9 @@
 <template lang="pug">
   .form.registration
     .registration__step(v-if="currentStep === regSteps.START")
-      Input(:required="true" label="Телефон или адрес эл.почты" name="login").form__input
-      Input(:required="true" label="Пароль" name="password" type="password").form__input
-      Input(:required="true" label="Повторите пароль" name="password-check" type="password").form__input
+      Input(:rules="['required']" label="Телефон или адрес эл.почты" name="login").form__input
+      Input(:rules="['required']" label="Пароль" name="password" type="password").form__input
+      Input(:rules="['required']" label="Повторите пароль" name="password-check" type="password").form__input
       button(type="button" @click="register").button.form__login-button Создать
 
     .registration__step(v-if="currentStep === regSteps.FINISH")

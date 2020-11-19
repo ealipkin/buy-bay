@@ -58,6 +58,13 @@ export default class AddressModal extends Vue {
 }
 </script>
 
+<style lang="scss">
+  .modal .modal__button:disabled {
+    background: $grey-15;
+    color: #fff;
+  }
+</style>
+
 <style lang="scss" scoped>
   .modal {
     padding: 16px;

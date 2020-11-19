@@ -8,16 +8,16 @@
         .order-checkout__info.order-checkout__item
           h2.order-checkout__info-title Адрес доставки
           span.order-checkout__info-text Пожалуйста, добавьте недостающие данные
+        ValidationObserver(v-slot="{ invalid }")
+          form(@submit.prevet="dosomething").order-checkout__form
+            fieldset.order-checkout__item.order-checkout__fieldset.order-checkout__recipient
+              Recipient
 
-        form.order-checkout__form
-          fieldset.order-checkout__item.order-checkout__fieldset.order-checkout__recipient
-            Recipient
+            fieldset.order-checkout__item.order-checkout__fieldset.order-checkout__destination
+              Destination
 
-          fieldset.order-checkout__item.order-checkout__fieldset.order-checkout__destination
-            Destination
-
-          .order-checkout__item.order-checkout__item--last
-            button(type="submit").order-checkout__form-submit Продолжить
+            .order-checkout__item.order-checkout__item--last
+              button(type="submit" :disabled="invalid").order-checkout__form-submit Продолжить
 
       .order-checkout__aside
         OrderInfo(:item="item" v-if="!isMobile" :type="'checkout'").order-checkout__product.order-checkout__item.order-info--checkout

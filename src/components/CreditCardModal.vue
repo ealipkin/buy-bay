@@ -3,21 +3,21 @@
     article.modal
       h4.modal__title Добавление карты
       button(type="button" @click="closeModal").modal__close.close
+      ValidationObserver(v-slot="{ invalid }")
+        form(@submit.prevent="AddCard").modal__form
 
-      form.modal__form
+          span.modal__form-border
+            span.modal__form-box
+              Input(name="number" label="Номер карты" :rules="['required']" value="6453 7633 7772 2300").modal__input.modal__input--number
 
-        span.modal__form-border
-          span.modal__form-box
-            Input(name="number" label="Номер карты" :required="true" value="6453 7633 7772 2300").modal__input.modal__input--number
+            span.modal__form-box
+              Input(name="owner" label="Имя держателя карты" :rules="['required', 'alpha']").modal__input.modal__input--owner
+              Input(name="date" label="месяц/год" :rules="['required']").modal__input.modal__input--half.modal__input--date
+              Input(name="cvv" label="код CVV" :rules="['required', 'digits:3']").modal__input.modal__input--half.modal__input--cvv
 
-          span.modal__form-box
-            Input(name="owner" label="Имя держателя карты" :required="true").modal__input.modal__input--owner
-            Input(name="date" label="месяц/год" :required="true").modal__input.modal__input--half.modal__input--date
-            Input(name="cvv" label="код CVV" :required="true").modal__input.modal__input--half.modal__input--cvv
+          span.modal__form-info Если нужна какая-то предупрепреждающая инфа, она будет здесь
 
-        span.modal__form-info Если нужна какая-то предупрепреждающая инфа, она будет здесь
-
-        button(type="submit" @click.prevent="AddCard").modal__button Добавить карту
+          button(type="submit" :disabled="invalid").modal__button Добавить карту
 
 </template>
 

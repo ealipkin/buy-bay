@@ -2,16 +2,16 @@
   .destination
     legend.destination__legend Aдрес Доставки
     label.destination__input-box
-      select(name="country" placeholder="Страна *" isRequired).destination__input.destination__select
+      select(name="country" placeholder="Страна *" required).destination__input.destination__select
         option(value="Russia") Россия
         option(value="USA") USA
       span.destination__label Страна
 
     .destination__input-box
-      Input(name="city" label="Город" :value="addressItem.city" :isRequired="true")
+      Input(name="city" label="Город" :value="addressItem.city" :rules="['required', 'alpha']")
 
     .destination__input-box
-      Input(name="district" :value="addressItem.district" label="Область")
+      Input(name="district" :value="addressItem.district" label="Область" :rules="['alpha']")
 
     .destination__input-box
       Input(name="street" :value="addressItem.street" label="Улица")
@@ -29,7 +29,7 @@
       Input(name="flat" :value="addressItem.flat" label="Квартира/офис")
 
     .destination__input-box
-      Input(name="index" label="Индекс" :value="addressItem.index" :isRequired="true")
+      Input(name="index" label="Индекс" :value="addressItem.index" :rules="['required', 'digits:6']")
 
 </template>
 

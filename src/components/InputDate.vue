@@ -4,7 +4,7 @@
       template(v-slot:icon-calendar="{ emit }")
         include ../assets/icons/calendar.svg
       template(v-slot:input="{ emit }")
-        Input(:required="required" :label="label" :name="name" :value="date")
+        Input(:rules="[isRequired]" :label="label" :name="name" :value="date")
 </template>
 
 <script lang="ts">
@@ -30,6 +30,8 @@ export default class InputDate extends Vue {
   @Prop() public value!: string | number;
 
   @Prop() public required!: boolean;
+
+  isRequired = this.required ? 'required' : '';
 
   date = this.value;
 }

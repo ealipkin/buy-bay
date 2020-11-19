@@ -1,10 +1,10 @@
 <template lang="pug">
   .input
-    ValidationProvider(:name="name" rules="required" v-slot="{ errors }")
-      input(:type="type || 'text'" :required="isRequired" :placeholder="label" v-model="myValue").input__field
+    ValidationProvider(:name="name" :rules="myRules" v-slot="{ errors, failed }").input__provider
+      input(:type="type || 'text'" :placeholder="label" v-model="myValue" :class="failed ? 'input__field--fail' : ''").input__field
       label(v-if="label" :data-placeholder="label").input__label {{label}}
         sup(v-if="isRequired").input__required-mark *
-      <span>{{ errors[0] }}</span>
+      span.input__message {{ errors[0] }}
 </template>
 
 <script lang="ts">
@@ -20,7 +20,11 @@ export default class Input extends Vue {
 
   @Prop() public value!: string | number;
 
-  @Prop() public isRequired!: boolean;
+  @Prop() public rules!: string[] | null;
+
+  myRules = this.rules?.join('|') || '';
+
+  isRequired = this.rules?.includes('required') || false;
 
   data() {
     return {
@@ -59,6 +63,11 @@ export default class Input extends Vue {
         font-size: 0;
         opacity: 0;
       }
+
+      &--fail {
+        border: 1px solid $red-1;
+        color: $red-1;
+      }
     }
 
     &__label {
@@ -95,6 +104,15 @@ export default class Input extends Vue {
         margin-left: 4px;
         top: -0.1em;
       }
+    }
+
+    &__message {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      z-index: 1;
+      font-size: 12px;
+      color: $red-1;
     }
 
     &__required-mark {

@@ -3,13 +3,14 @@
     article.modal
       h4.modal__title Изменить данные
       button(type="button" @click="closeModal").modal__close.close
-      form.form.modal__form
-        UserEdit(:user="user").modal__user-edit
+      ValidationObserver(v-slot="{ invalid }")
+        form(@submit.prevent="saveData").form.modal__form
+          UserEdit(:user="user").modal__user-edit
 
-        Input(:required="true" label="Телефон" :value="user.contacts.phone" name="phone" type="text").form__input
-        Input(:required="true" label="Email" :value="user.contacts.email" name="email" type="text").form__input
+          Input(:rules="['required']" label="Телефон" :value="user.contacts.phone" name="phone" type="text").form__input
+          Input(:rules="['required', 'email']" label="Email" :value="user.contacts.email" name="email" type="text").form__input
 
-        button(type="submit" @click.prevent="saveData").modal__button Сохранить данные
+          button(type="submit" :disabled="invalid").modal__button Сохранить данные
     Toasted(ref="toasted")
 </template>
 
