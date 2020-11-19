@@ -1,9 +1,11 @@
 import { extend } from 'vee-validate';
-import { required, email } from 'vee-validate/dist/rules';
+import { required, email, alpha } from 'vee-validate/dist/rules';
 
 export const addBasicValidations = () => {
   // No message specified.
   extend('email', email);
+
+  extend('alpha', alpha);
 
   // Override the default message.
   extend('required', {
