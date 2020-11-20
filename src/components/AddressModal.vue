@@ -3,14 +3,15 @@
     article.modal
       h4.modal__title Добавить адрес
       button(type="button" @click="closeModal").modal__close.close
-      form.modal__form
-        fieldset.modal__form-fieldset
-          Recipient(:addressItem="addressItem").modal__recipient
+      ValidationObserver(v-slot="{ invalid }")
+        form(@submit.prevent="addAddress").modal__form
+          fieldset.modal__form-fieldset
+            Recipient(:addressItem="addressItem").modal__recipient
 
-        fieldset.modal__form-fieldset
-          Destination(:addressItem="addressItem").modal__destination
+          fieldset.modal__form-fieldset
+            Destination(:addressItem="addressItem").modal__destination
 
-        button(type="submit" @click.prevent="addAddress").modal__button Добавить адрес
+          button(type="submit" :disabled="invalid").modal__button Добавить адрес
 
 </template>
 
@@ -56,6 +57,13 @@ export default class AddressModal extends Vue {
   };
 }
 </script>
+
+<style lang="scss">
+  .modal .modal__button:disabled {
+    background: $grey-15;
+    color: #fff;
+  }
+</style>
 
 <style lang="scss" scoped>
   .modal {
