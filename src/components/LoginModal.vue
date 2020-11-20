@@ -5,12 +5,13 @@
       .modal__content.login-modal__content
         TabsNav(:tabs="tabs" v-on:change="selectTab").tabs-nav--small.login-modal__tabs
         div(:class="{'tab--active': selectedTab === 'login'}").tab.login-modal__login
-          .login-modal__inner.form
-            Input(:rules="['required']" label="Телефон или адрес эл.почты" name="login").form__input
-            Input(:rules="['required']" label="Пароль" name="password" type="password").form__input
-            button(type="button" @click="login").button.form__login-button Войти
-            .login-modal__forgot
-              button(type="button" @click="forgotPassword").link Забыли пароль?
+          ValidationObserver(v-slot="{ invalid }")
+            form(@submit.prevent="login").login-modal__inner.form
+              Input(:rules="['required']" label="Телефон или адрес эл.почты" name="login").form__input
+              Input(:rules="['required']" label="Пароль" name="password" type="password").form__input
+              button(type="submit" :disabled="invalid").button.form__login-button Войти
+              .login-modal__forgot
+                button(type="button" @click="forgotPassword").link Забыли пароль?
 
         div(:class="{'tab--active': selectedTab === 'register'}").tab.login-modal__register
           Registration(@register="handleRegister" @later="closeModal").login-modal__inner

@@ -11,7 +11,7 @@
               Input(name="number" label="Номер карты" :rules="['required']" value="6453 7633 7772 2300").modal__input.modal__input--number
 
             span.modal__form-box
-              Input(name="owner" label="Имя держателя карты" :rules="['required', 'alpha']").modal__input.modal__input--owner
+              Input(name="owner" label="Имя держателя карты" :rules="['required']").modal__input.modal__input--owner
               Input(name="date" label="месяц/год" :rules="['required']").modal__input.modal__input--half.modal__input--date
               Input(name="cvv" label="код CVV" :rules="['required', 'digits:3']").modal__input.modal__input--half.modal__input--cvv
 

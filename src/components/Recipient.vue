@@ -2,13 +2,13 @@
   .recipient
     legend.recipient__legend Получатель
     .recipient__input-box
-      Input(name="surname" label="Фамилия" :value="addressItem.surname" :rules="['required', 'alpha']")
+      Input(name="surname" label="Фамилия" :value="addressItem.surname" :rules="['required']")
 
     .recipient__input-box
-      Input(name="surname" label="Имя" :value="addressItem.name" :rules="['required', 'alpha']")
+      Input(name="surname" label="Имя" :value="addressItem.name" :rules="['required']")
 
     .recipient__input-box
-      Input(name="patronymic" :value="addressItem.patronymic" label="Отчество" :rules="['alpha']")
+      Input(name="patronymic" :value="addressItem.patronymic" label="Отчество")
 
     .recipient__input-box
       Input(name="email" :value="addressItem.email" :rules="['email']" label="Электнонная почта")

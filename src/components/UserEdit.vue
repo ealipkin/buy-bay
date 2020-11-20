@@ -2,7 +2,7 @@
   .form.user-edit
       .user-edit__image
         AvatarEdit(:selectedImage="user.avatar")
-      Input(:rules="['required', 'alpha']" label="Ваше имя" name="name" type="text" :value="user.name").form__input.user-edit__input
+      Input(:rules="['required']" label="Ваше имя" name="name" type="text" :value="user.name").form__input.user-edit__input
       InputDate(:rules="['required']" :value="user.getFormatDate()" label="Дата рождения" name="birthday").form__input.user-edit__input
       .user-edit__sex
         Radio(label="Я мужчина" :checked="user.sex.value === sexTypes.MALE" name="sex" :value="sexTypes.MALE").radio--style--2.user-edit__radio

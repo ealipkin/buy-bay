@@ -11,8 +11,5 @@ export const addBasicValidations = () => {
 
   extend('integer', integer);
   // Override the default message.
-  extend('required', {
-    ...required,
-    message: 'Обязательно для заполнения',
-  });
+  extend('required', required);
 };

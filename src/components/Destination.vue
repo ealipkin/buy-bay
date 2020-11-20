@@ -8,7 +8,7 @@
       span.destination__label Страна
 
     .destination__input-box
-      Input(name="city" label="Город" :value="addressItem.city" :rules="['required', 'alpha']")
+      Input(name="city" label="Город" :value="addressItem.city" :rules="['required']")
 
     .destination__input-box
       Input(name="district" :value="addressItem.district" label="Область" :rules="['alpha']")
