@@ -48,7 +48,6 @@ export default class Brands extends Vue {
     slidesToScroll: 2,
   };
 
-
   updateSliders = () => {
     if (this.$refs.slickDesktop) {
       (this.$refs.slickDesktop as any).reSlick();
@@ -65,8 +64,9 @@ export default class Brands extends Vue {
   get isLaptop() {
     return this.windowWidth >= breakPoints.laptop && this.windowWidth < breakPoints.desktopSliders;
   }
+
   get isDesktop() {
-    return this.windowWidth >= breakPoints.desktopSliders
+    return this.windowWidth >= breakPoints.desktopSliders;
   }
 
   handleResize() {

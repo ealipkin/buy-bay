@@ -17,13 +17,13 @@ export interface MenuChildItem {
 export interface BaseMenuItem {
   title: string;
   href: string;
-  icon: string;
-  isActive?: boolean;
+  icon?: string;
+  is_active?: boolean;
   count?: string;
 }
 
 export interface MenuItem extends BaseMenuItem {
-  inGeneralMenu?: boolean;
+  is_general_menu?: boolean;
   brands?: BrandMenuItem[];
   children?: MenuChildItem[];
 }

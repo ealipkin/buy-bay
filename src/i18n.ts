@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+import vee_en from 'vee-validate/dist/locale/en.json';
 import ru from './lang/ru.json';
 import vee_ru from './lang/vee_ru.json';
-import vee_en from 'vee-validate/dist/locale/en.json';
 
 Vue.use(VueI18n);
 
@@ -11,16 +11,16 @@ const i18n = new VueI18n({
   messages: {
     ru: {
       ...ru,
-      validation: vee_ru.messages
+      validation: vee_ru.messages,
     },
     en: {
       fields: {
         email: 'E-mail',
-        password: 'Password'
+        password: 'Password',
       },
-      validation: vee_en.messages
-    }
-  }
+      validation: vee_en.messages,
+    },
+  },
 });
 
 export { i18n };

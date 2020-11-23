@@ -15,9 +15,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { State } from 'vuex-class';
 import Rate from '@/components/Rate.vue';
-import { mapGetters } from 'vuex';
 import { ProductShop } from '@/utils/models';
 
 @Component({

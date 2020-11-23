@@ -10,32 +10,37 @@
           ul.main-nav__list
             li(v-for="item in navigationList").main-nav__item
               router-link(:to="item.href").main-nav__link {{item.title}}
-    CatalogMenu(:links="menuItems" :class="{'main-nav__menu--visible': isMenuVisible}").main-nav__menu
+    CatalogMenu(:links="mainMenu" :class="{'main-nav__menu--visible': isMenuVisible}").main-nav__menu
 
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import { MENU_ITEMS } from '@/utils/constants';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import CatalogMenu from '@/components/CatalogMenu.vue';
 import clickOutside from '@/utils/clickOutside';
+import { MenuItem } from '@/utils/models';
 
 @Component({
   components: { CatalogMenu },
+  computed: {
+    navigationList(): MenuItem[] {
+      return this.$store.state.app.mainMenu.filter((item) => item.is_general_menu);
+    },
+  },
 })
 export default class MainNav extends Vue {
+  @Prop() public mainMenu!: MenuItem[];
+
   isMenuVisible = false;
-
-  menuItems = MENU_ITEMS;
-
-  navigationList = this.menuItems.filter((item) => item.inGeneralMenu);
 
   mounted() {
     const menu = this.$el.querySelector('.main-nav__menu');
     clickOutside(menu, (e) => {
       const body = document.querySelector('body');
       const isMenuToggle = e.target.closest('.main-nav__menu-toggle');
+      console.log(e.target);
       if (this.isMenuVisible && !isMenuToggle) {
+        console.log('close');
         this.isMenuVisible = false;
         (body as HTMLBodyElement).classList.remove('_hidden');
       }

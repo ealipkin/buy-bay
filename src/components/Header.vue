@@ -53,7 +53,7 @@
     .header-inner
       HeaderShopCard(:shop="selectedShop" v-if="selectedShop")
     .header-bottom
-      MainNav.container
+      MainNav(v-if="mainMenu" :main-menu="mainMenu").container
     .container
     LoginModal(ref="loginModal" @login-success="loginSuccess" @register-success="registerSuccess")
 </template>
@@ -74,6 +74,7 @@ import { NOTIFICATIONS, PROFILE_MENU_ITEMS } from '@/utils/constants';
 import { NotificationItem } from '@/utils/models';
 import ProfileNav from '@/components/ProfileNav.vue';
 import MobileNav from '@/components/MobileNav.vue';
+import { Action } from 'vuex-class';
 
 @Component({
   components: {
@@ -88,10 +89,13 @@ import MobileNav from '@/components/MobileNav.vue';
   computed: {
     ...mapGetters({
       selectedShop: 'app/getSelectedShop',
+      mainMenu: 'app/getMainMenu',
     }),
   },
 })
 export default class Header extends Vue {
+  @Action('app/fetchMenu') fetchMenu;
+
   isAuthenticated = false;
 
   showNotifications = false;
@@ -153,6 +157,10 @@ export default class Header extends Vue {
     this.showNotifications = !this.showNotifications;
     (this.body as HTMLBodyElement).classList.toggle('_hidden', this.showNotifications);
   }
+
+  async created() {
+    await this.fetchMenu();
+  }
 }
 </script>
 
@@ -174,7 +182,6 @@ export default class Header extends Vue {
 
     .profile-nav__link {
       padding: 14px 26px 14px 17px;
-
 
       svg {
         margin-right: 10px;

@@ -48,6 +48,7 @@ export default class CatalogCardItem extends Vue {
   @Prop({ type: Boolean, default: false }) public isOutlined!: boolean;
 
   @Prop() public item!: Product;
+
   @Prop() public titleLength!: number;
 
   get truncateLength() {

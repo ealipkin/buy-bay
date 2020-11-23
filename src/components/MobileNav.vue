@@ -46,7 +46,7 @@ export default class MobileNav extends Vue {
     const { index } = link.dataset;
     const item = this.items[index];
     const active = item.isActive;
-    this.items.forEach((item) => item.isActive = false);
+    this.items.forEach((i) => i.isActive = false);
     Vue.set(this.items, index, { ...item, isActive: !active });
     this.$emit('toggle-notifications');
   }

@@ -1,5 +1,7 @@
 import { extend } from 'vee-validate';
-import { required, email, alpha, digits, integer } from 'vee-validate/dist/rules';
+import {
+  required, email, alpha, digits, integer,
+} from 'vee-validate/dist/rules';
 
 export const addBasicValidations = () => {
   // No message specified.

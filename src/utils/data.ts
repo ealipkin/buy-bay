@@ -1,6 +1,6 @@
 import {
   Group, ORDER_STATUSES, OrderItem, OrderUser, Product, PRODUCT_FEATURES, ProductFeature, ProductShop, REQUIRED_ADDRESS_FIELDS, ProfileUser,
-  SEX_TYPES
+  SEX_TYPES,
 } from '@/utils/models';
 import { nanoid } from 'nanoid';
 import { getIfExist } from './common';
