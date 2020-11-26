@@ -4,7 +4,7 @@
       div(:class="{'catalog-menu__container-primary--hidden': subMenuOpen}").catalog-menu__container-primary
         .catalog-menu__nav-wrapper
           .catalog-menu__nav
-            button(type="button" v-for="(link, index) in links" :key="index" @click="menuLinkClick(link)" :class="{'catalog-menu__nav-link--active': link.is_active }").catalog-menu__nav-link
+            button(type="button" v-for="(link, index) in links" :key="index" @click="menuLinkClick(link, index)" :class="{'catalog-menu__nav-link--active': selectedIndex === index }").catalog-menu__nav-link
               span(v-if="link.icon === 'user'").catalog-menu__nav-link-icon
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path d="M0 8.993c0 4.957 4.035 8.992 8.993 8.992 4.957 0 8.992-4.035 8.992-8.992C17.985 4.035 13.95 0 8.993 0 4.035 0 0 4.035 0 8.993zm3.759 6.16a24.676 24.676 0 012.803-1.638.59.59 0 00.332-.531v-1.13a.45.45 0 00-.063-.228 3.844 3.844 0 01-.468-1.38.449.449 0 00-.325-.364c-.044-.056-.17-.248-.328-.805-.126-.442-.126-.66-.115-.748a.452.452 0 00.425-.602 2.569 2.569 0 01-.063-1.538c.118-.501.387-.973.804-1.401.225-.24.483-.454.76-.627l.015-.011c.232-.163.472-.284.712-.366h.003c.203-.07.413-.107.638-.118.605-.051 1.147.06 1.623.343.524.288.734.664.734.664.074.14.214.233.37.244.003 0 .202.037.383.273.214.284.516 1.021.147 2.803-.04.203.06.406.24.494.015.07.033.284-.107.782-.125.443-.229.653-.291.749a.464.464 0 00-.236.03.456.456 0 00-.27.335 4.16 4.16 0 01-.343 1.107.447.447 0 00-.044.195v1.306a.58.58 0 00.332.531c.34.166 1.48.745 2.803 1.638a8.047 8.047 0 01-5.234 1.929 8.087 8.087 0 01-5.237-1.937zM8.993.902c4.459 0 8.089 3.63 8.089 8.09 0 2.132-.83 4.075-2.184 5.521a25.738 25.738 0 00-2.9-1.722v-1.01c.122-.266.222-.562.296-.875.361-.137.616-.557.856-1.402.217-.77.199-1.313-.06-1.623.27-1.479.148-2.57-.365-3.246a1.566 1.566 0 00-.789-.575 2.889 2.889 0 00-.966-.84c-.631-.373-1.354-.528-2.132-.462-.295.015-.587.07-.87.166h-.004a3.718 3.718 0 00-.926.472 4.97 4.97 0 00-.922.76c-.532.542-.878 1.154-1.03 1.807a3.45 3.45 0 00-.04 1.609.72.72 0 00-.137.129c-.265.32-.287.833-.066 1.619.148.52.34 1.055.671 1.302.1.498.259.952.476 1.35v.819c-.505.254-1.634.856-2.899 1.722a8.056 8.056 0 01-2.187-5.52c0-4.46 3.63-8.09 8.089-8.09z" fill="currentColor"/></svg>
 
@@ -54,7 +54,7 @@ export default class CatalogMenu extends Vue {
     console.log('onLinksChanged');
     const hasActive = this.links.filter((link) => link.is_active).length;
     if (!hasActive && this.links) {
-      this.links[0].is_active = true;
+      this.menuLinkClick(this.links[0], 0);
     }
   }
 
@@ -63,7 +63,7 @@ export default class CatalogMenu extends Vue {
   childMenu: MenuItem | null = null;
 
   header: any;
-
+  selectedIndex: number = 0;
   subMenuOpen = false;
 
   mounted() {
@@ -75,9 +75,10 @@ export default class CatalogMenu extends Vue {
     });
   }
 
-  menuLinkClick(link) {
+  menuLinkClick(link, index) {
     this.childMenu = link;
     this.subMenuOpen = true;
+    this.selectedIndex = index;
   }
 
   closeMenu() {
@@ -135,6 +136,11 @@ export default class CatalogMenu extends Vue {
         background-color: #ededed;
       }
 
+      &--active,
+      &--active span {
+        color: $blue;
+      }
+
       @include laptop() {
         padding-left: 12px;
       }
@@ -146,7 +152,7 @@ export default class CatalogMenu extends Vue {
         position: absolute;
         top: 50%;
         right: 24px;
-        border: 1px solid black;
+        border: 1px solid currentColor;
         border-bottom: none;
         border-left: none;
         transform: translateY(-50%) rotate(45deg);

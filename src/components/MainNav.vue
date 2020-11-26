@@ -9,7 +9,8 @@
         .main-nav__list-inner
           ul.main-nav__list
             li(v-for="item in navigationList").main-nav__item
-              router-link(:to="item.href").main-nav__link {{item.title}}
+              router-link(v-if="item.href" :to="item.href").main-nav__link {{item.title}}
+              span(v-else).main-nav__link {{item.title}}
     CatalogMenu(:links="mainMenu" :class="{'main-nav__menu--visible': isMenuVisible}").main-nav__menu
 
 </template>
