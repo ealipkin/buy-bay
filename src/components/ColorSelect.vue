@@ -43,6 +43,12 @@ export default class ColorSelect extends Vue {
 
       &--visible {
         display: flex;
+        margin-right: 15px;
+
+        &:nth-child(6n) {
+          margin-right: 15px;
+        }
+
       }
     }
 
@@ -51,6 +57,10 @@ export default class ColorSelect extends Vue {
       height: 26px;
       display: block;
       border-radius: 50%;
+    }
+
+    input:checked + &__item {
+      background: url(../assets/icons/checkbox.svg) no-repeat center 55%;
     }
 
     &__show-all {

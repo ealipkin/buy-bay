@@ -4,23 +4,9 @@
     .item-groups__text Покупайте совместно с моментальной доставкой по&nbsp;самой выгодной цене.
 
     Slick(ref="slick" :options="sliderSettings").item-groups__slider
-      div(v-for="(group, index) in visibleSliderGroups" :class="{'item-groups__item--hide-desktop': ((index+1) > visibleListGroups)}").item-groups__slide
-        GroupItem(
-          :group="group"
-          :class="{'item-groups__item--hide-desktop': ((index+1) > visibleListGroups)}"
-        ).item-groups__item
-    .item-groups__footer
-      button(type="button" v-if="groups.length" @click="showModal").item-groups__show-all Всего {{groups.length}} групп
+      div(v-for="(group, index) in visibleSliderGroups").item-groups__slide
+        GroupItem(:group="group").item-groups__item
 
-    modal(name="group-modal" @closed="modalClose" :height="modalHeight" :adaptive="true" :classes="'groups-modal'")
-      .modal.item-groups__modal
-        button(type="button" @click="closeModal").modal__close.close
-        .modal__header
-          .modal__title Всего {{groups.length}}  групп
-            span._hide-mobile  на покупку товара
-          .modal__text Покупайте совместно с моментальной доставкой по самой выгодной цене.
-        .modal__content.item-groups__modal-content
-          GroupItem(v-for="(group, index) in groups" :key="index" :group="group").item-groups__item.item-groups__item--modal
 </template>
 
 <script lang="ts">
@@ -44,7 +30,8 @@ export default class ItemGroups extends Vue {
   showMobile = false;
 
   get visibleSliderGroups(): Group[] {
-    return this.groups.length > SLIDER_VISIBLE_GROUPS ? this.groups.slice(0, SLIDER_VISIBLE_GROUPS) : this.groups;
+    // return this.groups.length > SLIDER_VISIBLE_GROUPS ? this.groups.slice(0, SLIDER_VISIBLE_GROUPS) : this.groups;
+    return this.groups;
   }
 
   get visibleListGroups(): number {
@@ -125,17 +112,23 @@ export default class ItemGroups extends Vue {
       }
     }
   }
+  .item-groups__slide:last-child .item-groups__item {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
 </style>
 <style lang="scss" scoped>
   .item-groups {
+    max-height: 500px;
     background: white;
     padding: 16px 15px;
 
     @include tablet() {
       border-radius: 8px;
       border: solid 1px #dfdfdf;
-      overflow: hidden;
       padding: 23px 31px;
+      display: flex;
+      flex-direction: column;
     }
 
     &__title {
@@ -191,6 +184,12 @@ export default class ItemGroups extends Vue {
 
       @include tablet() {
         padding: 0;
+      }
+    }
+
+    &__slider {
+      @include laptop() {
+        overflow: auto;
       }
     }
 

@@ -99,15 +99,13 @@ export default class Brands extends Vue {
 
     .slick-prev {
       @include desktop() {
-        left: -63px;
-        margin-top: -85px;
+        left: -15px;
       }
     }
 
     .slick-next {
       @include desktop() {
-        right: -69px;
-        margin-top: -85px;
+        right: -15px;
       }
     }
 

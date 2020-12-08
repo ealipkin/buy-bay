@@ -158,6 +158,7 @@ export default class ItemInfo extends Vue {
 
     &__option-label {
       span {
+        cursor: pointer;
         border-radius: 4px;
         border: solid 1px #e1e1e1;
         font-size: 14px;
@@ -177,6 +178,7 @@ export default class ItemInfo extends Vue {
       }
 
       input:checked + span {
+        cursor: default;
         background-color: #222222;
         color: white;
         border-color: black;
@@ -234,6 +236,8 @@ export default class ItemInfo extends Vue {
     }
 
     &__fav {
+      outline: none;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -244,9 +248,17 @@ export default class ItemInfo extends Vue {
       @include tablet() {
         padding: 24px 22px;
       }
+
+      &--active {
+        svg path {
+          fill: $blue;
+        }
+      }
     }
 
+
     &__buy {
+      cursor: pointer;
       display: flex;
       align-items: center;
       flex-direction: column;

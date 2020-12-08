@@ -1,7 +1,7 @@
 <template lang="pug">
   .pagination
     button(type="button" @click="showMore").button.pagination__show-more Показать еще {{moreCount}} товаров
-    paginate(:page-count="99" :page-range="3" :margin-pages="3" :click-handler="pageChange" :prev-text="'Назад'" :next-text="'Вперед'" :container-class="'paginator'")
+    paginate(:page-count="99" :page-range="3" :click-handler="pageChange" :prev-text="'Назад'" :next-text="'Вперед'" :container-class="'paginator'")
 </template>
 
 <script lang="ts">

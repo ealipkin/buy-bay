@@ -110,7 +110,7 @@ export default class Index extends Vue {
         settings: {
           dots: true,
           slidesToShow: 5,
-          slidesToScroll: 1,
+          slidesToScroll: 5,
         },
       },
       {
@@ -119,7 +119,7 @@ export default class Index extends Vue {
           arrows: true,
           dots: false,
           slidesToShow: 5,
-          slidesToScroll: 1,
+          slidesToScroll: 5,
         },
       },
     ],

@@ -32,6 +32,7 @@ export default class TabsNav extends Vue {
 
     &__tab {
       @include clearButton();
+      cursor: pointer;
       font-size: 32px;
       font-weight: 600;
       color: #7b8197;

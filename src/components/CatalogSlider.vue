@@ -7,9 +7,6 @@
       Slick(v-if="!isMobile && isLaptop" ref="slickLaptop" :options="laptopSettings").catalog-slider__slider
         div(v-for="(item, index) in items" :key="index").catalog-slider__item
           CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
-      Slick(v-if="!isLaptop && isDesktop" ref="slickDesktop" :options="desktopSettings").catalog-slider__slider
-        div(v-for="(item, index) in items" :key="index").catalog-slider__item
-          CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
 </template>
 
 <script lang="ts">
@@ -48,7 +45,7 @@ export default class BigSlider extends Vue {
     arrows: false,
     draggable: false,
     rows: 2,
-    slidesPerRow: 4,
+    slidesPerRow: 5,
     slidesToShow: 1,
     slidesToScroll: 1,
   };
@@ -76,7 +73,7 @@ export default class BigSlider extends Vue {
     this.windowWidth = window.innerWidth;
     this.$nextTick(() => {
       this.isMobile = this.windowWidth < breakPoints.laptop;
-      this.isLaptop = this.windowWidth >= breakPoints.laptop && this.windowWidth < breakPoints.desktopSliders;
+      this.isLaptop = this.windowWidth >= breakPoints.laptop;
       this.isDesktop = this.windowWidth >= breakPoints.desktopSliders;
     });
   }

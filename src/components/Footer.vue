@@ -4,7 +4,7 @@
       .footer__inner
         .footer__col.footer__info
           router-link(to="/").footer__logo
-            include ../assets/icons/logo.svg
+            include ../assets/icons/kupide-logo-white.svg
 
           .footer__payments
             p.footer__payments-title.footer__description Мы принимаем

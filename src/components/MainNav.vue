@@ -11,7 +11,8 @@
             li(v-for="item in navigationList").main-nav__item
               router-link(v-if="item.href" :to="item.href").main-nav__link {{item.title}}
               span(v-else).main-nav__link {{item.title}}
-    CatalogMenu(:links="mainMenu" :class="{'main-nav__menu--visible': isMenuVisible}").main-nav__menu
+    div(@mouseenter="mouseEnter" @mouseover="mouseEnter" @mouseleave="mouseLeave" ).main-nav__menu-wrapper
+      CatalogMenu(:links="mainMenu" :class="{'main-nav__menu--visible': isMenuVisible}").main-nav__menu
 
 </template>
 
@@ -20,6 +21,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import CatalogMenu from '@/components/CatalogMenu.vue';
 import clickOutside from '@/utils/clickOutside';
 import { MenuItem } from '@/utils/models';
+import { debounce } from '@/utils/common';
 
 @Component({
   components: { CatalogMenu },
@@ -39,22 +41,40 @@ export default class MainNav extends Vue {
     clickOutside(menu, (e) => {
       const body = document.querySelector('body');
       const isMenuToggle = e.target.closest('.main-nav__menu-toggle');
-      console.log(e.target);
       if (this.isMenuVisible && !isMenuToggle) {
-        console.log('close');
         this.isMenuVisible = false;
         (body as HTMLBodyElement).classList.remove('_hidden');
       }
     });
   }
 
-  toggleMenu() {
+  mouseLeave(e) {
+    setTimeout(() => {
+      this.hideMenu();
+    }, 500);
+  }
+
+  mouseEnter(e) {
+    this.showMenu();
+  }
+
+  showMenu() {
     const body = document.querySelector('body');
-    this.isMenuVisible = !this.isMenuVisible;
+    (body as HTMLBodyElement).classList.add('_hidden');
+    this.isMenuVisible = true;
+  }
+
+  hideMenu() {
+    const body = document.querySelector('body');
+    (body as HTMLBodyElement).classList.remove('_hidden');
+    this.isMenuVisible = false;
+  }
+
+  toggleMenu() {
     if (this.isMenuVisible) {
-      (body as HTMLBodyElement).classList.add('_hidden');
+      this.hideMenu();
     } else {
-      (body as HTMLBodyElement).classList.remove('_hidden');
+      this.showMenu()
     }
   }
 }
@@ -85,6 +105,7 @@ export default class MainNav extends Vue {
     }
 
     &__menu-toggle {
+      cursor: pointer;
       outline: none;
       background: none;
       border: none;
@@ -99,6 +120,14 @@ export default class MainNav extends Vue {
       @include tablet() {
         margin-right: 41px;
       }
+    }
+
+    &__toggler {
+      width: 150px;
+      height: 50px;
+      position: absolute;
+      margin-top: -20px;
+      cursor: pointer;
     }
 
     &__list {
@@ -206,8 +235,22 @@ export default class MainNav extends Vue {
     &__menu {
       display: none;
 
-      &--visible {
+      &--visible, &:hover {
         display: block;
+      }
+    }
+
+    &__menu-wrapper {
+      @include laptop() {
+        &:after {
+          content: '';
+          width: 180px;
+          height: 43px;
+          display: block;
+          position: absolute;
+          cursor: pointer;
+          margin-top: -25px;
+        }
       }
     }
 

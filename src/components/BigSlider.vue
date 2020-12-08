@@ -77,14 +77,14 @@ export default class BigSlider extends Vue {
 
     .slick-next {
       @include laptop() {
-        right: -8px;
+        right: -16px;
       }
     }
 
     .slick-prev {
       @include laptop() {
         z-index: 1;
-        left: -8px;
+        left: -16px;
       }
 
     }
@@ -126,6 +126,17 @@ export default class BigSlider extends Vue {
       }
     }
 
+    .slick-list {
+      @include laptop() {
+        border-radius: 8px;
+        overflow: hidden;
+      }
+    }
+    .slick-arrow {
+      &:before {
+        border-width: 2px;
+      }
+    }
   }
 </style>
 <style scoped lang="scss">
@@ -169,11 +180,16 @@ export default class BigSlider extends Vue {
         width: 61%;
         margin-right: 16px;
         margin-bottom: -5px;
+        border-radius: 8px;
       }
     }
 
     &__link {
       display: block;
+      @include laptop() {
+        border-radius: 8px;
+        overflow: hidden;
+      }
     }
 
     &__promo-image {

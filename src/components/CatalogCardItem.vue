@@ -30,8 +30,7 @@
       .catalog-card__price
         p.catalog-card__actual-price
           include ../assets/icons/group-button.svg
-          span {{divideNumberWithSpaces(item.groupPrice)}}
-          span ₽
+          span {{divideNumberWithSpaces(item.groupPrice)}} ₽
         p.catalog-card__old-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
 </template>
 
@@ -75,6 +74,7 @@ export default class CatalogCardItem extends Vue {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     &.--isOutlined {
       border: 1px solid #e7e7e7;
@@ -159,7 +159,7 @@ export default class CatalogCardItem extends Vue {
       white-space: nowrap;
       margin: 0;
       color: #7b8197;
-      font-weight: 600;
+      font-weight: 500;
       font-size: 13px;
     }
 
@@ -193,15 +193,18 @@ export default class CatalogCardItem extends Vue {
       }
 
       @include laptop() {
-        padding: 3px 7px;
+        padding: 3px 4px 3px 9px;
         background-position: 8px center;
         font-size: 16px;
-        font-weight: 600;
+        font-weight: 500;
 
         svg {
           display: block;
-          margin-right: 2px;
           opacity: 0.7;
+
+          width: 13px;
+          margin-right: 6px;
+          margin-top: 1px;
         }
       }
     }
@@ -219,6 +222,7 @@ export default class CatalogCardItem extends Vue {
 
     &__top {
       position: relative;
+      min-height: 222px;
 
       img {
         display: block;

@@ -106,6 +106,7 @@ export default class ItemPreview extends Vue {
     }
 
     &__bottom-slide {
+      cursor: pointer;
       width: 50px;
       height: 50px;
       border-radius: 2px;

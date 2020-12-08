@@ -36,14 +36,23 @@ export default class Checkbox extends Vue {
       width: 16px;
       height: 16px;
       border-radius: 2px;
-      border: solid 1px #d4d3d3;
+      border: 1px solid #B6BBCD;
       flex-shrink: 0;
       box-sizing: border-box;
       margin-top: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+
+      svg {
+        width: 9px;
+      }
     }
 
     input:checked + &__icon {
-      background: $blue;
+      background: $blue url(../assets/icons/checkbox.svg) no-repeat center 55%;
+      background-size: 9px;
       border-color: $blue;
     }
 

@@ -31,14 +31,16 @@ export default class Radio extends Vue {
     align-items: center;
 
     &__icon {
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      border: solid 1px #d4d3d3;
       margin-right: 12px;
       position: relative;
       box-sizing: border-box;
       flex-shrink: 0;
+
+      background: #FFFFFF;
+      border: 1px solid #B6BBCD;
     }
 
     &__text {
@@ -47,21 +49,7 @@ export default class Radio extends Vue {
     }
 
     &__input:checked + &__icon {
-      border-color: #e53333;
-
-      &:after {
-        content: '';
-        box-sizing: border-box;
-        width: 12px;
-        height: 12px;
-        display: block;
-        border-radius: 50%;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        background: $blue;
-      }
+      border: 6px solid $blue;
     }
     &--style--2 {
 

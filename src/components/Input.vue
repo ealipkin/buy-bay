@@ -52,11 +52,11 @@ export default class Input extends Vue {
 
       height: 52px;
       border-radius: 4px;
-      border: solid 1px #d3d4d9;
+      border: solid 1px #B6BBCD;
       background-color: #ffffff;
 
       &:focus {
-        border: solid 1px #61a7ff;
+        border: solid 1px $blue;
       }
 
       &::placeholder {
@@ -86,7 +86,7 @@ export default class Input extends Vue {
       font-style: normal;
       line-height: normal;
       letter-spacing: normal;
-      color: #7b8197;
+      color: #B6BBCD;
       margin-left: 12px;
       white-space: nowrap;
     }
@@ -97,7 +97,7 @@ export default class Input extends Vue {
       background-color: white;
       font-size: 13px;
       margin-left: 0;
-      color: #61a7ff;
+      color: $blue;
       letter-spacing: 0.1px;
 
       .input__required-mark {

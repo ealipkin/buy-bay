@@ -101,13 +101,12 @@ export default class CatalogMenu extends Vue {
     position: absolute;
     max-height: calc(100vh - 82px);
     overflow: auto;
-    height: auto;
+    height: 100vh;
     z-index: 20;
 
     @include laptop() {
       top: 175px;
-      height: 100%;
-      max-height: calc(100vh - 30%);
+      max-height: calc(100vh - 30vh);
       overflow: visible;
     }
 
@@ -134,6 +133,11 @@ export default class CatalogMenu extends Vue {
 
       &:hover {
         background-color: #ededed;
+        color: $blue;
+
+        span {
+          color: $blue;
+        }
       }
 
       &--active,
@@ -357,6 +361,10 @@ export default class CatalogMenu extends Vue {
       line-height: 2.29;
       text-decoration: none;
       color: #222222;
+
+      &:hover {
+        color: $blue;
+      }
 
       &--main {
         font-weight: bold;
