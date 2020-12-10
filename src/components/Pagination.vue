@@ -1,6 +1,6 @@
 <template lang="pug">
   .pagination
-    button(type="button" @click="showMore").button.pagination__show-more Показать еще {{moreCount}} товаров
+    button(type="button" @click="showMore").button.pagination__show-more Показать еще {{moreCount}} {{kindText || 'товаров'}}
     paginate(:page-count="99" :page-range="3" :click-handler="pageChange" :prev-text="'Назад'" :next-text="'Вперед'" :container-class="'paginator'")
 </template>
 
@@ -10,6 +10,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 @Component
 export default class Pagination extends Vue {
   @Prop() public moreCount!: number;
+
+  @Prop() public kindText!: number;
 
   showMore() {
     this.$emit('more', this.moreCount);

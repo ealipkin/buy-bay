@@ -1,14 +1,16 @@
 <template lang="pug">
   .input
-    ValidationProvider(:name="name" :rules="myRules" v-slot="{ errors, failed }").input__provider
-      input(:type="type || 'text'" :placeholder="label" v-model="myValue" :class="failed ? 'input__field--fail' : ''").input__field
+    ValidationProvider(:name="name" :rules="inputRules" v-slot="{ errors, failed }").input__provider
+      input(:type="type || 'text'" :placeholder="label" v-model="inputValue" :class="failed ? 'input__field--fail' : ''").input__field
       label(v-if="label" :data-placeholder="label").input__label {{label}}
         sup(v-if="isRequired").input__required-mark *
       span.input__message {{ errors[0] }}
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 
 @Component
 export default class Input extends Vue {
@@ -22,14 +24,23 @@ export default class Input extends Vue {
 
   @Prop() public rules!: string[] | null;
 
-  myRules = this.rules?.join('|') || '';
+  @Watch('value')
+  onValueChange(val) {
+    this.setValue(val);
+  }
+
+  inputValue = '';
+
+  inputRules = this.rules?.join('|') || '';
 
   isRequired = this.rules?.includes('required') || false;
 
-  data() {
-    return {
-      myValue: this.value,
-    };
+  mounted() {
+    this.setValue(this.value);
+  }
+
+  setValue(val) {
+    this.inputValue = val;
   }
 }
 </script>

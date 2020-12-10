@@ -5,7 +5,7 @@
     h1.order-detail__title Заказ отправлен продавцом
     .order-detail__main
       .order-detail__left-col
-        OrderInfo(:item="item").order-detail__product.order-detail__item
+        OrderInfo(:item="item" :hideStatus="true").order-detail__product.order-detail__item
         OrderStatusCard(:item="item" v-if="isMobile").order-detail__status.order-detail__item
         DeliveryAddress(:contacts="item.contacts").order-detail__address.order-detail__item
         DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").order-detail__delivery.order-detail__item
@@ -44,7 +44,6 @@ export default class OrderDetail extends Vue {
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
     { href: '/profile/orders', label: 'Мои заказы' },
-    { href: '/profile/orders/:id', label: 'order title?', current: true },
   ];
 
   get isMobile() {
@@ -70,6 +69,10 @@ export default class OrderDetail extends Vue {
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+  }
+
+  mounted() {
+    this.breadCrumbs.push({ href: '/profile/orders/:id', label: this.item ? `Заказ № ${this.item.id}` : '', current: true });
   }
 
   destroyed() {

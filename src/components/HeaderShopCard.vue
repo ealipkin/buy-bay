@@ -9,7 +9,7 @@
         Rate(:rate="shop.rate").header-shop-card__rate
         .header-shop-card__fav
           include ../assets/icons/heart.svg
-        button(type="button" @click="writeToShop").header-shop-card__button.button.button--disabled Написать продавцу
+        button(type="button" @click="writeToShop").header-shop-card__button.button.button--secondary Написать продавцу
 
 </template>
 

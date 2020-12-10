@@ -5,7 +5,8 @@
         div.big-slider__slide(v-for="(slide, index) of slides" :key="index")
           router-link(:to="slide.href").big-slider__link
             img(:src="slide.img").big-slider__slide-image
-    div(
+    router-link(
+      to="/"
       :style="{backgroundImage: 'url(https://picsum.photos/452/280/)'}"
     ).big-slider__promo-image
 </template>
@@ -132,6 +133,7 @@ export default class BigSlider extends Vue {
         overflow: hidden;
       }
     }
+
     .slick-arrow {
       &:before {
         border-width: 2px;
@@ -197,6 +199,7 @@ export default class BigSlider extends Vue {
       border-radius: 8px;
       overflow: hidden;
       background-size: cover;
+      text-decoration: none;
       @include laptop() {
         width: calc(39% - 16px);
         height: 100%;

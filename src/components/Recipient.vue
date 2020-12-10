@@ -2,19 +2,19 @@
   .recipient
     legend.recipient__legend Получатель
     .recipient__input-box
-      Input(name="surname" label="Фамилия" :value="addressItem.surname" :rules="['required']")
+      Input(name="surname" label="Фамилия" :value="addressItem ? addressItem.surname : ''" :rules="['required']")
 
     .recipient__input-box
-      Input(name="surname" label="Имя" :value="addressItem.name" :rules="['required']")
+      Input(name="surname" label="Имя" :value="addressItem ? addressItem.name : ''" :rules="['required']")
 
     .recipient__input-box
-      Input(name="patronymic" :value="addressItem.patronymic" label="Отчество")
+      Input(name="patronymic" :value="addressItem ? addressItem.patronymic : ''" label="Отчество")
 
     .recipient__input-box
-      Input(name="email" :value="addressItem.email" :rules="['email']" label="Электнонная почта")
+      Input(name="email" :value="addressItem ? addressItem.email : ''" :rules="['email']" label="Электнонная почта")
 
     .recipient__input-box
-      Input(name="phone" :value="addressItem.phone" label="Мобильный телефон")
+      Input(name="phone" :value="addressItem ? addressItem.phone : ''" label="Мобильный телефон")
 
 </template>
 

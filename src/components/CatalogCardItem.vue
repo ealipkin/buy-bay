@@ -222,8 +222,7 @@ export default class CatalogCardItem extends Vue {
 
     &__top {
       position: relative;
-      min-height: 222px;
-
+      height: 60%;
       img {
         display: block;
       }

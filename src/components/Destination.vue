@@ -8,28 +8,28 @@
       span.destination__label Страна
 
     .destination__input-box
-      Input(name="city" label="Город" :value="addressItem.city" :rules="['required']")
+      Input(name="city" label="Город" :value="addressItem ? addressItem.city : addressItem" :rules="['required']")
 
     .destination__input-box
-      Input(name="district" :value="addressItem.district" label="Область" :rules="['alpha']")
+      Input(name="district" :value="addressItem ? addressItem.district : addressItem" label="Область" :rules="['alpha']")
 
     .destination__input-box
-      Input(name="street" :value="addressItem.street" label="Улица")
+      Input(name="street" :value="addressItem ? addressItem.street : addressItem" label="Улица")
 
     .destination__input-box.destination__input-box--half
-      Input(name="house" :value="addressItem.house" label="Дом")
+      Input(name="house" :value="addressItem ? addressItem.house : addressItem" label="Дом")
 
     .destination__input-box.destination__input-box--half
-      Input(name="part" :value="addressItem.part" label="Корпус")
+      Input(name="part" :value="addressItem ? addressItem.part : addressItem" label="Корпус")
 
     .destination__input-box.destination__input-box--half
-      Input(name="building" :value="addressItem.building" label="Строение")
+      Input(name="building" :value="addressItem ? addressItem.building : addressItem" label="Строение")
 
     .destination__input-box.destination__input-box--half
-      Input(name="flat" :value="addressItem.flat" label="Квартира/офис")
+      Input(name="flat" :value="addressItem ? addressItem.flat : addressItem" label="Квартира/офис")
 
     .destination__input-box
-      Input(name="index" label="Индекс" :value="addressItem.index" :rules="['required', 'digits:6']")
+      Input(name="index" label="Индекс" :value="addressItem ? addressItem.index : addressItem" :rules="['required', 'digits:6']")
 
 </template>
 

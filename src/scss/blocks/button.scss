@@ -17,10 +17,16 @@
   padding: 0 24px;
   transition: background-color 0.5s ease;
   outline: none;
+  text-decoration: none;
 
   &--big {
     padding: 0 32px;
+    border-radius: 8px;
     height: 60px;
+
+    @include tablet() {
+      font-size: 18px;
+    }
   }
 
   &:focus,

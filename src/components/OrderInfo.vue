@@ -1,13 +1,16 @@
 <template lang="pug">
   .order-info
-    img(:src="item.images.preview").order-info__img
+    router-link(:to="`/product/${item.id}`").order-info__img
+      img(:src="item.images.preview")
     .order-info__box
-      h2.order-info__title {{item.title}}
+      router-link(:to="`/product/${item.id}`").order-info__title {{item.title}}
 
-      span.order-info__orders
-        img(src="../assets/icons/order-package.svg")
-        span Заказов: {{divideNumberWithSpaces(this.item.orders)}}
-      Rate(:rate="item.rate").order-info__rate
+      div(v-if="hideStatus").order-info__date Дата заказа: {{item.orderDate | dateFormat('DD.MM.YYYY')}}
+      template(v-if="!hideStatus")
+        span.order-info__orders
+          img(src="../assets/icons/order-package.svg")
+          span Заказов: {{divideNumberWithSpaces(this.item.orders)}}
+        Rate(:rate="item.rate").order-info__rate
 
       template(v-if="!type")
         PickedOptionsBox(:options="item.options").order-info__picked-options
@@ -41,6 +44,8 @@ export default class OrderInfo extends Vue {
 
   @Prop() public type!: string;
 
+  @Prop() public hideStatus!: boolean;
+
   divideNumberWithSpaces = (number) => divideNumberWithSpaces(number);
 }
 </script>
@@ -54,6 +59,7 @@ export default class OrderInfo extends Vue {
       width: 150px;
       height: 150px;
       margin-bottom: 28px;
+      display: block;
     }
 
     .order-info__picked-options {
@@ -82,6 +88,12 @@ export default class OrderInfo extends Vue {
       padding: 40px;
     }
 
+    &__date {
+      margin-bottom: 15px;
+      color: $grey-2;
+      font-size: 16px;
+    }
+
     &__img {
       width: 90px;
       height: auto;
@@ -93,6 +105,10 @@ export default class OrderInfo extends Vue {
 
       @include desktop() {
         width: 170px;
+      }
+
+      img {
+        max-width: 100%;
       }
     }
 
@@ -107,6 +123,8 @@ export default class OrderInfo extends Vue {
     }
 
     &__title {
+      display: block;
+      text-decoration: none;
       font-size: 14px;
       font-weight: 600;
       color: $black-1;

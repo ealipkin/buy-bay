@@ -61,6 +61,8 @@ import { generateProducts, getRandomNumberBetween } from '@/utils/data';
 import TabsNav from '@/components/TabsNav.vue';
 import Advantages from '@/components/Advantages.vue';
 import { ADVANTAGES } from '@/utils/constants';
+import { Action } from 'vuex-class';
+import { mapGetters } from 'vuex';
 
 @Component({
   components: {
@@ -75,8 +77,18 @@ import { ADVANTAGES } from '@/utils/constants';
     BigSlider,
     Slick,
   },
+  computed: {
+    // ...mapGetters({
+    //   hotItems: 'items/getHotItemsEntities',
+    //   bestItems: 'items/getBestItemsEntities',
+    // }),
+  },
 })
 export default class Index extends Vue {
+  @Action('items/fetchHotItems') fetchHotItems;
+
+  @Action('items/fetchBestItems') fetchBestItems;
+
   slidersMap = {};
 
   selectedTab = 1;
@@ -202,6 +214,11 @@ export default class Index extends Vue {
       2: { ref: this.$refs.slickHot, init: false },
       3: { ref: this.$refs.slickBest, init: false },
     };
+  }
+
+  async created() {
+    await this.fetchBestItems();
+    await this.fetchHotItems();
   }
 
   selectTab(tabId) {

@@ -10,13 +10,19 @@
             ProfileNav(:items="profileMenuItems")
 
           .page__content.category__items
-            TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.favourites__tabs
-            SortSelect(:options="options").favourites__select
-            .category__list
-              .category__item(v-for="(item, index) in myFilteredFavourites" :key="index")
+            .category__header
+              TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.favourites__tabs
+              SortSelect(:options="options").favourites__select
+            div(:class="{'hidden': selectedTab !== 'items'}").category__list
+              .category__item(v-for="(item, index) in favouritesItems" :key="index")
                 CatalogCardItem(:item="item")
-            .category__pagination
-              Pagination(:moreCount="50")
+              .category__pagination
+                Pagination(:moreCount="50")
+            div(:class="{'hidden': selectedTab !== 'shops'}").category__list
+              .category__item.category__item--shop(v-for="(shop, index) in favouritesShops" :key="index")
+                ShopCard(:shop="shop")
+              .category__pagination
+                Pagination(:moreCount="50" kindText="магазинов")
 </template>
 
 <script lang="ts">
@@ -31,11 +37,13 @@ import Pagination from '@/components/Pagination.vue';
 import { BreadcrumbLink } from '@/utils/models';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
-import { generateProducts } from '@/utils/data';
+import { generateProducts, generateShops } from '@/utils/data';
 import SortSelect from '@/components/SortSelect.vue';
+import ShopCard from '@/components/ShopCard.vue';
 
 @Component({
   components: {
+    ShopCard,
     SortSelect,
     Breadcrumbs,
     ProfileNav,
@@ -52,23 +60,19 @@ export default class Favourites extends Vue {
     { label: 'Избранное', current: true },
   ];
 
-  myFavourites = generateProducts(30);
-
   profileMenuItems = PROFILE_MENU_ITEMS;
 
-  selectedTab = 1;
+  selectedTab = 'shops';
 
   tabs = [
     {
-      id: 1,
+      id: 'items',
       label: 'Избранные товары',
-      isActive: true,
-      filter: (product) => product.isFavourite,
     },
     {
-      id: 2,
+      id: 'shops',
       label: 'Магазины',
-      filter: (product) => !product.isFavourite,
+      isActive: true,
     },
   ];
 
@@ -87,24 +91,24 @@ export default class Favourites extends Vue {
     },
   ];
 
-  myFilteredFavourites = this.myFavourites.filter((product) => product.isFavourite);
+  favouritesItems = generateProducts(16);
+
+  favouritesShops = generateShops(16);
 
   selectTab(tabId) {
     this.selectedTab = tabId;
-    const activeTab = this.tabs.find((tab) => tab.id === tabId) || this.tabs[0];
-
-    this.myFilteredFavourites = this.myFavourites.filter(activeTab.filter);
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .favourites {
-    padding-top: 16px;
     padding-bottom: 10px;
     background-color: #fff;
+    padding-top: 16px;
 
     @include laptop() {
+      padding-top: 0;
       background-color: $grey-3;
       padding-bottom: 155px;
     }
@@ -126,9 +130,6 @@ export default class Favourites extends Vue {
     }
 
     &__tabs {
-      @include tablet() {
-        display: none;
-      }
     }
 
     &__select {

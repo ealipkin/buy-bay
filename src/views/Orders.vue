@@ -9,8 +9,22 @@
 
         .page__content
           TabsNav(:tabs="tabs" @change="selectTab").tabs-nav--inner
-          ul.orders__list
-            OrderItem(v-for="order in myFilteredOrders" :order="order" :key="order.id").orders__item
+          ul(v-if="selectedTab === 1").orders__list
+            OrderItem(
+              v-for="order in activeOrders"
+              :order="order"
+              :key="order.id"
+              :link="'/profile/groups/' + order.id"
+              buttonText="Пригласить друзей"
+            ).orders__item
+          ul(v-if="selectedTab === 2").orders__list
+            OrderItem(
+              v-for="order in endedOrders"
+              :order="order"
+              :key="order.id"
+              :link="'/profile/orders/' + order.id"
+              buttonText="Купить одному"
+            ).orders__item
           Pagination(:moreCount="100").orders__pagination
 
 </template>
@@ -23,10 +37,10 @@ import ProfileNav from '@/components/ProfileNav.vue';
 import TabsNav from '@/components/TabsNav.vue';
 import OrderItem from '@/components/OrderItem.vue';
 import Pagination from '@/components/Pagination.vue';
-import { BreadcrumbLink, ORDER_STATUSES } from '@/utils/models';
+import { BreadcrumbLink } from '@/utils/models';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
-import { generateOrders } from '@/utils/data';
+import { generateFailOrders, generateOrders } from '@/utils/data';
 
 @Component({
   components: {
@@ -44,8 +58,6 @@ export default class Orders extends Vue {
     { label: 'Мои заказы', current: true },
   ];
 
-  myOrders = generateOrders(30);
-
   profileMenuItems = PROFILE_MENU_ITEMS;
 
   selectedTab = 1;
@@ -55,22 +67,20 @@ export default class Orders extends Vue {
       id: 1,
       label: 'Активные',
       isActive: true,
-      filter: (order) => order.status === ORDER_STATUSES.SEND,
     },
     {
       id: 2,
       label: 'Завершенные',
-      filter: (order) => order.status === ORDER_STATUSES.SUCCESS || order.status === ORDER_STATUSES.REJECT,
     },
   ];
 
-  myFilteredOrders = this.myOrders.filter((order) => order.status === ORDER_STATUSES.SEND);
+  activeOrders = generateOrders(10);
+
+  endedOrders = generateFailOrders(10);
 
   selectTab(tabId) {
     this.selectedTab = tabId;
-    const activeTab = this.tabs.find((tab) => tab.id === tabId) || this.tabs[0];
-
-    this.myFilteredOrders = this.myOrders.filter(activeTab.filter);
+    console.log(this.activeOrders);
   }
 }
 </script>
@@ -78,7 +88,6 @@ export default class Orders extends Vue {
 <style lang="scss" scoped>
 .orders {
   @include container();
-  padding-top: 16px;
   padding-bottom: 10px;
   background-color: #fff;
 

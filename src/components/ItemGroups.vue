@@ -70,9 +70,6 @@ export default class ItemGroups extends Vue {
       },
     ],
   };
-
-  mounted() {
-  }
 }
 
 </script>
@@ -112,6 +109,7 @@ export default class ItemGroups extends Vue {
       }
     }
   }
+
   .item-groups__slide:last-child .item-groups__item {
     margin-bottom: 0;
     border-bottom: none;

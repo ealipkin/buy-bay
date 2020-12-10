@@ -1,27 +1,43 @@
 <template lang="pug">
-  span(v-if="status === ORDER_STATUSES.PENDING").order-status
-    img(v-for="user in users" :src="user.avatar").order-status__img
-    span участников: {{users.length}} из {{maxUsers}}
+  span
+    template(v-if="isGroup")
+      span(v-if="time && users.length < maxUsers").order-status
+        img(v-for="user in users" :src="user.avatar").order-status__img
+        span участников: {{users.length}} из {{maxUsers}}
 
-  span(v-else-if="status === ORDER_STATUSES.SUCCESS").order-status.order-status--success
-    img(src="@/assets/icons/success.svg").order-status__img
-    span Заказ доставлен {{optionalText}}
+      span(v-if="time && users.length >= maxUsers").order-status.order-status--success
+        img(src="@/assets/icons/success.svg").order-status__img
+        span Группа сформирована {{optionalText}}
 
-  span(v-else-if="status === ORDER_STATUSES.SEND").order-status.order-status--success
-    img(src="@/assets/icons/success.svg").order-status__img
-    span Заказ отправлен {{optionalText}}
+      span(v-if="!time").order-status.order-status--fail
+        img(src="@/assets/icons/fail.svg").order-status__img
+        span Группа не сформирована {{optionalText}}
 
-  span(v-else-if="status === ORDER_STATUSES.FULFILL").order-status.order-status--success
-    img(src="@/assets/icons/success.svg").order-status__img
-    span Группа сформирована {{optionalText}}
+    template(v-else)
+      span(v-if="status === orderStatuses.FULFILL").order-status.order-status--success
+        img(src="@/assets/icons/success.svg").order-status__img
+        span Группа сформирована
 
-  span(v-else-if="status === ORDER_STATUSES.REJECT").order-status.order-status--fail
-    img(src="@/assets/icons/fail.svg").order-status__img
-    span Заказ отменен {{optionalText}}
+      span(v-else-if="status === orderStatuses.PREPARED").order-status.order-status--success
+        img(src="@/assets/icons/success.svg").order-status__img
+        span Заказ передан {{optionalText || 'продавцу'}}
 
-  span(v-else).order-status.order-status--fail
-    img(src="@/assets/icons/fail.svg").order-status__img
-    span Группа не сформирована {{optionalText}}
+      span(v-else-if="status === orderStatuses.SEND").order-status.order-status--success
+        img(src="@/assets/icons/success.svg").order-status__img
+        span Заказ отправлен {{optionalText || 'продавцом'}}
+
+      span(v-else-if="status === orderStatuses.CANCELLED").order-status.order-status--fail
+        img(src="@/assets/icons/fail.svg").order-status__img
+        span Заказ отменён {{optionalText || 'продавцом'}}
+
+      span(v-else-if="status === orderStatuses.CANCELLED_BY_CUSTOMER").order-status.order-status--fail
+        img(src="@/assets/icons/fail.svg").order-status__img
+        span Заказ отменён {{optionalText || 'покупателем'}}
+
+      span(v-else-if="status === orderStatuses.DELIVERED").order-status.order-status--success
+        img(src="@/assets/icons/success.svg").order-status__img
+        span Заказ доставлен
+
 </template>
 
 <script lang="ts">
@@ -38,12 +54,16 @@ export default class OrderStatus extends Vue {
 
   @Prop() public optionalText!: string;
 
-  ORDER_STATUSES = ORDER_STATUSES;
+  @Prop() public time!: string;
+
+  @Prop() public isGroup!: string;
+
+  orderStatuses = ORDER_STATUSES;
 }
 </script>
 
 <style lang="scss">
-  .order-status{
+  .order-status {
     font-size: 12px;
     color: $grey-2;
     display: flex;
@@ -98,7 +118,7 @@ export default class OrderStatus extends Vue {
       }
     }
 
-    &--big &{
+    &--big & {
       &__img {
         width: 20px;
         height: 20px;

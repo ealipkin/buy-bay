@@ -51,7 +51,8 @@ export default class CategoryFilter extends Vue {
 
   closed = true;
 
-  handleSearch = () => {
+  handleSearch() {
+    console.log('handleSearch');
   };
 
   toggleAccordion(accordion, index, filter) {

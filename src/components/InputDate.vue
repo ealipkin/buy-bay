@@ -1,6 +1,6 @@
 <template lang="pug">
   .input-date
-    DatePicker(v-model="date" valueType="format" format="DD.MM.YYYY")
+    DatePicker(v-model="date" valueType="format" format="DD.MM.YYYY" @clear="handleClear")
       template(v-slot:icon-calendar="{ emit }")
         include ../assets/icons/calendar.svg
       template(v-slot:input="{ emit }")
@@ -27,13 +27,21 @@ export default class InputDate extends Vue {
 
   @Prop() public type!: string;
 
-  @Prop() public value!: string | number;
+  @Prop() public value!: string;
 
   @Prop() public required!: boolean;
 
   isRequired = this.required ? 'required' : '';
 
-  date = this.value;
+  date = '';
+
+  mounted() {
+    this.date = this.value;
+  }
+
+  handleClear() {
+    this.date = '';
+  }
 }
 </script>
 

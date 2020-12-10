@@ -20,12 +20,14 @@ export default class Breadcrumbs extends Vue {
   .breadcrumbs {
     @include clearList();
     display: flex;
+    flex-wrap: nowrap;
     margin-top: 21px;
     margin-bottom: 31px;
+    width: 100%;
 
     &__link {
       font-size: 14px;
-      color: #7b8197;
+      color: $grey-2;
       text-decoration: none;
 
       &:before {
@@ -36,6 +38,12 @@ export default class Breadcrumbs extends Vue {
 
     &__item {
       margin-right: 10px;
+      white-space: nowrap;
+
+      &:last-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     &__item:first-child &__link:before {

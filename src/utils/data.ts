@@ -45,6 +45,7 @@ export const getShop = (): ProductShop => ({
   orders: getRandomNumberBetween(100000, 500000),
   rate: getRate(),
   isFavourite: Boolean(getRandomNumberBetween(0, 1)),
+  category: 'Спортивные товары',
 });
 
 const createProduct = (item, index): Product => ({
@@ -189,6 +190,7 @@ const createProduct = (item, index): Product => ({
       text: 'Добрый день. Простите, просто забыли отправить. Сейчас все сделаем.',
     },
   ],
+  orderDate: getDate(),
 });
 
 const createGroup = (item, index): Group => ({
@@ -315,22 +317,27 @@ export const createProfileUser = (item, index): ProfileUser => ({
   ],
 });
 
-const createOrder = (item, index): OrderItem => ({
+const orderSuccessStatuses = [ORDER_STATUSES.FULFILL, ORDER_STATUSES.PREPARED, ORDER_STATUSES.SEND];
+const orderFailStatuses = [ORDER_STATUSES.CANCELLED, ORDER_STATUSES.CANCELLED_BY_CUSTOMER, ORDER_STATUSES.DELIVERED];
+
+const createOrder = (item, index, failed?): OrderItem => ({
   id: nanoid(),
   image: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/200`,
   date: '12 декабря 2019',
   title: 'Фото камера сумка через плечо крестовой срез через плечо через плечо',
-  status: Object.values(ORDER_STATUSES)[getRandomNumberBetween(0, 5)],
+  status: failed ? getRandomArrayElement(orderFailStatuses) : getRandomArrayElement(orderSuccessStatuses),
   time: getRandomNumberBetween(0, 1) ? featureDate() : undefined,
   price: getRandomNumberBetween(100000, 500000),
-  users: getRandomNumberBetween(0, 1) ? new Array(getRandomNumberBetween(1, 3)).fill({}).map(createUser) : [],
+  users: new Array(getRandomNumberBetween(1, 25)).fill({}).map(createUser),
   maxUsers: getRandomNumberBetween(10, 20),
 });
 
 export const generateProducts = (count: number): Product[] => new Array(count).fill({}).map(createProduct);
-export const generateOrders = (count: number): OrderItem[] => new Array(count).fill({}).map(createOrder);
+export const generateOrders = (count: number): OrderItem[] => new Array(count).fill({}).map((item, index) => createOrder(item, index));
+export const generateFailOrders = (count: number): OrderItem[] => new Array(count).fill({}).map((item, index) => createOrder(item, index, true));
 
 export const generateGroups = (count: number) => new Array(count).fill({}).map(createGroup);
+export const generateShops = (count: number) => new Array(count).fill({}).map(getShop);
 
 export const generateUsers = (count: number) => new Array(count).fill({}).map(createUser);
 

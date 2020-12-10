@@ -1,16 +1,17 @@
 <template lang="pug">
   li.order
-    img(:src="order.image").order__img
-    span.order__content
+    router-link(:to="link").order__img
+      img(:src="order.image")
+    div.order__content
       span.order__date {{order.date}}
-      h3.order__title {{order.title | truncate(45)}}
-      OrderStatus(:users="order.users" :status="order.status" :maxUsers="order.maxUsers").order__status
-
-      OrderTimer(v-if="order.status === ORDER_STATUSES.PENDING" :time="order.time")
+      router-link(:to="link").order__title {{order.title | truncate(45)}}
+      .order__info
+        OrderStatus(:users="order.users" :status="order.status" :maxUsers="order.maxUsers" :time="order.time" :isGroup="isGroup").order__status
+        OrderTimer(v-if="isGroup" :time="order.time")
       span.order__box
         include ../assets/icons/group-button.svg
         span.order__price {{divideNumberWithSpaces(order.price)}} ₽
-        button(type="button" v-if="order.status === ORDER_STATUSES.PENDING").order__button Пригласить друзей
+        router-link(:to="link").button {{buttonText}}
 </template>
 
 <script lang="ts">
@@ -30,6 +31,12 @@ import { ORDER_STATUSES } from '@/utils/models';
 export default class OrderItem extends Vue {
   @Prop() public order!: object;
 
+  @Prop() public link!: string;
+
+  @Prop() public buttonText!: string;
+
+  @Prop() public isGroup!: boolean;
+
   ORDER_STATUSES = ORDER_STATUSES;
 
   divideNumberWithSpaces(number) {
@@ -41,9 +48,9 @@ export default class OrderItem extends Vue {
 <style lang="scss">
   .order {
     display: flex;
-    align-items: flex-start;
     padding-bottom: 28px;
     border-bottom: 1px solid $grey-4;
+    min-height: 200px;
 
     @include laptop() {
       padding-bottom: 0;
@@ -55,14 +62,28 @@ export default class OrderItem extends Vue {
       max-width: 100%;
     }
 
+    &__link {
+      display: block;
+    }
+
+    &__info {
+      min-height: 28px;
+    }
+
     &__img {
       margin-right: 16px;
       width: 90px;
       height: auto;
+      display: block;
 
       @include laptop() {
         width: 200px;
         margin-right: 35px;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
       }
     }
 
@@ -70,7 +91,7 @@ export default class OrderItem extends Vue {
       padding-right: 28px;
 
       @include laptop() {
-        padding: 18px 20px 25px 0;
+        padding: 18px 20px 0 0;
       }
     }
 
@@ -91,6 +112,8 @@ export default class OrderItem extends Vue {
       margin: 0;
       margin-bottom: 7px;
       font-weight: 600;
+      text-decoration: none;
+      display: block;
 
       @include laptop() {
         font-size: 18px;
@@ -112,15 +135,22 @@ export default class OrderItem extends Vue {
       display: none;
 
       @include laptop() {
-        display: block;
-        margin-top: 26px;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
 
         svg {
-          color: rgba(0, 0, 0, 0.7);
+          opacity: 0.4;
+          color: #341c05;
           width: 20px;
           height: 16px;
           margin-right: 10px;
           vertical-align: middle;
+
+          path {
+            color: #341c05;
+          }
         }
       }
     }
@@ -138,10 +168,6 @@ export default class OrderItem extends Vue {
 
     &__button {
       @include laptop() {
-        @include clearButton();
-
-        background-color: $blue;
-        color: #fff;
         font-size: 14px;
         font-weight: bold;
         padding: 9px 10px 12px;

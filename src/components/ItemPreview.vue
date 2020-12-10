@@ -55,9 +55,6 @@ export default class ItemPreview extends Vue {
   handleAfterChange(event, slick, currentSlide) {
     this.selectedIndex = currentSlide;
   }
-
-  mounted() {
-  }
 }
 
 </script>

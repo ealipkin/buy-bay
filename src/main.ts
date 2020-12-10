@@ -1,5 +1,6 @@
 import VModal from 'vue-js-modal';
 import vueAwesomeCountdown from 'vue-awesome-countdown';
+import VueFilterDateFormat from '@vuejs-community/vue-filter-date-format';
 import Paginate from 'vuejs-paginate';
 import VueTruncate from 'vue-truncate-filter';
 import VueClipboard from 'vue-clipboard2';
@@ -17,6 +18,15 @@ import './scss/style.scss';
 import './assets/fonts/opensans.css';
 
 import router from './router';
+
+Vue.use(VueFilterDateFormat, {
+  dayOfWeekNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  dayOfWeekNamesShort: ['Su', 'Mo', 'Tu', 'We', 'Tr', 'Fr', 'Sa'],
+  monthNames: ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'],
+  monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+  // Timezone offset, in minutes (0 - UTC, 180 - Russia, undefined - current)
+  timezone: 180,
+});
 
 Vue.use(vueAwesomeCountdown, 'vac');
 Vue.use(VueTruncate);

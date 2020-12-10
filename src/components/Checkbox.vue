@@ -44,7 +44,6 @@ export default class Checkbox extends Vue {
       align-items: center;
       justify-content: center;
 
-
       svg {
         width: 9px;
       }

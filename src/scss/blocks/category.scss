@@ -1,5 +1,4 @@
 
-
 .category {
 
   &__inner {
@@ -28,6 +27,12 @@
     margin-bottom: 8px;
     display: flex;
     flex-direction: column;
+
+    &--shop {
+      border: none;
+      margin-bottom: 17px;
+    }
+
     @media (max-width: $tablet-max-width) {
       &:nth-child(2n) {
         margin-right: 0;
@@ -104,6 +109,19 @@
     margin-left: auto;
     @include laptop() {
       display: flex;
+    }
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    @include tablet() {
+      .tabs-nav--inner {
+        margin-bottom: 0;
+      }
     }
   }
 

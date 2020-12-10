@@ -21,7 +21,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import CatalogMenu from '@/components/CatalogMenu.vue';
 import clickOutside from '@/utils/clickOutside';
 import { MenuItem } from '@/utils/models';
-import { debounce } from '@/utils/common';
 
 @Component({
   components: { CatalogMenu },
@@ -74,7 +73,7 @@ export default class MainNav extends Vue {
     if (this.isMenuVisible) {
       this.hideMenu();
     } else {
-      this.showMenu()
+      this.showMenu();
     }
   }
 }

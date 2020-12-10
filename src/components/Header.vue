@@ -126,12 +126,12 @@ export default class Header extends Vue {
     if (this.search && this.search.length) {
       router.push({ path: '/search', query: { q: this.search } });
     }
-  };
+  }
 
   openLoginModal(type) {
     const modalComponent: any = this.$refs.loginModal;
     modalComponent.showModal(type);
-  };
+  }
 
   mounted() {
     // this.showLogin = true;
@@ -145,11 +145,11 @@ export default class Header extends Vue {
 
   loginSuccess() {
     this.showLogin = true;
-  };
+  }
 
   registerSuccess() {
     this.showLogin = true;
-  };
+  }
 
   toggleNotifications() {
     this.showNotifications = !this.showNotifications;

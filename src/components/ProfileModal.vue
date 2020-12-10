@@ -31,28 +31,27 @@ import { createProfileUser } from '@/utils/data';
 export default class ProfileModal extends Vue {
   user = createProfileUser(null, 1);
 
-  saveData = () => {
-    console.log('save data');
-    const modalComponent: any = this.$refs.toasted;
-    modalComponent.showSuccess();
+  saveData() {
+    const toast: any = this.$refs.toasted;
+    toast.showSuccess('Ваши данные сохранены');
     this.closeModal();
   }
 
-  showModal = () => {
+  showModal() {
     this.$modal.show('profile-modal');
 
     console.log('show');
-  };
+  }
 
-  closeModal = () => {
+  closeModal() {
     this.$modal.hide('profile-modal');
     this.modalClose();
     console.log('close');
-  };
+  }
 
-  modalClose = () => {
+  modalClose() {
     document.body.classList.remove('_hidden');
-  };
+  }
 }
 </script>
 
@@ -63,7 +62,7 @@ export default class ProfileModal extends Vue {
     border-radius: 8px;
 
     @include tablet() {
-      padding: 39px 50px 58px;
+      padding: 28px 50px 58px;
     }
 
     &__title {
@@ -76,7 +75,7 @@ export default class ProfileModal extends Vue {
       @include tablet() {
         font-size: 18px;
         font-weight: bold;
-        margin-bottom: 48px;
+        margin-bottom: 70px;
       }
     }
 
@@ -113,6 +112,7 @@ export default class ProfileModal extends Vue {
         width: auto;
         min-width: 289px;
         margin: 0 auto;
+        width: 100%;
       }
     }
   }

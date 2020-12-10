@@ -17,7 +17,7 @@
               Destination
 
             .order-checkout__item.order-checkout__item--last
-              button(type="submit" :disabled="invalid").order-checkout__form-submit Продолжить
+              button(type="submit" :disabled="invalid").order-checkout__form-submit.button Продолжить
 
       .order-checkout__aside
         OrderInfo(:item="item" v-if="!isMobile" :type="'checkout'").order-checkout__product.order-checkout__item.order-info--checkout
@@ -227,16 +227,11 @@ export default class OrderCheckout extends Vue {
     }
 
     &__form-submit {
-      @include clearButton();
       font-size: 18px;
-      color: #fff;
       font-weight: bold;
       padding: 17px;
       padding-bottom: 19px;
       display: block;
-      text-align: center;
-      background-color: $blue;
-      border-radius: 8px;
       width: 100%;
 
       @include tablet() {

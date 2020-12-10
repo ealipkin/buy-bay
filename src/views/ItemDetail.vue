@@ -99,7 +99,7 @@ export default class ItemDetail extends Vue {
         settings: {
           dots: true,
           slidesToShow: 5,
-          slidesToScroll: 1,
+          slidesToScroll: 5,
         },
       },
       {
@@ -108,7 +108,7 @@ export default class ItemDetail extends Vue {
           dots: false,
           arrows: true,
           slidesToShow: 5,
-          slidesToScroll: 1,
+          slidesToScroll: 5,
         },
       },
     ],

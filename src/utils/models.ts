@@ -71,6 +71,7 @@ export interface ProductShop {
   id: string;
   name: string;
   description: string;
+  category: string;
   image: string;
   orders: number;
   rate: number | string;
@@ -127,6 +128,7 @@ export interface Product {
   contacts: Contacts;
   users: OrderUser[];
   messages: Message[];
+  orderDate: string | Date;
 }
 
 export interface Group {
@@ -146,12 +148,18 @@ export interface BreadcrumbLink {
 }
 
 export enum ORDER_STATUSES {
-  SUCCESS = 'success', // заказ доставлен
-  PENDING = 'pending', // ожидаем участников группы
-  FULFILL = 'fulfill', // группа сформирована
-  FAIL = 'fail', // группа не сформирована
-  SEND = 'send', // заказ отправлен
+  // SUCCESS = 'success', // заказ доставлен
+  // PENDING = 'pending', // ожидаем участников группы
+  // FAIL = 'fail', // группа не сформирована
   REJECT = 'reject', // заказ отменен
+  // success order statuses
+  FULFILL = 'fulfill', // группа сформирована
+  PREPARED = 'prepared', // Заказ передан продавцу
+  SEND = 'send', // заказ отправлен
+  // fail order statuses
+  CANCELLED = 'cancelled', // Заказ отменён продавцом
+  CANCELLED_BY_CUSTOMER = 'cancelledByCustomer', // Заказ отменён покупателем
+  DELIVERED = 'delivered', // Заказ доставлен
 }
 
 export enum REQUIRED_ADDRESS_FIELDS {

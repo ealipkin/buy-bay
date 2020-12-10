@@ -13,7 +13,7 @@
       label
         span.chat__form-label Ваше сообщение
         textarea.chat__form-textarea Вот это поворот, давайте быстрее
-      button(type="submit").chat__form-submit Отправить
+      button(type="submit").button Отправить
 </template>
 
 <script lang="ts">
@@ -142,18 +142,6 @@ export default class Chat extends Vue {
       @include tablet() {
         font-size: 14px;
       }
-    }
-
-    &__form-submit {
-      @include clearButton();
-      text-align: center;
-      background-color: $blue;
-      color: #fff;
-      border-radius: 4px;
-      padding: 9px 10px 12px;
-      font-weight: bold;
-      font-size: 14px;
-      min-width: 171px;
     }
   }
 </style>

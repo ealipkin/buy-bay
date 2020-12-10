@@ -3,15 +3,26 @@
     span.share__message Или скопируй ссылку, чтобы ей поделиться
     .share__box
       span(v-model="link").share__field {{link}}
-      button(type="button" v-clipboard:copy="link").share__button Скопировать
+      button(type="button" v-clipboard:copy="link" v-clipboard:success="handleCopySuccess").share__button.button.button--big Скопировать
+    Toasted(ref="toasted")
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import Toasted from '@/components/Toasted.vue';
 
-@Component
+@Component({
+  components: {
+    Toasted,
+  },
+})
 export default class Share extends Vue {
   @Prop() public link!: string;
+
+  handleCopySuccess() {
+    const toast: any = this.$refs.toasted;
+    toast.showSuccess('Ссылка скопирована');
+  }
 }
 </script>
 
@@ -54,21 +65,13 @@ export default class Share extends Vue {
     }
 
     &__button {
-      @include clearButton();
-      box-sizing: border-box;
       width: 44.28%;
-      border: none;
-      background-color: $blue;
-      padding: 11px 14px 12px 19px;
-      color: #fff;
-      font-size: 12px;
-      font-weight: bold;
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      height: 100%;
 
       @include tablet() {
-        font-size: 18px;
-        padding: 20px;
+        height: 62px;
         width: 42%;
       }
     }

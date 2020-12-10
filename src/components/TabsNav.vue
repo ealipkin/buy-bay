@@ -29,6 +29,7 @@ export default class TabsNav extends Vue {
 <style scoped lang="scss">
   .tabs-nav {
     border-bottom: 2px solid #c9c9d4;
+    white-space: nowrap;
 
     &__tab {
       @include clearButton();

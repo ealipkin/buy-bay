@@ -2,15 +2,15 @@
   .group-detail
     .group-detail__breadcrumbs
       Breadcrumbs(:links="breadCrumbs")
-    h1.group-detail__title Группа на покупку
+    h1.group-detail__title Группа на покупку {{item.title}}
     .group-detail__main
       .group-detail__left-col
-        OrderInfo(:item="item").group-detail__product.group-detail__item.order-info--group
+        OrderInfo(:item="item" :hideStatus="true").group-detail__product.group-detail__item.order-info--group
         GroupInfo(:users="users").group-detail__info.group-detail__item
-        GroupAction(:selfPrice="item.selfPrice" v-if="isMobile").group-detail__action.group-detail__item
+        GroupAction(:selfPrice="item.selfPrice" v-if="isMobile" :product="item").group-detail__action.group-detail__item
         DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").group-detail__delivery.group-detail__item
       .group-detail__aside
-        GroupAction(:selfPrice="item.selfPrice" v-if="!isMobile").group-detail__action.group-detail__item
+        GroupAction(:selfPrice="item.selfPrice" v-if="!isMobile" :product="item").group-detail__action.group-detail__item
         DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").group-detail__delivery.group-detail__item
 
 </template>
@@ -25,7 +25,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import OrderInfo from '@/components/OrderInfo.vue';
 import GroupInfo from '@/components/GroupInfo.vue';
 import GroupAction from '@/components/GroupAction.vue';
-import { BreadcrumbLink } from '@/utils/models';
+import { BreadcrumbLink, Product } from '@/utils/models';
 
 @Component({
   components: {
@@ -41,7 +41,6 @@ export default class GroupDetail extends Vue {
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
     { href: '/profile/groups', label: 'Мои группы' },
-    { href: '/profile/groups/:id', label: 'group title?', current: true },
   ];
 
   get isMobile() {
@@ -57,7 +56,7 @@ export default class GroupDetail extends Vue {
     height: 0,
   };
 
-  item = generateProducts(1).pop();
+  item: Product | undefined = generateProducts(1).pop();
 
   groups = generateGroups(12);
 
@@ -71,6 +70,14 @@ export default class GroupDetail extends Vue {
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+  }
+
+  mounted() {
+    this.breadCrumbs.push({
+      href: '/profile/groups/:id',
+      label: `Группа на покупку ${this.item ? this.item.title : ''}`,
+      current: true,
+    });
   }
 
   destroyed() {
@@ -108,6 +115,9 @@ export default class GroupDetail extends Vue {
 
     &__title {
       display: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       @include tablet() {
         font-size: 32px;

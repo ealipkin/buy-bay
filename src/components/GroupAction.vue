@@ -3,7 +3,8 @@
     Timer(:time="shareTimer").group-action__timer
     h2.group-action__title Купить вне группы
     span.group-action__price {{divideNumberWithSpaces(selfPrice)}} ₽
-    button(type="button").group-action__button Купить одному
+    router-link(:to="`/product/${product.id}/payment`").button.button--big Купить одному
+
 </template>
 
 <script lang="ts">
@@ -11,6 +12,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { SHARE_TIMER } from '@/utils/constants';
 import { divideNumberWithSpaces } from '@/utils/common';
 import Timer from '@/components/Timer.vue';
+import { Product } from '@/utils/models';
 
 @Component({
   components: {
@@ -19,6 +21,8 @@ import Timer from '@/components/Timer.vue';
 })
 export default class GroupAction extends Vue {
   @Prop() public selfPrice!: number;
+
+  @Prop() public product!: Product;
 
   shareTimer = SHARE_TIMER;
 

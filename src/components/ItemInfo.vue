@@ -256,7 +256,6 @@ export default class ItemInfo extends Vue {
       }
     }
 
-
     &__buy {
       cursor: pointer;
       display: flex;

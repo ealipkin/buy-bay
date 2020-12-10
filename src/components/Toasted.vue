@@ -10,11 +10,11 @@ import { successIcon } from '@/utils/svgIcons';
   },
 })
 export default class Toasted extends Vue {
-  showSuccess() {
-    this.$toasted.show('Ваши данные сохранены', {
+  showSuccess(message) {
+    this.$toasted.show(message, {
       position: 'top-center',
       duration: 1500,
-      className: ['my-toasted', 'my-toasted--success'],
+      className: ['bb-toasted', 'bb-toasted--success'],
       fitToScreen: true,
       fullWidth: true,
       iconPack: 'callback',
@@ -28,7 +28,7 @@ export default class Toasted extends Vue {
 </script>
 
 <style lang="scss">
-.my-toasted {
+.bb-toasted {
   font-size: 16px !important;
   font-weight: 600 !important;
   text-align: center !important;

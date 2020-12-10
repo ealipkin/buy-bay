@@ -29,6 +29,9 @@ export default class BrandsItem extends Vue {
 
 <style lang="scss">
   .brands-item {
+    .catalog-card__old-price {
+      margin-bottom: 5px;
+    }
     .rate__item {
       @include laptop() {
         margin: 0 3px;
