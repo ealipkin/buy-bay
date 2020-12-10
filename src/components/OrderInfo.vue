@@ -5,7 +5,7 @@
     .order-info__box
       router-link(:to="`/product/${item.id}`").order-info__title {{item.title}}
 
-      div(v-if="hideStatus").order-info__date Дата заказа: {{item.orderDate | dateFormat('DD.MM.YYYY')}}
+      div(v-if="hideStatus").order-info__date Дата заказа: {{item.orderDate | dateFormat('DD MMMM YYYY')}}
       template(v-if="!hideStatus")
         span.order-info__orders
           img(src="../assets/icons/order-package.svg")
