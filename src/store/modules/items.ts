@@ -1,9 +1,15 @@
 import { createRequest } from '@/services/http.service';
 import { Product } from '@/utils/models';
 
+/*
+Если пустой результат, то сначала нагенерировать новых групп перед запуском  (время то идет): https://kd-dev.ru/api/v1/group/seeds
+* */
+
 const endpoints = {
-  GET_HOT_ITEMS: '/product/get_hot_groups',
-  GET_BEST_ITEMS: '/product/get_bestseller',
+  GET_POPULAR_ITEMS: '/mp/popular',
+  GET_HOT_ITEMS: '/mp/hot_groups',
+  GET_BEST_ITEMS: '/mp/bestseller',
+  GET_TOP_CAT_ITEMS: '/mp/top_cat',
 };
 
 interface ItemState {
@@ -12,11 +18,16 @@ interface ItemState {
 }
 
 interface ItemsState {
+  popular: ItemState;
   hot: ItemState;
   best: ItemState;
 }
 
 const itemsState: ItemsState = {
+  popular: {
+    loaded: false,
+    items: [],
+  },
   hot: {
     loaded: false,
     items: [],
@@ -28,11 +39,14 @@ const itemsState: ItemsState = {
 };
 
 const getters = {
+  getPopularItemsEntities: (state: ItemsState) => state.popular.items,
   getHotItemsEntities: (state: ItemsState) => state.hot.items,
   getBestItemsEntities: (state: ItemsState) => state.best.items,
 };
 
 const mutationTypes = {
+  SET_POPULAR_ITEMS: 'SET_POPULAR_ITEMS',
+  SET_POPULAR_ITEMS_LOADED: 'SET_POPULAR_ITEMS_LOADED',
   SET_HOT_ITEMS: 'SET_HOT_ITEMS',
   SET_HOT_ITEMS_LOADED: 'SET_HOT_ITEMS_LOADED',
   SET_BEST_ITEMS: 'SET_BEST_ITEMS',
@@ -40,6 +54,13 @@ const mutationTypes = {
 };
 
 const mutations = {
+  [mutationTypes.SET_POPULAR_ITEMS](state: ItemsState, payload: Product[]) {
+    console.log('SET_POPULAR_ITEMS -> ', payload);
+    state.popular.items = payload;
+  },
+  [mutationTypes.SET_POPULAR_ITEMS_LOADED](state: ItemsState, payload: boolean) {
+    state.popular.loaded = payload;
+  },
   [mutationTypes.SET_HOT_ITEMS](state: ItemsState, payload: Product[]) {
     state.hot.items = payload;
   },
@@ -55,6 +76,16 @@ const mutations = {
 };
 
 const actions = {
+  async fetchPopularItems({ commit }) {
+    commit('SET_POPULAR_ITEMS_LOADED', true);
+    return createRequest('get', endpoints.GET_POPULAR_ITEMS)
+      .then((res) => {
+        const response = res.data.data;
+        commit('SET_POPULAR_ITEMS', response);
+        return response;
+      })
+      .finally(() => commit('SET_POPULAR_ITEMS_LOADED', false));
+  },
   async fetchHotItems({ commit }) {
     commit('SET_HOT_ITEMS_LOADED', true);
     return createRequest('get', endpoints.GET_HOT_ITEMS)

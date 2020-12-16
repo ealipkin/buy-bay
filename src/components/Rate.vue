@@ -6,7 +6,7 @@
           img(src="../assets/icons/star.svg")
     template(v-else)
       img(src="../assets/icons/star.svg")
-      span {{rate}}
+      span {{parseFloat(rate).toFixed(1)}}
 </template>
 
 <script lang="ts">

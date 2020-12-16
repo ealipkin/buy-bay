@@ -21,7 +21,7 @@
           ).catalog-card__feature
     .catalog-card__bottom
       .catalog-card__group
-        p.catalog-card__group-text {{item.groups}} групп
+        p.catalog-card__group-text {{item.groups || 0}} групп
           span  на покупку
         Rate(:rate="item.rate").catalog-card__group-rating.rate--small-star
 
