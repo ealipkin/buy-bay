@@ -72,10 +72,13 @@
   }
 
   &__pagination {
-    display: none;
+    display: flex;
     margin-top: 24px;
+
     @include desktop() {
-      display: flex;
+      .paginator {
+        display: flex;
+      }
     }
   }
 

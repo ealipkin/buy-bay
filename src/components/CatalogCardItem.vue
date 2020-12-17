@@ -21,7 +21,7 @@
           ).catalog-card__feature
     .catalog-card__bottom
       .catalog-card__group
-        p.catalog-card__group-text {{item.groups || 0}} групп
+        p.catalog-card__group-text {{item.groups || 0}} {{declOfNum(item.groups)}}
           span  на покупку
         Rate(:rate="item.rate").catalog-card__group-rating.rate--small-star
 
@@ -37,7 +37,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Product } from '@/utils/models';
-import { divideNumberWithSpaces } from '@/utils/common';
+import { divideNumberWithSpaces, declOfNum } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
 
 @Component({
@@ -53,6 +53,8 @@ export default class CatalogCardItem extends Vue {
   get truncateLength() {
     return this.titleLength || 35;
   }
+
+  declOfNum = (groups) => declOfNum(groups, ['группа', 'группы', 'групп']);
 
   divideNumberWithSpaces = (number) => divideNumberWithSpaces(number)
 }
@@ -75,6 +77,8 @@ export default class CatalogCardItem extends Vue {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    height: 100%;
 
     &.--isOutlined {
       border: 1px solid #e7e7e7;
@@ -166,7 +170,7 @@ export default class CatalogCardItem extends Vue {
     &__old-price {
       text-decoration: line-through;
       font-size: 11px;
-      margin: 3px;
+      margin: 3px 0;
 
       @include laptop() {
         font-size: 14px;
@@ -182,7 +186,6 @@ export default class CatalogCardItem extends Vue {
       color: #ffffff;
       background: $blue no-repeat center;
       padding: 2px 5px;
-      min-width: 67px;
       border-radius: 4px;
       text-align: center;
       display: flex;
@@ -193,6 +196,7 @@ export default class CatalogCardItem extends Vue {
       }
 
       @include laptop() {
+        min-width: 67px;
         padding: 3px 4px 3px 9px;
         background-position: 8px center;
         font-size: 16px;
@@ -222,7 +226,7 @@ export default class CatalogCardItem extends Vue {
 
     &__top {
       position: relative;
-      height: 60%;
+      min-height: 50%;
       img {
         display: block;
       }
@@ -336,30 +340,6 @@ export default class CatalogCardItem extends Vue {
         align-items: flex-end;
         @include laptop() {
           margin-bottom: 24px;
-        }
-      }
-
-      &__price {
-        flex-wrap: wrap;
-        margin-top: 1px;
-      }
-
-      &__actual-price {
-        background-size: 11px;
-        background-position: 9px center;
-        font-size: 16px;
-      }
-
-      &__old-price {
-        order: -1;
-        margin: 0;
-        font-size: 14px;
-        margin-bottom: 8px;
-        @media (min-width: 400px) {
-          margin-bottom: 0;
-        }
-        @include laptop() {
-          font-size: 16px;
         }
       }
     }

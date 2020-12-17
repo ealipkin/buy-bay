@@ -45,6 +45,21 @@ export default class PickedOptionsBox extends Vue {
       }
     }
 
+    &--group & {
+      &__title {
+        font-size: 12px;
+        font-weight: normal;
+        color: #7b8197;
+        margin-bottom: 4px;
+      }
+
+      &__label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #222222;
+      }
+    }
+
     &__item {
       margin: 0;
       padding-right: 15px;

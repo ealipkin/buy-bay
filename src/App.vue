@@ -34,6 +34,12 @@ export default class Index extends Vue {
     flex-direction: column;
     min-height: 100vh;
 
+    padding-bottom: 50px;
+
+    @include tablet() {
+      padding-bottom: 0;
+    }
+
     /*margin-bottom: 49px;*/
 
     @include tablet() {

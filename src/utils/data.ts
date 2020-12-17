@@ -55,7 +55,7 @@ const createProduct = (item, index): Product => ({
   groups: getRandomNumberBetween(0, 999),
   images: {
     preview: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/300`,
-    detail: new Array(getRandomNumberBetween(1, 5)).fill({}).map(() => ({
+    detail: new Array(getRandomNumberBetween(1, 25)).fill({}).map(() => ({
       url: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/700`,
     })),
   },

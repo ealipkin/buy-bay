@@ -37,6 +37,10 @@ export default class GroupAction extends Vue {
     padding-bottom: 32px;
 
     @include tablet() {
+      padding: 20px 30px;
+    }
+
+    @include laptop() {
       padding: 40px 50px;
     }
 

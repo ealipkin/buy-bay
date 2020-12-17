@@ -91,7 +91,11 @@ export default class OrderInfo extends Vue {
     &__date {
       margin-bottom: 15px;
       color: $grey-2;
-      font-size: 16px;
+      font-size: 12px;
+
+      @include tablet() {
+        font-size: 16px;
+      }
     }
 
     &__img {
@@ -140,11 +144,6 @@ export default class OrderInfo extends Vue {
 
     &__picked-options {
       margin-bottom: 24px;
-    }
-
-    &--group > .picked-options-box--group {
-      margin: 0;
-      margin-top: 24px;
     }
 
     &__label {
@@ -197,5 +196,11 @@ export default class OrderInfo extends Vue {
         display: inline-flex;
       }
     }
+
+    &--group > .picked-options-box--group {
+      margin: 0;
+      margin-top: 24px;
+    }
+
   }
 </style>

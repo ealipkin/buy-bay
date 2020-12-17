@@ -8,7 +8,6 @@
       Rate(:rate="item.rate").item-info__rate
 
     .item-info__prices
-      span.item-info__group-price {{divideNumberWithSpaces(item.groupPrice)}} ₽
       span.item-info__self-price
         span.item-info__self-price-value {{divideNumberWithSpaces(item.selfPrice)}}
         span  ₽
@@ -113,13 +112,9 @@ export default class ItemInfo extends Vue {
     }
 
     &__prices {
-      display: none;
-
-      @include tablet() {
-        display: flex;
-        align-items: flex-end;
-        margin-top: 6px;
-      }
+      display: flex;
+      align-items: flex-end;
+      margin-top: 6px;
     }
 
     &__options {
@@ -157,6 +152,9 @@ export default class ItemInfo extends Vue {
     }
 
     &__option-label {
+      margin-right: 9px;
+      margin-bottom: 9px;
+
       span {
         cursor: pointer;
         border-radius: 4px;
@@ -169,8 +167,6 @@ export default class ItemInfo extends Vue {
         padding: 5px 14px;
         display: flex;
         align-items: center;
-        margin-right: 9px;
-        margin-bottom: 9px;
 
         &:last-child {
           /*margin-right: 0;*/
@@ -217,11 +213,16 @@ export default class ItemInfo extends Vue {
     }
 
     &__self-price {
-      font-size: 18px;
+      font-size: 24px;
       font-weight: 600;
       color: #7b8197;
 
       padding-bottom: 5px;
+
+      @include tablet() {
+        font-size: 32px;
+        font-weight: 600;
+      }
 
       &-value {
         text-decoration: line-through;

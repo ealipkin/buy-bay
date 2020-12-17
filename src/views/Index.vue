@@ -217,8 +217,8 @@ export default class Index extends Vue {
   }
 
   async created() {
-    await this.fetchBestItems();
-    await this.fetchHotItems();
+    // await this.fetchBestItems();
+    // await this.fetchHotItems();
   }
 
   selectTab(tabId) {

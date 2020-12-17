@@ -18,7 +18,7 @@
       Slick(ref="slick" :options="sliderSettings").similar-slider
         div(v-for="item in similarItems"  :key="item.id").similar-slider__wrapper
           CatalogCardItem(:item="item").catalog-card--similar.similar-slider__slide
-
+      Pagination(moreCount="50").item-detail__pagination
     SeoTexts(:texts="seoBlockDescription").item-detail__seo
 
 </template>
@@ -39,9 +39,11 @@ import SeoTexts from '@/components/SeoTexts.vue';
 import { breakPoints } from '@/utils/constants';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { BreadcrumbLink } from '@/utils/models';
+import Pagination from '@/components/Pagination.vue';
 
 @Component({
   components: {
+    Pagination,
     Breadcrumbs,
     SeoTexts,
     CatalogCardItem,
@@ -164,8 +166,12 @@ export default class ItemDetail extends Vue {
     }
 
     &__section {
-      margin-top: 63px;
       /*padding: 0 15px;*/
+      margin-top: 16px;
+
+      @include laptop() {
+        margin-top: 63px;
+      }
     }
 
     &__main {
@@ -213,6 +219,13 @@ export default class ItemDetail extends Vue {
 
       @include laptop() {
         margin-top: 134px;
+      }
+    }
+
+    &__pagination {
+      margin-top: 15px;
+      @include laptop() {
+        display: none;
       }
     }
   }

@@ -10,14 +10,17 @@
           router-link(to="#").header-top__list-item Доставка
           router-link(to="#").header-top__list-item Гарантия и возврат
           router-link(to="#").header-top__list-item Помощь
-    .header-main.container
+
+    div(:class="{'header-main--search-focused': searchFocused}").header-main.container
+      div(v-if="showProfileHeader").header-main__profile-page
+        router-link(to='/profile').header-main__profile-link {{profilePage}}
+        button(type="button" @click="handleProfileSearch").header-main__profile-search
+          include ../assets/icons/search.svg
+
       router-link(to='/').header-main__logo
         include ../assets/icons/kupide-logo.svg
 
-      form(@submit="searchSubmit").header-main__input-search.header-search
-        .header-search__inner
-          input.header-search__input(placeholder="Найти товар" v-model="search")
-        button(type="submit").header-search__submit-button.button Найти
+      SearchField(@focus="searchFocused = true" @blur="searchFocused = false" ref="search").header-main__input-search
 
       .header-main__user-block
         router-link(to="/profile/favourites").notification-button.header__fav-btn
@@ -62,7 +65,6 @@ import 'vue-popperjs/dist/vue-popper.css';
 import { mapGetters } from 'vuex';
 import { Component, Vue } from 'vue-property-decorator';
 
-import router from '@/router';
 import MainNav from '@/components/MainNav.vue';
 import HeaderShopCard from '@/components/HeaderShopCard.vue';
 import LoginModal from '@/components/LoginModal.vue';
@@ -73,9 +75,11 @@ import { NotificationItem } from '@/utils/models';
 import ProfileNav from '@/components/ProfileNav.vue';
 import MobileNav from '@/components/MobileNav.vue';
 import { Action } from 'vuex-class';
+import SearchField from '@/components/SearchField.vue';
 
 @Component({
   components: {
+    SearchField,
     MobileNav,
     ProfileNav,
     Notifications,
@@ -87,6 +91,7 @@ import { Action } from 'vuex-class';
   computed: {
     ...mapGetters({
       selectedShop: 'app/getSelectedShop',
+      profilePage: 'app/getProfilePage',
       mainMenu: 'app/getMainMenu',
     }),
   },
@@ -98,7 +103,7 @@ export default class Header extends Vue {
 
   showNotifications = false;
 
-  search = '';
+  searchFocused = false;
 
   body: HTMLBodyElement | null = null;
 
@@ -109,9 +114,17 @@ export default class Header extends Vue {
 
   selectedShop;
 
+  profilePage;
+
   notifications: NotificationItem[] = NOTIFICATIONS;
 
   profileMenuItems = PROFILE_MENU_ITEMS;
+
+  get showProfileHeader() {
+    const res = !this.searchFocused && this.profilePage;
+    console.log(res);
+    return res;
+  }
 
   get showLogin() {
     return this.isAuthenticated;
@@ -119,13 +132,6 @@ export default class Header extends Vue {
 
   set showLogin(value) {
     this.isAuthenticated = value;
-  }
-
-  searchSubmit(event) {
-    event.preventDefault();
-    if (this.search && this.search.length) {
-      router.push({ path: '/search', query: { q: this.search } });
-    }
   }
 
   openLoginModal(type) {
@@ -154,6 +160,13 @@ export default class Header extends Vue {
   toggleNotifications() {
     this.showNotifications = !this.showNotifications;
     (this.body as HTMLBodyElement).classList.toggle('_hidden', this.showNotifications);
+  }
+
+  handleProfileSearch() {
+    (this.$refs.search as any).doFocus();
+    setTimeout(() => {
+      this.searchFocused = true;
+    }, 0);
   }
 
   async created() {
@@ -204,6 +217,12 @@ export default class Header extends Vue {
     background: white;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.19);
     position: relative;
+
+    /*
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    */
 
     &__mobile-nav {
       @include tablet() {
@@ -311,8 +330,9 @@ export default class Header extends Vue {
 
   .header-main {
     display: flex;
-    padding: 8px 16px 3px 11px;
+    padding: 8px 16px 9px 11px;
     box-shadow: inset 0 -1px 0 0 #00000014;
+    position: relative;
 
     @include tablet() {
       align-items: center;
@@ -327,19 +347,69 @@ export default class Header extends Vue {
       padding-top: 12px;
     }
 
+    &__profile-page {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      padding: 0 10px;
+      box-shadow: inset 0 -1px 0 0 #00000014;
+      @include tablet() {
+        display: none;
+      }
+    }
+
+    &__profile-link {
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      color: #222222;
+      display: flex;
+      align-items: center;
+
+      &:before {
+        content: '';
+        width: 21px;
+        height: 20px;
+        display: block;
+        background: url(../assets/icons/arrow-back.svg) no-repeat center;
+        background-size: 140%;
+        margin-right: 28px;
+      }
+    }
+
+    &__profile-search {
+      @include clearButton();
+      color: $blue;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
     &__logo {
       display: flex;
       align-items: center;
-      width: 102px;
+      width: 120px;
       flex-shrink: 0;
       margin-right: 13px;
+
       svg {
         width: 100%;
         display: block;
       }
+
       @include laptop() {
         margin-left: -3px;
-        width: 135px;
+        width: 155px;
         margin-right: 52px;
       }
     }
@@ -389,121 +459,12 @@ export default class Header extends Vue {
         border-radius: 4px;
       }
     }
-  }
 
-  .header-search {
-    display: flex;
-    height: 28px;
-    box-sizing: border-box;
-    width: 100%;
-    @include tablet() {
-      height: 44px;
-    }
-
-    &__inner {
-      border-radius: 4px 0 0 4px;
-      display: flex;
-      position: relative;
-      border: none;
-      width: 100%;
-      box-sizing: border-box;
-      @include tablet() {
-        height: 44px;
-        border: 2px solid #496cff;
-      }
-
-      @include laptop() {
-        flex-grow: 1;
-      }
-
-      &::before {
-        content: '';
-        position: absolute;
-        left: 11px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 12px;
-        height: 16px;
-        background: url('../assets/icons/find.svg') no-repeat center;
-        background-size: contain;
-
-        @include laptop() {
-          width: 16px;
+    &--search-focused & {
+      &__logo {
+        @media (max-width: 767px) {
+          display: none;
         }
-      }
-    }
-
-    &__input {
-      padding: 2px 10px 4px 32px;
-      border: 1px solid #496cff;
-      border-radius: 14px;
-      box-sizing: border-box;
-      width: 100%;
-      font-size: 12px;
-
-      @include tablet() {
-        border: none;
-      }
-
-      @include laptop() {
-        padding-left: 43px;
-        font-size: 14px;
-      }
-
-      &:focus {
-        outline: none;
-      }
-
-      &::placeholder {
-        color: #8e8e8e;
-      }
-    }
-
-    &__category-button {
-      background-color: transparent;
-      border: none;
-      width: 190px;
-      font-size: 14px;
-      color: rgba(34, 34, 34, 0.9);
-      padding: 6px 18px 6px 15px;
-      white-space: nowrap;
-      border-left: 1px solid #ece1e1;
-
-      svg {
-        margin-left: 11px;
-      }
-
-      &:focus {
-        outline: none;
-      }
-
-      display: none;
-
-      @include laptop() {
-        display: block;
-      }
-    }
-
-    &__submit-button {
-      font-size: 14px;
-      color: #ffffff;
-      font-weight: bold;
-      padding: 0 27px;
-      border: none;
-      opacity: 0.9;
-      border-radius: 0 4px 4px 0;
-      background-color: #355cff;
-      cursor: pointer;
-
-      &:focus {
-        outline: none;
-      }
-
-      display: none;
-
-      @include tablet() {
-        display: block;
-        height: 44px;
       }
     }
   }

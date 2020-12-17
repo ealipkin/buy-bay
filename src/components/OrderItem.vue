@@ -50,9 +50,9 @@ export default class OrderItem extends Vue {
     display: flex;
     padding-bottom: 28px;
     border-bottom: 1px solid $grey-4;
-    min-height: 200px;
 
     @include laptop() {
+      min-height: 200px;
       padding-bottom: 0;
       border-bottom: 0;
       background-color: #fff;
@@ -74,6 +74,7 @@ export default class OrderItem extends Vue {
       margin-right: 16px;
       width: 90px;
       height: auto;
+      flex-shrink: 0;
       display: block;
 
       @include laptop() {
@@ -88,8 +89,6 @@ export default class OrderItem extends Vue {
     }
 
     &__content {
-      padding-right: 28px;
-
       @include laptop() {
         padding: 18px 20px 0 0;
       }
@@ -124,6 +123,7 @@ export default class OrderItem extends Vue {
 
     &__status {
       margin-bottom: 13px;
+      display: block;
 
       @include laptop() {
         margin-bottom: 0;

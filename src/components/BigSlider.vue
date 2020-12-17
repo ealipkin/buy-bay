@@ -188,9 +188,28 @@ export default class BigSlider extends Vue {
 
     &__link {
       display: block;
+      margin-bottom: 13px;
+      position: relative;
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 10%;
+        top: 0;
+        height: 100%;
+        z-index: -1;
+        width: 80%;
+        box-shadow: 0 6px 14px 0 rgba(50, 50, 50, 0.59);
+      }
+
       @include laptop() {
         border-radius: 8px;
         overflow: hidden;
+        margin-bottom: 0;
+
+        &:after {
+          display: none;
+        }
       }
     }
 

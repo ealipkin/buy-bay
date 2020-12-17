@@ -53,7 +53,7 @@ export default class CategoryFilter extends Vue {
 
   handleSearch() {
     console.log('handleSearch');
-  };
+  }
 
   toggleAccordion(accordion, index, filter) {
     accordion.isOpen = !accordion.isOpen;
@@ -76,12 +76,17 @@ export default class CategoryFilter extends Vue {
   handleSubmit() {
     this.closed = true;
   }
+
+  mounted() {
+    this.filters.forEach((f) => f.isOpen = true);
+  }
 }
 </script>
 
 <style lang="scss">
   .category-filter {
     .radio {
+      display: flex;
       margin-bottom: 20px;
 
       &:last-child {
@@ -284,9 +289,18 @@ export default class CategoryFilter extends Vue {
       margin: 0 16px;
       font-size: 18px;
       height: 60px;
+      border-radius: 8px;
 
       @include laptop() {
         display: none;
+      }
+    }
+
+    &__colors {
+      padding: 0 20px;
+
+      @include laptop() {
+        padding: 0;
       }
     }
 

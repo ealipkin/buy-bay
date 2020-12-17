@@ -41,6 +41,9 @@ import { BreadcrumbLink } from '@/utils/models';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
 import { generateFailOrders, generateOrders } from '@/utils/data';
+import { Action } from 'vuex-class';
+
+const PAGE_TITLE = 'Мои заказы';
 
 @Component({
   components: {
@@ -52,6 +55,8 @@ import { generateFailOrders, generateOrders } from '@/utils/data';
   },
 })
 export default class Orders extends Vue {
+  @Action('app/setProfilePage') setProfilePage;
+
   Breadcrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
@@ -82,16 +87,26 @@ export default class Orders extends Vue {
     this.selectedTab = tabId;
     console.log(this.activeOrders);
   }
+
+  created() {
+    this.setProfilePage(PAGE_TITLE);
+  }
+
+  beforeDestroy() {
+    this.setProfilePage(null);
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .orders {
   @include container();
+  padding-top: 16px;
   padding-bottom: 10px;
   background-color: #fff;
 
   @include laptop() {
+    padding-top: 0;
     background-color: $grey-3;
     padding-bottom: 155px;
   }

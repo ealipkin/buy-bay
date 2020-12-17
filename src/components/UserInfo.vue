@@ -26,6 +26,7 @@ export default class UserInfo extends Vue {
     padding: 16px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     @include tablet() {
       padding: 0;

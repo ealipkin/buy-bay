@@ -7,28 +7,35 @@ const endpoints = {
 
 interface AppState {
   selectedShop: ProductShop | null;
+  profilePage: string | null;
   menuLoaded: boolean;
   mainMenu: MenuItem[];
 }
 
 const appState: AppState = {
   selectedShop: null,
+  profilePage: null,
   menuLoaded: false,
   mainMenu: [],
 };
 
 const getters = {
   getSelectedShop: (state: AppState) => state.selectedShop,
+  getProfilePage: (state: AppState) => state.profilePage,
   getMainMenu: (state: AppState) => state.mainMenu,
 };
 
 const mutationTypes = {
   SET_SELECTED_SHOP: 'SET_SELECTED_SHOP',
+  SET_PROFILE_PAGE: 'SET_PROFILE_PAGE',
   SET_MAIN_MENU: 'SET_MAIN_MENU',
   SET_MAIN_MENU_LOADED: 'SET_MAIN_MENU_LOADED',
 };
 
 const mutations = {
+  [mutationTypes.SET_PROFILE_PAGE](state: AppState, payload: string) {
+    state.profilePage = payload;
+  },
   [mutationTypes.SET_SELECTED_SHOP](state: AppState, payload: ProductShop) {
     state.selectedShop = payload ? { ...payload } : payload;
   },
@@ -41,6 +48,9 @@ const mutations = {
 };
 
 const actions = {
+  async setProfilePage({ commit, state }, props) {
+    commit('SET_PROFILE_PAGE', props);
+  },
   async setSelectedShop({ commit, state }, props) {
     commit('SET_SELECTED_SHOP', props);
   },

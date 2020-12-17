@@ -45,17 +45,24 @@ import {
   Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
 import { MenuItem } from '@/utils/models';
+import { breakPoints } from '@/utils/constants';
 
 @Component
 export default class CatalogMenu extends Vue {
   @Prop() public links!: MenuItem[];
 
   @Watch('links') onLinksChanged() {
-    console.log('onLinksChanged');
+    if (window.innerWidth < breakPoints.laptop) {
+      return;
+    }
     const hasActive = this.links.filter((link) => link.is_active).length;
     if (!hasActive && this.links) {
-      this.menuLinkClick(this.links[0], 0);
+      // this.menuLinkClick(this.links[0], 0);
     }
+  }
+
+  @Watch('$route') routeChange() {
+    this.closeMenu();
   }
 
   headerHeight = 0;
@@ -64,7 +71,7 @@ export default class CatalogMenu extends Vue {
 
   header: any;
 
-  selectedIndex = 0;
+  selectedIndex = null;
 
   subMenuOpen = false;
 
@@ -87,7 +94,7 @@ export default class CatalogMenu extends Vue {
     this.subMenuOpen = false;
   }
 
-  searchClick = () => {
+  searchClick() {
     console.log('searchClick');
   }
 }

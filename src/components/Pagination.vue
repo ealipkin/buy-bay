@@ -1,7 +1,7 @@
 <template lang="pug">
   .pagination
     button(type="button" @click="showMore").button.pagination__show-more Показать еще {{moreCount}} {{kindText || 'товаров'}}
-    paginate(:page-count="99" :page-range="3" :click-handler="pageChange" :prev-text="'Назад'" :next-text="'Вперед'" :container-class="'paginator'")
+    paginate(:page-count="99" :page-range="3" :click-handler="pageChange" :prev-text="'Назад'" :next-text="'Вперед'" :container-class="'paginator'").pagination__paginator
 </template>
 
 <script lang="ts">
@@ -26,15 +26,32 @@ export default class Pagination extends Vue {
 <style scoped lang="scss">
   .pagination {
     display: flex;
+    width: 100%;
+    justify-content: center;
+
+    @include desktop() {
+      justify-content: flex-start;
+    }
 
     &__show-more {
-      margin-right: 28px;
       white-space: nowrap;
 
       font-size: 14px;
       font-weight: bold;
       color: #ffffff;
       padding: 0 31px;
+
+      @include desktop() {
+        margin-right: 28px;
+      }
+    }
+
+    &__paginator {
+      display: none;
+
+      @include desktop() {
+        display: flex;
+      }
     }
   }
 </style>

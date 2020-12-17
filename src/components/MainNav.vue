@@ -17,10 +17,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 import CatalogMenu from '@/components/CatalogMenu.vue';
 import clickOutside from '@/utils/clickOutside';
 import { MenuItem } from '@/utils/models';
+import { breakPoints } from '@/utils/constants';
 
 @Component({
   components: { CatalogMenu },
@@ -32,6 +35,10 @@ import { MenuItem } from '@/utils/models';
 })
 export default class MainNav extends Vue {
   @Prop() public mainMenu!: MenuItem[];
+
+  @Watch('$route') routeChange() {
+    this.hideMenu();
+  }
 
   isMenuVisible = false;
 
@@ -48,12 +55,18 @@ export default class MainNav extends Vue {
   }
 
   mouseLeave(e) {
+    if (window.innerWidth < breakPoints.laptop) {
+      return;
+    }
     setTimeout(() => {
       this.hideMenu();
     }, 500);
   }
 
   mouseEnter(e) {
+    if (window.innerWidth < breakPoints.laptop) {
+      return;
+    }
     this.showMenu();
   }
 
@@ -234,8 +247,14 @@ export default class MainNav extends Vue {
     &__menu {
       display: none;
 
-      &--visible, &:hover {
+      &--visible {
         display: block;
+      }
+
+      &:hover {
+        @include tablet() {
+          display: block;
+        }
       }
     }
 

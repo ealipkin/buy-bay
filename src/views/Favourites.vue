@@ -40,6 +40,9 @@ import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 import { generateProducts, generateShops } from '@/utils/data';
 import SortSelect from '@/components/SortSelect.vue';
 import ShopCard from '@/components/ShopCard.vue';
+import { Action } from 'vuex-class';
+
+const PAGE_TITLE = 'Избранное';
 
 @Component({
   components: {
@@ -54,6 +57,8 @@ import ShopCard from '@/components/ShopCard.vue';
   },
 })
 export default class Favourites extends Vue {
+  @Action('app/setProfilePage') setProfilePage;
+
   Breadcrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
@@ -97,6 +102,14 @@ export default class Favourites extends Vue {
 
   selectTab(tabId) {
     this.selectedTab = tabId;
+  }
+
+  created() {
+    this.setProfilePage(PAGE_TITLE);
+  }
+
+  beforeDestroy() {
+    this.setProfilePage(null);
   }
 }
 </script>

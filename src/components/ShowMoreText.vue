@@ -2,8 +2,8 @@
   div( v-bind:style="additionalContainerCss").show-more
     div(ref="detail" v-bind:class="{'show-more__default': !expanded, 'show-more__expanded': expanded}" v-bind:style="`--lines: ${lines}`")
       div(v-bind:style="additionalCss" v-html="text")
-    button(type="button" v-if="hasMore && triggerShowMore" :style="additionalAnchorCss" @click="onClick").show-more__anchor.button.button--disabled {{ moreText }}
-    button(v-if="hasMore && expanded" :style="additionalAnchorCss" @click="onClick").show-more__anchor.button.button--disabled {{ lessText }}
+    button(type="button" v-if="hasMore && triggerShowMore" :style="additionalAnchorCss" @click="onClick").show-more__anchor.button.button--secondary {{ moreText }}
+    button(v-if="hasMore && expanded" :style="additionalAnchorCss" @click="onClick").show-more__anchor.button.button--secondary {{ lessText }}
 </template>
 
 <script>

@@ -5,7 +5,7 @@
       img(v-else :src="selectedImage").avatar-edit__selected-image
     label.avatar-edit__edit-button
       include ../assets/icons/edit.svg
-      ImageUploader(:preview="true" :className="['visually-hidden', { 'fileinput--loaded': selectedImage }]" capture="environment" :debug="1" doNotResize="gif" :autoRotate="true" outputFormat="verbose" @input="setImage")
+      ImageUploader(:preview="true" :className="['visually-hidden', { 'fileinput--loaded': selectedImage }]" :debug="1" doNotResize="gif" :autoRotate="false" outputFormat="verbose" @input="setImage")
 </template>
 
 <script lang="ts">

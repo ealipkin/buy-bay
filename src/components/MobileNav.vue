@@ -53,8 +53,8 @@ export default class MobileNav extends Vue {
 
   items = [
     {
-      href: '#',
-      title: '',
+      href: '/',
+      title: 'Главная',
       icon: 'shop',
     },
     {
@@ -116,6 +116,10 @@ export default class MobileNav extends Vue {
       &--active {
         color: $blue;
       }
+    }
+
+    &__link.router-link-exact-active {
+      color: $blue;
     }
 
     &__count {

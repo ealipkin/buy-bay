@@ -40,6 +40,9 @@ import { BreadcrumbLink } from '@/utils/models';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
 import { generateOrders } from '@/utils/data';
+import { Action } from 'vuex-class';
+
+const PAGE_TITLE = 'Мои группы';
 
 @Component({
   components: {
@@ -51,6 +54,8 @@ import { generateOrders } from '@/utils/data';
   },
 })
 export default class Groups extends Vue {
+  @Action('app/setProfilePage') setProfilePage;
+
   Breadcrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
@@ -80,16 +85,26 @@ export default class Groups extends Vue {
   selectTab(tabId) {
     this.selectedTab = tabId;
   }
+
+  created() {
+    this.setProfilePage(PAGE_TITLE);
+  }
+
+  beforeDestroy() {
+    this.setProfilePage(null);
+  }
 }
 </script>
 
 <style lang="scss" scoped>
   .groups {
+    padding-top: 16px;
     @include container();
     padding-bottom: 10px;
     background-color: #fff;
 
     @include laptop() {
+      padding-top: 0;
       background-color: $grey-3;
       padding-bottom: 155px;
     }

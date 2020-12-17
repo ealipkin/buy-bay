@@ -1,10 +1,11 @@
 <template lang="pug">
   .input
     ValidationProvider(:name="name" :rules="inputRules" v-slot="{ errors, failed }").input__provider
-      input(:type="type || 'text'" :placeholder="label" v-model="inputValue" :class="failed ? 'input__field--fail' : ''").input__field
-      label(v-if="label" :data-placeholder="label").input__label {{label}}
-        sup(v-if="isRequired").input__required-mark *
-      span.input__message {{ errors[0] }}
+      .input__wrapper
+        input(:type="type || 'text'" :placeholder="label" v-model="inputValue" :class="failed ? 'input__field--fail' : ''").input__field
+        label(v-if="label" :data-placeholder="label").input__label {{label}}
+          sup(v-if="isRequired").input__required-mark *
+      span.input__error {{ errors[0] }}
 </template>
 
 <script lang="ts">
@@ -51,6 +52,10 @@ export default class Input extends Vue {
 
     &:last-child {
       margin-bottom: 0;
+    }
+
+    &__wrapper {
+      position: relative;
     }
 
     &__field {
@@ -117,10 +122,8 @@ export default class Input extends Vue {
       }
     }
 
-    &__message {
-      position: absolute;
+    &__error {
       left: 0;
-      top: 100%;
       z-index: 1;
       font-size: 12px;
       color: $red-1;
@@ -129,7 +132,7 @@ export default class Input extends Vue {
     &__required-mark {
       color: #e53333;
       font-size: 0.9em;
-      margin-left: 9px;
+      margin-left: 0;
       top: 0;
     }
 
