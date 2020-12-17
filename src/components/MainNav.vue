@@ -72,8 +72,11 @@ export default class MainNav extends Vue {
 
   showMenu() {
     const body = document.querySelector('body');
-    (body as HTMLBodyElement).classList.add('_hidden');
     this.isMenuVisible = true;
+
+    if (window.innerWidth < breakPoints.laptop) {
+      (body as HTMLBodyElement).classList.add('_hidden');
+    }
   }
 
   hideMenu() {
