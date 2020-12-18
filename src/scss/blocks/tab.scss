@@ -1,7 +1,26 @@
 .tab {
   display: none;
 
-  &--active {
+  @include desktop() {
+    opacity: 0;
+  }
+
+  &--show {
     display: block;
+  }
+
+  &--active, &--not-inited {
+    display: block;
+    opacity: 1;
+  }
+
+  &--hidden {
+    @include desktop() {
+      opacity: 0;
+    }
+  }
+
+  &--visible {
+    opacity: 1;
   }
 }

@@ -1,17 +1,23 @@
 <template lang="pug">
-  .index.index--flex
-    section.section.section--slider.container
-      BigSlider
+  div(v-if="pageLoaded" ref="index").index.index--flex
+    section(v-if="bigSliderItems").section.section--slider.container
+      BigSlider(:items="bigSliderItems" :promo="bigSliderPromo")
       FeaturesSlider.index__features-slider
 
     .container.index__tabs
       TabsNav(:tabs="tabs" v-on:change="selectTab")
 
-    section.section.section--catalog-slider
+    section(v-show="popularItems").section.section--catalog-slider
       .section-header.section-header--hide-desktop
         .section-title Популярные
         router-link(to="#").section-link Показать еще
-      CatalogSlider(:items="popularItems" :class="{'tab--active': selectedTab === 1}" ref="slickPopular").tab
+      CatalogSlider(
+        @init="sliderInit"
+        :sliderId="tabsIds.POPULAR"
+        :items="popularItems"
+        :class="{'tab--visible': selectedTab === tabsIds.POPULAR, 'tab--not-inited': !slidersMap[tabsIds.POPULAR].inited, 'tab--hidden': !slidersMap[tabsIds.POPULAR].updated}"
+        ref="sliderPopular"
+      ).tab.tab--show.index__catalog-slider
 
     section.section.section--white.section--categories
       .section__container
@@ -20,29 +26,42 @@
           router-link(to="#").section-link Показать еще
         TopCategories(:categories="topCategories")
 
-    section.section.section--catalog-slider
+    section(v-show="hotItems").section.section--catalog-slider
       .section-header.section-header--hide-desktop
         .section-title Горящие группы
         router-link(to="#").section-link Показать еще
-      CatalogSlider(:items="hotItems" :class="{'tab--active': selectedTab === 2}" ref="slickHot").tab
+      CatalogSlider(
+        @init="sliderInit"
+        :sliderId="tabsIds.HOT"
+        :items="hotItems"
+        :class="{'tab--visible': selectedTab === tabsIds.HOT, 'tab--not-inited': !slidersMap[tabsIds.HOT].inited, 'tab--hidden': !slidersMap[tabsIds.HOT].updated}"
+        ref="sliderHot"
+      ).tab.tab--show.index__catalog-slider
 
     Advantages(:advantagesList="advantagesList")
 
-    section.section.section--catalog-slider
+    section(v-show="bestItems").section.section--catalog-slider
       .section-header.section-header--hide-desktop
         .section-title Бестселлеры
         router-link(to="#").section-link Показать еще
-      CatalogSlider(:items="bestItems" :class="{'tab--active': selectedTab === 3}" ref="slickBest").tab
+      CatalogSlider(
+        @init="sliderInit"
+        :sliderId="tabsIds.BEST"
+        :items="bestItems"
+        :class="{'tab--visible': selectedTab === tabsIds.BEST, 'tab--not-inited': !slidersMap[tabsIds.BEST].inited, 'tab--hidden': !slidersMap[tabsIds.BEST].updated}"
+        ref="sliderBest"
+      ).tab.tab--show.index__catalog-slider
 
-    section.section.section--brands
+    section(v-if="brands").section.section--brands
       .section__container
         .section-header
           .section-title Лучшие бренды
           router-link(to="#").section-link Показать еще
         Brands(:brands="brands")
 
-    section.section.section--seo
-      SeoTexts(:texts="seoBlockDescription").container.index__seo
+    section(v-if="seo").section.section--seo
+      SeoTexts(:block="seo").container.index__seo
+  loading(v-else :active="!pageLoaded" color="#496cff" :can-cancel="true" :is-full-page="false")
 
 </template>
 
@@ -57,15 +76,42 @@ import CatalogSlider from '@/components/CatalogSlider.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
 import FeaturesSlider from '@/components/FeaturesSlider.vue';
 import TopCategories from '@/components/TopCategories.vue';
-import { generateProducts, getRandomNumberBetween } from '@/utils/data';
 import TabsNav from '@/components/TabsNav.vue';
 import Advantages from '@/components/Advantages.vue';
 import { ADVANTAGES } from '@/utils/constants';
 import { Action } from 'vuex-class';
-import { mapGetters } from 'vuex';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import {
+  BigSliderItem, BrandItem, Product, SeoBlock,
+} from '@/utils/models';
+import Loading from 'vue-loading-overlay';
+import { topCategories } from '@/utils/data';
 
+enum TABS_IDS {
+  POPULAR = 'popular',
+  HOT = 'hot',
+  BEST = 'best',
+}
+
+interface IndexPage {
+  b1: BigSliderItem[]; // +
+  b2: BigSliderItem[]; // +
+  top_brand: BrandItem[]; //+
+
+  popular: Product[]; // +
+  bestseller: Product[]; // +
+  hot_groups: Product[]; // +
+  highlights: [];
+  top_cat: [];
+
+  seo_block: SeoBlock; // +
+}
+
+/* tslint:disable */
 @Component({
   components: {
+    Loading: Vue.extend(Loading),
     Advantages,
     TabsNav,
     TopCategories,
@@ -74,14 +120,8 @@ import { mapGetters } from 'vuex';
     CatalogSlider,
     Brands,
     CatalogCardItem,
-    BigSlider,
     Slick,
-  },
-  computed: {
-    // ...mapGetters({
-    //   hotItems: 'items/getHotItemsEntities',
-    //   bestItems: 'items/getBestItemsEntities',
-    // }),
+    BigSlider,
   },
 })
 export default class Index extends Vue {
@@ -89,146 +129,97 @@ export default class Index extends Vue {
 
   @Action('items/fetchBestItems') fetchBestItems;
 
-  slidersMap = {};
+  tabsIds = TABS_IDS;
 
-  selectedTab = 1;
+  selectedTab = this.tabsIds.POPULAR;
 
-  popularItems = generateProducts(30);
+  slidersMap = {
+    [this.tabsIds.POPULAR]: {
+      inited: false,
+      updated: this.selectedTab === this.tabsIds.POPULAR,
+      ref: this.$refs.sliderPopular,
+    },
+    [this.tabsIds.HOT]: {
+      inited: false,
+      updated: this.selectedTab === this.tabsIds.HOT,
+      ref: this.$refs.sliderHot,
+    },
+    [this.tabsIds.BEST]: {
+      inited: false,
+      updated: this.selectedTab === this.tabsIds.BEST,
+      ref: this.$refs.sliderBest,
+    },
+  };
 
-  hotItems = generateProducts(30);
+  bigSliderItems: BigSliderItem[] | null = null;
 
-  bestItems = generateProducts(30);
+  bigSliderPromo: BigSliderItem[] | null = null;
 
-  seoBlockDescription = [
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-  ];
+  popularItems: Product[] | null = null;
 
-  topCategories = [
-    {
-      title: 'Спортивный инвентарь',
-      src: require('../assets/images/top-01.png'),
-      position: 'bottom',
-      positionMobile: 'right-center',
-      type: 'red',
-      color: 'pink',
-    },
-    {
-      title: 'Cмарфтоны',
-      src: require('../assets/images/top-02.png'),
-      position: 'center',
-      positionMobile: 'center-bottom',
-      type: 'brown',
-      color: 'yellow',
-    },
-    {
-      title: 'Компьютеры и офис',
-      src: require('../assets/images/top-03.png'),
-      position: 'top',
-      positionMobile: 'right-top',
-      type: 'blue',
-      color: 'cyan',
-    },
-    {
-      title: 'Женский гардероб',
-      src: require('../assets/images/top-04.png'),
-      position: 'bottom',
-      positionMobile: 'center-bottom',
-      type: 'light-blue',
-      color: 'pink',
-    },
-    {
-      title: 'Спортивный инвентарь',
-      src: require('../assets/images/top-01.png'),
-      position: 'bottom',
-      positionMobile: 'right-center',
-      type: 'red',
-      color: 'cyan',
-    },
-    {
-      title: 'Cмарфтоны',
-      src: require('../assets/images/top-02.png'),
-      position: 'center',
-      positionMobile: 'center-bottom',
-      type: 'brown',
-      color: 'yellow',
-    },
-  ];
+  hotItems: Product[] | null = null;
+
+  bestItems: Product[] | null = null;
+
+  seo: SeoBlock | null = null;
+
+  pageLoaded = false;
+
+  topCategories = topCategories;
 
   advantagesList = ADVANTAGES;
 
-  brands = [
-    {
-      id: 1,
-      image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
-      title: 'Adidas',
-      category: 'Спортивные товары',
-      rate: 5,
-      items: generateProducts(3),
-    },
-    {
-      id: 2,
-      image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
-      title: 'Calvin klein',
-      category: 'Мужская и женская одежда',
-      rate: 4,
-      items: generateProducts(3),
-    },
-    {
-      id: 3,
-      image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
-      title: 'Adidas',
-      category: 'Спортивные товары',
-      rate: 3,
-      items: generateProducts(3),
-    },
-    {
-      id: 4,
-      image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
-      title: 'Calvin klein',
-      category: 'Мужская и женская одежда',
-      rate: 2,
-      items: generateProducts(3),
-    },
-  ];
+  brands: BrandItem[] | null = null;
 
   tabs = [
     {
-      id: 1,
+      id: this.tabsIds.POPULAR,
       label: 'Популярные товары',
       isActive: true,
     },
     {
-      id: 2,
+      id: this.tabsIds.HOT,
       label: 'Горящие группы',
     },
     {
-      id: 3,
+      id: this.tabsIds.BEST,
       label: 'Бестселлеры',
     },
   ];
 
-  mounted() {
-    this.slidersMap = {
-      1: { ref: this.$refs.slickPopular, init: false },
-      2: { ref: this.$refs.slickHot, init: false },
-      3: { ref: this.$refs.slickBest, init: false },
-    };
+  sliderInit(e) {
+    const { id } = e;
+    this.slidersMap[id].inited = true;
   }
 
-  async created() {
-    // await this.fetchBestItems();
-    // await this.fetchHotItems();
+  mounted() {
+    createRequest('get', endpoints.index).then((res) => {
+      const response: IndexPage = res.data.data;
+      this.bigSliderItems = response.b1;
+      this.bigSliderPromo = response.b2;
+      this.seo = response.seo_block;
+      this.brands = response.top_brand;
+
+      this.popularItems = response.popular;
+      this.bestItems = response.bestseller;
+      this.hotItems = response.hot_groups;
+
+      this.pageLoaded = true;
+      return response;
+    });
   }
 
   selectTab(tabId) {
     this.selectedTab = tabId;
-    const targetSlider = this.slidersMap[tabId];
-    if (!targetSlider.init) {
-      this.$nextTick(() => {
-        targetSlider.ref.reInit();
-      });
-      targetSlider.init = true;
+    const sliderRef = tabId === this.tabsIds.POPULAR ? this.$refs.sliderPopular
+      : tabId === this.tabsIds.HOT ? this.$refs.sliderHot
+        : tabId === this.tabsIds.BEST ? this.$refs.sliderBest : null;
+    const { updated } = this.slidersMap[tabId];
+    if (!updated && sliderRef) {
+      (sliderRef as any).update();
+      setTimeout(() => {
+        // this.slidersMap[tabId].updated = true;
+      }, 100);
     }
   }
 }
@@ -241,10 +232,28 @@ export default class Index extends Vue {
         display: block;
       }
     }
+
+    .slick-list {
+      height: 100%;
+      width: 100%;
+    }
+
+    @include desktop() {
+      .index__catalog-slider {
+        position: absolute;
+      }
+
+      .tab--visible.index__catalog-slider {
+        position: relative;
+        transition: none;
+      }
+    }
   }
 </style>
 <style lang="scss" scoped>
   .index {
+    position: relative;
+
     &--flex {
       @include desktop() {
         display: flex;

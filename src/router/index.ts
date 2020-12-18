@@ -5,6 +5,11 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
+    path: '/brand/:id',
+    name: 'Shop',
+    component: () => import('../views/Shop.vue'),
+  },
+  {
     path: '/shop/:id',
     name: 'Shop',
     component: () => import('../views/Shop.vue'),

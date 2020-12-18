@@ -13,6 +13,7 @@ export default class TabsNav extends Vue {
   @Prop() public tabs!: any[];
 
   selectTab(tab, index) {
+    console.log('selectTab');
     if (tab.isActive) {
       return;
     }
@@ -22,7 +23,9 @@ export default class TabsNav extends Vue {
     this.$emit('change', tab.id);
   }
 
-  isTabActive = (tab) => Boolean(tab.isActive)
+  isTabActive(tab) {
+    return Boolean(tab.isActive);
+  }
 }
 </script>
 

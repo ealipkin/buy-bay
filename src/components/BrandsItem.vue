@@ -1,13 +1,13 @@
 <template lang="pug">
   .brands-item
-    router-link(:to="{ path: `/shop/${brand.id}` }").brands-item__header
-      img.brands-item__logo(:src="brand.image")
+    router-link(:to="{ path: brand.link }").brands-item__header
+      div(v-if="brand.image").brands-item__logo(:style="{backgroundImage: `url(${brand.image})`}")
       .brands-item__header-inner
-        h3.brands-item__title {{brand.title}}
+        h3.brands-item__title {{brand.brand}}
         p.brands-item__category {{brand.category}}
       Rate(:list="true" :rate="brand.rate").brands-item__rate
     ul.brands-item__list
-      li(v-for="(item, index) in brand.items" :key="index").brands-item__card
+      li(v-for="(item, index) in brand.data" :key="index").brands-item__card
         CatalogCardItem(:is-outlined="true" :item="item" title-length="25")
 </template>
 
@@ -15,6 +15,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Rate from '@/components/Rate.vue';
+import { BrandItem } from '@/utils/models';
 
 @Component({
   components: {
@@ -23,7 +24,7 @@ import Rate from '@/components/Rate.vue';
   },
 })
 export default class BrandsItem extends Vue {
-  @Prop() public brand!: any;
+  @Prop() public brand!: BrandItem;
 }
 </script>
 
@@ -32,6 +33,7 @@ export default class BrandsItem extends Vue {
     .catalog-card__old-price {
       margin-bottom: 5px;
     }
+
     .rate__item {
       @include laptop() {
         margin: 0 3px;
@@ -66,7 +68,17 @@ export default class BrandsItem extends Vue {
     }
 
     &__logo {
+      width: 59px;
+      height: 59px;
       border-radius: 50%;
+      background: white no-repeat center;
+      background-size: contain;
+      margin: 0 auto;
+
+      @include laptop() {
+        margin: 0;
+        margin-right: 18px;
+      }
     }
 
     &__header {
@@ -85,9 +97,6 @@ export default class BrandsItem extends Vue {
     &__header-inner {
       display: flex;
       flex-direction: column;
-      @include laptop() {
-        margin-left: 18px;
-      }
     }
 
     &__title {

@@ -59,17 +59,7 @@ export default class Input extends Vue {
     }
 
     &__field {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 10px 22px;
-      transition: all 0.3s ease;
-      outline: 0;
-      font-family: inherit;
-
-      height: 52px;
-      border-radius: 4px;
-      border: solid 1px #B6BBCD;
-      background-color: #ffffff;
+      @include input;
 
       &:focus {
         border: solid 1px $blue;

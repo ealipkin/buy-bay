@@ -18,6 +18,7 @@ import BrandsItem from '@/components/BrandsItem.vue';
 import Slick from 'vue-slick';
 import { debounce } from '@/utils/common';
 import { breakPoints } from '@/utils/constants';
+import { BrandItem } from '@/utils/models';
 
 @Component({
   components: {
@@ -26,7 +27,7 @@ import { breakPoints } from '@/utils/constants';
   },
 })
 export default class Brands extends Vue {
-  @Prop() public brands!: any[];
+  @Prop() public brands!: BrandItem[];
 
   windowWidth = 0;
 
@@ -176,6 +177,10 @@ export default class Brands extends Vue {
     &__item {
       padding-left: 10px;
       margin-bottom: 1px;
+
+      .brands-item {
+        height: 100%;
+      }
 
       &:last-child {
         padding-right: 10px;

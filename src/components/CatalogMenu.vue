@@ -1,4 +1,5 @@
 <template lang="pug">
+  //.catalog-menu(:style="{top: headerHeight + 'px'}")
   .catalog-menu(:style="{top: headerHeight + 'px'}")
     .catalog-menu__container
       div(:class="{'catalog-menu__container-primary--hidden': subMenuOpen}").catalog-menu__container-primary
@@ -57,7 +58,7 @@ export default class CatalogMenu extends Vue {
     }
     const hasActive = this.links.filter((link) => link.is_active).length;
     if (!hasActive && this.links) {
-      // this.menuLinkClick(this.links[0], 0);
+      this.menuLinkClick(this.links[0], 0);
     }
   }
 

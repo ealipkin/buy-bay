@@ -1,15 +1,21 @@
 <template lang="pug">
-  section.seo
+  section(v-if="texts").seo
     h2.seo__title SEO Block
     p.seo__description(v-for="text in texts") {{text}}
+  section(v-else).seo
+    h2.seo__title {{block.title}}
+    p.seo__description {{block.text}}
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { SeoBlock } from '@/utils/models';
 
 @Component({})
 export default class SeoTexts extends Vue {
   @Prop() public texts!: string[];
+
+  @Prop() public block!: SeoBlock;
 }
 
 </script>

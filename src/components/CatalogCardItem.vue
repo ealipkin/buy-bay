@@ -1,7 +1,9 @@
 <template lang="pug">
   router-link(:to="{path: `/product/${item.id}`}" :class="{'--isOutlined': isOutlined }").catalog-card
     .catalog-card__top
-      img.catalog-card__img(:src="item.images.preview")
+      .catalog-card__img(:style="{backgroundImage: `url(${item.images.preview})`}")
+        //:style="{backgroundImage: `url(${promoImage.image})`}"
+        // img(:src="item.images.preview")
       ul(v-if="item.features && item.features.length").catalog-card__features
         template(v-if="item.features.find(item => item.time)")
           li(
@@ -92,6 +94,11 @@ export default class CatalogCardItem extends Vue {
       //height: 218px;
       width: 100%;
       border-radius: 6px 6px 0 0;
+      height: 0;
+      padding-bottom: 100%;
+
+      background: white no-repeat center;
+      background-size: contain;
     }
 
     &__title {
@@ -226,7 +233,7 @@ export default class CatalogCardItem extends Vue {
 
     &__top {
       position: relative;
-      min-height: 50%;
+
       img {
         display: block;
       }

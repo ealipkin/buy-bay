@@ -121,9 +121,7 @@ export default class Header extends Vue {
   profileMenuItems = PROFILE_MENU_ITEMS;
 
   get showProfileHeader() {
-    const res = !this.searchFocused && this.profilePage;
-    console.log(res);
-    return res;
+    return !this.searchFocused && this.profilePage;
   }
 
   get showLogin() {

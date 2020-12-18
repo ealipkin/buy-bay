@@ -1,20 +1,23 @@
 <template lang="pug">
-  .big-slider
+  .big-slider(v-if="items && items.length")
     .big-slider__slider
       Slick(ref="slick" :options="sliderSettings")
-        div.big-slider__slide(v-for="(slide, index) of slides" :key="index")
-          router-link(:to="slide.href").big-slider__link
-            img(:src="slide.img").big-slider__slide-image
+        div.big-slider__slide(v-for="(slide, index) of items" :key="index")
+          router-link(:to="slide.link").big-slider__link
+            img(:src="slide.image").big-slider__slide-image
+
     router-link(
-      to="/"
-      :style="{backgroundImage: 'url(https://picsum.photos/452/280/)'}"
+      v-if="promoImage"
+      :to="promoImage.link"
+      :style="{backgroundImage: `url(${promoImage.image})`}"
     ).big-slider__promo-image
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import Slick from 'vue-slick';
+import { BigSliderItem } from '@/utils/models';
 
 @Component({
   components: {
@@ -22,6 +25,14 @@ import Slick from 'vue-slick';
   },
 })
 export default class BigSlider extends Vue {
+  @Prop() public items!: BigSliderItem[];
+
+  @Prop() public promo!: BigSliderItem[];
+
+  get promoImage(): BigSliderItem | null {
+    return this.promo && this.promo.length ? this.promo[0] : null;
+  }
+
   sliderSettings = {
     slidesToShow: 1,
     swipeToSlide: true,
@@ -47,21 +58,6 @@ export default class BigSlider extends Vue {
       },
     ],
   };
-
-  slides = [
-    {
-      img: 'https://picsum.photos/id/1/682/280',
-      href: '',
-    },
-    {
-      img: 'https://picsum.photos/id/2/682/280',
-      href: '',
-    },
-    {
-      img: 'https://picsum.photos/id/4/682/280',
-      href: '',
-    },
-  ]
 }
 </script>
 

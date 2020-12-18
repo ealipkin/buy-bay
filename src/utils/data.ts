@@ -1,5 +1,14 @@
 import {
-  Group, ORDER_STATUSES, OrderItem, OrderUser, Product, PRODUCT_FEATURES, ProductFeature, ProductShop, REQUIRED_ADDRESS_FIELDS, ProfileUser,
+  Group,
+  ORDER_STATUSES,
+  OrderItem,
+  OrderUser,
+  Product,
+  PRODUCT_FEATURES,
+  ProductFeature,
+  ProductShop,
+  REQUIRED_ADDRESS_FIELDS,
+  ProfileUser,
   SEX_TYPES,
 } from '@/utils/models';
 import { nanoid } from 'nanoid';
@@ -134,7 +143,11 @@ const createProduct = (item, index): Product => ({
     {
       title: 'Размер',
       id: '2',
-      values: [{ label: 'S (47)', value: 's' }, { label: 'M (48-50)', value: 'm', selected: true }, { label: 'L (50-52)', value: 'l' }],
+      values: [{ label: 'S (47)', value: 's' }, {
+        label: 'M (48-50)',
+        value: 'm',
+        selected: true,
+      }, { label: 'L (50-52)', value: 'l' }],
     },
     {
       title: 'Количество',
@@ -342,3 +355,59 @@ export const generateShops = (count: number) => new Array(count).fill({}).map(ge
 export const generateUsers = (count: number) => new Array(count).fill({}).map(createUser);
 
 export const generateDefaultUsers = (count: number) => new Array(count).fill({}).map(createDefaultUser);
+
+const CATEGORIES_COLORS = ['pink', 'yellow', 'cyan'];
+const CATEGORIES_TYPES = ['red', 'brown', 'blue', 'light-blue'];
+const CATEGORIES_POSITIONS = ['bottom', 'center', 'top'];
+const CATEGORIES_POSITIONS_MOBILE = ['right-center', 'center-bottom', 'right-top', 'light-blue'];
+
+export const topCategories = [
+  {
+    title: 'Спортивный инвентарь',
+    src: require('../assets/images/top-01.png'),
+    position: 'bottom',
+    positionMobile: 'right-center',
+    type: 'red',
+    color: 'pink',
+  },
+  {
+    title: 'Cмарфтоны',
+    src: require('../assets/images/top-02.png'),
+    position: 'center',
+    positionMobile: 'center-bottom',
+    type: 'brown',
+    color: 'yellow',
+  },
+  {
+    title: 'Компьютеры и офис',
+    src: require('../assets/images/top-03.png'),
+    position: 'top',
+    positionMobile: 'right-top',
+    type: 'blue',
+    color: 'cyan',
+  },
+  {
+    title: 'Женский гардероб',
+    src: require('../assets/images/top-04.png'),
+    position: 'bottom',
+    positionMobile: 'center-bottom',
+    type: 'light-blue',
+    color: 'pink',
+  },
+  {
+    title: 'Спортивный инвентарь',
+    src: require('../assets/images/top-01.png'),
+    position: 'bottom',
+    positionMobile: 'right-center',
+    type: 'red',
+    color: 'cyan',
+  },
+  {
+    title: 'Cмарфтоны',
+    src: require('../assets/images/top-02.png'),
+    position: 'center',
+    positionMobile: 'center-bottom',
+    type: 'brown',
+    color: 'yellow',
+  },
+];

@@ -270,3 +270,24 @@ export interface NotificationItem {
   text: string;
   read: boolean;
 }
+
+export interface SeoBlock {
+  title: string;
+  text: string;
+}
+
+export interface BigSliderItem {
+  image: string;
+  image_mob: string;
+  link: string;
+  title: string;
+}
+
+export interface BrandItem {
+  brand: string;
+  category: string;
+  data: Product[];
+  id_brand: string;
+  link: string;
+  rate: number;
+}

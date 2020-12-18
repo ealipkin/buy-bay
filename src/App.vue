@@ -50,6 +50,7 @@ export default class Index extends Vue {
   main {
     flex: 1;
     background: $background-color;
+    position: relative;
   }
 
   #nav {

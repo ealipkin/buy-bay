@@ -1,2 +1,6 @@
 export const API_URL = process.env.VUE_APP_API_URL;
 export const AUTH_API_URL = process.env.VUE_APP_AUTH_API_URL;
+
+export const endpoints = {
+  index: '/mp/build',
+};

@@ -1,10 +1,10 @@
 <template lang="pug">
-  section.catalog-slider.container
+  section(:data-id="sliderId  || ''").catalog-slider.container
     .catalog-slider__inner
       div(v-if="isMobile").catalog-slider__slider
         div(v-for="(item, index) in items" :key="index").catalog-slider__item
           CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
-      Slick(v-if="!isMobile && isLaptop" ref="slickLaptop" :options="laptopSettings").catalog-slider__slider
+      Slick(v-if="!isMobile && isLaptop" ref="slickLaptop" :options="laptopSettings" @init="handleInit").catalog-slider__slider
         div(v-for="(item, index) in items" :key="index").catalog-slider__item
           CatalogCardItem(:isOutlined="true" :item="item").catalog-slider__card
 </template>
@@ -28,6 +28,8 @@ import { breakPoints } from '@/utils/constants';
 export default class BigSlider extends Vue {
   @Prop() public items!: Product[];
 
+  @Prop() public sliderId!: string;
+
   windowWidth;
 
   isMobile = false;
@@ -36,8 +38,21 @@ export default class BigSlider extends Vue {
 
   isDesktop = false;
 
-  public reInit() {
-    this.updateSliders();
+  handleInit(event) {
+    this.$emit('init', { event, id: this.sliderId });
+  }
+
+  reInit() {
+    this.reinitSliders();
+  }
+
+  update() {
+    if (this.$refs.slickDesktop) {
+      (this.$refs.slickDesktop as any).goTo(0);
+    }
+    if (this.$refs.slickLaptop) {
+      (this.$refs.slickLaptop as any).goTo(0);
+    }
   }
 
   laptopSettings = {
@@ -60,7 +75,7 @@ export default class BigSlider extends Vue {
     slidesToScroll: 1,
   };
 
-  updateSliders = () => {
+  reinitSliders = () => {
     if (this.$refs.slickDesktop) {
       (this.$refs.slickDesktop as any).reSlick();
     }
@@ -80,13 +95,13 @@ export default class BigSlider extends Vue {
 
   created() {
     window.addEventListener('resize', this.handleResize);
-    window.addEventListener('resize', debounce(this.updateSliders.bind(this), 500));
+    window.addEventListener('resize', debounce(this.reinitSliders.bind(this), 500));
     this.handleResize();
   }
 
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
-    window.removeEventListener('resize', debounce(this.updateSliders.bind(this), 500));
+    window.removeEventListener('resize', debounce(this.reinitSliders.bind(this), 500));
   }
 }
 </script>

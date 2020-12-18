@@ -11,7 +11,7 @@
             li(v-for="item in navigationList").main-nav__item
               router-link(v-if="item.href" :to="item.href").main-nav__link {{item.title}}
               span(v-else).main-nav__link {{item.title}}
-    div(@mouseenter="mouseEnter" @mouseover="mouseEnter" @mouseleave="mouseLeave" ).main-nav__menu-wrapper
+    div(@mouseenter="mouseEnter" @mouseover="mouseEnter" @mouseleave="mouseLeave").main-nav__menu-wrapper
       CatalogMenu(:links="mainMenu" :class="{'main-nav__menu--visible': isMenuVisible}").main-nav__menu
 
 </template>
