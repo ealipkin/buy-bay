@@ -1,6 +1,6 @@
 // https://cli.vuejs.org/guide/css.html#passing-options-to-pre-processor-loaders
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/buy-bay/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/' : '/',
   lintOnSave: false,
   css: {
     loaderOptions: {
