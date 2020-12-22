@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   {
     path: '/brand/:id',
-    name: 'Shop',
+    name: 'Brand',
     component: () => import('../views/Shop.vue'),
   },
   {
@@ -31,8 +31,8 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/product/:id',
-    name: 'ItemDetail',
-    component: () => import('../views/ItemDetail.vue'),
+    name: 'Product',
+    component: () => import('../views/Product.vue'),
   },
   {
     path: '/product/:id/checkout',

@@ -1,5 +1,5 @@
 <template lang="pug">
-  div.item-detail
+  div(v-if="item").item-detail
     .item-detail__breadcrumbs
       Breadcrumbs(:links="breadCrumbs")
     .item-detail__main
@@ -8,19 +8,19 @@
         ItemDescription(:item="item" v-if="!isMobile").item-detail__item.item-detail__item--description
       .item-detail__aside
         ItemInfo(:item="item").item-detail__item.item-detail__item--info
-        ItemGroups(:groups="groups").item-detail__item.item-detail__item--groups
+        ItemGroups(v-if="groups && groups.length" :groups="groups").item-detail__item.item-detail__item--groups
         ItemDescription(:item="item" v-if="isMobile").item-detail__item.item-detail__item--description
         ItemShopCard(v-if="item.shop" :shop="item.shop").item-detail__item.item-detail__item--shop
-        DeliveryInfo(:deliveryItem="item.delivery").item-detail__delivery.item-detail__item.item-detail__item--delivery
+        DeliveryInfo(v-if="item.delivery" :deliveryItem="item.delivery").item-detail__delivery.item-detail__item.item-detail__item--delivery
 
     .item-detail__section
       .item-detail__title Похожие товары
       Slick(ref="slick" :options="sliderSettings").similar-slider
-        div(v-for="item in similarItems"  :key="item.id").similar-slider__wrapper
+        div(v-for="item in similarItems"  :key="item.id" v-if="similarItems").similar-slider__wrapper
           CatalogCardItem(:item="item").catalog-card--similar.similar-slider__slide
       Pagination(moreCount="50").item-detail__pagination
-    SeoTexts(:texts="seoBlockDescription").item-detail__seo
-
+    SeoTexts(:block="seo").item-detail__seo
+  Loader(v-else)
 </template>
 
 <script lang="ts">
@@ -38,11 +38,47 @@ import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
 import { breakPoints } from '@/utils/constants';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { BreadcrumbLink } from '@/utils/models';
+import { BreadcrumbLink, Product, SeoBlock } from '@/utils/models';
 import Pagination from '@/components/Pagination.vue';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import Loader from '@/components/Loader.vue';
+
+interface ProductPage extends Product {
+  seo_block: SeoBlock;
+}
+
+const PRODUCT_SLIDER_SETTINGS = {
+  mobileFirst: true,
+  arrows: false,
+  responsive: [
+    {
+      breakpoint: '300',
+      settings: 'unslick',
+    },
+    {
+      breakpoint: '767',
+      settings: {
+        dots: true,
+        slidesToShow: 5,
+        slidesToScroll: 5,
+      },
+    },
+    {
+      breakpoint: '1296',
+      settings: {
+        dots: false,
+        arrows: true,
+        slidesToShow: 5,
+        slidesToScroll: 5,
+      },
+    },
+  ],
+};
 
 @Component({
   components: {
+    Loader,
     Pagination,
     Breadcrumbs,
     SeoTexts,
@@ -72,49 +108,20 @@ export default class ItemDetail extends Vue {
     return this.window.width >= breakPoints.tablet && this.window.width < breakPoints.laptop;
   }
 
+  seo: SeoBlock | null = null;
+
+  item: Product | null = null;
+
   window = {
     width: 0,
     height: 0,
   };
 
-  item = generateProducts(1).pop();
-
   groups = generateGroups(12);
 
   similarItems = generateProducts(8);
 
-  seoBlockDescription = [
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-  ];
-
-  sliderSettings = {
-    mobileFirst: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: '300',
-        settings: 'unslick',
-      },
-      {
-        breakpoint: '767',
-        settings: {
-          dots: true,
-          slidesToShow: 5,
-          slidesToScroll: 5,
-        },
-      },
-      {
-        breakpoint: '1296',
-        settings: {
-          dots: false,
-          arrows: true,
-          slidesToShow: 5,
-          slidesToScroll: 5,
-        },
-      },
-    ],
-  };
+  sliderSettings = PRODUCT_SLIDER_SETTINGS;
 
   handleResize() {
     this.window.width = window.innerWidth;
@@ -124,6 +131,18 @@ export default class ItemDetail extends Vue {
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+  }
+
+  mounted() {
+    const productId = this.$route.params.id;
+    createRequest('get', `${endpoints.product}/${productId}`)
+      .then((res) => {
+        const response: ProductPage = res.data.data;
+        if (response) {
+          this.seo = response.seo_block;
+          this.item = response;
+        }
+      });
   }
 
   destroyed() {

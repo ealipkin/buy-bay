@@ -166,6 +166,7 @@ export default class BigSlider extends Vue {
 
     &__slide {
       padding: 0 7px;
+      display: block !important;
       @include laptop() {
         border-radius: 8px;
         overflow: hidden;

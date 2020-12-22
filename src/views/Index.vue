@@ -61,7 +61,7 @@
 
     section(v-if="seo").section.section--seo
       SeoTexts(:block="seo").container.index__seo
-  loading(v-else :active="!pageLoaded" color="#496cff" :can-cancel="true" :is-full-page="false")
+  Loader(v-else)
 
 </template>
 
@@ -85,8 +85,8 @@ import { endpoints } from '@/config';
 import {
   BigSliderItem, BrandItem, Product, SeoBlock,
 } from '@/utils/models';
-import Loading from 'vue-loading-overlay';
 import { topCategories } from '@/utils/data';
+import Loader from '@/components/Loader.vue';
 
 enum TABS_IDS {
   POPULAR = 'popular',
@@ -94,24 +94,40 @@ enum TABS_IDS {
   BEST = 'best',
 }
 
-interface IndexPage {
-  b1: BigSliderItem[]; // +
-  b2: BigSliderItem[]; // +
-  top_brand: BrandItem[]; //+
+const PRODUCT_TABS = [
+  {
+    id: TABS_IDS.POPULAR,
+    label: 'Популярные товары',
+    isActive: true,
+  },
+  {
+    id: TABS_IDS.HOT,
+    label: 'Горящие группы',
+  },
+  {
+    id: TABS_IDS.BEST,
+    label: 'Бестселлеры',
+  },
+];
 
-  popular: Product[]; // +
-  bestseller: Product[]; // +
-  hot_groups: Product[]; // +
+interface IndexPage {
+  b1: BigSliderItem[];
+  b2: BigSliderItem[];
+  top_brand: BrandItem[];
+
+  popular: Product[];
+  bestseller: Product[];
+  hot_groups: Product[];
   highlights: [];
   top_cat: [];
 
-  seo_block: SeoBlock; // +
+  seo_block: SeoBlock;
 }
 
 /* tslint:disable */
 @Component({
   components: {
-    Loading: Vue.extend(Loading),
+    Loader,
     Advantages,
     TabsNav,
     TopCategories,
@@ -171,21 +187,7 @@ export default class Index extends Vue {
 
   brands: BrandItem[] | null = null;
 
-  tabs = [
-    {
-      id: this.tabsIds.POPULAR,
-      label: 'Популярные товары',
-      isActive: true,
-    },
-    {
-      id: this.tabsIds.HOT,
-      label: 'Горящие группы',
-    },
-    {
-      id: this.tabsIds.BEST,
-      label: 'Бестселлеры',
-    },
-  ];
+  tabs = PRODUCT_TABS;
 
   sliderInit(e) {
     const { id } = e;
@@ -211,16 +213,6 @@ export default class Index extends Vue {
 
   selectTab(tabId) {
     this.selectedTab = tabId;
-    const sliderRef = tabId === this.tabsIds.POPULAR ? this.$refs.sliderPopular
-      : tabId === this.tabsIds.HOT ? this.$refs.sliderHot
-        : tabId === this.tabsIds.BEST ? this.$refs.sliderBest : null;
-    const { updated } = this.slidersMap[tabId];
-    if (!updated && sliderRef) {
-      (sliderRef as any).update();
-      setTimeout(() => {
-        // this.slidersMap[tabId].updated = true;
-      }, 100);
-    }
   }
 }
 </script>

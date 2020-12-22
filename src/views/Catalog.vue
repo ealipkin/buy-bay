@@ -79,6 +79,7 @@ export default class Index extends Vue {
     { href: '/', label: 'Главная' },
     { href: '/category', label: 'Мужской гардероб' },
     { href: '/category', label: 'Сумки и рюкзаки' },
+
     { label: 'Рюкзаки', current: true },
   ];
 

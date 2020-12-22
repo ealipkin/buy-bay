@@ -74,6 +74,7 @@ export default class ItemPreview extends Vue {
 
     img {
       max-width: 100%;
+      margin: 0 auto;
     }
 
     &__counter {

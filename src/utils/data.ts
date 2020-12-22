@@ -131,8 +131,8 @@ const createProduct = (item, index): Product => ({
       },
     },
   },
-  options: [
-    {
+  options: {
+    1: {
       title: 'Цвета',
       id: '1',
       values: [{ label: 'Красный', value: 'red' }, { label: 'Розовый', value: 'pink', selected: true }, {
@@ -140,7 +140,7 @@ const createProduct = (item, index): Product => ({
         value: 'cyan',
       }],
     },
-    {
+    2: {
       title: 'Размер',
       id: '2',
       values: [{ label: 'S (47)', value: 's' }, {
@@ -149,12 +149,14 @@ const createProduct = (item, index): Product => ({
         selected: true,
       }, { label: 'L (50-52)', value: 'l' }],
     },
-    {
+    3: {
       title: 'Количество',
       id: '3',
       values: [{ label: '1', value: '1', selected: true }],
-    }],
+    },
+  },
   description: DESCRIPTION,
+  crossedPrice: getRandomNumberBetween(1000, 400000),
   selfPrice: getRandomNumberBetween(1000, 400000),
   groupPrice: getRandomNumberBetween(1000, 300000),
   orders: getRandomNumberBetween(1000, 700000),

@@ -114,18 +114,26 @@ export interface Product {
   title: string;
   rate: number | string;
   groups: number;
+  group?: {
+    groupCount: number;
+    data: Group[];
+  };
   images: ProductImage;
   features: ProductFeature[];
   meta: ProductMeta;
-  options: ProductOption[];
+  options: {
+    [key: string]: ProductOption;
+  };
   description: string;
+  crossedPrice: number;
   selfPrice: number;
   groupPrice: number;
   orders: number;
+  watches?: number;
   isFavourite: boolean;
   shop?: ProductShop;
-  delivery?: ProductDelivery;
-  contacts: Contacts;
+  delivery?: ProductDelivery | false;
+  contacts: Contacts | false;
   users: OrderUser[];
   messages: Message[];
   orderDate: string | Date;
@@ -274,6 +282,9 @@ export interface NotificationItem {
 export interface SeoBlock {
   title: string;
   text: string;
+  meta_title: string;
+  meta_desc: string;
+  og_desc: string;
 }
 
 export interface BigSliderItem {
