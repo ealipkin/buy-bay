@@ -11,7 +11,7 @@
       span.item-info__self-price
         span.item-info__self-price-value {{divideNumberWithSpaces(item.selfPrice)}}
         span  ₽
-    ul(v-if="item.options && item.options.length").item-info__options
+    ul(v-if="item.options").item-info__options
       li(v-for="option in item.options").item-info__option
         h3.item-info__option-title {{option.title}}
         .item-info__option-list
