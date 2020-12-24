@@ -124,6 +124,7 @@ export interface Product {
   options: {
     [key: string]: ProductOption;
   };
+  maxCount: number;
   description: string;
   crossedPrice: number;
   selfPrice: number;
@@ -144,7 +145,7 @@ export interface Group {
   isJoined: boolean;
   avatar: string;
   allUsers: number;
-  joinedUsers: number;
+  joinedUsers: GroupUser[] | [] | null;
   title: string;
   time: number;
 }
@@ -184,6 +185,14 @@ export interface OrderUser {
   orderId: string;
   name: string;
   avatar: string;
+}
+
+export interface GroupUser {
+  group_id: number;
+  id: number;
+  is_creator: number;
+  name: string;
+  user_id: number;
 }
 
 export interface Message {

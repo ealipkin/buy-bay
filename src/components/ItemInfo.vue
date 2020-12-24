@@ -18,6 +18,11 @@
           label(v-for="value in option.values").item-info__option-label
             input(type="radio" :name="'option['+option.id+']'" :checked="value.selected").visually-hidden
             span {{value.label}}
+      li.item-info__option
+        h3.item-info__option-title Количество
+        .item-info__amount-container
+          AmountChooser(v-model="itemAmount" :options="settings").item-info__amount
+          .item-info__amount-text {{item.maxCount || 12345}} шт. в наличии
     .item-info__actions
       button(type="button" :class="{'item-info__fav--active': item.isFavourite}" @click="toggleFav").item-info__fav
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22"><path d="M14.2 20.6C-9.601 8.946 7.612-5.544 14.2 4.215c6.588-9.759 23.802 4.73 0 16.385z" stroke="currentColor" stroke-width="2" fill="none" fill-rule="evenodd"/></svg>
@@ -31,16 +36,25 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue,
+} from 'vue-property-decorator';
 import { Product } from '@/utils/models';
 import { divideNumberWithSpaces } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
+import AmountChooser from '@/components/AmountChooser/vue-amount-chooser.vue';
 
 @Component({
-  components: { Rate },
+  components: { AmountChooser, Rate },
 })
 export default class ItemInfo extends Vue {
   @Prop() public item!: Product;
+
+  itemAmount = 1;
+
+  settings = {
+    max: 100,
+  };
 
   toggleFav = () => {
     console.log('toggleFav');
@@ -86,6 +100,29 @@ export default class ItemInfo extends Vue {
       @include tablet() {
         font-size: 18px;
         margin-bottom: 20px;
+      }
+    }
+
+    &__amount-container {
+      display: flex;
+      align-items: flex-end;
+
+      @include tablet() {
+        align-items: center;
+      }
+    }
+
+    &__amount {
+
+    }
+
+    &__amount-text {
+      font-size: 14px;
+      color: #7b8197;
+      margin-left: 21px;
+
+      @include tablet() {
+        margin-left: 14px;
       }
     }
 

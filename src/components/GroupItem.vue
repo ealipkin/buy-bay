@@ -1,14 +1,14 @@
 <template lang="pug">
   .group-item
-    .group-item__avatar.avatar
+    div(v-if="group.avatar").group-item__avatar.avatar
       img(:src="group.avatar")
     .group-item__middle
       .group-item__title {{ group.title | truncate(28)}}
       .group-item__info
         .group-item__users
           img(src="../assets/icons/group-user.svg")
-          span.group-item__current-users {{group.joinedUsers}}
-          span.group-item__all-users  из {{group.joinedUsers}}
+          span.group-item__current-users {{group.joinedUsers.length}}
+          span.group-item__all-users  из {{group.allUsers}}
         .group-item__timer
           vac(:end-time="group.time")
             template(v-slot:process="{ timeObj }").group-item__timer-inner

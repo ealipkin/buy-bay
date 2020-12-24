@@ -1,8 +1,8 @@
 <template lang="pug">
   ul.breadcrumbs(v-if="links && links.length")
-    li.breadcrumbs__item(v-for="link in links" :key="link.label")
-      span(v-if="link.current").breadcrumbs__link.breadcrumbs__link--current  {{link.label}}
-      router-link(v-else :to="link.href").breadcrumbs__link  {{link.label}}
+    li.breadcrumbs__item(v-for="link in links" :key="link.title")
+      span(v-if="link.current").breadcrumbs__link.breadcrumbs__link--current  {{link.title || link.label}}
+      router-link(v-else :to="link.link || link.href").breadcrumbs__link  {{link.title || link.label}}
 </template>
 
 <script lang="ts">

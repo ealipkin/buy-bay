@@ -254,7 +254,7 @@ export default class MainNav extends Vue {
         display: block;
       }
 
-      &:hover {
+      &--visible:hover {
         @include tablet() {
           display: block;
         }

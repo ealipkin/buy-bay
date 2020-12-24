@@ -1,7 +1,7 @@
 <template lang="pug">
   div(v-if="item").item-detail
     .item-detail__breadcrumbs
-      Breadcrumbs(:links="breadCrumbs")
+      Breadcrumbs(:links="item.breadcrumbs")
     .item-detail__main
       .item-detail__left-col
         ItemPreview(:item="item").item-detail__item.item-detail__item--preview
@@ -27,7 +27,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import Slick from 'vue-slick';
-import { generateGroups, generateProducts } from '@/utils/data';
+import { generateProducts } from '@/utils/data';
 import ItemPreview from '@/components/ItemPreview.vue';
 import ItemInfo from '@/components/ItemInfo.vue';
 import ItemGroups from '@/components/ItemGroups.vue';
@@ -46,6 +46,7 @@ import Loader from '@/components/Loader.vue';
 
 interface ProductPage extends Product {
   seo_block: SeoBlock;
+  breadcrumbs: BreadcrumbLink[];
 }
 
 const PRODUCT_SLIDER_SETTINGS = {
@@ -117,7 +118,9 @@ export default class ItemDetail extends Vue {
     height: 0,
   };
 
-  groups = generateGroups(12);
+  get groups() {
+    return this.item && this.item.group && this.item.group.data;
+  }
 
   similarItems = generateProducts(8);
 

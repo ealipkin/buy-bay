@@ -62,6 +62,7 @@ const createProduct = (item, index): Product => ({
   title: getRandomArrayElement(PRODUCT_TITLES),
   rate: getRate(),
   groups: getRandomNumberBetween(0, 999),
+  maxCount: getRandomNumberBetween(0, 9999),
   images: {
     preview: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/300`,
     detail: new Array(getRandomNumberBetween(1, 25)).fill({}).map(() => ({
@@ -213,7 +214,7 @@ const createGroup = (item, index): Group => ({
   isJoined: Boolean(getRandomNumberBetween(0, 1)),
   avatar: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/50`,
   allUsers: getRandomNumberBetween(10, 20),
-  joinedUsers: getRandomNumberBetween(0, 20),
+  joinedUsers: [],
   title: 'Фото камера сумка через плечо крест цифровой',
   time: featureDate(),
 });
