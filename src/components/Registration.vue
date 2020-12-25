@@ -42,16 +42,16 @@ export default class Registration extends Vue {
 
   regSteps = REG_STEPS;
 
-  submit = () => {
-    console.log('finish');
-  };
+  submit() {
+    console.log('submit');
+  }
 
   register() {
     this.currentStep = REG_STEPS.FINISH;
     this.$emit('register');
   }
 
-  doLater = () => {
+  doLater() {
     this.$emit('later');
   }
 }

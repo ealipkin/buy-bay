@@ -44,38 +44,37 @@ export default class LoginModal extends Vue {
     return this.selectedTab === 'login' ? true : !this.accountCreated;
   }
 
-  showModal = (type) => {
-    console.log('showModal', type);
+  showModal(type) {
     this.$modal.show('login-modal');
     if (type) {
       this.selectTab(type);
     }
     // document.body.classList.add('_hidden');
-  };
+  }
 
-  closeModal = () => {
+  closeModal() {
     this.$modal.hide('login-modal');
     this.modalClose();
-  };
+  }
 
-  login = () => {
+  login() {
     // login here
     this.closeModal();
     this.$emit('login-success');
-  };
+  }
 
-  handleRegister = () => {
+  handleRegister() {
     this.accountCreated = true;
     this.$emit('register-success');
-  };
+  }
 
-  forgotPassword = () => {
+  forgotPassword() {
     // forgotPassword here
-  };
+  }
 
-  modalClose = () => {
+  modalClose() {
     document.body.classList.remove('_hidden');
-  };
+  }
 
   tabs = [
     {

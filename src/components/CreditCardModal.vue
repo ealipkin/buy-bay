@@ -4,7 +4,7 @@
       h4.modal__title Добавление карты
       button(type="button" @click="closeModal").modal__close.close
       ValidationObserver(v-slot="{ invalid }")
-        form(@submit.prevent="AddCard").modal__form
+        form(@submit.prevent="addCard").modal__form
 
           span.modal__form-border
             span.modal__form-box
@@ -31,26 +31,22 @@ import Input from '@/components/Input.vue';
   },
 })
 export default class CreditCardModal extends Vue {
-  AddCard = () => {
-    console.log('add card');
+  addCard() {
     this.closeModal();
   }
 
-  showModal = () => {
+  showModal() {
     this.$modal.show('credit-card-modal');
+  }
 
-    console.log('show');
-  };
-
-  closeModal = () => {
+  closeModal() {
     this.$modal.hide('credit-card-modal');
     this.modalClose();
-    console.log('close');
-  };
+  }
 
-  modalClose = () => {
+  modalClose() {
     document.body.classList.remove('_hidden');
-  };
+  }
 }
 </script>
 
@@ -95,18 +91,18 @@ export default class CreditCardModal extends Vue {
         padding: 75px 56px 91px 43px;
         z-index: 1;
 
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 485px;
-        background-color: #fff;
-        border: 1px solid $blue;
-        box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.03);
-        border-radius: 12px;
-      }
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          width: 485px;
+          background-color: #fff;
+          border: 1px solid $blue;
+          box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.03);
+          border-radius: 12px;
+        }
       }
     }
 
@@ -154,32 +150,32 @@ export default class CreditCardModal extends Vue {
 
       @include tablet() {
         // font-family: 'Lato', Arial, sans-serif;
-      margin-bottom: 58px;
-      display: block;
-      width: 516px;
-      color: $grey-14;
-      min-height: 308px;
-      background-color: $grey-12;
-      margin-left: auto;
-      padding: 26px;
-      padding-top: 264px;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 12px;
-      line-height: 18px;
-      letter-spacing: 0;
-      position: relative;
-      margin-top: -250px;
+        margin-bottom: 58px;
+        display: block;
+        width: 516px;
+        color: $grey-14;
+        min-height: 308px;
+        background-color: $grey-12;
+        margin-left: auto;
+        padding: 26px;
+        padding-top: 264px;
+        border-radius: 12px;
+        text-align: center;
+        font-size: 12px;
+        line-height: 18px;
+        letter-spacing: 0;
+        position: relative;
+        margin-top: -250px;
 
-      &::before {
-        content: "";
-        position: absolute;
-        top: 25px;
-        left: 0;
-        right: 0;
-        height: 56px;
-        background-color: $grey-13;
-      }
+        &::before {
+          content: "";
+          position: absolute;
+          top: 25px;
+          left: 0;
+          right: 0;
+          height: 56px;
+          background-color: $grey-13;
+        }
       }
     }
 

@@ -21,7 +21,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ProfileModal from '@/components/ProfileModal.vue';
-import { createProfileUser } from '@/utils/data';
 
 @Component({
   components: {
@@ -34,7 +33,6 @@ export default class Contacts extends Vue {
   openProfileModal = () => {
     const modalComponent: any = this.$refs.profileModal;
     modalComponent.showModal();
-    console.log('open profile modal');
   };
 }
 </script>

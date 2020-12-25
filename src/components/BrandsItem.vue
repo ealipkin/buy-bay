@@ -6,7 +6,7 @@
         h3.brands-item__title {{brand.brand}}
         p.brands-item__category {{brand.category}}
       Rate(:list="true" :rate="brand.rate").brands-item__rate
-    ul.brands-item__list
+    ul(v-if="brand && brand.data && brand.data.length").brands-item__list
       li(v-for="(item, index) in brand.data" :key="index").brands-item__card
         CatalogCardItem(:is-outlined="true" :item="item" title-length="25")
 </template>
@@ -83,11 +83,11 @@ export default class BrandsItem extends Vue {
 
     &__header {
       text-decoration: none;
+
       @include laptop() {
         display: flex;
         align-items: center;
         min-height: 60px;
-        margin-bottom: 32px;
       }
 
       &-inner {
@@ -134,6 +134,7 @@ export default class BrandsItem extends Vue {
 
       @include laptop() {
         display: flex;
+        margin-top: 32px;
       }
     }
 

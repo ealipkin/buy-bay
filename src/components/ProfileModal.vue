@@ -39,14 +39,11 @@ export default class ProfileModal extends Vue {
 
   showModal() {
     this.$modal.show('profile-modal');
-
-    console.log('show');
   }
 
   closeModal() {
     this.$modal.hide('profile-modal');
     this.modalClose();
-    console.log('close');
   }
 
   modalClose() {

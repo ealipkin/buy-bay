@@ -1,37 +1,39 @@
 <template lang="pug">
-  .search
-    .container.item-detail__breadcrumbs
-      Breadcrumbs(:links="breadCrumbs")
-      .search__result Результаты поиска «{{searchQuery}}»
-    .container.index__tabs
-      TabsNav(:tabs="tabs" v-on:change="selectTab")
+  .category.page.search
+    .search__wrapper
+      .container.page__breadcrumbs
+        Breadcrumbs(:links="breadCrumbs")
+      .container.page__header
+        .page__title.search__title «{{searchQuery}}»
+        .category__sort
+          SortSelect(:options="selectOptions")
+      .container.category__inner
+        .page__layout
+          .page__aside
+            CategoryFilter(:filters="filters").category__filters
+          .page__content
+            div(v-if="searchResults && searchResults.length").search__items
+            div(v-else).search__empty
+              .search__empty-icon
+                include ../assets/icons/search-big.svg
+              .search__empty-title Ничего не удалось найти
+              .search__empty-text Попробуте изменить запрос
 
-    section.index__section.index__section--catalog-slider
-      .section-header.section-header--hide-desktop
-        .index__section-title Популярные
-        router-link(to="#").index__link Показать еще
-      CatalogSlider(:items="popularItems" :class="{'tab--active': selectedTab === 1}" ref="slickPopular").tab
+    section.search__section
+      .section-header.section-header--offset-2
+        .section-title Пользователи рекомендуют
+        router-link(to="#").link._hide-desktop Смотреть все
+      .container
+        SimilarSlider(:items="recommendedItems").similar-slider--scroll
 
-    section.index__section.index__section--catalog-slider
-      .section-header.section-header--hide-desktop
-        .index__section-title Горящие группы
-        router-link(to="#").index__link Показать еще
-      CatalogSlider(:items="hotItems" :class="{'tab--active': selectedTab === 2}" ref="slickHot").tab
-
-    section.index__section.index__section--catalog-slider
-      .section-header.section-header--hide-desktop
-        .index__section-title Бестселлеры
-        router-link(to="#").index__link Показать еще
-      CatalogSlider(:items="bestItems" :class="{'tab--active': selectedTab === 3}" ref="slickBest").tab
-
-    section.index__section.index__section--brands
-      .index__container
-        .section-header
-          .index__section-title Лучшие бренды
-          router-link(to="#").index__link Показать еще
+    section.search__section
+      .section-header.section-header--offset-2
+        .section-title Лучшие бренды
+        router-link(to="#").link Показать еще
+      .container
         Brands(:brands="brands")
 
-    section.index__section.index__section--seo
+    section.search__section.search__section--seo
       SeoTexts(:texts="seoBlockDescription").container.index__seo
 
 </template>
@@ -39,127 +41,100 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import BigSlider from '@/components/BigSlider.vue';
-import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Brands from '@/components/Brands.vue';
-import Slick from 'vue-slick';
-import CatalogSlider from '@/components/CatalogSlider.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
-import FeaturesSlider from '@/components/FeaturesSlider.vue';
-import TopCategories from '@/components/TopCategories.vue';
 import { generateProducts, getRandomNumberBetween } from '@/utils/data';
 import TabsNav from '@/components/TabsNav.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { BreadcrumbLink } from '@/utils/models';
+import { BreadcrumbLink, Product } from '@/utils/models';
+import SimilarSlider from '@/components/AmountChooser/SimilarSlider.vue';
+import SortSelect from '@/components/SortSelect.vue';
+import CategoryFilter from '@/components/CategoryFilter.vue';
+import { FILTERS } from '@/utils/constants';
+
+const BRANDS = [
+  {
+    id: 1,
+    image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
+    brand: 'Adidas',
+    category: 'Спортивные товары',
+    rate: 5,
+    data: generateProducts(3),
+  },
+  {
+    id: 2,
+    image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
+    brand: 'Calvin klein',
+    category: 'Мужская и женская одежда',
+    rate: 4,
+    data: generateProducts(3),
+  },
+  {
+    id: 3,
+    image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
+    brand: 'Adidas',
+    category: 'Спортивные товары',
+    rate: 3,
+    data: generateProducts(3),
+  },
+  {
+    id: 4,
+    image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
+    brand: 'Calvin klein',
+    category: 'Мужская и женская одежда',
+    rate: 2,
+    data: generateProducts(3),
+  },
+];
+
+const BREADCRUMBS = [
+  { href: '/', label: 'Главная' },
+  { href: '/product/123', label: 'Мужской гардероб' },
+  { href: '/product/123', label: 'Сумки и рюкзаки' },
+  { href: '/', label: 'Рюкзаки', current: true },
+];
+
+const OPTIONS = [
+  { value: 'popular', label: 'По популярности' },
+  { value: 'price-asc', label: 'Цена по возрастанию' },
+  { value: 'price-desc', label: 'Цена по убыванию' },
+];
+
+const SEO = [
+  'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
+  'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
+];
 
 @Component({
   components: {
+    CategoryFilter,
+    SortSelect,
+    SimilarSlider,
     Breadcrumbs,
     TabsNav,
-    TopCategories,
-    FeaturesSlider,
     SeoTexts,
-    CatalogSlider,
     Brands,
-    CatalogCardItem,
-    BigSlider,
-    Slick,
   },
 })
 export default class Index extends Vue {
+  filters = FILTERS;
+
   searchQuery = '';
 
-  breadCrumbs: BreadcrumbLink[] = [
-    { href: '/', label: 'Главная' },
-    { href: '/product/123', label: 'Мужской гардероб' },
-    { href: '/product/123', label: 'Сумки и рюкзаки' },
-    { href: '/', label: 'Рюкзаки', current: true },
-  ];
+  breadCrumbs: BreadcrumbLink[] = BREADCRUMBS;
 
-  slidersMap = {};
+  recommendedItems = generateProducts(30);
 
-  selectedTab = 1;
+  selectOptions = OPTIONS;
 
-  popularItems = generateProducts(30);
+  seoBlockDescription = SEO;
 
-  hotItems = generateProducts(30);
+  brands = BRANDS;
 
-  bestItems = generateProducts(30);
-
-  seoBlockDescription = [
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-  ];
-
-  brands = [
-    {
-      id: 1,
-      image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
-      title: 'Adidas',
-      category: 'Спортивные товары',
-      rate: 5,
-      items: generateProducts(3),
-    },
-    {
-      id: 2,
-      image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
-      title: 'Calvin klein',
-      category: 'Мужская и женская одежда',
-      rate: 4,
-      items: generateProducts(3),
-    },
-    {
-      id: 3,
-      image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
-      title: 'Adidas',
-      category: 'Спортивные товары',
-      rate: 3,
-      items: generateProducts(3),
-    },
-    {
-      id: 4,
-      image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/60`,
-      title: 'Calvin klein',
-      category: 'Мужская и женская одежда',
-      rate: 2,
-      items: generateProducts(3),
-    },
-  ];
-
-  tabs = [
-    {
-      id: 1,
-      label: 'Популярные товары',
-      isActive: true,
-    },
-    {
-      id: 2,
-      label: 'Горящие группы',
-    },
-    {
-      id: 3,
-      label: 'Бестселлеры',
-    },
-  ];
+  searchResults: Product[] | null = null;
 
   mounted() {
-    this.slidersMap = {
-      1: { ref: this.$refs.slickPopular, init: false },
-      2: { ref: this.$refs.slickHot, init: false },
-      3: { ref: this.$refs.slickBest, init: false },
-    };
     this.searchQuery = this.$route.query.q as string;
-  }
-
-  selectTab(tabId) {
-    this.selectedTab = tabId;
-    const targetSlider = this.slidersMap[tabId];
-    if (!targetSlider.init) {
-      this.$nextTick(() => {
-        targetSlider.ref.reInit();
-      });
-      targetSlider.init = true;
-    }
   }
 }
 </script>
@@ -176,143 +151,78 @@ export default class Index extends Vue {
         font-size: 32px;
       }
     }
-  }
-  .index {
-    @include desktop() {
-      display: flex;
-      flex-direction: column;
-    }
-
-    &__tabs {
-      order: -1;
-      width: 100%;
-      display: none;
-      @include desktop() {
-        display: flex;
-        margin-top: 49px;
-        margin-bottom: 50px;
-      }
-    }
 
     &__section {
       background: white;
       padding-bottom: 15px;
-      margin-bottom: 15px;
-      width: 100%;
-      @include desktop() {
-        background: transparent;
-      }
-
-      &--categories {
-        @include desktop() {
-          margin-top: 73px;
-          padding-bottom: 70px;
-        }
-      }
+      margin-bottom: 13px;
 
       &--seo {
-        @include desktop() {
-          order: 2;
-          margin-top: 31px;
-          margin-bottom: 73px;
-        }
+        color: #7b8197;
+        margin-bottom: 0;
       }
 
-      &--slider {
-        padding-top: 12px;
+      @include laptop() {
+        background: transparent;
+        color: black;
 
-        @include desktop() {
-          padding-top: 40px;
-          order: -1;
+        &--seo {
+          margin-bottom: 100px;
         }
       }
+    }
 
-      &--catalog-slider {
-        @include desktop() {
-          order: -1;
-          margin: 0;
-          padding: 0;
-        }
+    &__wrapper {
+      padding-top: 1px;
+      padding-bottom: 1px;
+      box-sizing: border-box;
+      background: white;
+
+      @include laptop() {
+        background: transparent;
+        margin-bottom: 50px;
+      }
+    }
+
+    &__empty {
+      padding-bottom: 77px;
+      background: white;
+      border-radius: 6px;
+
+      @include laptop() {
+        padding-top: 58px;
+        padding-bottom: 114px;
       }
 
-      &--offset {
-      }
-
-      &--white {
-        @include laptop() {
-          background: white;
-        }
+      &-icon {
+        margin: 0 auto;
+        margin-top: 7px;
+        width: 80px;
       }
 
       &-title {
         font-size: 16px;
-        font-weight: 600;
+        font-weight: bold;
         color: #222222;
+        margin-top: 42px;
+        text-align: center;
 
         @include laptop() {
-          font-size: 32px;
+          font-size: 18px;
+          margin-top: 27px;
         }
       }
 
-      &-header {
-        display: flex;
-        align-items: center;
-        padding: 17px 12px;
-        justify-content: space-between;
-        max-width: 1170px;
-        margin-left: auto;
-        margin-right: auto;
-        @include desktop() {
-          padding: 0;
-          padding-top: 41px;
-          margin-bottom: 68px;
-        }
+      &-text {
+        margin-top: 14px;
+        font-size: 12px;
+        text-align: center;
+        color: #7b8197;
 
-        &--hide-desktop {
-          @include desktop() {
-            display: none;
-          }
+        @include laptop() {
+          font-size: 14px;
         }
       }
-    }
-
-    &__section--brands & {
-      @include desktop() {
-        &__link {
-          display: none;
-        }
-
-        &__section-header {
-          margin-bottom: 39px;
-        }
-      }
-    }
-
-    &__container {
-      @include desktop() {
-        @include container();
-      }
-    }
-
-    &__link {
-      font-size: 12px;
-      color: #496cff;
-
-      @include laptop() {
-        font-size: 14px;
-      }
-
-      @include desktop() {
-        margin-top: 11px;
-        margin-right: 16px;
-      }
-    }
-
-    &__seo {
-      color: #7b8197;
-      padding: 16px;
-      margin-bottom: 0;
-      padding-bottom: 0;
     }
   }
 </style>

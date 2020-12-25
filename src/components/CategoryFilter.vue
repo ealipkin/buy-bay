@@ -224,8 +224,8 @@ export default class CategoryFilter extends Vue {
       width: 60px;
       height: 70px;
       position: fixed;
-      bottom: 30px;
-      right: 30px;
+      bottom: 50px;
+      right: 20px;
       z-index: 10;
       background-size: contain;
       background: url(../assets/icons/filter-btn.svg) no-repeat center;

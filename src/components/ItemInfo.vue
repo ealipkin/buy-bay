@@ -53,21 +53,20 @@ export default class ItemInfo extends Vue {
   itemAmount = 1;
 
   settings = {
-    max: 100,
+    max: 99,
   };
 
-  toggleFav = () => {
-    console.log('toggleFav');
+  toggleFav() {
     this.item.isFavourite = !this.item.isFavourite;
-  };
+  }
 
-  buySelf = () => {
+  buySelf() {
     console.log('buySelf');
-  };
+  }
 
-  buyGroup = () => {
+  buyGroup() {
     console.log('buyGroup');
-  };
+  }
 
   divideNumberWithSpaces(number) {
     return divideNumberWithSpaces(number);

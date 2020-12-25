@@ -85,7 +85,6 @@ export default class Orders extends Vue {
 
   selectTab(tabId) {
     this.selectedTab = tabId;
-    console.log(this.activeOrders);
   }
 
   created() {

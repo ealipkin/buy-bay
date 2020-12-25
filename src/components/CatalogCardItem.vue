@@ -23,7 +23,7 @@
           ).catalog-card__feature
     .catalog-card__bottom
       .catalog-card__group
-        p.catalog-card__group-text {{item.groups || 0}} {{declOfNum(item.groups)}}
+        p.catalog-card__group-text {{groups}} {{declOfNum(groups)}}
           span  на покупку
         Rate(:rate="item.rate").catalog-card__group-rating.rate--small-star
 
@@ -54,6 +54,10 @@ export default class CatalogCardItem extends Vue {
 
   get truncateLength() {
     return this.titleLength || 35;
+  }
+
+  get groups(): number {
+    return this.item.group && this.item.group.data ? this.item.group.data.length : 0;
   }
 
   declOfNum = (groups) => declOfNum(groups, ['группа', 'группы', 'групп']);

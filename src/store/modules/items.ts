@@ -55,7 +55,6 @@ const mutationTypes = {
 
 const mutations = {
   [mutationTypes.SET_POPULAR_ITEMS](state: ItemsState, payload: Product[]) {
-    console.log('SET_POPULAR_ITEMS -> ', payload);
     state.popular.items = payload;
   },
   [mutationTypes.SET_POPULAR_ITEMS_LOADED](state: ItemsState, payload: boolean) {

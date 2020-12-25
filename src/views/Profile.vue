@@ -40,7 +40,7 @@ import AddressItem from '@/components/AddressItem.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
 import AddressModal from '@/components/AddressModal.vue';
 import CreditCardModal from '@/components/CreditCardModal.vue';
-import { BreadcrumbLink, AddressItem as AddressItemType } from '@/utils/models';
+import { BreadcrumbLink} from '@/utils/models';
 import { createProfileUser } from '@/utils/data';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
@@ -66,48 +66,45 @@ export default class Profile extends Vue {
 
   user = createProfileUser(null, 1);
 
-  openAddressModal = (data) => {
+  openAddressModal(data) {
     const modalComponent: any = this.$refs.addressModal;
 
     modalComponent.showModal(data);
-    console.log('open address modal');
-  };
+  }
 
-  addressChange = ({ item, index }) => {
+  addressChange({ item, index }) {
     if (item.isActive) {
       return;
     }
 
     this.user.addresses.forEach((address) => address.isActive = false);
     Vue.set(this.user.addresses, index, { ...item, isActive: true });
-  };
+  }
 
-  removeAddress = (id: string) => {
+  removeAddress(id: string) {
     this.user.addresses = this.user.addresses.filter((address) => address.id !== id);
-  };
+  }
 
   openAddressEditor(id: string) {
-    console.log('edit address:', id);
     const pickedAddress = this.user.addresses.find((address) => address.id === id) || null;
     this.openAddressModal(pickedAddress);
   }
 
-  openCreditCardModal = () => {
+  openCreditCardModal() {
     const modalComponent: any = this.$refs.creditCardModal;
     modalComponent.showModal();
-    console.log('open creditCard modal');
-  };
+  }
 
-  cardChange = ({ item, index }) => {
+  cardChange({ item, index }) {
     if (item.isActive) {
       return;
     }
 
     this.user.cards.forEach((card) => card.isActive = false);
     Vue.set(this.user.cards, index, { ...item, isActive: true });
-  };
+  }
 
-  removeCard = (id: string) => {
+  removeCard(id: string) {
     this.user.cards = this.user.cards.filter((card) => card.id !== id);
   }
 }

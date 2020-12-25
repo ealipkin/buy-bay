@@ -23,9 +23,7 @@
       .section__container
         .section-header
           .section-title Пользователи рекомендуют
-        Slick(ref="slick" :options="sliderSettings").similar-slider
-          div(v-for="item in similarItems"  :key="item.id").similar-slider__wrapper
-            CatalogCardItem(:item="item").catalog-card--similar.similar-slider__slide
+        SimilarSlider(:items="similarItems" v-if="similarItems")
 
     section.section.section--brands
       .section__container
@@ -56,9 +54,11 @@ import CategoryFilter from '@/components/CategoryFilter.vue';
 import { ADVANTAGES, FILTERS } from '@/utils/constants';
 import Pagination from '@/components/Pagination.vue';
 import Slick from 'vue-slick';
+import SimilarSlider from '@/components/AmountChooser/SimilarSlider.vue';
 
 @Component({
   components: {
+    SimilarSlider,
     Pagination,
     CategoryFilter,
     SortSelect,
@@ -97,34 +97,6 @@ export default class Index extends Vue {
     'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
     'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
   ];
-
-  sliderSettings = {
-    mobileFirst: true,
-    arrows: false,
-    responsive: [
-      {
-        breakpoint: '300',
-        settings: 'unslick',
-      },
-      {
-        breakpoint: '767',
-        settings: {
-          dots: true,
-          slidesToShow: 5,
-          slidesToScroll: 5,
-        },
-      },
-      {
-        breakpoint: '1296',
-        settings: {
-          arrows: true,
-          dots: false,
-          slidesToShow: 5,
-          slidesToScroll: 5,
-        },
-      },
-    ],
-  };
 
   advantagesList = ADVANTAGES;
 

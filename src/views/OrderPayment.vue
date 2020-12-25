@@ -67,47 +67,45 @@ export default class OrderPayment extends Vue {
     { href: '/product/:id/payment', label: 'Рюкзак', current: true },
   ];
 
-    user = createProfileUser(null, 1);
+  user = createProfileUser(null, 1);
 
-  openAddressModal = () => {
+  openAddressModal() {
     const modalComponent: any = this.$refs.addressModal;
     modalComponent.showModal();
-    console.log('open address modal');
-  };
+  }
 
-  addressChange = ({ item, index }) => {
+  addressChange({ item, index }) {
     if (item.isActive) {
       return;
     }
 
     this.user.addresses.forEach((address) => address.isActive = false);
     Vue.set(this.user.addresses, index, { ...item, isActive: true });
-  };
+  }
 
-  removeAddress = (id: string) => {
+  removeAddress(id: string) {
     this.user.addresses = this.user.addresses.filter((address) => address.id !== id);
-  };
+  }
 
-  openAddressEditor = (id: string) => {
+  openAddressEditor(id: string) {
     console.log('edit address:', id);
-  };
+  }
 
-  openCreditCardModal = () => {
+  openCreditCardModal() {
     const modalComponent: any = this.$refs.creditCardModal;
     modalComponent.showModal();
-    console.log('open creditCard modal');
-  };
+  }
 
-  cardChange = ({ item, index }) => {
+  cardChange({ item, index }) {
     if (item.isActive) {
       return;
     }
 
     this.user.cards.forEach((card) => card.isActive = false);
     Vue.set(this.user.cards, index, { ...item, isActive: true });
-  };
+  }
 
-  removeCard = (id: string) => {
+  removeCard(id: string) {
     this.user.cards = this.user.cards.filter((card) => card.id !== id);
   }
 
@@ -296,7 +294,7 @@ export default class OrderPayment extends Vue {
       }
     }
 
-        &__cards {
+    &__cards {
       padding: 16px;
       padding-bottom: 24px;
       background-color: #fff;

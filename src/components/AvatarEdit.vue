@@ -19,8 +19,6 @@ export default class Main extends Vue {
 
   setImage(output) {
     this.selectedImage = output.dataUrl;
-    console.log(output);
-    console.log('setImage');
   }
 }
 </script>

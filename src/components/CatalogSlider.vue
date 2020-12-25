@@ -13,7 +13,6 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import Slick from 'vue-slick';
-import { generateProducts } from '@/utils/data';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import { Product } from '@/utils/models';
 import { debounce } from '@/utils/common';
@@ -57,7 +56,7 @@ export default class BigSlider extends Vue {
 
   laptopSettings = {
     dots: true,
-    arrows: false,
+    arrows: true,
     draggable: false,
     rows: 2,
     slidesPerRow: 5,
@@ -108,6 +107,14 @@ export default class BigSlider extends Vue {
 
 <style lang="scss">
   .catalog-slider {
+    .slick-arrow {
+      display: none;
+
+      @media (min-width: 1350px) {
+        display: block;
+      }
+    }
+
     .slick-prev {
       @include desktop() {
         left: -63px;

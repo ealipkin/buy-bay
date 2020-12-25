@@ -4,6 +4,12 @@
   }
 }
 
+._hide-desktop {
+  @include desktop() {
+    display: none;
+  }
+}
+
 
 .hidden {
   display: none;

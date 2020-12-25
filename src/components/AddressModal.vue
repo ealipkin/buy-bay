@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { AddressItem } from '@/utils/models';
 import Recipient from '@/components/Recipient.vue';
 import Destination from '@/components/Destination.vue';
@@ -30,8 +30,7 @@ import Destination from '@/components/Destination.vue';
 export default class AddressModal extends Vue {
   addressItem: AddressItem | object = {};
 
-  addAddress = () => {
-    console.log('add address');
+  addAddress() {
     this.closeModal();
   }
 
@@ -43,18 +42,16 @@ export default class AddressModal extends Vue {
     }
 
     this.$modal.show('address-modal');
-    console.log('show');
   }
 
-  closeModal = () => {
+  closeModal() {
     this.$modal.hide('address-modal');
     this.modalClose();
-    console.log('close');
-  };
+  }
 
-  modalClose = () => {
+  modalClose() {
     document.body.classList.remove('_hidden');
-  };
+  }
 }
 </script>
 

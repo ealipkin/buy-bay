@@ -13,7 +13,7 @@
         ItemShopCard(v-if="item.shop" :shop="item.shop").item-detail__item.item-detail__item--shop
         DeliveryInfo(v-if="item.delivery" :deliveryItem="item.delivery").item-detail__delivery.item-detail__item.item-detail__item--delivery
 
-    .item-detail__section
+    div(v-if="similarItems").item-detail__section
       .item-detail__title Похожие товары
       Slick(ref="slick" :options="sliderSettings").similar-slider
         div(v-for="item in similarItems"  :key="item.id" v-if="similarItems").similar-slider__wrapper
@@ -27,7 +27,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import Slick from 'vue-slick';
-import { generateProducts } from '@/utils/data';
 import ItemPreview from '@/components/ItemPreview.vue';
 import ItemInfo from '@/components/ItemInfo.vue';
 import ItemGroups from '@/components/ItemGroups.vue';
@@ -122,7 +121,7 @@ export default class ItemDetail extends Vue {
     return this.item && this.item.group && this.item.group.data;
   }
 
-  similarItems = generateProducts(8);
+  similarItems: Product[] | null = null;
 
   sliderSettings = PRODUCT_SLIDER_SETTINGS;
 
@@ -145,6 +144,10 @@ export default class ItemDetail extends Vue {
           this.seo = response.seo_block;
           this.item = response;
         }
+      });
+    createRequest('get', `${endpoints.product}/${productId}/related`)
+      .then((res) => {
+        this.similarItems = res.data.data;
       });
   }
 

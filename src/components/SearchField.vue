@@ -1,7 +1,7 @@
 <template lang="pug">
   form(@submit="searchSubmit" :class="{'search-field--focused': isFocused}").search-field
     .search-field__inner
-      input.search-field__input(placeholder="Найти товар" v-model="search" @focus="handleFocus")
+      input.search-field__input(placeholder="Найти товар" v-model="search" @focus="handleFocus" ref="input" @blur="handleBlur")
     ul(v-if="showResults").search-field__results
       li(v-for="item in searchResults" @click="itemClick(item)").search-field__item {{item}}
     button(type="button" @click="handleClear").search-field__clear Отмена
@@ -34,6 +34,7 @@ export default class SearchField extends Vue {
     if (this.search && this.search.length) {
       router.push({ path: '/search', query: { q: this.search } });
     }
+    (this.$refs.input as any).blur();
   }
 
   itemClick(item) {
@@ -68,6 +69,7 @@ export default class SearchField extends Vue {
   }
 
   mounted() {
+    this.search = this.$route.query.q as string;
     clickOutside(this.$el, (e) => {
       const isProfileSearch = e.target.closest('.header-main__profile-search');
       const isPrevent = isProfileSearch;

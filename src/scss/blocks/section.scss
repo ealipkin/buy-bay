@@ -1,0 +1,121 @@
+.section {
+  background: white;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  @include desktop() {
+    background: transparent;
+  }
+
+  &__container {
+    @include desktop() {
+      @include container();
+    }
+  }
+
+
+  &--categories {
+    @include desktop() {
+      margin-top: 73px;
+      padding-bottom: 70px;
+    }
+  }
+
+  &--seo {
+    @include desktop() {
+      order: 2;
+      margin-top: 31px;
+      margin-bottom: 73px;
+    }
+  }
+
+  &--slider {
+    padding-top: 12px;
+
+    @include desktop() {
+      padding-top: 40px;
+      order: -1;
+    }
+  }
+
+  &--catalog-slider {
+    @include desktop() {
+      order: -1;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  &--white {
+    @include laptop() {
+      background: white;
+    }
+  }
+
+  &-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222222;
+
+    @include laptop() {
+      font-size: 32px;
+    }
+  }
+}
+
+.section--brands {
+  @include desktop() {
+    .section-link {
+      display: none;
+    }
+
+    .section-header {
+      margin-bottom: 39px;
+    }
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  padding: 17px 12px;
+  justify-content: space-between;
+  max-width: 1170px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include desktop() {
+    padding: 0;
+    padding-top: 41px;
+    margin-bottom: 68px;
+  }
+
+  &--hide-desktop {
+    @include desktop() {
+      display: none;
+    }
+  }
+
+  &--offset-2 {
+    margin-bottom: 0;
+
+    @include desktop() {
+      margin-bottom: 44px;
+    }
+  }
+}
+
+
+.section-link {
+  font-size: 12px;
+  color: #496cff;
+
+  @include laptop() {
+    font-size: 14px;
+  }
+
+  @include desktop() {
+    margin-top: 11px;
+    margin-right: 16px;
+  }
+}
