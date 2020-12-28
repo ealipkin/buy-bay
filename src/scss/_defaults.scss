@@ -55,7 +55,6 @@
 }
 
 
-
 .paginator {
   @include clearList();
   border-radius: 3px;
@@ -106,3 +105,10 @@
   height: 100%;
 }
 
+.profile-page {
+  margin-top: 20px;
+
+  @include laptop() {
+    margin-top: 40px;
+  }
+}

@@ -28,7 +28,6 @@ export default {
     emit(value) {
       this.$emit('amount-change', value);
       this.input = value;
-      this.setFocus();
     },
     setFocus() {
       this.$nextTick(() => {

@@ -91,6 +91,7 @@ export default class SimilarSlider extends Vue {
 
     &--scroll &__wrapper {
       margin-right: 8px;
+      width: auto;
 
       @include tablet() {
         margin-right: 0;

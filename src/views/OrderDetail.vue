@@ -2,10 +2,10 @@
   .order-detail
     .order-detail__breadcrumbs
       Breadcrumbs(:links="breadCrumbs")
-    h1.order-detail__title Заказ отправлен продавцом
+    h1.order-detail__title Заказ № {{item.id}} отправлен продавцом
     .order-detail__main
       .order-detail__left-col
-        OrderInfo(:item="item" :hideStatus="true").order-detail__product.order-detail__item
+        OrderInfo(:item="item" :hideStatus="false").order-detail__product.order-detail__item
         OrderStatusCard(:item="item" v-if="isMobile").order-detail__status.order-detail__item
         DeliveryAddress(:contacts="item.contacts").order-detail__address.order-detail__item
         DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").order-detail__delivery.order-detail__item

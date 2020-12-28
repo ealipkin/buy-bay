@@ -6,7 +6,7 @@
     p.order-status-card__text Это означает, что скоро, посылка дойдет до вас. Если это уже произошло, вы можете оставить отзыв
 
     OrderResultTable(:meta="item.meta").order-status-card__table
-    router-link(to="#").order-status-card__link Пожаловаться
+    //router-link(to="#").order-status-card__link Пожаловаться
 
 </template>
 
@@ -63,6 +63,7 @@ export default class OrderStatusCard extends Vue {
       color: $grey-2;
       margin: 0;
       margin-bottom: 20px;
+      margin-top: 17px;
 
       @include tablet() {
         font-size: 14px;

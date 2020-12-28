@@ -11,7 +11,7 @@
       span.order__box
         include ../assets/icons/group-button.svg
         span.order__price {{divideNumberWithSpaces(order.price)}} ₽
-        router-link(:to="link").button {{buttonText}}
+        router-link(:to="link" v-if="!hideButton").button.order__button {{buttonText}}
 </template>
 
 <script lang="ts">
@@ -20,7 +20,7 @@ import OrderTimer from '@/components/OrderTimer.vue';
 import OrderStatus from '@/components/OrderStatus.vue';
 
 import { divideNumberWithSpaces } from '@/utils/common';
-import { ORDER_STATUSES } from '@/utils/models';
+import { ORDER_STATUSES, OrderItem as OrderItemModel } from '@/utils/models';
 
 @Component({
   components: {
@@ -29,13 +29,15 @@ import { ORDER_STATUSES } from '@/utils/models';
   },
 })
 export default class OrderItem extends Vue {
-  @Prop() public order!: object;
+  @Prop() public order!: OrderItemModel;
 
   @Prop() public link!: string;
 
   @Prop() public buttonText!: string;
 
   @Prop() public isGroup!: boolean;
+
+  @Prop() public hideButton!: boolean;
 
   ORDER_STATUSES = ORDER_STATUSES;
 
@@ -68,6 +70,7 @@ export default class OrderItem extends Vue {
 
     &__info {
       min-height: 28px;
+      display: flex;
     }
 
     &__img {
@@ -113,7 +116,7 @@ export default class OrderItem extends Vue {
       font-weight: 600;
       text-decoration: none;
       display: block;
-
+      @include link();
       @include laptop() {
         font-size: 18px;
         font-weight: bold;
@@ -132,15 +135,19 @@ export default class OrderItem extends Vue {
     }
 
     &__box {
-      display: none;
+      display: flex;
+
+      svg {
+        display: none;
+      }
 
       @include laptop() {
         min-height: 40px;
-        display: flex;
         align-items: center;
         margin-top: 20px;
 
         svg {
+          display: block;
           opacity: 0.4;
           color: #341c05;
           width: 20px;
@@ -156,10 +163,13 @@ export default class OrderItem extends Vue {
     }
 
     &__price {
+      color: $blue;
+      font-size: 14px;
+      font-weight: 600;
+
       @include laptop() {
         font-size: 24px;
         color: $black-1;
-        font-weight: 600;
         vertical-align: middle;
         margin-right: 32px;
         position: relative;
@@ -167,12 +177,15 @@ export default class OrderItem extends Vue {
     }
 
     &__button {
+      display: none;
       @include laptop() {
+        display: block;
         font-size: 14px;
         font-weight: bold;
         padding: 9px 10px 12px;
         border-radius: 4px;
       }
     }
+
   }
 </style>

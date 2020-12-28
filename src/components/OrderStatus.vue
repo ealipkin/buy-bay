@@ -2,7 +2,8 @@
   span
     template(v-if="isGroup")
       span(v-if="time && users.length < maxUsers").order-status
-        img(v-for="user in users" :src="user.avatar").order-status__img
+        .order-status__images
+          img(v-for="user in users.reverse()" :src="user.avatar").order-status__img.order-status__img--avatar
         span участников: {{users.length}} из {{maxUsers}}
 
       span(v-if="time && users.length >= maxUsers").order-status.order-status--success
@@ -90,31 +91,31 @@ export default class OrderStatus extends Vue {
       font-weight: bold;
     }
 
+    &__images {
+      display: flex;
+      flex-direction: row-reverse;
+
+      @include laptop() {
+        margin-right: 26px;
+      }
+    }
+
     &__img {
       width: 18px;
       height: 18px;
       border-radius: 50%;
       border: 1px solid #fff;
-      margin-right: -9px;
+      margin-right: 8px;
       position: relative;
       z-index: 2;
 
-      &:nth-of-type(2) {
-        z-index: 1;
-      }
-
-      &:last-of-type {
-        margin-right: 8px;
-        z-index: 0;
+      &--avatar {
+        margin-right: -9px;
       }
 
       @include laptop() {
         width: 24px;
         height: 24px;
-
-        &:last-of-type {
-          margin-right: 16px;
-        }
       }
     }
 

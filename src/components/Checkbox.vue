@@ -31,6 +31,7 @@ export default class Checkbox extends Vue {
 <style scoped lang="scss">
   .checkbox {
     display: flex;
+    cursor: pointer;
 
     &__icon {
       width: 16px;

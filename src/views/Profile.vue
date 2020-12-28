@@ -1,7 +1,6 @@
 <template lang="pug">
-  .profile
+  .profile.profile-page
     .page.page--aside-tablet
-      Breadcrumbs.profile__breadcrumbs(:links="Breadcrumbs")
       .page__layout
         .page__aside.profile__aside
           h1.page__title Мой профиль
@@ -40,7 +39,7 @@ import AddressItem from '@/components/AddressItem.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
 import AddressModal from '@/components/AddressModal.vue';
 import CreditCardModal from '@/components/CreditCardModal.vue';
-import { BreadcrumbLink} from '@/utils/models';
+import { BreadcrumbLink } from '@/utils/models';
 import { createProfileUser } from '@/utils/data';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 

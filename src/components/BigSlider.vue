@@ -63,8 +63,15 @@ export default class BigSlider extends Vue {
 
 <style lang="scss">
   .big-slider {
+    .slick-dotted.slick-slider {
+      margin-bottom: 20px;
+
+      @include laptop() {
+        margin-bottom: 0;
+      }
+    }
     .slick-dots {
-      bottom: -21px;
+      bottom: -8px;
     }
 
     .slick-arrow {
@@ -141,7 +148,7 @@ export default class BigSlider extends Vue {
   .big-slider {
     margin-left: -10px;
     margin-right: -10px;
-    margin-bottom: 36px;
+    margin-bottom: 28px;
 
     @include laptop() {
       position: relative;
@@ -176,7 +183,7 @@ export default class BigSlider extends Vue {
 
     &__slider {
       @include laptop() {
-        width: 61%;
+        width: 60.7%;
         margin-right: 16px;
         margin-bottom: -5px;
         border-radius: 8px;
@@ -185,7 +192,7 @@ export default class BigSlider extends Vue {
 
     &__link {
       display: block;
-      margin-bottom: 13px;
+      margin-bottom: 25px;
       position: relative;
 
       &:after {

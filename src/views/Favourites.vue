@@ -1,8 +1,6 @@
 <template lang="pug">
-  .favourites
+  .favourites.profile-page
     .page.page--aside-tablet.category
-      .container.page__breadcrumbs
-        Breadcrumbs.favourites__breadcrumbs(:links="Breadcrumbs")
       .category__inner.container
         .page__layout
           .page__aside.favourites__aside
@@ -13,11 +11,13 @@
             .category__header
               TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.favourites__tabs
               SortSelect(:options="options").favourites__select
+
             div(:class="{'hidden': selectedTab !== 'items'}").category__list
               .category__item(v-for="(item, index) in favouritesItems" :key="index")
-                CatalogCardItem(:item="item")
+                CatalogCardItem(:item="item").catalog-card--fav
               .category__pagination
                 Pagination(:moreCount="50")
+
             div(:class="{'hidden': selectedTab !== 'shops'}").category__list
               .category__item.category__item--shop(v-for="(shop, index) in favouritesShops" :key="index")
                 ShopCard(:shop="shop")
@@ -28,13 +28,11 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import ProfileNav from '@/components/ProfileNav.vue';
 import TabsNav from '@/components/TabsNav.vue';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Select from '@/components/Select.vue';
 import Pagination from '@/components/Pagination.vue';
-import { BreadcrumbLink } from '@/utils/models';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
 import { generateProducts, generateShops } from '@/utils/data';
@@ -48,7 +46,6 @@ const PAGE_TITLE = 'Избранное';
   components: {
     ShopCard,
     SortSelect,
-    Breadcrumbs,
     ProfileNav,
     TabsNav,
     CatalogCardItem,
@@ -59,25 +56,19 @@ const PAGE_TITLE = 'Избранное';
 export default class Favourites extends Vue {
   @Action('app/setProfilePage') setProfilePage;
 
-  Breadcrumbs: BreadcrumbLink[] = [
-    { href: '/', label: 'Главная' },
-    { href: '/profile', label: 'Мой профиль' },
-    { label: 'Избранное', current: true },
-  ];
-
   profileMenuItems = PROFILE_MENU_ITEMS;
 
-  selectedTab = 'shops';
+  selectedTab = 'items';
 
   tabs = [
     {
       id: 'items',
       label: 'Избранные товары',
+      isActive: true,
     },
     {
       id: 'shops',
-      label: 'Магазины',
-      isActive: true,
+      label: 'Избранные бренды',
     },
   ];
 
@@ -126,11 +117,15 @@ export default class Favourites extends Vue {
       padding-bottom: 155px;
     }
 
-    &__breadcrumbs {
-      display: none;
+    .category__header {
+      @include laptop() {
+        margin-bottom: 19px;
+      }
+    }
 
-      @include tablet() {
-        display: flex;
+    .page__title {
+      @include laptop() {
+        margin-bottom: 40px;
       }
     }
 
@@ -140,9 +135,6 @@ export default class Favourites extends Vue {
       @include tablet() {
         display: block;
       }
-    }
-
-    &__tabs {
     }
 
     &__select {

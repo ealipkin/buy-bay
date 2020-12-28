@@ -1,7 +1,6 @@
 <template lang="pug">
-  .orders
+  .orders.profile-page
     .page.page--aside-tablet
-      Breadcrumbs(:links="Breadcrumbs").orders__breadcrumbs
       .page__layout
         .page__aside.orders__aside
           h1.page__title Мои заказы
@@ -14,8 +13,8 @@
               v-for="order in activeOrders"
               :order="order"
               :key="order.id"
-              :link="'/profile/groups/' + order.id"
-              buttonText="Пригласить друзей"
+              :link="'/profile/orders/' + order.id"
+              :hideButton="true"
             ).orders__item
           ul(v-if="selectedTab === 2").orders__list
             OrderItem(
@@ -23,6 +22,7 @@
               :order="order"
               :key="order.id"
               :link="'/profile/orders/' + order.id"
+              :hideButton="true"
               buttonText="Купить одному"
             ).orders__item
           Pagination(:moreCount="100").orders__pagination
@@ -32,12 +32,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import ProfileNav from '@/components/ProfileNav.vue';
 import TabsNav from '@/components/TabsNav.vue';
 import OrderItem from '@/components/OrderItem.vue';
 import Pagination from '@/components/Pagination.vue';
-import { BreadcrumbLink } from '@/utils/models';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
 import { generateFailOrders, generateOrders } from '@/utils/data';
@@ -47,7 +45,6 @@ const PAGE_TITLE = 'Мои заказы';
 
 @Component({
   components: {
-    Breadcrumbs,
     ProfileNav,
     TabsNav,
     OrderItem,
@@ -56,12 +53,6 @@ const PAGE_TITLE = 'Мои заказы';
 })
 export default class Orders extends Vue {
   @Action('app/setProfilePage') setProfilePage;
-
-  Breadcrumbs: BreadcrumbLink[] = [
-    { href: '/', label: 'Главная' },
-    { href: '/profile', label: 'Мой профиль' },
-    { label: 'Мои заказы', current: true },
-  ];
 
   profileMenuItems = PROFILE_MENU_ITEMS;
 
@@ -108,14 +99,6 @@ export default class Orders extends Vue {
     padding-top: 0;
     background-color: $grey-3;
     padding-bottom: 155px;
-  }
-
-  &__breadcrumbs {
-    display: none;
-
-    @include tablet() {
-      display: flex;
-    }
   }
 
   &__aside {

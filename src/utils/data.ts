@@ -26,15 +26,18 @@ const FEATURES: ProductFeature[] = [
   {
     type: PRODUCT_FEATURES.DELIVERY,
     icon: '',
+    title: '',
   },
   {
     type: PRODUCT_FEATURES.DISCOUNT,
     icon: '',
+    title: '',
   },
   {
     type: PRODUCT_FEATURES.HOT,
     icon: '',
     time: featureDate(),
+    title: '',
   }];
 
 const createFeatures = () => {

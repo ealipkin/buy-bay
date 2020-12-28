@@ -151,6 +151,7 @@ export default class BigSlider extends Vue {
       margin-left: 6px;
       display: flex;
       flex-direction: column;
+      outline: none;
 
       &:first-child {
         padding-left: 10px;

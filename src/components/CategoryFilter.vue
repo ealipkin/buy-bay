@@ -260,6 +260,8 @@ export default class CategoryFilter extends Vue {
 
     &__accordion-item {
       @include clearButton();
+      cursor: pointer;
+      outline: none;
       background: #f9f9f9;
       display: flex;
       width: 100%;

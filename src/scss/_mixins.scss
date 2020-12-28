@@ -24,11 +24,21 @@
   }
 }
 
+@mixin link() {
+  transition: color 0.5s ease;
+  text-decoration: none;
+
+  &:hover {
+    color: $blue;
+  }
+}
+
 @mixin container() {
   max-width: 1190px;
   padding-left: 10px;
   padding-right: 10px;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @mixin clearList() {

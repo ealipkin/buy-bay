@@ -1,6 +1,6 @@
 <template lang="pug">
   .item-shop-card
-    .item-shop-card__title.content-title Магазин
+    .item-shop-card__title.content-title Бренд
     ShopInfo(:shop="shop")
 
 </template>

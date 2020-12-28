@@ -8,13 +8,14 @@
         div(v-for="(imageItem, index) in item.images.detail" :key="index" :class="{'--video': imageItem.isVideo }").item-preview__top-slide
           img(:src="imageItem.url")
       .item-preview__counter {{selectedIndex + 1}}/ {{item.images.detail.length}}
-    .item-preview__bottom
-      div(
-        v-for="(imageItem, index) in item.images.detail" :key="index"
-        :class="{'item-preview__bottom-slide--video': imageItem.isVideo , 'item-preview__bottom-slide--selected': selectedIndex === index}"
-        @click='goToSlide(index)'
-      ).item-preview__bottom-slide
-        img(:src="imageItem.url")
+    div(:class="{'left-gradient': showLeftGradient, 'right-gradient': showRightGradient}").item-preview__bottom-wrapper
+      div(@scroll="onBottomScroll" ref="bottomSlider").item-preview__bottom
+        div(
+          v-for="(imageItem, index) in item.images.detail" :key="index"
+          :class="{'item-preview__bottom-slide--video': imageItem.isVideo , 'item-preview__bottom-slide--selected': selectedIndex === index}"
+          @click='goToSlide(index)'
+        ).item-preview__bottom-slide
+          img(:src="imageItem.url")
 
 </template>
 
@@ -32,6 +33,10 @@ export default class ItemPreview extends Vue {
   @Prop() public item!: Product;
 
   selectedIndex = 0;
+
+  showLeftGradient = false;
+
+  showRightGradient = false;
 
   topSliderSettings = {
     // asNavFor: '.item-preview__bottom-slider',
@@ -54,6 +59,20 @@ export default class ItemPreview extends Vue {
 
   handleAfterChange(event, slick, currentSlide) {
     this.selectedIndex = currentSlide;
+  }
+
+  mounted() {
+    this.updateGradients();
+  }
+
+  onBottomScroll() {
+    this.updateGradients();
+  }
+
+  updateGradients() {
+    const bottomSlider: HTMLElement = this.$refs.bottomSlider as HTMLElement;
+    this.showLeftGradient = bottomSlider.scrollLeft !== 0;
+    this.showRightGradient = bottomSlider.scrollWidth - bottomSlider.scrollLeft > bottomSlider.offsetWidth;
   }
 }
 
@@ -93,6 +112,10 @@ export default class ItemPreview extends Vue {
 
     &__top {
       position: relative;
+
+      .slick-slider {
+        touch-action: unset;
+      }
     }
 
     &__bottom {
@@ -101,6 +124,38 @@ export default class ItemPreview extends Vue {
       align-items: center;
       overflow: auto;
       padding: 2px 1px;
+      height: 60px;
+      box-sizing: border-box;
+
+      &-wrapper.right-gradient {
+        &:after {
+          content: '';
+          width: 20px;
+          height: 100%;
+          position: absolute;
+          z-index: 10;
+          right: 0;
+          top: 0;
+          background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 84%);
+        }
+      }
+
+      &-wrapper.left-gradient {
+        &:before {
+          content: '';
+          width: 20px;
+          height: 100%;
+          position: absolute;
+          z-index: 10;
+          left: 0;
+          top: 0;
+          background: linear-gradient(to right, rgba(255, 255, 255, 1) 16%, rgba(255, 255, 255, 0) 100%);
+        }
+      }
+
+      &-wrapper {
+        position: relative;
+      }
     }
 
     &__bottom-slide {

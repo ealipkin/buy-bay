@@ -12,7 +12,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { MenuChildItem } from '@/utils/models';
 
 @Component
-export default class CatalogMenu extends Vue {
+export default class CatalogNav extends Vue {
   @Prop() public items!: MenuChildItem[];
 }
 </script>

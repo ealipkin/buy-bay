@@ -1,39 +1,45 @@
 <template lang="pug">
-  router-link(:to="{path: `/product/${item.id}`}" :class="{'--isOutlined': isOutlined }").catalog-card
-    .catalog-card__top
-      .catalog-card__img(:style="{backgroundImage: `url(${item.images.preview})`}")
-        //:style="{backgroundImage: `url(${promoImage.image})`}"
-        // img(:src="item.images.preview")
-      ul(v-if="item.features && item.features.length").catalog-card__features
-        template(v-if="item.features.find(item => item.time)")
-          li(
-            v-for="feature in item.features"
-            v-if="feature.time"
-            v-bind:class="`catalog-card__feature--${feature.type} ${feature.time ? 'catalog-card__feature--time' : ''}`"
-          ).catalog-card__feature
-            vac(:end-time="feature.time" v-if="feature.type === 'hot'").catalog-card__feature-time
-              template(v-slot:process="{ timeObj }").group-item__timer-inner
-                span {{ `${timeObj.h}:${timeObj.m}:${timeObj.s}`}}
-              template(v-slot:finish)
-        template(v-else)
-          li(
-            v-for="feature in item.features"
-            v-if="!feature.time"
-            v-bind:class="`catalog-card__feature--${feature.type} ${feature.time ? 'catalog-card__feature--time' : ''}`"
-          ).catalog-card__feature
-    .catalog-card__bottom
-      .catalog-card__group
-        p.catalog-card__group-text {{groups}} {{declOfNum(groups)}}
-          span  на покупку
-        Rate(:rate="item.rate").catalog-card__group-rating.rate--small-star
+  div(:class="{'--isOutlined': isOutlined }").catalog-card
+    button(@click="toggleFav" :class="{'catalog-card__fav--active': item.isFavourite}").catalog-card__fav
+      include ../assets/icons/heart.svg
 
-      a.catalog-card__title-link
-        h3.catalog-card__title {{item.title | truncate(truncateLength)}}
-      .catalog-card__price
-        p.catalog-card__actual-price
-          include ../assets/icons/group-button.svg
-          span {{divideNumberWithSpaces(item.groupPrice)}} ₽
-        p.catalog-card__old-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
+    router-link(:to="{path: `/product/${item.id}`}").catalog-card__inner
+      .catalog-card__top
+        .catalog-card__img(:style="{backgroundImage: `url(${item.images.preview})`}")
+          //:style="{backgroundImage: `url(${promoImage.image})`}"
+          // img(:src="item.images.preview")
+        ul(v-if="item.features && item.features.length").catalog-card__features
+          template(v-if="item.features.find(item => item.time)")
+            li(
+              v-for="feature in item.features"
+              v-if="feature.time"
+              v-bind:class="`${feature.icon} ${feature.time ? 'catalog-card__feature--time' : ''}`"
+              :title="feature.title"
+            ).catalog-card__feature
+              vac(:end-time="feature.time" v-if="feature.time").catalog-card__feature-time
+                template(v-slot:process="{ timeObj }").group-item__timer-inner
+                  span {{ `${timeObj.h}:${timeObj.m}:${timeObj.s}`}}
+                template(v-slot:finish)
+          template(v-else)
+            li(
+              v-for="feature in item.features"
+              v-if="!feature.time"
+              v-bind:class="feature.icon"
+              :title="feature.title"
+            ).catalog-card__feature
+      .catalog-card__bottom
+        .catalog-card__group
+          p.catalog-card__group-text {{groups}} {{declOfNum(groups)}}
+            span  на покупку
+          Rate(:rate="item.rate").catalog-card__group-rating.rate--small-star
+
+        a.catalog-card__title-link
+          h3.catalog-card__title {{item.title | truncate(truncateLength)}}
+        .catalog-card__price
+          p.catalog-card__old-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
+          p.catalog-card__actual-price
+            include ../assets/icons/group-button.svg
+            span {{divideNumberWithSpaces(item.groupPrice)}} ₽
 </template>
 
 <script lang="ts">
@@ -62,7 +68,11 @@ export default class CatalogCardItem extends Vue {
 
   declOfNum = (groups) => declOfNum(groups, ['группа', 'группы', 'групп']);
 
-  divideNumberWithSpaces = (number) => divideNumberWithSpaces(number)
+  divideNumberWithSpaces = (number) => divideNumberWithSpaces(number);
+
+  toggleFav() {
+    this.item.isFavourite = !this.item.isFavourite;
+  }
 }
 </script>
 
@@ -76,13 +86,10 @@ export default class CatalogCardItem extends Vue {
 </style>
 <style scoped lang="scss">
   .catalog-card {
-    text-decoration: none;
     border-radius: 6px;
     background-color: #ffffff;
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    position: relative;
 
     height: 100%;
 
@@ -92,6 +99,46 @@ export default class CatalogCardItem extends Vue {
       @include desktop() {
         border: none;
       }
+    }
+
+    &__fav {
+      @include clearButton();
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      right: 10px;
+      top: 10px;
+      color: $blue;
+      z-index: 1;
+      padding: 5px;
+      box-sizing: border-box;
+      background: white;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      display: none;
+
+      svg {
+        display: block;
+        width: 100%;
+      }
+
+      &--active {
+        svg path {
+          fill: $blue;
+        }
+      }
+    }
+
+    &--fav &__fav {
+      display: flex;
+    }
+
+    &__inner {
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     &__img {

@@ -15,9 +15,7 @@
 
     div(v-if="similarItems").item-detail__section
       .item-detail__title Похожие товары
-      Slick(ref="slick" :options="sliderSettings").similar-slider
-        div(v-for="item in similarItems"  :key="item.id" v-if="similarItems").similar-slider__wrapper
-          CatalogCardItem(:item="item").catalog-card--similar.similar-slider__slide
+      SimilarSlider(:items="similarItems")
       Pagination(moreCount="50").item-detail__pagination
     SeoTexts(:block="seo").item-detail__seo
   Loader(v-else)
@@ -42,6 +40,7 @@ import Pagination from '@/components/Pagination.vue';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import Loader from '@/components/Loader.vue';
+import SimilarSlider from '@/components/AmountChooser/SimilarSlider.vue';
 
 interface ProductPage extends Product {
   seo_block: SeoBlock;
@@ -78,6 +77,7 @@ const PRODUCT_SLIDER_SETTINGS = {
 
 @Component({
   components: {
+    SimilarSlider,
     Loader,
     Pagination,
     Breadcrumbs,
@@ -192,7 +192,7 @@ export default class ItemDetail extends Vue {
 
     &__section {
       /*padding: 0 15px;*/
-      margin-top: 16px;
+      margin-top: 26px;
 
       @include laptop() {
         margin-top: 63px;

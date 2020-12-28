@@ -46,7 +46,8 @@ export interface ProductOption {
 
 export interface ProductFeature {
   type: PRODUCT_FEATURES;
-  icon: string;
+  icon: string; // class
+  title: string;
   time?: number;
 }
 

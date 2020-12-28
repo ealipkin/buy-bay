@@ -9,8 +9,7 @@
 
     .item-info__prices
       span.item-info__self-price
-        span.item-info__self-price-value {{divideNumberWithSpaces(item.selfPrice)}}
-        span  ₽
+        span.item-info__self-price-value {{divideNumberWithSpaces(item.selfPrice)}} ₽
     ul(v-if="item.options").item-info__options
       li(v-for="option in item.options").item-info__option
         h3.item-info__option-title {{option.title}}
@@ -250,7 +249,7 @@ export default class ItemInfo extends Vue {
 
     &__self-price {
       font-size: 24px;
-      font-weight: 600;
+      font-weight: 500;
       color: #7b8197;
 
       padding-bottom: 5px;
@@ -262,6 +261,7 @@ export default class ItemInfo extends Vue {
 
       &-value {
         text-decoration: line-through;
+        font-weight: 500;
       }
     }
 

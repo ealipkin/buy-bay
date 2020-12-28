@@ -2,7 +2,6 @@
   .user-info
     .user-info__box
       h2.user-info__title {{title}}
-      span.user-info__gender {{user.sex.label}},
       span.user-info__age {{user.age}} года
     img(:src="user.avatar").user-info__img
 
@@ -30,6 +29,7 @@ export default class UserInfo extends Vue {
 
     @include tablet() {
       padding: 0;
+      justify-content: flex-start;
     }
 
     &__box {

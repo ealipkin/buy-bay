@@ -1,21 +1,22 @@
 <template lang="pug">
-  .category.page
+  .category.page.catalog
     .container.page__breadcrumbs
       Breadcrumbs(:links="breadCrumbs")
-    .page__header.container
-      .page__title Сумки и рюкзаки
-      .category__sort
-        SortSelect(:options="selectOptions")
-    .container.category__inner
-      .page__layout
-        .page__aside
-          CategoryFilter(:filters="filters").category__filters
-        .category__items.page__content
-          .category__list
-            .category__item(v-for="(item, index) in items" :key="index")
-              CatalogCardItem(:item="item")
-          .category__pagination
-            Pagination(:moreCount="50")
+    .catalog__wrapper
+      .page__header.container
+        .page__title Сумки и рюкзаки
+        .category__sort
+          SortSelect(:options="selectOptions")
+      .container.category__inner
+        .page__layout
+          .page__aside
+            CategoryFilter(:filters="filters").category__filters
+          .category__items.page__content
+            .category__list
+              .category__item(v-for="(item, index) in items" :key="index")
+                CatalogCardItem(:item="item")
+            .category__pagination
+              Pagination(:moreCount="50")
 
     Advantages(:advantagesList="advantagesList").category__advantages
 
@@ -138,4 +139,15 @@ export default class Index extends Vue {
 </script>
 
 <style lang="scss" scoped>
+  .catalog {
+    &__wrapper {
+      background: white;
+      padding-top: 1px;
+      padding-bottom: 1px;
+
+      @include laptop() {
+        background: transparent;
+      }
+    }
+  }
 </style>

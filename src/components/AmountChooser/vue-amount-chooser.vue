@@ -6,7 +6,7 @@
       {{ leftButton.text }}
     </button>
     <div :class="classes['vue-amount-chooser__input-block']">
-      <input type="text" :class="classes['vue-amount-chooser__input']" v-model="input" ref="input" autofocus>
+      <input type="text" :class="classes['vue-amount-chooser__input']" v-model="input" ref="input">
     </div>
     <button type="button" :disabled="amount === settings.max"
       :class="`${classes['vue-amount-chooser__button']} ${classes['vue-amount-chooser__button_right']}`"
@@ -70,6 +70,7 @@ export default {
       transition: 0.2s;
       cursor: pointer;
       user-select: none;
+      text-outline: none;
 
       background: transparent;
       color: black;

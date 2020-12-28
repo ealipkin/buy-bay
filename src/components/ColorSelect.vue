@@ -53,6 +53,7 @@ export default class ColorSelect extends Vue {
     }
 
     &__item {
+      cursor: pointer;
       width: 26px;
       height: 26px;
       display: block;

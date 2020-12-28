@@ -1,5 +1,5 @@
 <template lang="pug">
-  .picked-options-box
+  div(v-if="options").picked-options-box
     p(v-for="[title, label] in entries").picked-options-box__item
       span.picked-options-box__title {{title}}
       span.picked-options-box__label {{label}}
@@ -13,7 +13,9 @@ import { ProductOption } from '@/utils/models';
 export default class PickedOptionsBox extends Vue {
   @Prop() public options!: ProductOption[];
 
-  entries = this.options.map((option: any) => [option.title, option.values.find((value) => value.selected).label]);
+  get entries() {
+    return Object.values(this.options).map((option: any) => [option.title, option.values.find((value) => value.selected).label]);
+  }
 }
 </script>
 

@@ -2,7 +2,7 @@
   .group-info
     .group-info__header
       h2.group-info__title Нужно еще {{needUsersCount}} человека
-      button(type="button").group-info__link.link Покинуть
+      button(type="button").group-info__link.link Покинуть группу
     CustomScrollWrapper.custom-scroll-wrapper--mobile-only
       UsersList(:users="usersToRender").group-info__users
     hr.group-info__hr

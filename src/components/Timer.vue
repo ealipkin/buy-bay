@@ -1,6 +1,6 @@
 <template lang="pug">
   .timer
-    span.timer__text Мы вернем деньги, если никто не присоединиться в течении 24 часов.
+    span.timer__text Мы вернём деньги, если никто не присоединится к группе в течение 24 часов
     vac(:end-time="time").timer__tick
       template(v-slot:process="{ timeObj }")
         span {{ `${timeObj.h}:${timeObj.m}:${timeObj.s}`}}

@@ -43,11 +43,13 @@
               .popper.header__dropdown
                 Notifications(:notifications="notifications").header__notifications
 
-          Popper(popper trigger="clickToToggle" :options="{placement: 'bottom-end'}" )
+          Popper(popper trigger="hover" :options="{placement: 'bottom-end'}" )
             button(type="button" slot="reference").header__user-btn
-              span.header__user-name {{user.name}}
-              span.header__user-avatar
-                img(:src="user.avatar")
+              div(v-if="!user.name").header__user-name Профиль
+              .header__user-btn-inner
+                span.header__user-avatar
+                  img(:src="user.avatar")
+                span(v-if="user.name").header__user-name {{user.name}}
             .popper.header__dropdown
               ProfileNav(:items="profileMenuItems")
 
@@ -269,6 +271,16 @@ export default class Header extends Vue {
       display: flex;
       align-items: center;
       margin-left: 34px;
+      position: relative;
+      &:after {
+        content: '';
+        width: 100%;
+        height: 30px;
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 100%;
+      }
     }
 
     &__user-name {

@@ -1,7 +1,6 @@
 <template lang="pug">
-  .groups
+  .groups.profile-page
     .page.page--aside-tablet
-      Breadcrumbs.groups__breadcrumbs(:links="Breadcrumbs")
       .page__layout
         .page__aside.groups__aside
           h1.page__title Мои группы
@@ -31,22 +30,19 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import ProfileNav from '@/components/ProfileNav.vue';
 import TabsNav from '@/components/TabsNav.vue';
 import OrderItem from '@/components/OrderItem.vue';
 import Pagination from '@/components/Pagination.vue';
-import { BreadcrumbLink } from '@/utils/models';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
-import { generateOrders } from '@/utils/data';
+import { generateOrders, generateProducts } from '@/utils/data';
 import { Action } from 'vuex-class';
 
 const PAGE_TITLE = 'Мои группы';
 
 @Component({
   components: {
-    Breadcrumbs,
     ProfileNav,
     TabsNav,
     OrderItem,
@@ -55,12 +51,6 @@ const PAGE_TITLE = 'Мои группы';
 })
 export default class Groups extends Vue {
   @Action('app/setProfilePage') setProfilePage;
-
-  Breadcrumbs: BreadcrumbLink[] = [
-    { href: '/', label: 'Главная' },
-    { href: '/profile', label: 'Мой профиль' },
-    { label: 'Мои группы', current: true },
-  ];
 
   profileMenuItems = PROFILE_MENU_ITEMS;
 
@@ -107,14 +97,6 @@ export default class Groups extends Vue {
       padding-top: 0;
       background-color: $grey-3;
       padding-bottom: 155px;
-    }
-
-    &__breadcrumbs {
-      display: none;
-
-      @include tablet() {
-        display: flex;
-      }
     }
 
     &__aside {

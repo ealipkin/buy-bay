@@ -98,6 +98,7 @@ export default class Select extends Vue {
     &__item {
       font-size: 16px;
       line-height: 22px;
+      cursor: pointer;
       color: #222222;
       padding: 15px 10px 15px 24px;
       box-shadow: inset 0px -1px 0px #F5F7FB;

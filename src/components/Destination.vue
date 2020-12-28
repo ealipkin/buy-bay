@@ -1,11 +1,6 @@
 <template lang="pug">
   .destination
-    legend.destination__legend Aдрес Доставки
-    label.destination__input-box
-      select(name="country" placeholder="Страна *" required).destination__input.destination__select
-        option(value="Russia") Россия
-        option(value="USA") USA
-      span.destination__label Страна
+    legend.destination__legend Адрес доставки
 
     .destination__input-box
       Input(name="city" label="Город" :value="addressItem ? addressItem.city : addressItem" :rules="['required']")

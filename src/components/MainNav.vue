@@ -11,7 +11,7 @@
             li(v-for="item in navigationList").main-nav__item
               router-link(v-if="item.href" :to="item.href").main-nav__link {{item.title}}
               span(v-else).main-nav__link {{item.title}}
-    div(@mouseenter="mouseEnter" @mouseover="mouseEnter" @mouseleave="mouseLeave").main-nav__menu-wrapper
+    div.main-nav__menu-wrapper
       CatalogMenu(:links="mainMenu" :class="{'main-nav__menu--visible': isMenuVisible}").main-nav__menu
 
 </template>
@@ -86,6 +86,7 @@ export default class MainNav extends Vue {
   }
 
   toggleMenu() {
+    console.log('toggleMenu -> ');
     if (this.isMenuVisible) {
       this.hideMenu();
     } else {
@@ -237,6 +238,10 @@ export default class MainNav extends Vue {
       font-size: 12px;
       color: #222222;
       text-decoration: none;
+
+      &:hover {
+        color: $blue;
+      }
     }
 
     &__item {
@@ -257,20 +262,6 @@ export default class MainNav extends Vue {
       &--visible:hover {
         @include tablet() {
           display: block;
-        }
-      }
-    }
-
-    &__menu-wrapper {
-      @include laptop() {
-        &:after {
-          content: '';
-          width: 180px;
-          height: 43px;
-          display: block;
-          position: absolute;
-          cursor: pointer;
-          margin-top: -25px;
         }
       }
     }

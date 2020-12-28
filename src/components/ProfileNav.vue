@@ -14,8 +14,8 @@
         template(v-if="item.icon === 'heart'")
           include ../assets/icons/heart.svg
 
-        template(v-if="item.icon === 'settings'")
-          include ../assets/icons/settings.svg
+        template(v-if="item.icon === 'logout'")
+          include ../assets/icons/logout.svg
 
         span {{item.title}}
         span(v-if="item.count").profile-nav__item-count ({{item.count}})

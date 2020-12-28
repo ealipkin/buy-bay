@@ -29,6 +29,7 @@ export default class Radio extends Vue {
   .radio {
     display: inline-flex;
     align-items: center;
+    cursor: pointer;
 
     &__icon {
       width: 20px;

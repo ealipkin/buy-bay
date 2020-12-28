@@ -35,9 +35,9 @@ export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
     count: '173',
   },
   {
-    title: 'Настройки сервиса',
-    href: '/profile/settings',
-    icon: 'settings',
+    title: 'Выход',
+    href: '/logout',
+    icon: 'logout',
   },
 ];
 export const ADVANTAGES = [

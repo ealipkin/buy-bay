@@ -11,7 +11,7 @@
       Input(name="patronymic" :value="addressItem ? addressItem.patronymic : ''" label="Отчество")
 
     .recipient__input-box
-      Input(name="email" :value="addressItem ? addressItem.email : ''" :rules="['email']" label="Электнонная почта")
+      Input(name="email" :value="addressItem ? addressItem.email : ''" :rules="['email']" label="Электронная почта")
 
     .recipient__input-box
       Input(name="phone" :value="addressItem ? addressItem.phone : ''" label="Мобильный телефон")

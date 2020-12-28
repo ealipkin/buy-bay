@@ -3,9 +3,9 @@
     router-link(:to="`/product/${item.id}`").order-info__img
       img(:src="item.images.preview")
     .order-info__box
-      router-link(:to="`/product/${item.id}`").order-info__title {{item.title}}
+      router-link(:to="`/product/${item.id}`" v-if="!hideTitle").order-info__title {{item.title}}
 
-      div(v-if="hideStatus").order-info__date Дата заказа: {{item.orderDate | dateFormat('DD MMMM YYYY')}}
+      div(v-if="hideStatus").order-info__date Дата заказа: {{item.orderDate | dateFormat('DD.MM.YYYY')}}
       template(v-if="!hideStatus")
         span.order-info__orders
           img(src="../assets/icons/order-package.svg")
@@ -32,6 +32,7 @@ import { divideNumberWithSpaces } from '@/utils/common';
 import { Product } from '@/utils/models';
 import Rate from '@/components/Rate.vue';
 import PickedOptionsBox from '@/components/PickedOptionsBox.vue';
+import { generateProducts } from '@/utils/data';
 
 @Component({
   components: {
@@ -45,6 +46,8 @@ export default class OrderInfo extends Vue {
   @Prop() public type!: string;
 
   @Prop() public hideStatus!: boolean;
+
+  @Prop() public hideTitle!: boolean;
 
   divideNumberWithSpaces = (number) => divideNumberWithSpaces(number);
 }
@@ -135,14 +138,18 @@ export default class OrderInfo extends Vue {
       margin: 0;
       margin-bottom: 7px;
 
+      @include link();
+
       @include tablet() {
         font-size: 18px;
         font-weight: bold;
         margin-bottom: 22px;
       }
+
     }
 
     &__picked-options {
+      margin-top: 12px;
       margin-bottom: 24px;
     }
 

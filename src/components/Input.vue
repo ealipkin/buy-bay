@@ -4,7 +4,6 @@
       .input__wrapper
         input(:type="type || 'text'" :placeholder="label" v-model="inputValue" :class="failed ? 'input__field--fail' : ''").input__field
         label(v-if="label" :data-placeholder="label").input__label {{label}}
-          sup(v-if="isRequired").input__required-mark *
       span.input__error {{ errors[0] }}
 </template>
 
