@@ -2,7 +2,7 @@
   .user-info
     .user-info__box
       h2.user-info__title {{title}}
-      span.user-info__age {{user.age}} года
+      span.user-info__age {{user.age}} {{declOfNum(user.age)}}
     img(:src="user.avatar").user-info__img
 
 </template>
@@ -10,12 +10,15 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { ProfileUser } from '@/utils/models';
+import { declOfNum } from '@/utils/common';
 
 @Component
 export default class UserInfo extends Vue {
   @Prop() public user!: ProfileUser;
 
   title = `${this.user.surname} ${this.user.name}`;
+  
+  declOfNum = (groups) => declOfNum(groups, ['год', 'года', 'лет']);
 }
 </script>
 
