@@ -85,7 +85,7 @@ export default class FeaturesSlider extends Vue {
       }
 
       &--discount {
-        background-image: linear-gradient(197deg, #2cd2c7 97%, #05a5f6 1%);
+        background-image: linear-gradient(222.68deg, #2CD2C7 2.68%, #05A5F6 96.05%);
       }
     }
 
