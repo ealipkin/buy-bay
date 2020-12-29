@@ -290,7 +290,7 @@ export default class CatalogMenu extends Vue {
       margin-right: 28px;
       position: relative;
       top: 3px;
-      background: url(../assets/icons/menu-back.svg) no-repeat center;
+      background: url(../assets/icons/arrow-back.svg) no-repeat center;
       @include laptop() {
         display: none;
       }

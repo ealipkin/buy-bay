@@ -21,7 +21,11 @@ import './assets/fonts/opensans.css';
 
 import router from './router';
 
+const VueInputMask = require('vue-inputmask').default;
+
 Vue.use(Loading);
+
+Vue.use(VueInputMask);
 
 Vue.use(VueFilterDateFormat, {
   dayOfWeekNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],

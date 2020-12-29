@@ -1,8 +1,21 @@
 <template lang="pug">
   .input
-    ValidationProvider(:name="name" :rules="inputRules" v-slot="{ errors, failed }").input__provider
+    ValidationProvider(
+      :name="name"
+      :rules="inputRules"
+      v-slot="{ errors, failed }"
+      mode="passive"
+    ).input__provider
       .input__wrapper
-        input(:type="type || 'text'" :placeholder="label" v-model="inputValue" :class="failed ? 'input__field--fail' : ''").input__field
+        input(
+          v-model="inputValue"
+          v-mask="mask || ''"
+          :type="type || 'text'"
+          :placeholder="label"
+          :class="failed ? 'input__field--fail' : ''"
+          @input="handleInput"
+          ref="input"
+        ).input__field
         label(v-if="label" :data-placeholder="label").input__label {{label}}
       span.input__error {{ errors[0] }}
 </template>
@@ -20,6 +33,8 @@ export default class Input extends Vue {
 
   @Prop() public type!: string;
 
+  @Prop() public mask!: string;
+
   @Prop() public value!: string | number;
 
   @Prop() public rules!: string[] | null;
@@ -35,12 +50,22 @@ export default class Input extends Vue {
 
   isRequired = this.rules?.includes('required') || false;
 
+  doFocus() {
+    this.$nextTick(() => {
+      (this.$refs.input as any).focus();
+    });
+  }
+
   mounted() {
     this.setValue(this.value);
   }
 
   setValue(val) {
     this.inputValue = val;
+  }
+
+  handleInput() {
+    this.$emit('input', { value: this.inputValue });
   }
 }
 </script>

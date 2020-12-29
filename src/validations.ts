@@ -1,13 +1,21 @@
 import { extend } from 'vee-validate';
+
 import {
   required, email, alpha, digits, integer,
 } from 'vee-validate/dist/rules';
+
+const PHONE_REGEXP = /^(\+)?(\(\d{2,3}\) ?\d|\d)(([ -]?\d)|( ?\(\d{2,3}\) ?)){5,12}\d$/;
+export const PHONE_CODE_LENGTH = 4;
 
 export const addBasicValidations = () => {
   // No message specified.
   extend('email', email);
 
   extend('alpha', alpha);
+
+  extend('phone', (value) => PHONE_REGEXP.test(value));
+
+  extend('phoneCode', (value) => value.length && value.length === PHONE_CODE_LENGTH);
 
   extend('digits', digits);
 

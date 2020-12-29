@@ -238,7 +238,7 @@ export default class Header extends Vue {
       top: 0;
       left: 0;
       height: calc(100% - 49px);
-      z-index: 1;
+      z-index: 5;
       background: white;
       @include tablet() {
         display: none;

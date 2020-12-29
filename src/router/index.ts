@@ -21,7 +21,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/catalog/:id',
-    name: 'Catalog',
+    name: 'Catalog item',
     component: () => import('../views/Catalog.vue'),
   },
   {
@@ -31,7 +31,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/category/:id',
-    name: 'Category',
+    name: 'Category item',
     component: () => import('../views/Category.vue'),
   },
   {

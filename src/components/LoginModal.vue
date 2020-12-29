@@ -1,21 +1,19 @@
 <template lang="pug">
-  modal(name="login-modal" @closed="modalClose" :adaptive="true" :classes="'login-modal'" width="90%" :minWidth="290" :maxWidth="450" height="auto")
+  modal(name="login-modal" @closed="modalClose" :adaptive="true" :classes="'login-modal'" width="90%" :minWidth="290" :maxWidth="500" height="auto")
     .modal
       button(type="button" @click="closeModal").modal__close.close
       .modal__content.login-modal__content
         TabsNav(:tabs="tabs" v-on:change="selectTab").tabs-nav--small.login-modal__tabs
         div(:class="{'tab--active': selectedTab === 'login'}").tab.login-modal__login
-          ValidationObserver(v-slot="{ invalid }")
-            form(@submit.prevent="login").login-modal__inner.form
-              Input(:rules="['required']" label="Телефон или адрес эл.почты" name="login").form__input
-              Input(:rules="['required']" label="Пароль" name="password" type="password").form__input
-              button(type="submit" :disabled="invalid").button.form__login-button Войти
-              .login-modal__forgot
-                button(type="button" @click="forgotPassword").link Забыли пароль?
-
+          PhoneConfirmation(v-show="!enterByMail" @confirmed="phoneConfirmed")
+          div(v-show="enterByMail").login-modal__mail-confirmation
+            .login-modal__subtitle Только для зарегистрированных пользователей
+            PhoneConfirmation(v-show="enterByMail" :byMail="true" @confirmed="phoneConfirmed")
+          .tac.login-modal__bottom
+            button(v-show="enterByMail" type="button" @click="handleMailEnterClick").login-modal__enter-by Войти по номеру телефона
+            button(v-show="!enterByMail" type="button" @click="handlePhoneEnterClick").login-modal__enter-by Войти по почте
         div(:class="{'tab--active': selectedTab === 'register'}").tab.login-modal__register
           Registration(@register="handleRegister" @later="closeModal").login-modal__inner
-      SocialsAuth(:title="socialsTitle" v-if="showSocialsAuth").login-modal__social-auth
 
 </template>
 
@@ -25,10 +23,15 @@ import Input from '@/components/Input.vue';
 import TabsNav from '@/components/TabsNav.vue';
 import SocialsAuth from '@/components/SocialsAuth.vue';
 import Registration from '@/components/Registration.vue';
+import PhoneConfirmation from '@/components/PhoneConfirmation.vue';
 
 @Component({
   components: {
-    Registration, SocialsAuth, TabsNav, Input,
+    PhoneConfirmation,
+    Registration,
+    SocialsAuth,
+    TabsNav,
+    Input,
   },
 })
 export default class LoginModal extends Vue {
@@ -36,13 +39,7 @@ export default class LoginModal extends Vue {
 
   accountCreated = false;
 
-  get socialsTitle() {
-    return this.selectedTab === 'login' ? 'Войти, используя социальные сети' : 'Создать аккаунт, используя социальные сети';
-  }
-
-  get showSocialsAuth() {
-    return this.selectedTab === 'login' ? true : !this.accountCreated;
-  }
+  enterByMail = false;
 
   showModal(type) {
     this.$modal.show('login-modal');
@@ -50,6 +47,22 @@ export default class LoginModal extends Vue {
       this.selectTab(type);
     }
     // document.body.classList.add('_hidden');
+  }
+
+  phoneConfirmed() {
+    this.login();
+  }
+
+  mailConfirmed() {
+    this.login();
+  }
+
+  handleMailEnterClick() {
+    this.enterByMail = false;
+  }
+
+  handlePhoneEnterClick() {
+    this.enterByMail = true;
   }
 
   closeModal() {
@@ -116,6 +129,19 @@ export default class LoginModal extends Vue {
 </style>
 <style scoped lang="scss">
   .login-modal {
+    &__bottom {
+      margin-top: 30px;
+    }
+
+    &__subtitle {
+      margin-bottom: 15px;
+    }
+
+    &__enter-by {
+      @include clearButton();
+      @include link();
+      color: $blue;
+    }
 
     &__tabs {
       margin-bottom: 28px;
