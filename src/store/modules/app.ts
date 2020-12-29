@@ -6,6 +6,7 @@ const endpoints = {
 };
 
 interface AppState {
+  isAuthenticated: boolean;
   selectedShop: ProductShop | null;
   profilePage: string | null;
   menuLoaded: boolean;
@@ -16,6 +17,7 @@ const appState: AppState = {
   selectedShop: null,
   profilePage: null,
   menuLoaded: false,
+  isAuthenticated: false,
   mainMenu: [],
 };
 
@@ -23,6 +25,7 @@ const getters = {
   getSelectedShop: (state: AppState) => state.selectedShop,
   getProfilePage: (state: AppState) => state.profilePage,
   getMainMenu: (state: AppState) => state.mainMenu,
+  getIsAuthenticated: (state: AppState) => state.isAuthenticated,
 };
 
 const mutationTypes = {
@@ -30,6 +33,7 @@ const mutationTypes = {
   SET_PROFILE_PAGE: 'SET_PROFILE_PAGE',
   SET_MAIN_MENU: 'SET_MAIN_MENU',
   SET_MAIN_MENU_LOADED: 'SET_MAIN_MENU_LOADED',
+  SET_USER_AUTH: 'SET_USER_AUTH',
 };
 
 const mutations = {
@@ -45,6 +49,9 @@ const mutations = {
   [mutationTypes.SET_MAIN_MENU_LOADED](state: AppState, payload: boolean) {
     state.menuLoaded = payload;
   },
+  [mutationTypes.SET_USER_AUTH](state: AppState, payload: boolean) {
+    state.isAuthenticated = payload;
+  },
 };
 
 const actions = {
@@ -53,6 +60,9 @@ const actions = {
   },
   async setSelectedShop({ commit, state }, props) {
     commit('SET_SELECTED_SHOP', props);
+  },
+  async setUserAuth({ commit, state }, props) {
+    commit('SET_USER_AUTH', props);
   },
   async fetchMenu({ commit }) {
     commit('SET_MAIN_MENU_LOADED', true);

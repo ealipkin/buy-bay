@@ -1,7 +1,7 @@
 <template lang="pug">
   header.header
     div.header__mobile-nav
-      MobileNav(@toggle-notifications="toggleNotifications")
+      MobileNav(@toggle-notifications="toggleNotifications" @show-login="openLoginModal('login')")
       Notifications(:notifications="notifications" v-if="showNotifications").header__mobile-notifications
     .header-top
       .header-top__inner.container
@@ -272,6 +272,7 @@ export default class Header extends Vue {
       align-items: center;
       margin-left: 34px;
       position: relative;
+
       &:after {
         content: '';
         width: 100%;

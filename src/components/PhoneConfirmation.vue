@@ -121,5 +121,8 @@ export default class PhoneConfirmation extends Vue {
       color: $blue;
       text-align: center;
     }
+    &__code-text {
+      font-size: 14px;
+    }
   }
 </style>

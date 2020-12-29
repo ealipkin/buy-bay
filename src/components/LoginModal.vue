@@ -24,6 +24,7 @@ import TabsNav from '@/components/TabsNav.vue';
 import SocialsAuth from '@/components/SocialsAuth.vue';
 import Registration from '@/components/Registration.vue';
 import PhoneConfirmation from '@/components/PhoneConfirmation.vue';
+import { Action } from 'vuex-class';
 
 @Component({
   components: {
@@ -35,6 +36,8 @@ import PhoneConfirmation from '@/components/PhoneConfirmation.vue';
   },
 })
 export default class LoginModal extends Vue {
+  @Action('app/setUserAuth') setUserAuth;
+  
   selectedTab = 'login';
 
   accountCreated = false;
@@ -72,6 +75,7 @@ export default class LoginModal extends Vue {
 
   login() {
     // login here
+    this.setUserAuth(true);
     this.closeModal();
     this.$emit('login-success');
   }

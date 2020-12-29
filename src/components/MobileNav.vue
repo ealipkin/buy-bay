@@ -33,12 +33,21 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { NotificationItem } from '@/utils/models';
+import { mapGetters } from 'vuex';
+import router from '@/router';
 
 @Component({
   components: {},
+  computed: {
+    ...mapGetters({
+      isAuthenticated: 'app/getIsAuthenticated',
+    }),
+  },
 })
 export default class MobileNav extends Vue {
   @Prop() public notifications!: NotificationItem[];
+
+  isAuthenticated;
 
   toggleNotifications(event) {
     const { target } = event;
@@ -51,6 +60,14 @@ export default class MobileNav extends Vue {
     this.$emit('toggle-notifications');
   }
 
+  login() {
+    if (this.isAuthenticated) {
+      router.push({ path: '/profile'});
+    } else {
+      this.$emit('show-login');
+    }
+  }
+
   items = [
     {
       href: '/',
@@ -58,7 +75,7 @@ export default class MobileNav extends Vue {
       icon: 'shop',
     },
     {
-      href: '#',
+      href: '/catalog',
       title: '',
       icon: 'docs',
     },
@@ -75,8 +92,8 @@ export default class MobileNav extends Vue {
       icon: 'heart',
     },
     {
-      href: '/profile',
       title: 'Профиль',
+      action: this.login,
       icon: 'user',
     },
   ];
