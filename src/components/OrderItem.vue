@@ -20,7 +20,7 @@ import OrderTimer from '@/components/OrderTimer.vue';
 import OrderStatus from '@/components/OrderStatus.vue';
 
 import { divideNumberWithSpaces } from '@/utils/common';
-import { ORDER_STATUSES, OrderItem as OrderItemModel } from '@/utils/models';
+import { OrderItem as OrderItemModel } from '@/utils/models';
 
 @Component({
   components: {
@@ -38,8 +38,6 @@ export default class OrderItem extends Vue {
   @Prop() public isGroup!: boolean;
 
   @Prop() public hideButton!: boolean;
-
-  ORDER_STATUSES = ORDER_STATUSES;
 
   divideNumberWithSpaces(number) {
     return divideNumberWithSpaces(number);

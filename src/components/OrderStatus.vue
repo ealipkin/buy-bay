@@ -3,7 +3,7 @@
     template(v-if="isGroup")
       span(v-if="time && users.length < maxUsers").order-status
         .order-status__images
-          img(v-for="user in users.reverse()" :src="user.avatar").order-status__img.order-status__img--avatar
+          img(v-for="user in reversedUsers" :src="user.avatar").order-status__img.order-status__img--avatar
         span участников: {{users.length}} из {{maxUsers}}
 
       span(v-if="time && users.length >= maxUsers").order-status.order-status--success
@@ -60,6 +60,10 @@ export default class OrderStatus extends Vue {
   @Prop() public isGroup!: string;
 
   orderStatuses = ORDER_STATUSES;
+  
+  get reversedUsers() {
+    return this.users && this.users.slice().reverse();
+  }
 }
 </script>
 
