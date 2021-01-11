@@ -39,7 +39,6 @@ const config = {
     logoutData: {
       url: `${API_URL}/auth/logout`,
       method: 'POST',
-      redirect: '/',
       makeRequest: false,
     },
     fetchData: {
