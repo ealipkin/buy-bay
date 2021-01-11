@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import Brands from '@/components/Brands.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
@@ -117,6 +117,10 @@ const SEO = [
   },
 })
 export default class Index extends Vue {
+  @Watch('$route') routeChange() {
+    this.updateQueryTitle();
+  }
+
   filters = FILTERS;
 
   searchQuery = '';
@@ -134,7 +138,11 @@ export default class Index extends Vue {
   searchResults: Product[] | null = null;
 
   mounted() {
-    this.searchQuery = this.$route.query.q as string;
+    this.updateQueryTitle();
+  }
+
+  updateQueryTitle() {
+    this.searchQuery = this.$router.currentRoute.query.q as string;
   }
 }
 </script>

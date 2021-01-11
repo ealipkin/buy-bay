@@ -37,7 +37,7 @@ import { Action } from 'vuex-class';
 })
 export default class LoginModal extends Vue {
   @Action('app/setUserAuth') setUserAuth;
-  
+
   selectedTab = 'login';
 
   accountCreated = false;

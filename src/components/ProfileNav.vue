@@ -1,7 +1,7 @@
 <template lang="pug">
   ul.profile-nav
     li(v-for="item in items").profile-nav__item
-      router-link(:to="item.href" :class="{'profile-nav__link--active': $route.path === item.href}").profile-nav__link
+      button(@click="handleClick(item)" :class="{'profile-nav__link--active': $route.path === item.href}").profile-nav__link
         template(v-if="item.icon === 'user'")
           include ../assets/icons/user.svg
 
@@ -24,10 +24,34 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { BaseMenuItem } from '@/utils/models';
+import router from '@/router';
 
 @Component
 export default class ProfileNav extends Vue {
-  @Prop() public items!: object[];
+  @Prop() public items!: BaseMenuItem[];
+
+  handleClick(item: BaseMenuItem) {
+    console.log(item);
+    if (item.href) {
+      router.push({ path: item.href });
+    }
+    if (item.action) {
+      switch (item.action) {
+        case 'logout': {
+          this.logout();
+          break;
+        }
+        default: {
+          console.log('default');
+        }
+      }
+    }
+  }
+
+  logout() {
+    (this as any).$auth.logout();
+  }
 }
 </script>
 
@@ -70,7 +94,9 @@ export default class ProfileNav extends Vue {
     }
 
     &__link {
+      @include clearButton();
       font-size: 14px;
+      width: 100%;
       color: $black-1;
       text-decoration: none;
       padding: 20px 32px;

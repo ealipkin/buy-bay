@@ -1,6 +1,8 @@
 import {
-  BaseMenuItem, MenuChildItem, NOTIFICATIONS_TYPES, NotificationItem,
+  BaseMenuItem, MenuChildItem, NOTIFICATIONS_TYPES, NotificationItem, SearchSuggestItem, SEARCH_ITEM_TYPE,
 } from '@/utils/models';
+import { getRandomNumberBetween } from '@/utils/data';
+import { nanoid } from 'nanoid';
 
 export const breakPoints = {
   mobile: 320,
@@ -36,10 +38,11 @@ export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
   },
   {
     title: 'Выход',
-    href: '/logout',
+    action: 'logout',
     icon: 'logout',
   },
 ];
+
 export const ADVANTAGES = [
   {
     type: 'cart',
@@ -355,7 +358,10 @@ export const NOTIFICATIONS: NotificationItem[] = [
     type: NOTIFICATIONS_TYPES.GROUP, title: 'Группа сформирована', text: 'в группе «Стиральная машина…»', read: false,
   },
   {
-    type: NOTIFICATIONS_TYPES.DELIVERY, title: 'Заказ отправлен продавцом', text: '«Фотоаппарат sony a7m3»', read: false,
+    type: NOTIFICATIONS_TYPES.DELIVERY,
+    title: 'Заказ отправлен продавцом',
+    text: '«Фотоаппарат sony a7m3»',
+    read: false,
   },
   {
     type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: false,
@@ -367,7 +373,10 @@ export const NOTIFICATIONS: NotificationItem[] = [
     type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: true,
   },
   {
-    type: NOTIFICATIONS_TYPES.DELIVERY, title: 'Заказ отправлен продавцом', text: '«Фотоаппарат sony a7m3»', read: false,
+    type: NOTIFICATIONS_TYPES.DELIVERY,
+    title: 'Заказ отправлен продавцом',
+    text: '«Фотоаппарат sony a7m3»',
+    read: false,
   },
   {
     type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: false,
@@ -377,5 +386,61 @@ export const NOTIFICATIONS: NotificationItem[] = [
   },
   {
     type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: true,
+  },
+];
+
+export const SEARCH_SUGGEST: SearchSuggestItem[] = [
+  {
+    title: 'Бренды',
+    items: [
+      {
+        id: nanoid(),
+        type: SEARCH_ITEM_TYPE.BRAND,
+        image: `https://picsum.photos/id/${getRandomNumberBetween(0, 20)}/40`,
+        title: 'Adidas Classic',
+      },
+      {
+        id: nanoid(),
+        type: SEARCH_ITEM_TYPE.BRAND,
+        image: `https://picsum.photos/id/${getRandomNumberBetween(0, 20)}/40`,
+        title: 'Adidas Sport',
+      },
+    ],
+  },
+  {
+    title: 'Товары',
+    items: [
+      {
+        id: nanoid(),
+        type: SEARCH_ITEM_TYPE.PRODUCT,
+        image: `https://picsum.photos/id/${getRandomNumberBetween(0, 20)}/40`,
+        title: 'Adidas кроссовки AirMav',
+        price: 7760,
+        groups: 8,
+      },
+      {
+        id: nanoid(),
+        type: SEARCH_ITEM_TYPE.PRODUCT,
+        image: `https://picsum.photos/id/${getRandomNumberBetween(0, 20)}/40`,
+        title: 'Adidas Sport',
+        price: 7760,
+        groups: 1,
+      },
+    ],
+  },
+  {
+    title: 'Категории',
+    items: [
+      {
+        id: nanoid(),
+        type: SEARCH_ITEM_TYPE.CATEGORY,
+        title: 'Adidas Спортивные товары',
+      },
+      {
+        id: nanoid(),
+        type: SEARCH_ITEM_TYPE.CATEGORY,
+        title: 'Adidas Товары для дома',
+      },
+    ],
   },
 ];

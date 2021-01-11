@@ -17,7 +17,7 @@ export default class UserInfo extends Vue {
   @Prop() public user!: ProfileUser;
 
   title = `${this.user.surname} ${this.user.name}`;
-  
+
   declOfNum = (groups) => declOfNum(groups, ['год', 'года', 'лет']);
 }
 </script>

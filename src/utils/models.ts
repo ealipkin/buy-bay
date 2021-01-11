@@ -16,8 +16,9 @@ export interface MenuChildItem {
 
 export interface BaseMenuItem {
   title: string;
-  href: string;
+  href?: string;
   icon?: string;
+  action?: string;
   is_active?: boolean;
   count?: string;
 }
@@ -311,4 +312,24 @@ export interface BrandItem {
   id_brand: string;
   link: string;
   rate: number;
+}
+
+export enum SEARCH_ITEM_TYPE {
+  BRAND = 'brand',
+  PRODUCT = 'product',
+  CATEGORY = 'category',
+}
+
+export interface SearchItem {
+  id: string;
+  type: SEARCH_ITEM_TYPE;
+  title: string;
+  image?: string;
+  price?: number | string;
+  groups?: number;
+}
+
+export interface SearchSuggestItem {
+  title: string;
+  items: SearchItem[];
 }

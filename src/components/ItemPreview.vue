@@ -124,7 +124,7 @@ export default class ItemPreview extends Vue {
       align-items: center;
       overflow: auto;
       padding: 2px 1px;
-      height: 60px;
+      height: 64px;
       box-sizing: border-box;
 
       &-wrapper.right-gradient {

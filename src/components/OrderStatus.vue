@@ -60,7 +60,7 @@ export default class OrderStatus extends Vue {
   @Prop() public isGroup!: string;
 
   orderStatuses = ORDER_STATUSES;
-  
+
   get reversedUsers() {
     return this.users && this.users.slice().reverse();
   }

@@ -9,8 +9,13 @@ import Toasted from 'vue-toasted';
 import { ValidationObserver, ValidationProvider, localize } from 'vee-validate';
 import Vue from 'vue';
 import { addBasicValidations } from '@/validations';
+import VueAuth from '@websanova/vue-auth/dist/v2/vue-auth.esm';
+
 import { i18n } from './i18n';
 import vee_ru from './lang/vee_ru.json';
+import authConfig from './auth';
+
+import router from './router';
 
 import App from './App.vue';
 import store from './store';
@@ -19,7 +24,7 @@ import './scss/style.scss';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import './assets/fonts/opensans.css';
 
-import router from './router';
+Vue.use(VueAuth, authConfig);
 
 const VueInputMask = require('vue-inputmask').default;
 

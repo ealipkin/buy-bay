@@ -62,7 +62,7 @@ export default class MobileNav extends Vue {
 
   login() {
     if (this.isAuthenticated) {
-      router.push({ path: '/profile'});
+      router.push({ path: '/profile' });
     } else {
       this.$emit('show-login');
     }

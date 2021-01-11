@@ -1,23 +1,29 @@
 <template lang="pug">
   form(@submit="searchSubmit" :class="{'search-field--focused': isFocused}").search-field
     .search-field__inner
-      input.search-field__input(placeholder="Найти товар" v-model="search" @focus="handleFocus" ref="input" @blur="handleBlur")
-    ul(v-if="showResults").search-field__results
-      li(v-for="item in searchResults" @click="itemClick(item)").search-field__item {{item}}
+      input.search-field__input(placeholder="Найти товар" v-model="search" @focus="handleFocus" ref="input")
+    transition(name="fade")
+      SearchSuggest(:items="searchResults" v-if="showResults" @item-click="itemClick").search-field__results
     button(type="button" @click="handleClear").search-field__clear Отмена
     button(type="submit").search-field__submit-button.button Найти
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import router from '@/router';
 import clickOutside from '@/utils/clickOutside';
+import { SEARCH_SUGGEST } from '@/utils/constants';
+import { SearchItem, SearchSuggestItem } from '@/utils/models';
+import SearchSuggest from '@/components/AmountChooser/SearchSuggest.vue';
 
 const MIN_SEARCH_LENGTH = 3;
-
-@Component
+@Component({
+  components: { SearchSuggest },
+})
 export default class SearchField extends Vue {
-  @Prop() public prop!: boolean;
+  @Watch('$route') routeChange() {
+    this.isFocused = false;
+  }
 
   get showResults() {
     return this.isFocused && this.search && this.search.length >= MIN_SEARCH_LENGTH;
@@ -25,7 +31,7 @@ export default class SearchField extends Vue {
 
   search = '';
 
-  searchResults = ['iPhone X', 'iPhone XR 64 Gb', 'Чехол iPhone XR ', 'Аксессуары iPhone', 'Наушники для iPhone', 'Наушники для iPhone', 'iPhone X', 'iPhone XR 64 Gb', 'Чехол iPhone XR ', 'Аксессуары iPhone', 'Наушники для iPhone', 'Наушники для iPhone'];
+  searchResults: SearchSuggestItem[] = SEARCH_SUGGEST;
 
   isFocused = false;
 
@@ -35,12 +41,6 @@ export default class SearchField extends Vue {
       router.push({ path: '/search', query: { q: this.search } });
     }
     (this.$refs.input as any).blur();
-  }
-
-  itemClick(item) {
-    this.handleBlur();
-    this.search = item;
-    router.push({ path: '/search', query: { q: item } });
   }
 
   handleFocus() {
@@ -57,6 +57,12 @@ export default class SearchField extends Vue {
 
   handleClear() {
     this.search = '';
+    this.handleBlur();
+  }
+
+  itemClick(data: { item: SearchItem }) {
+    const { item } = data;
+    this.search = item.title;
     this.handleBlur();
   }
 
@@ -81,6 +87,13 @@ export default class SearchField extends Vue {
 }
 </script>
 
+<style lang="scss">
+  .search-field {
+    .fade-leave-active {
+      display: none;
+    }
+  }
+</style>
 <style scoped lang="scss">
   .search-field {
     position: relative;
@@ -208,32 +221,20 @@ export default class SearchField extends Vue {
     }
 
     &__results {
-      @include clearList();
-
       position: absolute;
       left: -11px;
       top: calc(100% + 9px);
-      height: calc(100vh - 48px);
+      height: calc(100vh - 30px);
       width: calc(100% + 27px);
-      background: white;
       z-index: 10;
       overflow: auto;
 
       @include tablet() {
         max-height: 70vh;
         width: 100%;
+        top: 100%;
         left: 0;
-      }
-    }
-
-    &__item {
-      font-size: 14px;
-      color: #222222;
-      padding: 14px 19px 16px;
-      border-bottom: 1px solid #ededed;
-
-      &:last-child {
-        border-bottom: none;
+        height: auto;
       }
     }
 

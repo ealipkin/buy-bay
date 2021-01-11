@@ -58,7 +58,7 @@
     .header-bottom
       MainNav(v-if="mainMenu" :main-menu="mainMenu").container
     .container
-    LoginModal(ref="loginModal" @login-success="loginSuccess" @register-success="registerSuccess")
+    LoginModal(ref="loginModal")
 </template>
 
 <script lang="ts">
@@ -73,7 +73,7 @@ import LoginModal from '@/components/LoginModal.vue';
 import Notifications from '@/components/Notifications.vue';
 import { getRandomNumberBetween } from '@/utils/data';
 import { NOTIFICATIONS, PROFILE_MENU_ITEMS } from '@/utils/constants';
-import { NotificationItem } from '@/utils/models';
+import { BaseMenuItem, NotificationItem } from '@/utils/models';
 import ProfileNav from '@/components/ProfileNav.vue';
 import MobileNav from '@/components/MobileNav.vue';
 import { Action } from 'vuex-class';
@@ -120,18 +120,14 @@ export default class Header extends Vue {
 
   notifications: NotificationItem[] = NOTIFICATIONS;
 
-  profileMenuItems = PROFILE_MENU_ITEMS;
+  profileMenuItems: BaseMenuItem[] = PROFILE_MENU_ITEMS;
 
   get showProfileHeader() {
     return !this.searchFocused && this.profilePage;
   }
 
   get showLogin() {
-    return this.isAuthenticated;
-  }
-
-  set showLogin(value) {
-    this.isAuthenticated = value;
+    return (this as any).$auth.check();
   }
 
   openLoginModal(type) {
@@ -147,14 +143,6 @@ export default class Header extends Vue {
         (this.body as HTMLBodyElement).classList.remove('_hidden');
       }
     });
-  }
-
-  loginSuccess() {
-    this.showLogin = true;
-  }
-
-  registerSuccess() {
-    this.showLogin = true;
   }
 
   toggleNotifications() {
@@ -211,7 +199,6 @@ export default class Header extends Vue {
   }
 </style>
 <style scoped lang="scss">
-  @import "src/scss/_mixins.scss";
 
   .header {
     background: white;
