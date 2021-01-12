@@ -54,9 +54,11 @@ Vue.use(VModal);
 localize('ru', vee_ru);
 Vue.component('paginate', Paginate);
 
-new Vue({
+const vm = new Vue({
   router,
   store,
   i18n,
   render: (h) => h(App),
 }).$mount('#app');
+
+export { vm };

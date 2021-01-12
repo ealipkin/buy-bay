@@ -5,7 +5,7 @@
       Notifications(:notifications="notifications" v-if="showNotifications").header__mobile-notifications
     .header-top
       .header-top__inner.container
-        .header-top__text Групповые покупки без наценок
+        .header-top__text Совместные покупки 2.0
         .header-top__list
           router-link(to="#").header-top__list-item Доставка
           router-link(to="#").header-top__list-item Гарантия и возврат
@@ -16,8 +16,10 @@
         router-link(to='/profile').header-main__profile-link {{profilePage}}
         button(type="button" @click="handleProfileSearch").header-main__profile-search
           include ../assets/icons/search.svg
+      router-link(to='/' v-if="!isIndexPage").header-main__logo
+        include ../assets/icons/kupide-logo.svg
 
-      router-link(to='/').header-main__logo
+      span(v-if="isIndexPage").header-main__logo
         include ../assets/icons/kupide-logo.svg
 
       SearchField(@focus="searchFocused = true" @blur="searchFocused = false" ref="search").header-main__input-search
@@ -26,30 +28,30 @@
         router-link(to="/profile/favourites").notification-button.header__fav-btn
           span.notification-button__icon
             include ../assets/icons/heart.svg
-            span.notification-button__number 23
+            span.notification-button__number {{favouritesCount}}
           p.notification-button__text Избранное
         div(v-if="!showLogin").header-main__user-wrap
-          button(type="button" @click="openLoginModal('register')").header-main__user-block-text Регистрация
           button(type="button" @click="openLoginModal('login')").button.button--secondary Войти
 
         div(v-if="showLogin").header-main__user-wrap
           .header__item
-            Popper(popper trigger="clickToToggle" :options="{placement: 'bottom'}" ref="notificationsPopper")
+            Popper(popper trigger="hover" :options="{placement: 'bottom'}" ref="notificationsPopper")
               button(type="button" slot="reference").notification-button.header__notification-toggle
                 span.notification-button__icon
                   include ../assets/icons/bell.svg
                   span.notification-button__number 9
                 p.notification-button__text Уведомления
-              .popper.header__dropdown
+              .popper.header__dropdown.header__dropdown--popper
                 Notifications(:notifications="notifications").header__notifications
 
           Popper(popper trigger="hover" :options="{placement: 'bottom-end'}" )
             button(type="button" slot="reference").header__user-btn
-              div(v-if="!user.name").header__user-name Профиль
               .header__user-btn-inner
                 span.header__user-avatar
-                  img(:src="user.avatar")
-                span(v-if="user.name").header__user-name {{user.name}}
+                  img(v-if="$auth.user.image" :src="$auth.user.image")
+                  span(v-else)
+                    include ../assets/icons/user.svg
+                span.header__user-name {{$auth.user.name || 'Профиль'}}
             .popper.header__dropdown
               ProfileNav(:items="profileMenuItems")
 
@@ -62,18 +64,17 @@
 </template>
 
 <script lang="ts">
-import Popper from 'vue-popperjs';
 import 'vue-popperjs/dist/vue-popper.css';
 import { mapGetters } from 'vuex';
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import Popper from 'vue-popperjs';
 
 import MainNav from '@/components/MainNav.vue';
 import HeaderShopCard from '@/components/HeaderShopCard.vue';
 import LoginModal from '@/components/LoginModal.vue';
 import Notifications from '@/components/Notifications.vue';
-import { getRandomNumberBetween } from '@/utils/data';
 import { NOTIFICATIONS, PROFILE_MENU_ITEMS } from '@/utils/constants';
-import { BaseMenuItem, NotificationItem } from '@/utils/models';
+import { BaseMenuItem, NotificationItem, ProfileUser } from '@/utils/models';
 import ProfileNav from '@/components/ProfileNav.vue';
 import MobileNav from '@/components/MobileNav.vue';
 import { Action } from 'vuex-class';
@@ -95,10 +96,15 @@ import SearchField from '@/components/SearchField.vue';
       selectedShop: 'app/getSelectedShop',
       profilePage: 'app/getProfilePage',
       mainMenu: 'app/getMainMenu',
+      favouritesCount: 'app/getFavouritesCount',
     }),
   },
 })
 export default class Header extends Vue {
+  @Watch('$route') routeChange() {
+    this.isIndexPage = this.$router.currentRoute.path === '/';
+  }
+
   @Action('app/fetchMenu') fetchMenu;
 
   isAuthenticated = false;
@@ -109,10 +115,7 @@ export default class Header extends Vue {
 
   body: HTMLBodyElement | null = null;
 
-  user = {
-    name: 'Владимир',
-    avatar: `https://picsum.photos/id/${getRandomNumberBetween(0, 100)}/100`,
-  };
+  user: ProfileUser | null = null;
 
   selectedShop;
 
@@ -121,6 +124,8 @@ export default class Header extends Vue {
   notifications: NotificationItem[] = NOTIFICATIONS;
 
   profileMenuItems: BaseMenuItem[] = PROFILE_MENU_ITEMS;
+
+  isIndexPage = false;
 
   get showProfileHeader() {
     return !this.searchFocused && this.profilePage;
@@ -136,7 +141,6 @@ export default class Header extends Vue {
   }
 
   mounted() {
-    // this.showLogin = true;
     this.body = document.querySelector('body');
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 768) {
@@ -234,6 +238,20 @@ export default class Header extends Vue {
 
     &__dropdown {
       margin-top: 25px;
+
+      &--popper {
+        position: relative;
+
+        &:after {
+          content: '';
+          width: 100%;
+          height: 25px;
+          position: absolute;
+          display: block;
+          left: 0;
+          top: -25px;
+        }
+      }
     }
 
     &__notifications {
@@ -247,9 +265,34 @@ export default class Header extends Vue {
     &__fav-btn {
       margin-right: 15px;
       margin-left: 15px;
+      color: black;
+
+      .notification-button__number {
+        transition: background-color 0.5s ease;
+        background-color: black;
+      }
+
+      .notification-button__icon,
+      .notification-button__text {
+        transition: color 0.5s ease;
+        color: black;
+      }
+
       @include tablet() {
         margin-left: 12px;
         margin-right: 37px;
+      }
+
+      &:hover {
+        .notification-button__number {
+          background-color: $blue;
+        }
+
+        .notification-button__icon,
+        .notification-button__text {
+          color: $blue;
+        }
+
       }
     }
 
@@ -288,6 +331,9 @@ export default class Header extends Vue {
 
       img {
         max-width: 100%;
+        height: 100%;
+        width: 100%;
+        display: block;
       }
     }
   }

@@ -9,4 +9,8 @@ export const endpoints = {
   user: '/auth/user',
   logout: '/auth/logout',
   refreshToken: '/auth/refresh ',
+  getMenu: '/category/tree',
+  favourites: {
+    counter: '/wishlist/counter',
+  },
 };

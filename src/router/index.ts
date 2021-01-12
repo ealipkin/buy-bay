@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import { createRequest } from '@/services/http.service';
-import { endpoints } from '@/config';
+import $store from '../store';
 
 Vue.use(VueRouter);
 
@@ -111,16 +110,8 @@ const router = new VueRouter({
 });
 
 export async function loadUser(to, from, next) {
-  const token = localStorage.getItem('laravel-jwt-auth');
-  if (token) {
-    createRequest('GET', endpoints.user, { token })
-      .then((res) => {
-        console.log('user -> ', res);
-        next();
-      });
-  } else {
-    next();
-  }
+  await $store.dispatch('app/loadUser');
+  next();
 }
 
 router.beforeEach(loadUser);

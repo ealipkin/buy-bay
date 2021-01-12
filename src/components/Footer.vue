@@ -3,7 +3,11 @@
     .container.footer__content
       .footer__inner
         .footer__col.footer__info
-          router-link(to="/").footer__logo
+
+          span(v-if="isIndexPage").footer__logo
+            include ../assets/icons/kupide-logo-white.svg
+
+          router-link(to="/" v-if="!isIndexPage").footer__logo
             include ../assets/icons/kupide-logo-white.svg
 
           .footer__payments
@@ -55,10 +59,16 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 @Component
 export default class Footer extends Vue {
+  @Watch('$route') routeChange() {
+    this.isIndexPage = this.$router.currentRoute.path === '/';
+  }
+
+  isIndexPage = false;
+
   contacts = [
     {
       href: '',
@@ -216,6 +226,7 @@ export default class Footer extends Vue {
     }
 
     &__logo {
+      display: block;
       margin-right: auto;
       width: 140px;
       color: white;

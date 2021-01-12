@@ -32,7 +32,6 @@ export default class ProfileNav extends Vue {
   @Prop() public items!: BaseMenuItem[];
 
   handleClick(item: BaseMenuItem) {
-    console.log(item);
     if (item.href) {
       router.push({ path: item.href });
     }

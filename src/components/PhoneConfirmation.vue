@@ -2,14 +2,14 @@
   .phone-confirmation
     ValidationObserver(v-slot="{ validate }" v-show="!phoneSend" v-if="!byMail")
       form(@submit.prevent="validate().then(handleGetCodeClick)").form.phone-confirmation__phone-section
-        Input(:rules="['required', 'phone']" label="Телефон" name="phone" mask="+7(999)999-99-99" @input="handlePhoneInput" ref="phoneInput").form__input
+        Input(:rules="['required', 'phone']" label="Телефон" name="phone" mask="+7 999 999-99-99" @input="handlePhoneInput" ref="phoneInput").form__input
         button(type="button" @click="validate().then(handleGetCodeClick)").button.form__login-button Получить код
 
     ValidationObserver(v-slot="{ validate }" v-show="!phoneSend" v-if="byMail")
       form(@submit.prevent="validate().then(handleGetCodeClick)").form.phone-confirmation__phone-section
         Input(:rules="['required', 'email']" label="Электронная почта" name="email" mask="" ref="mailInput").form__input
         button(type="button" @click="validate().then(handleGetCodeClick)").button.form__login-button Получить код
-
+    div(v-if="error").phone-confirmation__error {{error}}
     div(v-show="phoneSend").phone-confirmation__code
       div(v-if="byMail").phone-confirmation__code-text Мы отправили код подтверждения на указанный в аккаунте телефон
         span.nowrap  {{safePhoneNumber}}&nbsp;
@@ -23,7 +23,6 @@
         .tac
           button(type="button" @click="handleGetNewCodeClick" v-if="byMail").phone-confirmation__code-get-new Получить новый код
 
-        div(v-if="smsCode") Код из смс (для теста) - {{smsCode}}
         div(v-if="!byMail").tac
           vac(:left-time="59000" ref="countdown")
             template(v-slot:process="{ timeObj }")
@@ -33,6 +32,8 @@
             template(v-slot:finish)
               button(type="button" @click="handleGetNewCodeClick").phone-confirmation__code-get-new Получить новый код
 
+        div(v-if="smsCode") <br><br>Код из смс (для теста) - {{smsCode}}
+
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
@@ -41,6 +42,8 @@ import Input from '@/components/Input.vue';
 import { PHONE_CODE_LENGTH } from '@/validations';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
+import { CONFIRMATION_STEPS } from '@/utils/models';
+import { Action } from 'vuex-class';
 
 interface GetCodeResponse {
   data: {
@@ -67,6 +70,8 @@ interface LoginResponse {
   components: { Input },
 })
 export default class PhoneConfirmation extends Vue {
+  @Action('app/loadUser') loadUser;
+
   @Prop() public byMail!: boolean;
 
   smsCode: number | null = null;
@@ -77,6 +82,8 @@ export default class PhoneConfirmation extends Vue {
 
   phoneNumber = '';
 
+  error: string | null = null;
+
   get safePhoneNumber() {
     const number = this.phoneNumber || '+7(911)566-78-98';
     const splittedPhone = number.split('-');
@@ -86,18 +93,22 @@ export default class PhoneConfirmation extends Vue {
   handleChangePhoneClick() {
     this.phoneSend = false;
     (this.$refs.phoneInput as any).doFocus();
+    this.$emit('step-change', CONFIRMATION_STEPS.PHONE);
   }
 
   async handleGetCodeClick(isValid) {
     if (isValid) {
-      this.getCode().then((res: GetCodeResponse) => {
-        const { data } = res;
-        if (data.success) {
-          this.smsCode = data.data.code;
-          this.smsToken = data.data.token;
-          this.openCodeStep();
-        }
-      });
+      this.error = null;
+      this.getCode().then(this.getCodeSuccess).catch(this.catchError);
+    }
+  }
+
+  getCodeSuccess(res: GetCodeResponse) {
+    const { data } = res;
+    if (data.success) {
+      this.smsCode = data.data.code;
+      this.smsToken = data.data.token;
+      this.openCodeStep();
     }
   }
 
@@ -109,6 +120,7 @@ export default class PhoneConfirmation extends Vue {
     }
     codeInput.setValue('');
     codeInput.doFocus();
+    this.$emit('step-change', CONFIRMATION_STEPS.CODE);
   }
 
   handlePhoneInput({ value }) {
@@ -122,14 +134,24 @@ export default class PhoneConfirmation extends Vue {
 
   handleCodeInput({ value }) {
     const safeValue = Number(value);
-    if (safeValue && !Number.isNaN(value) && String(value).length === PHONE_CODE_LENGTH && safeValue === this.smsCode) {
+    if (safeValue && !Number.isNaN(value) && String(value).length === PHONE_CODE_LENGTH) {
       this.login()
-        .then((res: LoginResponse) => {
-          const { data } = res.data;
-          ((this as any).$auth).token(null, data.token, false);
-          this.$emit('confirmed');
-        });
+        .then(this.checkCodeSuccess)
+        .catch(this.catchError);
     }
+  }
+
+  checkCodeSuccess(res: LoginResponse) {
+    const { data } = res.data;
+    const { token } = data;
+    const { $auth } = this as any;
+    $auth.token(null, token, false);
+    this.$emit('confirmed');
+    this.loadUser();
+  }
+
+  catchError(res) {
+    this.error = res.response && res.response.data && res.response.data.message;
   }
 
   async login(): Promise<LoginResponse> {
@@ -147,6 +169,10 @@ export default class PhoneConfirmation extends Vue {
 
   handleGetNewCodeClick() {
     this.openCodeStep();
+  }
+
+  mounted() {
+    this.$emit('step-change', CONFIRMATION_STEPS.PHONE);
   }
 }
 
@@ -178,6 +204,12 @@ export default class PhoneConfirmation extends Vue {
 
     &__code-text {
       font-size: 14px;
+    }
+
+    &__error {
+      margin-top: 10px;
+      font-size: 14px;
+      color: $red-1;
     }
   }
 </style>

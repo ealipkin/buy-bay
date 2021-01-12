@@ -3,18 +3,10 @@
     .modal
       button(type="button" @click="closeModal").modal__close.close
       .modal__content.login-modal__content
-        TabsNav(:tabs="tabs" v-on:change="selectTab").tabs-nav--small.login-modal__tabs
         div(:class="{'tab--active': selectedTab === 'login'}").tab.login-modal__login
-          PhoneConfirmation(v-show="!enterByMail" @confirmed="phoneConfirmed")
-          div(v-show="enterByMail").login-modal__mail-confirmation
-            .login-modal__subtitle Только для зарегистрированных пользователей
-            PhoneConfirmation(v-show="enterByMail" :byMail="true" @confirmed="phoneConfirmed")
-          .tac.login-modal__bottom
-            button(v-show="enterByMail" type="button" @click="handleMailEnterClick").login-modal__enter-by Войти по номеру телефона
-            button(v-show="!enterByMail" type="button" @click="handlePhoneEnterClick").login-modal__enter-by Войти по почте
-        div(:class="{'tab--active': selectedTab === 'register'}").tab.login-modal__register
-          Registration(@register="handleRegister" @later="closeModal").login-modal__inner
-
+          div(v-if="confirmationStep === confirmationSteps.PHONE").login-modal__title Войдите, чтобы продолжить
+          div(v-if="confirmationStep === confirmationSteps.CODE").login-modal__title Введите код
+          PhoneConfirmation(v-show="!enterByMail" @confirmed="phoneConfirmed" @step-change="handleConfirmationStepChange")
 </template>
 
 <script lang="ts">
@@ -25,6 +17,7 @@ import SocialsAuth from '@/components/SocialsAuth.vue';
 import Registration from '@/components/Registration.vue';
 import PhoneConfirmation from '@/components/PhoneConfirmation.vue';
 import { Action } from 'vuex-class';
+import { CONFIRMATION_STEPS } from '@/utils/models';
 
 @Component({
   components: {
@@ -39,6 +32,10 @@ export default class LoginModal extends Vue {
   @Action('app/setUserAuth') setUserAuth;
 
   selectedTab = 'login';
+
+  confirmationStep: CONFIRMATION_STEPS | null = null;
+
+  confirmationSteps = CONFIRMATION_STEPS;
 
   accountCreated = false;
 
@@ -71,6 +68,10 @@ export default class LoginModal extends Vue {
   closeModal() {
     this.$modal.hide('login-modal');
     this.modalClose();
+  }
+
+  handleConfirmationStepChange(step: CONFIRMATION_STEPS) {
+    this.confirmationStep = step;
   }
 
   login() {
@@ -133,6 +134,12 @@ export default class LoginModal extends Vue {
 </style>
 <style scoped lang="scss">
   .login-modal {
+    &__title {
+      font-size: 16px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
     &__bottom {
       margin-top: 30px;
     }

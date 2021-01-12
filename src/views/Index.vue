@@ -23,7 +23,6 @@
       .section__container
         .section-header
           .section-title Топ категории
-          router-link(to="#").section-link Показать еще
         TopCategories(:categories="topCategories")
 
     section(v-show="hotItems").section.section--catalog-slider

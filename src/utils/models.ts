@@ -259,6 +259,8 @@ export interface ProfileUser {
   name: string;
   surname: string;
   patronymic?: string;
+  phone?: string;
+  image?: string;
   sex?: {
     label: string;
     value: SEX_TYPES;
@@ -332,4 +334,23 @@ export interface SearchItem {
 export interface SearchSuggestItem {
   title: string;
   items: SearchItem[];
+}
+
+export enum CONFIRMATION_STEPS {
+  PHONE = 'phone',
+  CODE = 'code',
+}
+
+export interface UserResponse {
+  data: {
+    success: boolean;
+    data: {
+      status: string;
+      data: ProfileUser;
+    };
+  };
+}
+
+export interface FavCountResponse {
+  data: number;
 }

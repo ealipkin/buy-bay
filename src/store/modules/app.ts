@@ -1,15 +1,15 @@
 import { createRequest } from '@/services/http.service';
-import { MenuItem, ProductShop } from '@/utils/models';
-
-const endpoints = {
-  GET_MENU: '/category/tree',
-};
+import {
+  FavCountResponse, MenuItem, ProductShop, ProfileUser, UserResponse,
+} from '@/utils/models';
+import { endpoints } from '@/config';
 
 interface AppState {
   isAuthenticated: boolean;
   selectedShop: ProductShop | null;
   profilePage: string | null;
   menuLoaded: boolean;
+  favouritesCount: number;
   mainMenu: MenuItem[];
 }
 
@@ -18,6 +18,7 @@ const appState: AppState = {
   profilePage: null,
   menuLoaded: false,
   isAuthenticated: false,
+  favouritesCount: 0,
   mainMenu: [],
 };
 
@@ -26,6 +27,7 @@ const getters = {
   getProfilePage: (state: AppState) => state.profilePage,
   getMainMenu: (state: AppState) => state.mainMenu,
   getIsAuthenticated: (state: AppState) => state.isAuthenticated,
+  getFavouritesCount: (state: AppState) => state.favouritesCount,
 };
 
 const mutationTypes = {
@@ -34,6 +36,7 @@ const mutationTypes = {
   SET_MAIN_MENU: 'SET_MAIN_MENU',
   SET_MAIN_MENU_LOADED: 'SET_MAIN_MENU_LOADED',
   SET_USER_AUTH: 'SET_USER_AUTH',
+  SET_FAVOURITES_COUNT: 'SET_FAVOURITES_COUNT',
 };
 
 const mutations = {
@@ -52,6 +55,9 @@ const mutations = {
   [mutationTypes.SET_USER_AUTH](state: AppState, payload: boolean) {
     state.isAuthenticated = payload;
   },
+  [mutationTypes.SET_FAVOURITES_COUNT](state: AppState, payload: number) {
+    state.favouritesCount = payload;
+  },
 };
 
 const actions = {
@@ -64,9 +70,30 @@ const actions = {
   async setUserAuth({ commit, state }, props) {
     commit('SET_USER_AUTH', props);
   },
+  async loadUser({ commit }) {
+    const vm = (this as any)._vm;
+    const { $auth } = vm;
+    const token = $auth.token();
+    if (token) {
+      // load user
+      createRequest('GET', endpoints.user, { token })
+        .then((res: UserResponse) => {
+          const user: ProfileUser = res.data.data.data;
+          $auth.user(user);
+        });
+
+      // load favourites counter
+      createRequest('GET', endpoints.favourites.counter)
+        .then((res: FavCountResponse) => {
+          commit('SET_FAVOURITES_COUNT', res.data);
+        });
+
+      // load notifications here
+    }
+  },
   async fetchMenu({ commit }) {
     commit('SET_MAIN_MENU_LOADED', true);
-    return createRequest('get', endpoints.GET_MENU)
+    return createRequest('get', endpoints.getMenu)
       .then((res) => {
         const response = res.data.data;
         commit('SET_MAIN_MENU', response);

@@ -24,5 +24,6 @@ module.exports = {
     'no-param-reassign': 'off',
     'no-return-assign': 'off',
     'no-nested-ternary': 'off',
+    'no-underscore-dangle': 'off',
   },
 };
