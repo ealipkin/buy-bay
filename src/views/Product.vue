@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import Slick from 'vue-slick';
 import ItemPreview from '@/components/ItemPreview.vue';
@@ -93,6 +93,10 @@ const PRODUCT_SLIDER_SETTINGS = {
   },
 })
 export default class ItemDetail extends Vue {
+  @Watch('$route') routeChange() {
+    this.init();
+  }
+
   breadCrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/category', label: 'Мужской гардероб' },
@@ -136,7 +140,14 @@ export default class ItemDetail extends Vue {
   }
 
   mounted() {
+    this.init();
+  }
+
+  init() {
     const productId = this.$route.params.id;
+    this.seo = null;
+    this.item = null;
+    this.similarItems = null;
     createRequest('get', `${endpoints.product}/${productId}`)
       .then((res) => {
         const response: ProductPage = res.data.data;

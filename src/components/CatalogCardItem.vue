@@ -3,7 +3,7 @@
     button(@click="toggleFav" :class="{'catalog-card__fav--active': item.isFavourite}").catalog-card__fav
       include ../assets/icons/heart.svg
 
-    router-link(:to="{path: `/product/${item.id}`}").catalog-card__inner
+    div(@click="handleClick").catalog-card__inner
       .catalog-card__top
         .catalog-card__img(:style="{backgroundImage: `url(${item.images.preview})`}")
           //:style="{backgroundImage: `url(${promoImage.image})`}"
@@ -73,6 +73,10 @@ export default class CatalogCardItem extends Vue {
   toggleFav() {
     this.item.isFavourite = !this.item.isFavourite;
   }
+  
+  handleClick() {
+    this.$router.push({ path: `/product/${this.item.id}` })
+  }
 }
 </script>
 
@@ -135,10 +139,12 @@ export default class CatalogCardItem extends Vue {
     }
 
     &__inner {
+      outline: none;
       text-decoration: none;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      cursor: pointer;
     }
 
     &__img {
