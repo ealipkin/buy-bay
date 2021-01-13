@@ -14,9 +14,9 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import Slick from 'vue-slick';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
-import { Product } from '@/utils/models';
 import { debounce } from '@/utils/common';
 import { breakPoints } from '@/utils/constants';
+import { Product } from '@/models/product';
 
 @Component({
   components: {

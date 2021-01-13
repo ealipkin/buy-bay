@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProductMeta } from '@/utils/models';
+import { ProductMeta } from '@/models/product';
 
 @Component
 export default class OrderResultTable extends Vue {

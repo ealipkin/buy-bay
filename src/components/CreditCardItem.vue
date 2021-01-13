@@ -19,7 +19,7 @@
 import {
   Component, Prop, Vue, Emit,
 } from 'vue-property-decorator';
-import { CardItem } from '@/utils/models';
+import { CardItem } from '@/models/models';
 
 @Component
 export default class CreditCardItem extends Vue {

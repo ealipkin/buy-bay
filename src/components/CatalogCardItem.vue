@@ -1,9 +1,9 @@
 <template lang="pug">
   div(:class="{'--isOutlined': isOutlined }").catalog-card
     button(@click="toggleFav" :class="{'catalog-card__fav--active': item.isFavourite}").catalog-card__fav
-      include ../assets/icons/heart.svg
+      include ../assets/icons/trash.svg
 
-    div(@click="handleClick").catalog-card__inner
+    router-link(:to="`/product/${item.id}`").catalog-card__inner
       .catalog-card__top
         .catalog-card__img(:style="{backgroundImage: `url(${item.images.preview})`}")
           //:style="{backgroundImage: `url(${promoImage.image})`}"
@@ -44,9 +44,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Product } from '@/utils/models';
 import { divideNumberWithSpaces, declOfNum } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
+import { Product } from '@/models/product';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
 
 @Component({
   components: { Rate },
@@ -72,10 +74,12 @@ export default class CatalogCardItem extends Vue {
 
   toggleFav() {
     this.item.isFavourite = !this.item.isFavourite;
-  }
-  
-  handleClick() {
-    this.$router.push({ path: `/product/${this.item.id}` })
+    this.$emit('toggle-fav');
+    createRequest('GET', endpoints.favourites.deleteProduct(this.item.id_product))
+      .then(() => {
+        console.log('here ->> ');
+        this.$emit('favRemove');
+      });
   }
 }
 </script>
@@ -121,17 +125,13 @@ export default class CatalogCardItem extends Vue {
       align-items: center;
       justify-content: center;
       display: none;
+      cursor: pointer;
 
       svg {
         display: block;
         width: 100%;
       }
 
-      &--active {
-        svg path {
-          fill: $blue;
-        }
-      }
     }
 
     &--fav &__fav {

@@ -16,7 +16,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Rate from '@/components/Rate.vue';
-import { ProductShop } from '@/utils/models';
+import { ProductShop } from '@/models/product';
 
 @Component({
   components: { Rate },

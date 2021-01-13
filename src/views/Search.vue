@@ -46,11 +46,12 @@ import SeoTexts from '@/components/SeoTexts.vue';
 import { generateProducts, getRandomNumberBetween } from '@/utils/data';
 import TabsNav from '@/components/TabsNav.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { BreadcrumbLink, Product } from '@/utils/models';
 import SimilarSlider from '@/components/AmountChooser/SimilarSlider.vue';
 import SortSelect from '@/components/SortSelect.vue';
 import CategoryFilter from '@/components/CategoryFilter.vue';
 import { FILTERS } from '@/utils/constants';
+import { BreadcrumbLink } from '@/models/models';
+import { Product } from '@/models/product';
 
 const BRANDS = [
   {

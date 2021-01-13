@@ -4,16 +4,16 @@
     .item-groups__text Покупайте совместно с моментальной доставкой по&nbsp;самой выгодной цене.
 
     Slick(ref="slick" :options="sliderSettings").item-groups__slider
-      div(v-for="(group, index) in visibleSliderGroups").item-groups__slide
+      div(v-for="(group) in visibleSliderGroups").item-groups__slide
         GroupItem(:group="group").item-groups__item
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Group } from '@/utils/models';
 import Slick from 'vue-slick';
 import GroupItem from '@/components/GroupItem.vue';
+import { Group } from '@/models/models';
 
 const SLIDER_VISIBLE_GROUPS = 10;
 const LIST_VISIBLE_GROUPS = 3;

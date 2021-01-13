@@ -33,7 +33,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { NotificationItem, NOTIFICATIONS_TYPES } from '@/utils/models';
+import { NOTIFICATIONS_TYPES } from '@/models/enums';
+import { NotificationItem } from '@/models/models';
 
 @Component
 export default class Notifications extends Vue {

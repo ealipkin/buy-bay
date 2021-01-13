@@ -34,9 +34,9 @@ import { breakPoints } from '@/utils/constants';
 import OrderInfo from '@/components/OrderInfo.vue';
 import GroupInfo from '@/components/GroupInfo.vue';
 import GroupAction from '@/components/GroupAction.vue';
-import { Product } from '@/utils/models';
 import SimilarSlider from '@/components/AmountChooser/SimilarSlider.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
+import { Product } from '@/models/product';
 
 @Component({
   components: {

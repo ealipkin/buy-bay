@@ -17,7 +17,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import Slick from 'vue-slick';
-import { BigSliderItem } from '@/utils/models';
+import { BigSliderItem } from '@/models/models';
 
 @Component({
   components: {

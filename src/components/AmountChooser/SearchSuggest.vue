@@ -14,9 +14,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SEARCH_ITEM_TYPE, SearchItem, SearchSuggestItem } from '@/utils/models';
 import router from '@/router';
 import { declOfNum, getPrice } from '@/utils/common';
+import { SEARCH_ITEM_TYPE } from '@/models/enums';
+import { SearchItem, SearchSuggestItem } from '@/models/models';
 
 @Component
 export default class Main extends Vue {

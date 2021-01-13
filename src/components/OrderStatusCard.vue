@@ -12,9 +12,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Product } from '@/utils/models';
 import OrderStatus from '@/components/OrderStatus.vue';
 import OrderResultTable from '@/components/OrderResultTable.vue';
+import { Product } from '@/models/product';
 
 @Component({
   components: {

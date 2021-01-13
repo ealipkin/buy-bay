@@ -9,11 +9,12 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { ProfileUser, SEX_TYPES } from '@/utils/models';
 import Input from '@/components/Input.vue';
 import AvatarEdit from '@/components/AvatarEdit.vue';
 import Radio from '@/components/Radio.vue';
 import InputDate from '@/components/InputDate.vue';
+import { ProfileUser } from '@/models/models';
+import { SEX_TYPES } from '@/models/enums';
 
 @Component({
   components: {

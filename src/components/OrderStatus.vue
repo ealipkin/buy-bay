@@ -43,7 +43,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { ORDER_STATUSES, OrderUser } from '@/utils/models';
+import { OrderUser } from '@/models/models';
+import { ORDER_STATUSES } from '@/models/enums';
 
 @Component
 export default class OrderStatus extends Vue {

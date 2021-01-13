@@ -39,9 +39,9 @@ import AddressItem from '@/components/AddressItem.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
 import AddressModal from '@/components/AddressModal.vue';
 import CreditCardModal from '@/components/CreditCardModal.vue';
-import { BreadcrumbLink } from '@/utils/models';
 import { createProfileUser } from '@/utils/data';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
+import { BreadcrumbLink } from '@/models/models';
 
 @Component({
   components: {

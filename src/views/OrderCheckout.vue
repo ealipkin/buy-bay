@@ -35,7 +35,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import OrderInfo from '@/components/OrderInfo.vue';
 import Recipient from '@/components/Recipient.vue';
 import Destination from '@/components/Destination.vue';
-import { BreadcrumbLink } from '@/utils/models';
+import { BreadcrumbLink } from '@/models/models';
 
 @Component({
   components: {

@@ -42,8 +42,8 @@ import Input from '@/components/Input.vue';
 import { PHONE_CODE_LENGTH } from '@/validations';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
-import { CONFIRMATION_STEPS } from '@/utils/models';
 import { Action } from 'vuex-class';
+import { CONFIRMATION_STEPS } from '@/models/enums';
 
 interface GetCodeResponse {
   data: {
@@ -81,6 +81,8 @@ export default class PhoneConfirmation extends Vue {
   phoneSend = false;
 
   phoneNumber = '';
+
+  code: string | number = '';
 
   error: string | null = null;
 
@@ -134,6 +136,7 @@ export default class PhoneConfirmation extends Vue {
 
   handleCodeInput({ value }) {
     const safeValue = Number(value);
+    this.code = safeValue;
     if (safeValue && !Number.isNaN(value) && String(value).length === PHONE_CODE_LENGTH) {
       this.login()
         .then(this.checkCodeSuccess)
@@ -156,7 +159,7 @@ export default class PhoneConfirmation extends Vue {
 
   async login(): Promise<LoginResponse> {
     const phone = `+${this.safePhoneNumber.replace(/\D/g, '')}`;
-    const code = String(this.smsCode);
+    const code = String(this.code);
     const token = this.smsToken;
 
     return (this as any).$auth.login({

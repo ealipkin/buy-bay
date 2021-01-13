@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SeoBlock } from '@/utils/models';
+import { SeoBlock } from '@/models/models';
 
 @Component({})
 export default class SeoTexts extends Vue {

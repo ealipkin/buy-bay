@@ -27,7 +27,7 @@ import OrderInfo from '@/components/OrderInfo.vue';
 import DeliveryAddress from '@/components/DeliveryAddress.vue';
 import OrderStatusCard from '@/components/OrderStatusCard.vue';
 import Chat from '@/components/Chat.vue';
-import { BreadcrumbLink } from '@/utils/models';
+import { BreadcrumbLink } from '@/models/models';
 
 @Component({
   components: {

@@ -1,5 +1,9 @@
+import { SORT_PARAMS } from '@/models/enums';
+
 export const API_URL = process.env.VUE_APP_API_URL;
 export const AUTH_API_URL = process.env.VUE_APP_AUTH_API_URL;
+
+export const DEFAULT_PAGINATE_PAGE = 1;
 
 export const endpoints = {
   index: '/mp/build',
@@ -11,6 +15,12 @@ export const endpoints = {
   refreshToken: '/auth/refresh ',
   getMenu: '/category/tree',
   favourites: {
+    products: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: { page: number; sort: SORT_PARAMS | string }) => `/wishlist/products?page=${page}&sort=${sort}`,
+    brands: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: { page: number; sort: SORT_PARAMS | string }) => `/wishlist/brands?page=${page}&sort=${sort}`,
+    addProduct: (id) => `/wishlist/product/${id}/add`,
+    deleteProduct: (id) => `/wishlist/product/${id}/delete`,
+    addBrand: (id) => `/wishlist/brand/${id}/add`,
+    deleteBrand: (id) => `/wishlist/brand/${id}/delete`,
     counter: '/wishlist/counter',
   },
 };

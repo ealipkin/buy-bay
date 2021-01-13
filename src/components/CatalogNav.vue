@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { MenuChildItem } from '@/utils/models';
+import { MenuChildItem } from '@/models/menu';
 
 @Component
 export default class CatalogNav extends Vue {

@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Contacts } from '@/utils/models';
+import { Contacts } from '@/models/models';
 
 @Component
 export default class DeliveryAddress extends Vue {

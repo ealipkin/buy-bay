@@ -1,17 +1,36 @@
 <template lang="pug">
   .pagination
-    button(type="button" @click="showMore").button.pagination__show-more Показать еще {{moreCount}} {{kindText || 'товаров'}}
-    paginate(:page-count="99" :page-range="3" :click-handler="pageChange" :prev-text="'Назад'" :next-text="'Вперед'" :container-class="'paginator'").pagination__paginator
+    button(type="button" @click="showMore").button.pagination__show-more Показать еще {{moreCountNumber}} {{kindText || 'товаров'}}
+    paginate(
+      v-model="currentPage"
+      :page-count="paginationInfo ? paginationInfo.lastPage : 99"
+      :page-range="3"
+      :click-handler="pageChange"
+      :prev-text="'Назад'"
+      :next-text="'Вперед'"
+      :container-class="'paginator'"
+    ).pagination__paginator
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { PaginationInfo } from '@/models/responses';
 
 @Component
 export default class Pagination extends Vue {
+  @Prop() public paginationInfo!: PaginationInfo;
+
   @Prop() public moreCount!: number;
 
   @Prop() public kindText!: number;
+
+  get currentPage() {
+    return (this.paginationInfo && this.paginationInfo.currentPage) || 1;
+  }
+
+  get moreCountNumber() {
+    return this.paginationInfo ? this.paginationInfo.perPage : this.moreCount;
+  }
 
   showMore() {
     this.$emit('more', this.moreCount);

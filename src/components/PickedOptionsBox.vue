@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProductOption } from '@/utils/models';
+import { ProductOption } from '@/models/product';
 
 @Component
 export default class PickedOptionsBox extends Vue {

@@ -17,7 +17,7 @@ import SocialsAuth from '@/components/SocialsAuth.vue';
 import Registration from '@/components/Registration.vue';
 import PhoneConfirmation from '@/components/PhoneConfirmation.vue';
 import { Action } from 'vuex-class';
-import { CONFIRMATION_STEPS } from '@/utils/models';
+import { CONFIRMATION_STEPS } from '@/models/enums';
 
 @Component({
   components: {

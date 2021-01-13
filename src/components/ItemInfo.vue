@@ -38,10 +38,13 @@
 import {
   Component, Prop, Vue,
 } from 'vue-property-decorator';
-import { Product } from '@/utils/models';
 import { divideNumberWithSpaces } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
 import AmountChooser from '@/components/AmountChooser/vue-amount-chooser.vue';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import $store from '@/store';
+import { Product } from '@/models/product';
 
 @Component({
   components: { AmountChooser, Rate },
@@ -56,7 +59,24 @@ export default class ItemInfo extends Vue {
   };
 
   toggleFav() {
+    if (this.item.isFavourite) {
+      this.removeFromFav();
+    } else {
+      this.addToFav();
+    }
+  }
+
+  addToFav() {
+    createRequest('GET', endpoints.favourites.addProduct(this.item.id_product)).then(this.updateFavourites);
+  }
+
+  removeFromFav() {
+    createRequest('GET', endpoints.favourites.deleteProduct(this.item.id_product)).then(this.updateFavourites);
+  }
+
+  updateFavourites() {
     this.item.isFavourite = !this.item.isFavourite;
+    $store.dispatch('app/updateFavouritesCount');
   }
 
   buySelf() {

@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProductDelivery } from '@/utils/models';
+import { ProductDelivery } from '@/models/product';
 
 @Component({})
 export default class DeliveryInfo extends Vue {

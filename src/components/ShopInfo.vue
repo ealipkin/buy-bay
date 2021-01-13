@@ -16,9 +16,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProductShop } from '@/utils/models';
 import ShowMoreText from '@/components/ShowMoreText.vue';
 import Rate from '@/components/Rate.vue';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import $store from '@/store';
+import { ProductShop } from '@/models/product';
 
 @Component({
   components: { Rate, ShowMoreText },
@@ -27,7 +30,24 @@ export default class ShopInfo extends Vue {
   @Prop() public shop!: ProductShop;
 
   toggleFav() {
+    if (this.shop.isFavourite) {
+      this.removeFromFav();
+    } else {
+      this.addToFav();
+    }
+  }
+
+  addToFav() {
+    createRequest('GET', endpoints.favourites.addBrand(this.shop.id)).then(this.updateFavourites);
+  }
+
+  removeFromFav() {
+    createRequest('GET', endpoints.favourites.deleteBrand(this.shop.id)).then(this.updateFavourites);
+  }
+
+  updateFavourites() {
     Vue.set(this.shop, 'isFavourite', !this.shop.isFavourite);
+    $store.dispatch('app/updateFavouritesCount');
   }
 }
 

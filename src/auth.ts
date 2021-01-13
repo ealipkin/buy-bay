@@ -49,7 +49,7 @@ const config = {
     refreshData: {
       url: `${API_URL}/auth/refresh`,
       method: 'GET',
-      enabled: true,
+      enabled: false,
       interval: 30,
     },
   },

@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { BreadcrumbLink } from '@/utils/models';
+import { BreadcrumbLink } from '@/models/models';
 
 @Component({})
 export default class Breadcrumbs extends Vue {

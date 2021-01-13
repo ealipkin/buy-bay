@@ -20,7 +20,7 @@ import OrderTimer from '@/components/OrderTimer.vue';
 import OrderStatus from '@/components/OrderStatus.vue';
 
 import { divideNumberWithSpaces } from '@/utils/common';
-import { OrderItem as OrderItemModel } from '@/utils/models';
+import { OrderItem as OrderItemModel } from '@/models/models';
 
 @Component({
   components: {

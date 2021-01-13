@@ -23,13 +23,31 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { BaseMenuItem } from '@/utils/models';
+import {
+  Component, Vue, Prop, Watch,
+} from 'vue-property-decorator';
 import router from '@/router';
+import { BaseMenuItem } from '@/models/menu';
+import { mapGetters } from 'vuex';
+import { PROFILE_NAV_TYPES } from '@/models/enums';
 
-@Component
+@Component({
+  computed: {
+    ...mapGetters({
+      favouritesCount: 'app/getFavouritesCount',
+    }),
+  },
+})
 export default class ProfileNav extends Vue {
+  @Watch('favouritesCount') onFavouritesCountChange(count) {
+    const itemIndex = this.items.findIndex((item: BaseMenuItem) => item.type === this.NAV_TYPES.FAVOURITES);
+    const item = this.items[itemIndex];
+    Vue.set(this.items, itemIndex, { ...item, count });
+  }
+
   @Prop() public items!: BaseMenuItem[];
+
+  NAV_TYPES = PROFILE_NAV_TYPES;
 
   handleClick(item: BaseMenuItem) {
     if (item.href) {

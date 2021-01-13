@@ -13,8 +13,8 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import router from '@/router';
 import clickOutside from '@/utils/clickOutside';
 import { SEARCH_SUGGEST } from '@/utils/constants';
-import { SearchItem, SearchSuggestItem } from '@/utils/models';
 import SearchSuggest from '@/components/AmountChooser/SearchSuggest.vue';
+import { SearchItem, SearchSuggestItem } from '@/models/models';
 
 const MIN_SEARCH_LENGTH = 3;
 @Component({

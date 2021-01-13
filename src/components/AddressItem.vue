@@ -19,7 +19,7 @@
 import {
   Component, Prop, Vue, Emit,
 } from 'vue-property-decorator';
-import { AddressItem as ItemType } from '@/utils/models';
+import { AddressItem as ItemType } from '@/models/models';
 
 @Component
 export default class AddressItem extends Vue {

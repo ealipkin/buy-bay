@@ -30,8 +30,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { AddressItem } from '@/utils/models';
 import Input from '@/components/Input.vue';
+import { AddressItem } from '@/models/models';
 
 @Component({
   components: { Input },

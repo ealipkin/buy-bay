@@ -1,5 +1,5 @@
 import { createRequest } from '@/services/http.service';
-import { Product } from '@/utils/models';
+import { Product } from '@/models/product';
 
 /*
 Если пустой результат, то сначала нагенерировать новых групп перед запуском  (время то идет): https://kd-dev.ru/api/v1/group/seeds

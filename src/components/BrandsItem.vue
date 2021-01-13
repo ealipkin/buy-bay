@@ -15,7 +15,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Rate from '@/components/Rate.vue';
-import { BrandItem } from '@/utils/models';
+import { BrandItem } from '@/models/product';
 
 @Component({
   components: {

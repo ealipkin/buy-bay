@@ -74,11 +74,12 @@ import HeaderShopCard from '@/components/HeaderShopCard.vue';
 import LoginModal from '@/components/LoginModal.vue';
 import Notifications from '@/components/Notifications.vue';
 import { NOTIFICATIONS, PROFILE_MENU_ITEMS } from '@/utils/constants';
-import { BaseMenuItem, NotificationItem, ProfileUser } from '@/utils/models';
 import ProfileNav from '@/components/ProfileNav.vue';
 import MobileNav from '@/components/MobileNav.vue';
 import { Action } from 'vuex-class';
 import SearchField from '@/components/SearchField.vue';
+import { NotificationItem, ProfileUser } from '@/models/models';
+import { BaseMenuItem } from '@/models/menu';
 
 @Component({
   components: {

@@ -1,17 +1,11 @@
-import {
-  Group,
-  ORDER_STATUSES,
-  OrderItem,
-  OrderUser,
-  Product,
-  PRODUCT_FEATURES,
-  ProductFeature,
-  ProductShop,
-  REQUIRED_ADDRESS_FIELDS,
-  ProfileUser,
-  SEX_TYPES,
-} from '@/utils/models';
 import { nanoid } from 'nanoid';
+import { Product, ProductFeature, ProductShop } from '@/models/product';
+import {
+  ORDER_STATUSES, PRODUCT_FEATURES, REQUIRED_ADDRESS_FIELDS, SEX_TYPES,
+} from '@/models/enums';
+import {
+  Group, OrderItem, OrderUser, ProfileUser,
+} from '@/models/models';
 import { getIfExist } from './common';
 
 export const getRandomArrayElement = (array: any[]) => array[Math.floor(Math.random() * array.length)];
@@ -62,6 +56,7 @@ export const getShop = (): ProductShop => ({
 
 const createProduct = (item, index): Product => ({
   id: nanoid(),
+  id_product: nanoid(),
   title: getRandomArrayElement(PRODUCT_TITLES),
   rate: getRate(),
   groups: getRandomNumberBetween(0, 999),
@@ -165,7 +160,7 @@ const createProduct = (item, index): Product => ({
   groupPrice: getRandomNumberBetween(1000, 300000),
   orders: getRandomNumberBetween(1000, 700000),
   isFavourite: Boolean(getRandomNumberBetween(0, 1)),
-  shop: getShop(),
+  brand: getShop(),
   contacts: {
     name: 'Nikulin Alexander Ivanovich',
     phone: '+7 995 115-55-16',

@@ -29,10 +29,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { divideNumberWithSpaces } from '@/utils/common';
-import { Product } from '@/utils/models';
 import Rate from '@/components/Rate.vue';
 import PickedOptionsBox from '@/components/PickedOptionsBox.vue';
-import { generateProducts } from '@/utils/data';
+import { Product } from '@/models/product';
 
 @Component({
   components: {

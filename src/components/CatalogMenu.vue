@@ -45,8 +45,8 @@
 import {
   Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
-import { MenuItem } from '@/utils/models';
 import { breakPoints } from '@/utils/constants';
+import { MenuItem } from '@/models/menu';
 
 @Component
 export default class CatalogMenu extends Vue {

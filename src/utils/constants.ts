@@ -1,8 +1,8 @@
-import {
-  BaseMenuItem, MenuChildItem, NOTIFICATIONS_TYPES, NotificationItem, SearchSuggestItem, SEARCH_ITEM_TYPE,
-} from '@/utils/models';
 import { getRandomNumberBetween } from '@/utils/data';
 import { nanoid } from 'nanoid';
+import { BaseMenuItem, MenuChildItem } from '@/models/menu';
+import { NotificationItem, SearchSuggestItem } from '@/models/models';
+import { NOTIFICATIONS_TYPES, PROFILE_NAV_TYPES, SEARCH_ITEM_TYPE } from '@/models/enums';
 
 export const breakPoints = {
   mobile: 320,
@@ -14,23 +14,27 @@ export const breakPoints = {
 
 export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
   {
+    type: PROFILE_NAV_TYPES.PROFILE,
     title: 'Мой профиль',
     href: '/profile',
     icon: 'user',
   },
   {
+    type: PROFILE_NAV_TYPES.GROUPS,
     title: 'Мои группы',
     href: '/profile/groups',
     icon: 'users',
     count: '5',
   },
   {
+    type: PROFILE_NAV_TYPES.ORDERS,
     title: 'Мои заказы',
     href: '/profile/orders',
     icon: 'bag',
     count: '2',
   },
   {
+    type: PROFILE_NAV_TYPES.FAVOURITES,
     title: 'Избранное',
     href: '/profile/favourites',
     icon: 'heart',

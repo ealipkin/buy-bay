@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { SocialLink } from '@/utils/models';
+import { SocialLink } from '@/models/models';
 
 @Component
 export default class SocialList extends Vue {

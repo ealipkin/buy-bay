@@ -12,7 +12,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { SHARE_TIMER } from '@/utils/constants';
 import { divideNumberWithSpaces } from '@/utils/common';
 import Timer from '@/components/Timer.vue';
-import { Product } from '@/utils/models';
+import { Product } from '@/models/product';
 
 @Component({
   components: {

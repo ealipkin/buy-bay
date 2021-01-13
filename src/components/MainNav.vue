@@ -22,8 +22,8 @@ import {
 } from 'vue-property-decorator';
 import CatalogMenu from '@/components/CatalogMenu.vue';
 import clickOutside from '@/utils/clickOutside';
-import { MenuItem } from '@/utils/models';
 import { breakPoints } from '@/utils/constants';
+import { MenuItem } from '@/models/menu';
 
 @Component({
   components: { CatalogMenu },

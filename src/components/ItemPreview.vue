@@ -22,7 +22,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Slick from 'vue-slick';
-import { Product } from '@/utils/models';
+import { Product } from '@/models/product';
 
 @Component({
   components: {

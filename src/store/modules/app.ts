@@ -1,8 +1,9 @@
 import { createRequest } from '@/services/http.service';
-import {
-  FavCountResponse, MenuItem, ProductShop, ProfileUser, UserResponse,
-} from '@/utils/models';
 import { endpoints } from '@/config';
+import { ProductShop } from '@/models/product';
+import { MenuItem } from '@/models/menu';
+import { FavCountResponse, UserResponse } from '@/models/responses';
+import { ProfileUser } from '@/models/models';
 
 interface AppState {
   isAuthenticated: boolean;
@@ -12,6 +13,11 @@ interface AppState {
   favouritesCount: number;
   mainMenu: MenuItem[];
 }
+
+const updateFavouritesCount = async ({ commit }) => createRequest('GET', endpoints.favourites.counter)
+  .then((res: FavCountResponse) => {
+    commit('SET_FAVOURITES_COUNT', res.data);
+  });
 
 const appState: AppState = {
   selectedShop: null,
@@ -83,13 +89,13 @@ const actions = {
         });
 
       // load favourites counter
-      createRequest('GET', endpoints.favourites.counter)
-        .then((res: FavCountResponse) => {
-          commit('SET_FAVOURITES_COUNT', res.data);
-        });
+      updateFavouritesCount({ commit });
 
       // load notifications here
     }
+  },
+  async updateFavouritesCount({ commit }) {
+    await updateFavouritesCount({ commit });
   },
   async fetchMenu({ commit }) {
     commit('SET_MAIN_MENU_LOADED', true);

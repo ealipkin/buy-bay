@@ -10,7 +10,7 @@
         ItemInfo(:item="item").item-detail__item.item-detail__item--info
         ItemGroups(v-if="groups && groups.length" :groups="groups").item-detail__item.item-detail__item--groups
         ItemDescription(:item="item" v-if="isMobile").item-detail__item.item-detail__item--description
-        ItemShopCard(v-if="item.shop" :shop="item.shop").item-detail__item.item-detail__item--shop
+        ItemShopCard(v-if="item.brand" :shop="item.brand").item-detail__item.item-detail__item--shop
         DeliveryInfo(v-if="item.delivery" :deliveryItem="item.delivery").item-detail__delivery.item-detail__item.item-detail__item--delivery
 
     div(v-if="similarItems").item-detail__section
@@ -35,12 +35,13 @@ import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
 import { breakPoints } from '@/utils/constants';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { BreadcrumbLink, Product, SeoBlock } from '@/utils/models';
 import Pagination from '@/components/Pagination.vue';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import Loader from '@/components/Loader.vue';
 import SimilarSlider from '@/components/AmountChooser/SimilarSlider.vue';
+import { Product } from '@/models/product';
+import { BreadcrumbLink, SeoBlock } from '@/models/models';
 
 interface ProductPage extends Product {
   seo_block: SeoBlock;

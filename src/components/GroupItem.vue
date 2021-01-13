@@ -22,7 +22,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Group } from '@/utils/models';
+import { Group } from '@/models/models';
 
 @Component({})
 export default class GroupItem extends Vue {

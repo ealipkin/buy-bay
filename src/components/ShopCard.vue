@@ -2,7 +2,7 @@
   router-link(:to="{path: `/shop/${shop.id}`}").shop-card
     .shop-card__image
       img(:src="shop.image")
-    .shop-card__name {{shop.name}}
+    .shop-card__name {{shop.name || shop.brand}}
     .shop-card__category {{shop.category}}
     Rate(:rate="shop.rate || '5'" :list="true").shop-card__rate
 
@@ -10,8 +10,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProductShop } from '@/utils/models';
 import Rate from '@/components/Rate.vue';
+import { ProductShop } from '@/models/product';
 
 @Component({
   components: { Rate },

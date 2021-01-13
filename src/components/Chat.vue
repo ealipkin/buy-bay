@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { OrderUser, Message } from '@/utils/models';
+import { Message, OrderUser } from '@/models/models';
 
 @Component
 export default class Chat extends Vue {

@@ -24,20 +24,15 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
-import Brands from '@/components/Brands.vue';
-import CatalogSlider from '@/components/CatalogSlider.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
 import TopCategories from '@/components/TopCategories.vue';
 import { generateProducts } from '@/utils/data';
 import Advantages from '@/components/Advantages.vue';
-import { BreadcrumbLink, MenuChildItem } from '@/utils/models';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import SortSelect from '@/components/SortSelect.vue';
-import CategoryFilter from '@/components/CategoryFilter.vue';
 import { ADVANTAGES, MENU_CHILD_ITEMS } from '@/utils/constants';
-import Pagination from '@/components/Pagination.vue';
-import Slick from 'vue-slick';
 import CatalogNav from '@/components/CatalogNav.vue';
+import { MenuChildItem } from '@/models/menu';
+import { BreadcrumbLink } from '@/models/models';
 
 @Component({
   components: {

@@ -17,9 +17,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { AddressItem } from '@/utils/models';
 import Recipient from '@/components/Recipient.vue';
 import Destination from '@/components/Destination.vue';
+import { AddressItem } from '@/models/models';
 
 @Component({
   components: {

@@ -81,11 +81,11 @@ import { ADVANTAGES } from '@/utils/constants';
 import { Action } from 'vuex-class';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
-import {
-  BigSliderItem, BrandItem, Product, SeoBlock,
-} from '@/utils/models';
 import { topCategories } from '@/utils/data';
 import Loader from '@/components/Loader.vue';
+import { BigSliderItem, SeoBlock } from '@/models/models';
+import { BrandItem, Product } from '@/models/product';
+import { IndexPage, IndexPageResponse } from '@/models/responses';
 
 enum TABS_IDS {
   POPULAR = 'popular',
@@ -108,20 +108,6 @@ const PRODUCT_TABS = [
     label: 'Бестселлеры',
   },
 ];
-
-interface IndexPage {
-  b1: BigSliderItem[];
-  b2: BigSliderItem[];
-  top_brand: BrandItem[];
-
-  popular: Product[];
-  bestseller: Product[];
-  hot_groups: Product[];
-  highlights: [];
-  top_cat: [];
-
-  seo_block: SeoBlock;
-}
 
 /* tslint:disable */
 @Component({
@@ -194,7 +180,7 @@ export default class Index extends Vue {
   }
 
   mounted() {
-    createRequest('get', endpoints.index).then((res) => {
+    createRequest('get', endpoints.index).then((res: IndexPageResponse) => {
       const response: IndexPage = res.data.data;
       this.bigSliderItems = response.b1;
       this.bigSliderPromo = response.b2;

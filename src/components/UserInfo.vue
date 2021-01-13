@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProfileUser } from '@/utils/models';
 import { declOfNum } from '@/utils/common';
+import { ProfileUser } from '@/models/models';
 
 @Component
 export default class UserInfo extends Vue {
