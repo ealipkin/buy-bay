@@ -11,7 +11,7 @@ export enum SORT_PARAMS {
   RATE_DESC = 'rate_desc',
   PRICE = 'price',
   PRICE_DESC = 'price_desc',
-  GROUPS = 'groups',
+  GROUPS = 'u_group',
   DISCOUNT = 'discount'
 }
 

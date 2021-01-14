@@ -10,7 +10,7 @@
           div(v-if="!loaded").page__content.category__items
             .category__header
               TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.favourites__tabs
-              SortSelect(:options="options").favourites__select
+              SortSelect(:options="options" @change="sortChange").favourites__select
 
             div(:class="{'hidden': selectedTab !== 'items'}")
               div(v-if="favouritesItems && favouritesItems.length")
@@ -32,7 +32,7 @@
                     ShopCard(
                       :shop="shop"
                       @toggle-fav="toggleFav"
-                      @remove-from-fav="removeShop"
+                      @favRemove="removeShop"
                     )
                 div(v-if="shopPagination.total > shopPagination.perPage").category__pagination
                   Pagination(:paginationInfo="shopPagination" kindText="магазинов" @page="shopPageChange")
@@ -124,8 +124,6 @@ export default class Favourites extends Vue {
 
   selectedTab = 'items';
 
-  page = DEFAULT_PAGINATE_PAGE;
-
   sort: SORT_PARAMS = DEFAULT_SORT;
 
   tabs = PAGE_TABS;
@@ -136,7 +134,11 @@ export default class Favourites extends Vue {
 
   favouritesShops: ProductShop[] | null = null;
 
+  productPage: number = DEFAULT_PAGINATE_PAGE;
+
   productPagination: PaginationInfo | undefined;
+
+  shopPage: number = DEFAULT_PAGINATE_PAGE;
 
   shopPagination: PaginationInfo | undefined;
 
@@ -146,7 +148,7 @@ export default class Favourites extends Vue {
 
   async productPageChange(page) {
     this.loaded = true;
-    this.page = page;
+    this.productPage = page;
     this.loadProducts().then(() => {
       this.loaded = false;
     });
@@ -154,7 +156,7 @@ export default class Favourites extends Vue {
 
   async shopPageChange(page) {
     this.loaded = true;
-    this.page = page;
+    this.shopPage = page;
     this.loadBrands().then(() => {
       this.loaded = false;
     });
@@ -166,6 +168,10 @@ export default class Favourites extends Vue {
 
   async mounted() {
     this.loaded = true;
+    this.init();
+  }
+
+  init() {
     Promise
       .all([this.loadProducts(), this.loadBrands()])
       .then(() => {
@@ -175,14 +181,14 @@ export default class Favourites extends Vue {
 
   async loadProducts() {
     await createRequest('GET', endpoints.favourites.products({
-      page: this.page,
+      page: this.productPage,
       sort: this.sort,
     })).then(this.updateFavouritesProducts);
   }
 
   async loadBrands() {
     await createRequest('GET', endpoints.favourites.brands({
-      page: this.page,
+      page: this.shopPage,
       sort: this.sort,
     })).then(this.updateFavouritesBrands);
   }
@@ -213,6 +219,12 @@ export default class Favourites extends Vue {
     $store.dispatch('app/updateFavouritesCount');
   }
 
+  sortChange(sort: { label: string; value: SORT_PARAMS }) {
+    const { value } = sort;
+    this.sort = value;
+    this.init();
+  }
+
   beforeDestroy() {
     this.setProfilePage(null);
   }
@@ -224,6 +236,10 @@ export default class Favourites extends Vue {
     padding-bottom: 10px;
     background-color: #fff;
     padding-top: 16px;
+
+    .shop-card {
+      height: 100%;
+    }
 
     @include laptop() {
       padding-top: 0;

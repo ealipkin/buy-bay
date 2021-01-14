@@ -15,6 +15,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { PaginationInfo } from '@/models/responses';
+import { DEFAULT_PAGINATE_PAGE } from '@/config';
 
 @Component
 export default class Pagination extends Vue {
@@ -25,7 +26,7 @@ export default class Pagination extends Vue {
   @Prop() public kindText!: number;
 
   get currentPage() {
-    return (this.paginationInfo && this.paginationInfo.currentPage) || 1;
+    return (this.paginationInfo && this.paginationInfo.currentPage) || DEFAULT_PAGINATE_PAGE;
   }
 
   get moreCountNumber() {

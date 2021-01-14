@@ -1,10 +1,13 @@
 <template lang="pug">
-  router-link(:to="{path: `/shop/${shop.id}`}").shop-card
-    .shop-card__image
-      img(:src="shop.image")
-    .shop-card__name {{shop.name || shop.brand}}
-    .shop-card__category {{shop.category}}
-    Rate(:rate="shop.rate || '5'" :list="true").shop-card__rate
+  .shop-card
+    button(@click="toggleFav" :class="{'shop-card__fav--active': shop.isFavourite}").shop-card__fav
+      include ../assets/icons/trash.svg
+    router-link(:to="{path: `/shop/${shop.id}`}").shop-card__inner
+      .shop-card__image
+        img(:src="shop.image")
+      .shop-card__name {{shop.name || shop.brand}}
+      .shop-card__category {{shop.category}}
+      Rate(:rate="shop.rate || '5'" :list="true").shop-card__rate
 
 </template>
 
@@ -12,12 +15,23 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Rate from '@/components/Rate.vue';
 import { ProductShop } from '@/models/product';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
 
 @Component({
   components: { Rate },
 })
 export default class CatalogCardItem extends Vue {
   @Prop() public shop!: ProductShop;
+
+  toggleFav() {
+    this.shop.isFavourite = !this.shop.isFavourite;
+    this.$emit('toggle-fav');
+    createRequest('GET', endpoints.favourites.deleteBrand(this.shop.id_brand))
+      .then(() => {
+        this.$emit('favRemove');
+      });
+  }
 }
 </script>
 
@@ -28,11 +42,40 @@ export default class CatalogCardItem extends Vue {
     background-color: #ffffff;
     border-radius: 4px;
     text-align: center;
-    text-decoration: none;
+    position: relative;
 
     @include tablet() {
       padding-top: 30px;
       padding-bottom: 30px;
+    }
+
+    &__inner {
+      text-decoration: none;
+    }
+
+    &__fav {
+      @include clearButton();
+      display: flex;
+      position: absolute;
+      width: 25px;
+      height: 25px;
+      right: 10px;
+      top: 10px;
+      z-index: 1;
+      padding: 5px;
+      box-sizing: border-box;
+      background: white;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid $grey-4;
+
+      svg {
+        display: block;
+        width: 100%;
+      }
+
     }
 
     &__image {

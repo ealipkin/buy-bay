@@ -164,3 +164,8 @@ export interface SearchSuggestItem {
   title: string;
   items: SearchItem[];
 }
+
+export interface SortOption {
+  label: string;
+  value: any;
+}

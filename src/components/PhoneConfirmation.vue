@@ -4,12 +4,14 @@
       form(@submit.prevent="validate().then(handleGetCodeClick)").form.phone-confirmation__phone-section
         Input(:rules="['required', 'phone']" label="Телефон" name="phone" mask="+7 999 999-99-99" @input="handlePhoneInput" ref="phoneInput").form__input
         button(type="button" @click="validate().then(handleGetCodeClick)").button.form__login-button Получить код
+      div(v-if="error").phone-confirmation__error {{error}}
 
     ValidationObserver(v-slot="{ validate }" v-show="!phoneSend" v-if="byMail")
       form(@submit.prevent="validate().then(handleGetCodeClick)").form.phone-confirmation__phone-section
         Input(:rules="['required', 'email']" label="Электронная почта" name="email" mask="" ref="mailInput").form__input
         button(type="button" @click="validate().then(handleGetCodeClick)").button.form__login-button Получить код
-    div(v-if="error").phone-confirmation__error {{error}}
+      div(v-if="error").phone-confirmation__error {{error}}
+
     div(v-show="phoneSend").phone-confirmation__code
       div(v-if="byMail").phone-confirmation__code-text Мы отправили код подтверждения на указанный в аккаунте телефон
         span.nowrap  {{safePhoneNumber}}&nbsp;
@@ -20,6 +22,7 @@
 
       div.phone-confirmation__code-field
         Input(:rules="['required', 'phoneCode']" label="Код из СМС" name="code" mask="9999" @input="handleCodeInput" ref="codeInput").form__input
+        div(v-if="error").phone-confirmation__error {{error}}
         .tac
           button(type="button" @click="handleGetNewCodeClick" v-if="byMail").phone-confirmation__code-get-new Получить новый код
 
@@ -183,6 +186,10 @@ export default class PhoneConfirmation extends Vue {
 
 <style scoped lang="scss">
   .phone-confirmation {
+    .form__input + .phone-confirmation__error {
+      margin-top: -15px;
+      margin-bottom: 15px;
+    }
 
     &__code-change {
       @include clearButton();

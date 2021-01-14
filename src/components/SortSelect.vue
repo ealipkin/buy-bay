@@ -8,14 +8,15 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Select from '@/components/Select.vue';
+import { SortOption } from '@/models/models';
 
 @Component({
   components: { Select },
 })
 export default class SortSelect extends Vue {
-  @Prop() public options!: any[];
+  @Prop() public options!: SortOption[];
 
-  handleChange(value) {
+  handleChange(value: SortOption) {
     this.$emit('change', value);
   }
 }

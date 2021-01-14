@@ -77,7 +77,6 @@ export default class CatalogCardItem extends Vue {
     this.$emit('toggle-fav');
     createRequest('GET', endpoints.favourites.deleteProduct(this.item.id_product))
       .then(() => {
-        console.log('here ->> ');
         this.$emit('favRemove');
       });
   }
