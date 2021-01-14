@@ -38,6 +38,7 @@ export interface ProductDelivery {
 }
 
 export interface ProductShop {
+  id: string;
   id_brand: string;
   name: string;
   brand?: string;

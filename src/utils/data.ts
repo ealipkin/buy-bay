@@ -45,6 +45,7 @@ const getDate = () => new Date(getRandomNumberBetween(1970, 2010), getRandomNumb
 
 export const getShop = (): ProductShop => ({
   id: nanoid(),
+  id_brand: nanoid(),
   name: 'Nike',
   description: 'Магазин электроники в котором есть все',
   image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/100`,
