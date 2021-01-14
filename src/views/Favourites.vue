@@ -10,7 +10,8 @@
           div(v-if="!loaded").page__content.category__items
             .category__header
               TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.favourites__tabs
-              SortSelect(:options="options" @change="sortChange").favourites__select
+              SortSelect(v-show="selectedTab === 'items'" :options="productOptions" @change="productSortChange").favourites__select
+              SortSelect(v-show="selectedTab === 'shops'" :options="brandsOptions" @change="brandsSortChange").favourites__select
 
             div(:class="{'hidden': selectedTab !== 'items'}")
               div(v-if="favouritesItems && favouritesItems.length")
@@ -74,7 +75,7 @@ const PAGE_TABS = [
   },
 ];
 
-const SORT_OPTIONS = [
+const PRODUCT_SORT_OPTIONS = [
   {
     value: SORT_PARAMS.POPULAR,
     label: 'По популярности',
@@ -101,6 +102,29 @@ const SORT_OPTIONS = [
   },
 ];
 
+const BRANDS_SORT_OPTIONS = [
+  {
+    value: SORT_PARAMS.POPULAR,
+    label: 'По популярности',
+  },
+  {
+    value: SORT_PARAMS.RATE,
+    label: 'По рейтингу',
+  },
+  {
+    value: SORT_PARAMS.RATE_DESC,
+    label: 'По рейтингу по убыванию',
+  },
+  {
+    value: SORT_PARAMS.DATE,
+    label: 'Новинки',
+  },
+  {
+    value: SORT_PARAMS.DATE_DESC,
+    label: 'По дате по убыванию',
+  },
+];
+
 const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 
 @Component({
@@ -124,11 +148,13 @@ export default class Favourites extends Vue {
 
   selectedTab = 'items';
 
-  sort: SORT_PARAMS = DEFAULT_SORT;
+  productSort: SORT_PARAMS = DEFAULT_SORT;
+  brandSort: SORT_PARAMS = DEFAULT_SORT;
 
   tabs = PAGE_TABS;
 
-  options = SORT_OPTIONS;
+  productOptions = PRODUCT_SORT_OPTIONS;
+  brandsOptions = BRANDS_SORT_OPTIONS;
 
   favouritesItems: Product[] | null = null;
 
@@ -182,14 +208,14 @@ export default class Favourites extends Vue {
   async loadProducts() {
     await createRequest('GET', endpoints.favourites.products({
       page: this.productPage,
-      sort: this.sort,
+      sort: this.productSort,
     })).then(this.updateFavouritesProducts);
   }
 
   async loadBrands() {
     await createRequest('GET', endpoints.favourites.brands({
       page: this.shopPage,
-      sort: this.sort,
+      sort: this.brandSort,
     })).then(this.updateFavouritesBrands);
   }
 
@@ -219,10 +245,16 @@ export default class Favourites extends Vue {
     $store.dispatch('app/updateFavouritesCount');
   }
 
-  sortChange(sort: { label: string; value: SORT_PARAMS }) {
+  productSortChange(sort: { label: string; value: SORT_PARAMS }) {
     const { value } = sort;
-    this.sort = value;
-    this.init();
+    this.productSort = value;
+    this.loadProducts();
+  }
+
+  brandsSortChange(sort: { label: string; value: SORT_PARAMS }) {
+    const { value } = sort;
+    this.brandSort = value;
+    this.loadBrands();
   }
 
   beforeDestroy() {
