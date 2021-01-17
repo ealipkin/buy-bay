@@ -5,25 +5,28 @@
         .page__aside.profile__aside
           h1.page__title Мой профиль
           ProfileNav(:items="profileMenuItems")
+        template(v-if="!loaded")
+          div(v-if="isAuthorized").page__content.profile__content
+            UserInfo(:user="user").profile__item.profile__user-info
+            ProfileNav(:items="profileMenuItems").profile__item.profile__nav-mobile-only
+            Contacts(:contacts="user.contacts").profile__item.profile__contacts
+            .profile__address.profile__item
+              h3.profile__address-title Адреса доставки
+              ul.profile__address-list
+                li(v-for="(item, i) in user.addresses" :key="item.id").profile__address-item
+                  AddressItem(:item="item" :i="i" @change="addressChange" @remove="removeAddress" @edit="openAddressEditor")
+              button(type="button" @click="openAddressModal(null)").link + Добавить адрес
 
-        .page__content.profile__content
-          UserInfo(:user="user").profile__item.profile__user-info
-          ProfileNav(:items="profileMenuItems").profile__item.profile__nav-mobile-only
-          Contacts(:contacts="user.contacts").profile__item.profile__contacts
-          .profile__address.profile__item
-            h3.profile__address-title Адреса доставки
-            ul.profile__address-list
-              li(v-for="(item, i) in user.addresses" :key="item.id").profile__address-item
-                AddressItem(:item="item" :i="i" @change="addressChange" @remove="removeAddress" @edit="openAddressEditor")
-            button(type="button" @click="openAddressModal(null)").link + Добавить адрес
+            .profile__cards.profile__item
+              h3.profile__cards-title Мои карты
+              ul.profile__cards-list
+                li(v-for="(item, i) in user.cards" :key="item.id").profile__cards-item
+                  CreditCardItem(:item="item" :i="i" @change="cardChange" @remove="removeCard")
 
-          .profile__cards.profile__item
-            h3.profile__cards-title Мои карты
-            ul.profile__cards-list
-              li(v-for="(item, i) in user.cards" :key="item.id").profile__cards-item
-                CreditCardItem(:item="item" :i="i" @change="cardChange" @remove="removeCard")
-
-            button(type="button" @click="openCreditCardModal").link + Добавить карту
+              button(type="button" @click="openCreditCardModal").link + Добавить карту
+          div(v-else).page__content.profile__content
+            h1.empty-message Войдите в учетную запись чтобы редактировать данные профиля
+        Loader(v-else)
     AddressModal(ref="addressModal")
     CreditCardModal(ref="creditCardModal")
 </template>
@@ -31,7 +34,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import ProfileNav from '@/components/ProfileNav.vue';
 import UserInfo from '@/components/UserInfo.vue';
 import Contacts from '@/components/Contacts.vue';
@@ -41,11 +43,13 @@ import AddressModal from '@/components/AddressModal.vue';
 import CreditCardModal from '@/components/CreditCardModal.vue';
 import { createProfileUser } from '@/utils/data';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
-import { BreadcrumbLink } from '@/models/models';
+import Loader from '@/components/Loader.vue';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
 
 @Component({
   components: {
-    Breadcrumbs,
+    Loader,
     ProfileNav,
     UserInfo,
     Contacts,
@@ -53,17 +57,17 @@ import { BreadcrumbLink } from '@/models/models';
     CreditCardItem,
     AddressModal,
     CreditCardModal,
-  },
+  }
 })
 export default class Profile extends Vue {
-  Breadcrumbs: BreadcrumbLink[] = [
-    { href: '/', label: 'Главная' },
-    { href: '/profile', label: 'Мой профиль', current: true },
-  ];
-
   profileMenuItems = PROFILE_MENU_ITEMS;
 
   user = createProfileUser(null, 1);
+  loaded: boolean = false;
+
+  get isAuthorized() {
+    return (this as any).$auth.check();
+  }
 
   openAddressModal(data) {
     const modalComponent: any = this.$refs.addressModal;
@@ -105,6 +109,26 @@ export default class Profile extends Vue {
 
   removeCard(id: string) {
     this.user.cards = this.user.cards.filter((card) => card.id !== id);
+  }
+
+  async mounted() {
+    this.loaded = true;
+    if (this.isAuthorized) {
+      this.loadProfile();
+    } else {
+      this.$root.$emit('show-login-modal');
+    }
+    this.loaded = false
+  }
+
+  async loadProfile() {
+    return createRequest('GET', endpoints.profile.load)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 }
 </script>

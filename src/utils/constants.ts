@@ -44,6 +44,7 @@ export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
     title: 'Выход',
     action: 'logout',
     icon: 'logout',
+    type: 'logout',
   },
 ];
 

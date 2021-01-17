@@ -1,6 +1,6 @@
 <template lang="pug">
   ul.profile-nav
-    li(v-for="item in items").profile-nav__item
+    li(v-for="item in filteredItems").profile-nav__item
       button(@click="handleClick(item)" :class="{'profile-nav__link--active': $route.path === item.href}").profile-nav__link
         template(v-if="item.icon === 'user'")
           include ../assets/icons/user.svg
@@ -30,6 +30,7 @@ import router from '@/router';
 import { BaseMenuItem } from '@/models/menu';
 import { mapGetters } from 'vuex';
 import { PROFILE_NAV_TYPES } from '@/models/enums';
+import $store from '@/store';
 
 @Component({
   computed: {
@@ -46,6 +47,14 @@ export default class ProfileNav extends Vue {
   }
 
   @Prop() public items!: BaseMenuItem[];
+  
+  get isAuthorized() {
+    return (this as any).$auth.check();
+  }
+  
+  get filteredItems() {
+    return this.items.filter((item: BaseMenuItem) => item.type === 'logout' ? this.isAuthorized : true);
+  }
 
   NAV_TYPES = PROFILE_NAV_TYPES;
 
@@ -56,7 +65,7 @@ export default class ProfileNav extends Vue {
     if (item.action) {
       switch (item.action) {
         case 'logout': {
-          this.logout();
+          $store.dispatch('app/logout');
           break;
         }
         default: {
@@ -64,10 +73,6 @@ export default class ProfileNav extends Vue {
         }
       }
     }
-  }
-
-  logout() {
-    (this as any).$auth.logout();
   }
 }
 </script>

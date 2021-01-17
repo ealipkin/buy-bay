@@ -23,4 +23,7 @@ export const endpoints = {
     deleteBrand: (id) => `/wishlist/brand/${id}/delete`,
     counter: '/wishlist/counter',
   },
+  profile: {
+    load: '/profile/'
+  }
 };

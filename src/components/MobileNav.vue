@@ -38,16 +38,10 @@ import { NotificationItem } from '@/models/models';
 
 @Component({
   components: {},
-  computed: {
-    ...mapGetters({
-      isAuthenticated: 'app/getIsAuthenticated',
-    }),
-  },
 })
 export default class MobileNav extends Vue {
   @Prop() public notifications!: NotificationItem[];
 
-  isAuthenticated;
 
   toggleNotifications(event) {
     const { target } = event;
@@ -61,7 +55,7 @@ export default class MobileNav extends Vue {
   }
 
   login() {
-    if (this.isAuthenticated) {
+    if ((this as any).$auth.check()) {
       router.push({ path: '/profile' });
     } else {
       this.$emit('show-login');

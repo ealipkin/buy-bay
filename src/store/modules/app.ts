@@ -6,7 +6,6 @@ import { FavCountResponse, UserResponse } from '@/models/responses';
 import { ProfileUser } from '@/models/models';
 
 interface AppState {
-  isAuthenticated: boolean;
   selectedShop: ProductShop | null;
   profilePage: string | null;
   menuLoaded: boolean;
@@ -23,7 +22,6 @@ const appState: AppState = {
   selectedShop: null,
   profilePage: null,
   menuLoaded: false,
-  isAuthenticated: false,
   favouritesCount: 0,
   mainMenu: [],
 };
@@ -32,7 +30,6 @@ const getters = {
   getSelectedShop: (state: AppState) => state.selectedShop,
   getProfilePage: (state: AppState) => state.profilePage,
   getMainMenu: (state: AppState) => state.mainMenu,
-  getIsAuthenticated: (state: AppState) => state.isAuthenticated,
   getFavouritesCount: (state: AppState) => state.favouritesCount,
 };
 
@@ -58,9 +55,6 @@ const mutations = {
   [mutationTypes.SET_MAIN_MENU_LOADED](state: AppState, payload: boolean) {
     state.menuLoaded = payload;
   },
-  [mutationTypes.SET_USER_AUTH](state: AppState, payload: boolean) {
-    state.isAuthenticated = payload;
-  },
   [mutationTypes.SET_FAVOURITES_COUNT](state: AppState, payload: number) {
     state.favouritesCount = payload;
   },
@@ -75,6 +69,12 @@ const actions = {
   },
   async setUserAuth({ commit, state }, props) {
     commit('SET_USER_AUTH', props);
+  },
+  async logout({ commit }, props) {
+    commit('SET_USER_AUTH', props);
+    const vm = (this as any)._vm;
+    const { $auth } = vm;
+    $auth.logout();
   },
   async loadUser({ commit }) {
     const vm = (this as any)._vm;

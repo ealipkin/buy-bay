@@ -190,6 +190,7 @@ export default class Index extends Vue {
       this.popularItems = response.popular;
       this.bestItems = response.bestseller;
       this.hotItems = response.hot_groups;
+      console.log(response.popular.map(i => i.features).filter(i => i.length));
 
       this.pageLoaded = true;
       return response;
