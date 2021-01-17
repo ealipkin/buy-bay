@@ -143,6 +143,7 @@ export default class AddressItem extends Vue {
         @include clearButton();
         margin-bottom: 18px;
         margin-right: 15px;
+        width: 20px;
 
         &:last-of-type {
           margin-bottom: 0;

@@ -56,7 +56,7 @@ import { Action } from 'vuex-class';
 import { createRequest } from '@/services/http.service';
 import { DEFAULT_PAGINATE_PAGE, endpoints } from '@/config';
 import Loader from '@/components/Loader.vue';
-import { SORT_PARAMS } from '@/models/enums';
+import { SERVER_ERRORS, SORT_PARAMS } from '@/models/enums';
 import { Product, ProductShop } from '@/models/product';
 import { FavBrandsResponse, FavProductsResponse, PaginationInfo } from '@/models/responses';
 import $store from '@/store';
@@ -237,6 +237,11 @@ export default class Favourites extends Vue {
     Promise
       .all([this.loadProducts(), this.loadBrands()])
       .then(() => {
+        this.loaded = false;
+      }).catch((err) => {
+        if (err.response.data.error === SERVER_ERRORS.UNAUTHORIZED) {
+          this.$root.$emit('show-login-modal');
+        }
         this.loaded = false;
       });
   }

@@ -10,6 +10,8 @@ import router from './router';
  * Authentication configuration, some of the options can be override in method calls
  */
 
+export const TOKEN_STORAGE_KEY = 'laravel-jwt-auth';
+
 const config = {
   plugins: {
     http: axios, // Axios
@@ -23,7 +25,7 @@ const config = {
   },
   options: {
     rememberKey: 'auth_remember',
-    tokenDefaultKey: 'laravel-jwt-auth',
+    tokenDefaultKey: TOKEN_STORAGE_KEY,
     stores: ['storage', 'cookie'],
     registerData: {
       url: `${API_URL}/auth/register`,

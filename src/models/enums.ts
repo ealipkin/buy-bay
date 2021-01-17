@@ -68,3 +68,7 @@ export enum PROFILE_NAV_TYPES {
   ORDERS = 'orders',
   FAVOURITES = 'favourites',
 }
+
+export enum SERVER_ERRORS {
+  UNAUTHORIZED = 'Unauthorized'
+}

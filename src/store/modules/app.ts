@@ -86,6 +86,9 @@ const actions = {
         .then((res: UserResponse) => {
           const user: ProfileUser = res.data.data.data;
           $auth.user(user);
+        })
+        .catch(() => {
+          $auth.token(null, null, false);
         });
 
       // load favourites counter

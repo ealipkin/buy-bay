@@ -120,6 +120,7 @@ export default class CreditCardItem extends Vue {
 
       button {
         @include clearButton();
+        width: 20px;
         margin-bottom: 18px;
         margin-right: 15px;
 

@@ -143,6 +143,9 @@ export default class Header extends Vue {
 
   mounted() {
     this.body = document.querySelector('body');
+    this.$root.$on('show-login-modal', () => {
+      this.openLoginModal('login');
+    });
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 768) {
         (this.body as HTMLBodyElement).classList.remove('_hidden');

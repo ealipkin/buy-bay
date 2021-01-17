@@ -89,6 +89,7 @@ export default class Notifications extends Vue {
 
     &__icon {
       min-width: 32px;
+      max-width: 35px;
     }
 
     &__list {
