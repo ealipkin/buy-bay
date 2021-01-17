@@ -91,12 +91,16 @@
   .active a {
     background-color: #b6bbcd;
     color: #ffffff;
+    cursor: default;
+    outline: none;
   }
 
   .disabled a {
     opacity: 0.8;
     font-size: 14px;
     color: #7b8197;
+    cursor: default;
+    outline: none;
   }
 }
 

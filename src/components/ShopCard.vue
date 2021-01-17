@@ -25,11 +25,12 @@ export default class CatalogCardItem extends Vue {
   @Prop() public shop!: ProductShop;
 
   toggleFav() {
+    const id = this.shop.id_brand;
     this.shop.isFavourite = !this.shop.isFavourite;
     this.$emit('toggle-fav');
-    createRequest('GET', endpoints.favourites.deleteBrand(this.shop.id_brand))
+    createRequest('GET', endpoints.favourites.deleteBrand(id))
       .then(() => {
-        this.$emit('favRemove');
+        this.$emit('favRemove', { id });
       });
   }
 }

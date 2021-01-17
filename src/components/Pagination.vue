@@ -1,6 +1,6 @@
 <template lang="pug">
   .pagination
-    button(type="button" @click="showMore").button.pagination__show-more Показать еще {{moreCountNumber}} {{kindText || 'товаров'}}
+    button(type="button" @click="showMore" :disabled="paginationInfo.lastPage === currentPage").button.pagination__show-more Показать еще {{moreCountNumber}} {{kindText || 'товаров'}}
     paginate(
       v-model="currentPage"
       :page-count="paginationInfo ? paginationInfo.lastPage : 99"
@@ -13,7 +13,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 import { PaginationInfo } from '@/models/responses';
 import { DEFAULT_PAGINATE_PAGE } from '@/config';
 
@@ -25,20 +27,29 @@ export default class Pagination extends Vue {
 
   @Prop() public kindText!: number;
 
-  get currentPage() {
-    return (this.paginationInfo && this.paginationInfo.currentPage) || DEFAULT_PAGINATE_PAGE;
+  @Watch('paginationInfo', { immediate: true, deep: true })
+  paginationInfoChange(paginationInfo: PaginationInfo) {
+    this.currentPage = paginationInfo.currentPage;
   }
+
+  currentPage = DEFAULT_PAGINATE_PAGE;
 
   get moreCountNumber() {
     return this.paginationInfo ? this.paginationInfo.perPage : this.moreCount;
   }
 
   showMore() {
-    this.$emit('more', this.moreCount);
+    this.$emit('more', this.moreCountNumber);
   }
 
   pageChange(page) {
     this.$emit('page', page);
+  }
+
+  mounted() {
+    if (this.paginationInfo && this.paginationInfo.currentPage) {
+      this.currentPage = this.paginationInfo.currentPage;
+    }
   }
 }
 </script>

@@ -10,33 +10,33 @@
           div(v-if="!loaded").page__content.category__items
             .category__header
               TabsNav(:tabs="tabs", @change="selectTab").tabs-nav--inner.favourites__tabs
-              SortSelect(v-show="selectedTab === 'items'" :options="productOptions" @change="productSortChange").favourites__select
-              SortSelect(v-show="selectedTab === 'shops'" :options="brandsOptions" @change="brandsSortChange").favourites__select
+              SortSelect(v-show="selectedTab === CATEGORIES.ITEMS" :options="productOptions" @change="productSortChange").favourites__select
+              SortSelect(v-show="selectedTab === CATEGORIES.BRAND" :options="brandsOptions" @change="brandsSortChange").favourites__select
 
-            div(:class="{'hidden': selectedTab !== 'items'}")
+            div(:class="{'hidden': selectedTab !== CATEGORIES.ITEMS}")
               div(v-if="favouritesItems && favouritesItems.length")
                 .category__list
                   .category__item(v-for="(item, index) in favouritesItems" :key="index")
                     CatalogCardItem(
                       :item="item"
                       @toggle-fav="toggleFav"
-                      @favRemove="removeProduct"
+                      @favRemove="removeProduct(index)"
                     ).catalog-card--fav
-                div(v-if="productPagination.total > productPagination.perPage").category__pagination
-                  Pagination(:paginationInfo="productPagination" @page="productPageChange")
+                div(v-if="showProductsPagination").category__pagination
+                  Pagination(:paginationInfo="productPagination" @page="productPageChange" @more="showMoreProducts")
               div(v-else).empty-message В избранном пока нет товаров
 
-            div(:class="{'hidden': selectedTab !== 'shops'}")
+            div(:class="{'hidden': selectedTab !== CATEGORIES.BRAND}")
               div(v-if="favouritesShops && favouritesShops.length")
                 .category__list
                   .category__item.category__item--shop(v-for="(shop, index) in favouritesShops" :key="index")
                     ShopCard(
                       :shop="shop"
                       @toggle-fav="toggleFav"
-                      @favRemove="removeShop"
+                      @favRemove="removeShop(id, index)"
                     )
-                div(v-if="shopPagination.total > shopPagination.perPage").category__pagination
-                  Pagination(:paginationInfo="shopPagination" kindText="магазинов" @page="shopPageChange")
+                div(v-if="showBrandsPagination").category__pagination
+                  Pagination(:paginationInfo="shopPagination" kindText="магазинов" @page="shopPageChange" @more="showMoreBrands")
               div(v-else).empty-message В избранном пока нет товаров
           Loader(v-else)
 </template>
@@ -63,14 +63,19 @@ import $store from '@/store';
 
 const PAGE_TITLE = 'Избранное';
 
+enum CATEGORIES {
+  ITEMS = 'items',
+  BRAND = 'brand'
+}
+
 const PAGE_TABS = [
   {
-    id: 'items',
+    id: CATEGORIES.ITEMS,
     label: 'Избранные товары',
     isActive: true,
   },
   {
-    id: 'shops',
+    id: CATEGORIES.BRAND,
     label: 'Избранные бренды',
   },
 ];
@@ -142,6 +147,8 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 export default class Favourites extends Vue {
   @Action('app/setProfilePage') setProfilePage;
 
+  CATEGORIES = CATEGORIES;
+
   profileMenuItems = PROFILE_MENU_ITEMS;
 
   loaded = false;
@@ -149,16 +156,18 @@ export default class Favourites extends Vue {
   selectedTab = 'items';
 
   productSort: SORT_PARAMS = DEFAULT_SORT;
+
   brandSort: SORT_PARAMS = DEFAULT_SORT;
 
   tabs = PAGE_TABS;
 
   productOptions = PRODUCT_SORT_OPTIONS;
+
   brandsOptions = BRANDS_SORT_OPTIONS;
 
-  favouritesItems: Product[] | null = null;
+  favouritesItems: Product[] = [];
 
-  favouritesShops: ProductShop[] | null = null;
+  favouritesShops: ProductShop[] = [];
 
   productPage: number = DEFAULT_PAGINATE_PAGE;
 
@@ -168,11 +177,37 @@ export default class Favourites extends Vue {
 
   shopPagination: PaginationInfo | undefined;
 
+  productShowMoreClicked = false;
+
+  brandShowMoreClicked = false;
+
+  get showProductsPagination() {
+    if (!this.productPagination) {
+      return false;
+    }
+    if (this.favouritesItems.length === Number(this.productPagination.total)) {
+      return false;
+    }
+    return Number(this.productPagination.total) > Number(this.productPagination.perPage);
+  }
+
+  get showBrandsPagination() {
+    this.brandShowMoreClicked = true;
+    if (!this.shopPagination) {
+      return false;
+    }
+    if (this.favouritesShops.length === Number(this.shopPagination.total)) {
+      return false;
+    }
+    return Number(this.shopPagination.total) > Number(this.shopPagination.perPage);
+  }
+
   selectTab(tabId) {
     this.selectedTab = tabId;
   }
 
   async productPageChange(page) {
+    this.productShowMoreClicked = false;
     this.loaded = true;
     this.productPage = page;
     this.loadProducts().then(() => {
@@ -181,6 +216,7 @@ export default class Favourites extends Vue {
   }
 
   async shopPageChange(page) {
+    this.brandShowMoreClicked = false;
     this.loaded = true;
     this.shopPage = page;
     this.loadBrands().then(() => {
@@ -206,17 +242,25 @@ export default class Favourites extends Vue {
   }
 
   async loadProducts() {
-    await createRequest('GET', endpoints.favourites.products({
+    await this.loadProductsRequest().then(this.updateFavouritesProducts);
+  }
+
+  async loadProductsRequest(): Promise<FavProductsResponse> {
+    return createRequest('GET', endpoints.favourites.products({
       page: this.productPage,
       sort: this.productSort,
-    })).then(this.updateFavouritesProducts);
+    }));
   }
 
   async loadBrands() {
-    await createRequest('GET', endpoints.favourites.brands({
+    await this.loadBrandsRequest().then(this.updateFavouritesBrands);
+  }
+
+  async loadBrandsRequest(): Promise<FavBrandsResponse> {
+    return createRequest('GET', endpoints.favourites.brands({
       page: this.shopPage,
       sort: this.brandSort,
-    })).then(this.updateFavouritesBrands);
+    }));
   }
 
   updateFavouritesProducts(res: FavProductsResponse) {
@@ -235,14 +279,45 @@ export default class Favourites extends Vue {
     // this.loaded = true;
   }
 
-  async removeProduct() {
-    await this.loadProducts();
+  async removeProduct(index: number) {
+    if (this.productShowMoreClicked) {
+      this.updatePagination(this.CATEGORIES.ITEMS, index);
+    } else {
+      await this.loadProducts();
+    }
     $store.dispatch('app/updateFavouritesCount');
   }
 
-  async removeShop() {
-    await this.loadBrands();
+  async removeShop(index: number) {
+    if (this.brandShowMoreClicked && this.productPagination) {
+      this.updatePagination(this.CATEGORIES.BRAND, index);
+    } else {
+      await this.loadBrands();
+    }
     $store.dispatch('app/updateFavouritesCount');
+  }
+
+  updatePagination(type: CATEGORIES, index: number) {
+    const pagination: PaginationInfo | undefined = type === this.CATEGORIES.ITEMS ? this.productPagination : this.shopPagination;
+    const items = type === this.CATEGORIES.ITEMS ? this.favouritesItems : this.favouritesShops;
+    if (pagination) {
+      this.$delete(items, index);
+      const total = pagination.total - 1;
+      const lastPage = Math.ceil(total / Number(pagination.perPage));
+      const currentPage = pagination.currentPage <= lastPage ? pagination.currentPage : lastPage;
+      const newPagination = {
+        ...pagination,
+        total,
+        currentPage,
+        lastPage,
+      };
+
+      if (type === CATEGORIES.ITEMS) {
+        this.productPagination = { ...newPagination };
+      } else {
+        this.shopPagination = { ...newPagination };
+      }
+    }
   }
 
   productSortChange(sort: { label: string; value: SORT_PARAMS }) {
@@ -255,6 +330,37 @@ export default class Favourites extends Vue {
     const { value } = sort;
     this.brandSort = value;
     this.loadBrands();
+  }
+
+  showMoreProducts() {
+    this.productShowMoreClicked = true;
+    this.productPage += 1;
+    this.loadProductsRequest()
+      .then((res: FavProductsResponse) => {
+        const { data } = res.data;
+        this.favouritesItems.push(...data.data);
+        if (this.productPagination) {
+          this.productPagination = {
+            ...this.productPagination,
+            currentPage: this.productPage,
+          };
+        }
+      });
+  }
+
+  showMoreBrands() {
+    this.shopPage += 1;
+    this.loadBrandsRequest()
+      .then((res: FavBrandsResponse) => {
+        const { data } = res.data;
+        this.favouritesShops.push(...data.data);
+        if (this.shopPagination) {
+          this.shopPagination = {
+            ...this.shopPagination,
+            currentPage: this.shopPage,
+          };
+        }
+      });
   }
 
   beforeDestroy() {
