@@ -47,13 +47,13 @@ export default class ProfileNav extends Vue {
   }
 
   @Prop() public items!: BaseMenuItem[];
-  
+
   get isAuthorized() {
     return (this as any).$auth.check();
   }
-  
+
   get filteredItems() {
-    return this.items.filter((item: BaseMenuItem) => item.type === 'logout' ? this.isAuthorized : true);
+    return this.items.filter((item: BaseMenuItem) => (item.type === 'logout' ? this.isAuthorized : true));
   }
 
   NAV_TYPES = PROFILE_NAV_TYPES;

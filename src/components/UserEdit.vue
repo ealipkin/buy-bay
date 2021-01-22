@@ -1,9 +1,9 @@
 <template lang="pug">
   .form.user-edit
-      .user-edit__image
-        AvatarEdit(:selectedImage="user.avatar")
-      Input(:rules="['required']" label="Ваше имя" name="name" type="text" :value="user.name").form__input.user-edit__input
-      //InputDate(:rules="['required']" :value="user.getFormatDate()" label="Дата рождения" name="birthday").form__input.user-edit__input
+    .user-edit__image
+      AvatarEdit(:selectedImage="user.image" v-model="user.image")
+    Input(label="Ваше имя" name="name" type="text" v-model="user.name").form__input.user-edit__input
+    //InputDate(:rules="['required']" :value="user.getFormatDate()" label="Дата рождения" name="birthday").form__input.user-edit__input
 
 </template>
 
@@ -22,9 +22,9 @@ import { SEX_TYPES } from '@/models/enums';
   },
 })
 export default class UserEdit extends Vue {
-@Prop() public user!: ProfileUser | null;
+  @Prop() public user!: ProfileUser | null;
 
-sexTypes = SEX_TYPES;
+  sexTypes = SEX_TYPES;
 }
 </script>
 

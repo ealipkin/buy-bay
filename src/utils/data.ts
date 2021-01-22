@@ -237,6 +237,8 @@ export const createProfileUser = (item, index): ProfileUser => ({
   name: getRandomArrayElement(NAMES),
   surname: 'Меньшов',
   patronymic: 'Иванович',
+  image: '',
+  phone: '',
   sex: {
     label: 'Мужчина',
     value: SEX_TYPES.MALE,

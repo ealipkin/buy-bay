@@ -16,7 +16,7 @@
               v-bind:class="`${feature.icon} ${feature.time ? 'catalog-card__feature--time' : ''}`"
               :title="feature.title"
             ).catalog-card__feature
-              vac(:end-time="feature.time" v-if="feature.time").catalog-card__feature-time
+              vac(:left-time="feature.time" v-if="feature.time").catalog-card__feature-time
                 template(v-slot:process="{ timeObj }").group-item__timer-inner
                   span {{ `${timeObj.h}:${timeObj.m}:${timeObj.s}`}}
                 template(v-slot:finish)

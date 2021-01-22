@@ -185,7 +185,7 @@ export default class BigSlider extends Vue {
       @include laptop() {
         width: 60.7%;
         margin-right: 16px;
-        margin-bottom: -5px;
+        /*margin-bottom: -5px;*/
         border-radius: 8px;
       }
     }

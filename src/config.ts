@@ -1,6 +1,7 @@
 import { SORT_PARAMS } from '@/models/enums';
 
 export const API_URL = process.env.VUE_APP_API_URL;
+export const PROXY_URL = process.env.VUE_APP_PROXY_URL;
 export const AUTH_API_URL = process.env.VUE_APP_AUTH_API_URL;
 
 export const DEFAULT_PAGINATE_PAGE = 1;
@@ -24,6 +25,8 @@ export const endpoints = {
     counter: '/wishlist/counter',
   },
   profile: {
-    load: '/profile/'
-  }
+    load: '/profile',
+    edit: '/profile/edit',
+    checkPhone: '/profile/check_phone',
+  },
 };

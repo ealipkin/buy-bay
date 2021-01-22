@@ -69,5 +69,11 @@ export interface IndexPageResponse {
   data: {
     data: IndexPage;
   };
+}
 
+export interface ProfileResponse {
+  data: {
+    success: boolean;
+    data: ProfileUser;
+  }
 }

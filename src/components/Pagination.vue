@@ -1,6 +1,6 @@
 <template lang="pug">
   .pagination
-    button(type="button" @click="showMore" :disabled="paginationInfo.lastPage === currentPage").button.pagination__show-more Показать еще {{moreCountNumber}} {{kindText || 'товаров'}}
+    button(type="button" @click="showMore" :disabled="paginationInfo ? paginationInfo.lastPage === currentPage : false").button.pagination__show-more Показать еще {{moreCountNumber}} {{kindText || 'товаров'}}
     paginate(
       v-model="currentPage"
       :page-count="paginationInfo ? paginationInfo.lastPage : 99"
@@ -29,7 +29,9 @@ export default class Pagination extends Vue {
 
   @Watch('paginationInfo', { immediate: true, deep: true })
   paginationInfoChange(paginationInfo: PaginationInfo) {
-    this.currentPage = paginationInfo.currentPage;
+    if (paginationInfo) {
+      this.currentPage = paginationInfo.currentPage;
+    }
   }
 
   currentPage = DEFAULT_PAGINATE_PAGE;

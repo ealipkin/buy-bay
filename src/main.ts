@@ -1,4 +1,5 @@
 import VModal from 'vue-js-modal';
+import { VueMaskDirective } from 'v-mask'
 import vueAwesomeCountdown from 'vue-awesome-countdown';
 import VueFilterDateFormat from '@vuejs-community/vue-filter-date-format';
 import Loading from 'vue-loading-overlay';
@@ -26,11 +27,9 @@ import './assets/fonts/opensans.css';
 
 Vue.use(VueAuth, authConfig);
 
-const VueInputMask = require('vue-inputmask').default;
+Vue.directive('mask', VueMaskDirective);
 
 Vue.use(Loading);
-
-Vue.use(VueInputMask);
 
 Vue.use(VueFilterDateFormat, {
   dayOfWeekNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],

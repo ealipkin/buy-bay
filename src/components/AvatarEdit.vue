@@ -1,8 +1,8 @@
 <template lang="pug">
   .avatar-edit
     .avatar-edit__container
-      img(v-if="!selectedImage" src="@/assets/empty-avatar.jpg").avatar-edit__empty-image
-      img(v-else :src="selectedImage").avatar-edit__selected-image
+      img(v-if="visibleImage" :src="visibleImage").avatar-edit__selected-image
+      img(v-else src="@/assets/empty-avatar.jpg").avatar-edit__empty-image
     label.avatar-edit__edit-button
       include ../assets/icons/edit.svg
       ImageUploader(:preview="true" :className="['visually-hidden', { 'fileinput--loaded': selectedImage }]" :debug="1" doNotResize="gif" :autoRotate="false" outputFormat="verbose" @input="setImage")
@@ -17,8 +17,17 @@ import ImageUploader from 'vue-image-upload-resize';
 export default class Main extends Vue {
   @Prop() public selectedImage!: string | null;
 
+  uploadedImage: string | ArrayBuffer | null = null;
+
+  get visibleImage() {
+    return this.selectedImage || this.uploadedImage
+  }
+
   setImage(output) {
-    this.selectedImage = output.dataUrl;
+    this.uploadedImage = output.dataUrl;
+    const formData = new FormData();
+    formData.append('image', output.dataUrl);
+    this.$emit('input', output.dataUrl);
   }
 }
 </script>
@@ -40,6 +49,7 @@ export default class Main extends Vue {
       position: absolute;
       right: 0;
       bottom: 0;
+      cursor: pointer;
 
       svg {
         display: block;

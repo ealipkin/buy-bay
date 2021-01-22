@@ -111,11 +111,12 @@ export interface CardItem {
 
 export interface ProfileUser {
   id: string;
+  phone: string;
   name: string;
   surname: string;
   patronymic?: string;
-  phone?: string;
-  image?: string;
+  image: string;
+  email?: string;
   sex?: {
     label: string;
     value: SEX_TYPES;

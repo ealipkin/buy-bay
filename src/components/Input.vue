@@ -8,12 +8,12 @@
     ).input__provider
       .input__wrapper
         input(
-          v-model="inputValue"
+          v-bind:value="value"
+          v-on:input="$emit('input', $event.target.value)"
           v-mask="mask || ''"
           :type="type || 'text'"
-          :placeholder="label"
+          :placeholder="placeholder || ''"
           :class="failed ? 'input__field--fail' : ''"
-          @input="handleInput"
           ref="input"
         ).input__field
         label(v-if="label" :data-placeholder="label").input__label {{label}}
@@ -27,6 +27,7 @@ import {
 
 @Component
 export default class Input extends Vue {
+  @Prop() public placeholder!: string;
   @Prop() public name!: string;
 
   @Prop() public label!: string;
@@ -39,13 +40,6 @@ export default class Input extends Vue {
 
   @Prop() public rules!: string[] | null;
 
-  @Watch('value')
-  onValueChange(val) {
-    this.setValue(val);
-  }
-
-  inputValue = '';
-
   inputRules = this.rules?.join('|') || '';
 
   isRequired = this.rules?.includes('required') || false;
@@ -56,17 +50,6 @@ export default class Input extends Vue {
     });
   }
 
-  mounted() {
-    this.setValue(this.value);
-  }
-
-  setValue(val) {
-    this.inputValue = val;
-  }
-
-  handleInput() {
-    this.$emit('input', { value: this.inputValue });
-  }
 }
 </script>
 
@@ -92,6 +75,11 @@ export default class Input extends Vue {
       &::placeholder {
         font-size: 0;
         opacity: 0;
+      }
+
+      &:focus::placeholder {
+        font-size: inherit;
+        opacity: 1;
       }
 
       &--fail {

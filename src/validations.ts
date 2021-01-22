@@ -23,3 +23,16 @@ export const addBasicValidations = () => {
   // Override the default message.
   extend('required', required);
 };
+
+export const INPUT_MASKS = {
+  phone: '+7 ### ###-##-##',
+  smsCode: '####'
+};
+
+
+export const INPUT_PLACEHOLDERS = {
+  phone: '+7 ___ ___-__-__',
+  smsCode: '____'
+};
+
+
