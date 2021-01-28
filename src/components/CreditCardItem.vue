@@ -1,6 +1,6 @@
 <template lang="pug">
   .credit-card-item
-    input(type="radio" name="card" :value="item.id" :id="item.id" :checked="item.isActive" @change="change").visually-hidden
+    input(type="radio" name="card" :value="item.id" :id="item.id" :checked="item.is_active" @change="change").visually-hidden
     label(:for="item.id").credit-card-item__box
       span.credit-card-item__custom-input
       span.credit-card-item__content
@@ -39,9 +39,8 @@ export default class CreditCardItem extends Vue {
 
   number = `●●●● ${this.item.last4}`;
 
-  @Emit()
   change(evt) {
-    return { item: this.item, index: this.i };
+    createRequest('GET', endpoints.card.setActive(this.item.id));
   }
 
   @Emit()

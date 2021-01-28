@@ -14,14 +14,14 @@
               h3.profile__address-title Адреса доставки
               ul.profile__address-list
                 li(v-for="(item) in user.addresses" :key="item.id").profile__address-item
-                  AddressItem(:item="item" @remove="removeAddress" @edit="openAddressEditor")
+                  AddressItem(:item="item" @edit="openAddressEditor")
               button(type="button" @click="openAddressModal(null)").link + Добавить адрес
 
             .profile__cards.profile__item
               h3.profile__cards-title Мои карты
               ul.profile__cards-list
                 li(v-for="(item) in user.cards" :key="item.id").profile__cards-item
-                  CreditCardItem(:item="item" @change="cardChange" @remove="removeCard")
+                  CreditCardItem(:item="item")
 
               button(type="button" @click="handleAddCard").link + Добавить карту
           div(v-if="!isAuthorized").page__content.profile__content

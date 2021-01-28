@@ -97,12 +97,12 @@ export default class OrderPayment extends Vue {
   }
 
   cardChange({ item, index }) {
-    if (item.isActive) {
-      return;
-    }
-
-    this.user.cards.forEach((card) => card.isActive = false);
-    Vue.set(this.user.cards, index, { ...item, isActive: true });
+    // if (item.isActive) {
+    //
+    // }
+    //
+    // this.user.cards.forEach((card) => card.isActive = false);
+    // Vue.set(this.user.cards, index, { ...item, isActive: true });
   }
 
   removeCard(id: string) {

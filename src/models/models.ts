@@ -104,7 +104,7 @@ export interface AddressItem {
 
 export interface CardItem {
   id: string;
-  isActive: boolean;
+  is_active: boolean;
   type: string;
   number: string;
   owner: string;

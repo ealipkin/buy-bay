@@ -37,5 +37,6 @@ export const endpoints = {
   card: {
     create: '/profile/card/create',
     edit: (id) => `/profile/card/${id}`,
+    setActive: (id) => `/profile/card/active/${id}`,
   },
 };
