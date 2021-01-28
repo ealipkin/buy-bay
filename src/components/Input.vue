@@ -4,16 +4,18 @@
       :name="name"
       :rules="inputRules"
       v-slot="{ errors, failed }"
-      mode="passive"
+      mode="custom"
     ).input__provider
       .input__wrapper
         input(
-          v-model="inputValue"
-          v-mask="mask || ''"
           :type="type || 'text'"
-          :placeholder="label"
-          :class="failed ? 'input__field--fail' : ''"
-          @input="handleInput"
+          autocomplete="off"
+          v-bind:value="value"
+          v-on:input="$emit('input', $event.target.value)"
+          v-mask="mask || ''"
+          :placeholder="placeholder || ''"
+          :class="{'input__field--fail': failed, 'input__field--has-value': value}"
+          :name="name || ''"
           ref="input"
         ).input__field
         label(v-if="label" :data-placeholder="label").input__label {{label}}
@@ -22,11 +24,13 @@
 
 <script lang="ts">
 import {
-  Component, Prop, Vue, Watch,
+  Component, Prop, Vue,
 } from 'vue-property-decorator';
 
 @Component
 export default class Input extends Vue {
+  @Prop() public placeholder!: string;
+
   @Prop() public name!: string;
 
   @Prop() public label!: string;
@@ -39,13 +43,6 @@ export default class Input extends Vue {
 
   @Prop() public rules!: string[] | null;
 
-  @Watch('value')
-  onValueChange(val) {
-    this.setValue(val);
-  }
-
-  inputValue = '';
-
   inputRules = this.rules?.join('|') || '';
 
   isRequired = this.rules?.includes('required') || false;
@@ -54,18 +51,6 @@ export default class Input extends Vue {
     this.$nextTick(() => {
       (this.$refs.input as any).focus();
     });
-  }
-
-  mounted() {
-    this.setValue(this.value);
-  }
-
-  setValue(val) {
-    this.inputValue = val;
-  }
-
-  handleInput() {
-    this.$emit('input', { value: this.inputValue });
   }
 }
 </script>
@@ -92,6 +77,11 @@ export default class Input extends Vue {
       &::placeholder {
         font-size: 0;
         opacity: 0;
+      }
+
+      &:focus::placeholder {
+        font-size: inherit;
+        opacity: 1;
       }
 
       &--fail {
@@ -121,7 +111,7 @@ export default class Input extends Vue {
       white-space: nowrap;
     }
 
-    &__field:not(:placeholder-shown) ~ &__label,
+    &__field--has-value ~ &__label,
     &__field:focus ~ &__label {
       transform: translate(-1%, -199%) scale(0.9, 0.9);
       background-color: white;

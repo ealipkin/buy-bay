@@ -6,12 +6,12 @@
         include ../assets/icons/phone.svg
         span
           span.contacts__item-label телефон
-          span.contacts__item-value {{contacts.phone}}
+          span.contacts__item-value {{user && user.phone}}
       li.contacts__item
         include ../assets/icons/mail.svg
         span
           span.contacts__item-label email
-          span.contacts__item-value {{contacts.email}}
+          span.contacts__item-value {{(user && user.email) || 'Не указан'}}
 
     button(type="button" @click="openProfileModal").contacts__button.link Изменить данные
 
@@ -21,6 +21,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ProfileModal from '@/components/ProfileModal.vue';
+import { ProfileUser } from '@/models/models';
 
 @Component({
   components: {
@@ -28,11 +29,11 @@ import ProfileModal from '@/components/ProfileModal.vue';
   },
 })
 export default class Contacts extends Vue {
-  @Prop() public contacts!: object;
+  @Prop() public user!: ProfileUser;
 
   openProfileModal = () => {
     const modalComponent: any = this.$refs.profileModal;
-    modalComponent.showModal();
+    modalComponent.showModal(this.user);
   };
 }
 </script>

@@ -36,6 +36,11 @@ export enum ORDER_STATUSES {
   DELIVERED = 'delivered', // Заказ доставлен
 }
 
+export enum CARD_TYPES {
+  MASTERCARD = 'MasterCard',
+  VISA = 'Visa'
+}
+
 export enum REQUIRED_ADDRESS_FIELDS {
   SURNAME = 'surname',
   NAME = 'name',

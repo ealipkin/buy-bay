@@ -6,25 +6,25 @@
           h1.page__title Мой профиль
           ProfileNav(:items="profileMenuItems")
         template(v-if="!loaded")
-          div(v-if="isAuthorized").page__content.profile__content
+          div(v-if="isAuthorized && user").page__content.profile__content
             UserInfo(:user="user").profile__item.profile__user-info
             ProfileNav(:items="profileMenuItems").profile__item.profile__nav-mobile-only
-            Contacts(:contacts="user.contacts").profile__item.profile__contacts
+            Contacts(:user="user").profile__item.profile__contacts
             .profile__address.profile__item
               h3.profile__address-title Адреса доставки
               ul.profile__address-list
-                li(v-for="(item, i) in user.addresses" :key="item.id").profile__address-item
-                  AddressItem(:item="item" :i="i" @change="addressChange" @remove="removeAddress" @edit="openAddressEditor")
+                li(v-for="(item) in user.addresses" :key="item.id").profile__address-item
+                  AddressItem(:item="item" @remove="removeAddress" @edit="openAddressEditor")
               button(type="button" @click="openAddressModal(null)").link + Добавить адрес
 
             .profile__cards.profile__item
               h3.profile__cards-title Мои карты
               ul.profile__cards-list
-                li(v-for="(item, i) in user.cards" :key="item.id").profile__cards-item
-                  CreditCardItem(:item="item" :i="i" @change="cardChange" @remove="removeCard")
+                li(v-for="(item) in user.cards" :key="item.id").profile__cards-item
+                  CreditCardItem(:item="item" @change="cardChange" @remove="removeCard")
 
-              button(type="button" @click="openCreditCardModal").link + Добавить карту
-          div(v-else).page__content.profile__content
+              button(type="button" @click="handleAddCard").link + Добавить карту
+          div(v-if="!isAuthorized").page__content.profile__content
             h1.empty-message Войдите в учетную запись чтобы редактировать данные профиля
         Loader(v-else)
     AddressModal(ref="addressModal")
@@ -41,9 +41,10 @@ import AddressItem from '@/components/AddressItem.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
 import AddressModal from '@/components/AddressModal.vue';
 import CreditCardModal from '@/components/CreditCardModal.vue';
-import { createProfileUser } from '@/utils/data';
 import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 import Loader from '@/components/Loader.vue';
+import $store from '@/store';
+import { mapGetters } from 'vuex';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 
@@ -57,13 +58,16 @@ import { endpoints } from '@/config';
     CreditCardItem,
     AddressModal,
     CreditCardModal,
-  }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'profile/getProfile',
+      loaded: 'profile/getProfileLoaded',
+    }),
+  },
 })
 export default class Profile extends Vue {
   profileMenuItems = PROFILE_MENU_ITEMS;
-
-  user = createProfileUser(null, 1);
-  loaded: boolean = false;
 
   get isAuthorized() {
     return (this as any).$auth.check();
@@ -71,26 +75,19 @@ export default class Profile extends Vue {
 
   openAddressModal(data) {
     const modalComponent: any = this.$refs.addressModal;
-
-    modalComponent.showModal(data);
+    modalComponent.showModal({ ...data });
   }
 
-  addressChange({ item, index }) {
-    if (item.isActive) {
-      return;
-    }
-
-    this.user.addresses.forEach((address) => address.isActive = false);
-    Vue.set(this.user.addresses, index, { ...item, isActive: true });
+  openAddressEditor(address: AddressItem) {
+    this.openAddressModal(address);
   }
 
-  removeAddress(id: string) {
-    this.user.addresses = this.user.addresses.filter((address) => address.id !== id);
-  }
-
-  openAddressEditor(id: string) {
-    const pickedAddress = this.user.addresses.find((address) => address.id === id) || null;
-    this.openAddressModal(pickedAddress);
+  handleAddCard() {
+    createRequest('POST', endpoints.card.create)
+      .then((res) => {
+        const url = res.data.data.confirmation_url;
+        window.location.href = url;
+      });
   }
 
   openCreditCardModal() {
@@ -98,37 +95,12 @@ export default class Profile extends Vue {
     modalComponent.showModal();
   }
 
-  cardChange({ item, index }) {
-    if (item.isActive) {
-      return;
-    }
-
-    this.user.cards.forEach((card) => card.isActive = false);
-    Vue.set(this.user.cards, index, { ...item, isActive: true });
-  }
-
-  removeCard(id: string) {
-    this.user.cards = this.user.cards.filter((card) => card.id !== id);
-  }
-
   async mounted() {
-    this.loaded = true;
     if (this.isAuthorized) {
-      this.loadProfile();
+      $store.dispatch('profile/loadProfile');
     } else {
       this.$root.$emit('show-login-modal');
     }
-    this.loaded = false
-  }
-
-  async loadProfile() {
-    return createRequest('GET', endpoints.profile.load)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      });
   }
 }
 </script>

@@ -1,4 +1,5 @@
 import VModal from 'vue-js-modal';
+import { VueMaskDirective } from 'v-mask';
 import vueAwesomeCountdown from 'vue-awesome-countdown';
 import VueFilterDateFormat from '@vuejs-community/vue-filter-date-format';
 import Loading from 'vue-loading-overlay';
@@ -6,7 +7,9 @@ import Paginate from 'vuejs-paginate';
 import VueTruncate from 'vue-truncate-filter';
 import VueClipboard from 'vue-clipboard2';
 import Toasted from 'vue-toasted';
-import { ValidationObserver, ValidationProvider, localize } from 'vee-validate';
+import {
+  ValidationObserver, ValidationProvider, localize, setInteractionMode,
+} from 'vee-validate';
 import Vue from 'vue';
 import { addBasicValidations } from '@/validations';
 import VueAuth from '@websanova/vue-auth/dist/v2/vue-auth.esm';
@@ -26,11 +29,9 @@ import './assets/fonts/opensans.css';
 
 Vue.use(VueAuth, authConfig);
 
-const VueInputMask = require('vue-inputmask').default;
+Vue.directive('mask', VueMaskDirective);
 
 Vue.use(Loading);
-
-Vue.use(VueInputMask);
 
 Vue.use(VueFilterDateFormat, {
   dayOfWeekNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
@@ -53,6 +54,17 @@ Vue.config.productionTip = false;
 Vue.use(VModal);
 localize('ru', vee_ru);
 Vue.component('paginate', Paginate);
+
+setInteractionMode('custom', (context) => {
+  if (context.value && context.flags.validated) {
+    return {
+      on: ['input'],
+    };
+  }
+  return ({
+    on: [],
+  });
+});
 
 const vm = new Vue({
   router,

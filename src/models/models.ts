@@ -1,4 +1,5 @@
 import {
+  CARD_TYPES,
   NOTIFICATIONS_TYPES,
   ORDER_STATUSES,
   REQUIRED_ADDRESS_FIELDS,
@@ -97,6 +98,8 @@ export interface AddressItem {
   getFullName?: () => string;
   getLocation?: () => string;
   getGlobal?: () => string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CardItem {
@@ -107,15 +110,18 @@ export interface CardItem {
   owner: string;
   date: string;
   cvv: string;
+  card_type: CARD_TYPES;
+  last4: string;
 }
 
 export interface ProfileUser {
   id: string;
+  phone: string;
   name: string;
   surname: string;
   patronymic?: string;
-  phone?: string;
-  image?: string;
+  image: string;
+  email?: string;
   sex?: {
     label: string;
     value: SEX_TYPES;

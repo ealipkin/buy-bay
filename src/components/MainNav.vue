@@ -86,7 +86,6 @@ export default class MainNav extends Vue {
   }
 
   toggleMenu() {
-    console.log('toggleMenu -> ');
     if (this.isMenuVisible) {
       this.hideMenu();
     } else {

@@ -237,6 +237,8 @@ export const createProfileUser = (item, index): ProfileUser => ({
   name: getRandomArrayElement(NAMES),
   surname: 'Меньшов',
   patronymic: 'Иванович',
+  image: '',
+  phone: '',
   sex: {
     label: 'Мужчина',
     value: SEX_TYPES.MALE,
@@ -310,26 +312,7 @@ export const createProfileUser = (item, index): ProfileUser => ({
       },
     },
   ],
-  cards: [
-    {
-      id: nanoid(),
-      isActive: true,
-      type: 'master',
-      number: '5645',
-      owner: 'owner',
-      date: '04/22',
-      cvv: '344',
-    },
-    {
-      id: nanoid(),
-      isActive: false,
-      type: 'visa',
-      number: '3322',
-      owner: 'owner',
-      date: '04/22',
-      cvv: '344',
-    },
-  ],
+  cards: [],
 });
 
 const orderSuccessStatuses = [ORDER_STATUSES.FULFILL, ORDER_STATUSES.PREPARED, ORDER_STATUSES.SEND];

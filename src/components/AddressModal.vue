@@ -1,17 +1,18 @@
 <template lang="pug">
   modal(name="address-modal" @closed="modalClose" :adaptive="true" :classes="'address-modal'" width="90%" :minWidth="290" :maxWidth="703" height="auto" :scrollable="true")
     article.modal
-      h4.modal__title Добавить адрес
+      h4.modal__title {{isEdit ? 'Изменить' : 'Добавить' }} адрес
       button(type="button" @click="closeModal").modal__close.close
-      ValidationObserver(v-slot="{ invalid }")
-        form(@submit.prevent="addAddress").modal__form
+      ValidationObserver(v-slot="{ validate }")
+        form(@submit.prevent="validate().then(addAddress)").modal__form
           fieldset.modal__form-fieldset
             Recipient(:addressItem="addressItem").modal__recipient
 
           fieldset.modal__form-fieldset
             Destination(:addressItem="addressItem").modal__destination
 
-          button(type="submit" :disabled="invalid").modal__button Добавить адрес
+          button(type="submit").modal__button {{isEdit ? 'Изменить' : 'Добавить' }} адрес
+    Toasted(ref="toasted")
 
 </template>
 
@@ -20,25 +21,50 @@ import { Component, Vue } from 'vue-property-decorator';
 import Recipient from '@/components/Recipient.vue';
 import Destination from '@/components/Destination.vue';
 import { AddressItem } from '@/models/models';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import $store from '@/store';
+import Toasted from '@/components/Toasted.vue';
 
 @Component({
   components: {
     Recipient,
     Destination,
+    Toasted,
   },
 })
 export default class AddressModal extends Vue {
   addressItem: AddressItem | object = {};
 
-  addAddress() {
+  isEdit = false;
+
+  addAddress(valid) {
+    if (!valid) {
+      return;
+    }
+    const method = this.isEdit ? 'POST' : 'PUT';
+    const id = this.addressItem && (this.addressItem as AddressItem).id;
+    const url = this.isEdit ? endpoints.address.update(id) : endpoints.address.create;
+    delete (this.addressItem as AddressItem).created_at;
+    delete (this.addressItem as AddressItem).updated_at;
+    createRequest(method, url, this.addressItem).then(this.handleAddAddressSuccess);
+  }
+
+  handleAddAddressSuccess() {
+    const toast: any = this.$refs.toasted;
+    const message = this.isEdit ? 'Адрес успешно обновлен' : 'Адрес успешно добавлен';
+    toast.showSuccess(message);
+    $store.dispatch('profile/loadProfile');
     this.closeModal();
   }
 
   showModal(data) {
-    if (data) {
+    if (data.id) {
       this.addressItem = data;
+      this.isEdit = true;
     } else {
       this.addressItem = {};
+      this.isEdit = false;
     }
 
     this.$modal.show('address-modal');

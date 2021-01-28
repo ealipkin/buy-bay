@@ -1,9 +1,12 @@
 <template lang="pug">
   .user-info
     .user-info__box
-      h2.user-info__title {{title}}
-      span.user-info__age {{user.age}} {{declOfNum(user.age)}}
-    img(:src="user.avatar").user-info__img
+      h2.user-info__title
+        span(v-if="user.name") {{user.name}} {{user.surname || ''}}
+        span(v-else) Профиль
+      span(v-if="user.age").user-info__age {{user.age}} {{declOfNum(user.age)}}
+    img(v-if="user.image" :src="user.image").user-info__img
+    img(v-else src="@/assets/empty-avatar.jpg").user-info__img
 
 </template>
 

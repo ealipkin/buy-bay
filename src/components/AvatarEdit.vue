@@ -1,11 +1,11 @@
 <template lang="pug">
   .avatar-edit
     .avatar-edit__container
-      img(v-if="!selectedImage" src="@/assets/empty-avatar.jpg").avatar-edit__empty-image
-      img(v-else :src="selectedImage").avatar-edit__selected-image
+      img(v-if="visibleImage" :src="visibleImage").avatar-edit__selected-image
+      img(v-else src="@/assets/empty-avatar.jpg").avatar-edit__empty-image
     label.avatar-edit__edit-button
       include ../assets/icons/edit.svg
-      ImageUploader(:preview="true" :className="['visually-hidden', { 'fileinput--loaded': selectedImage }]" :debug="1" doNotResize="gif" :autoRotate="false" outputFormat="verbose" @input="setImage")
+      ImageUploader(:preview="true" :className="['visually-hidden', { 'fileinput--loaded': selectedImage }]" :debug="1" doNotResize="gif" :autoRotate="false" outputFormat="file" @input="setImage")
 </template>
 
 <script lang="ts">
@@ -17,8 +17,25 @@ import ImageUploader from 'vue-image-upload-resize';
 export default class Main extends Vue {
   @Prop() public selectedImage!: string | null;
 
-  setImage(output) {
-    this.selectedImage = output.dataUrl;
+  uploadedImage: string | ArrayBuffer | null = null;
+
+  get visibleImage() {
+    return this.uploadedImage;
+  }
+
+  setImage(file: File) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.uploadedImage = reader.result;
+    };
+    this.$emit('input', file);
+  }
+
+  mounted() {
+    if (this.selectedImage) {
+      this.uploadedImage = this.selectedImage;
+    }
   }
 }
 </script>
@@ -40,6 +57,7 @@ export default class Main extends Vue {
       position: absolute;
       right: 0;
       bottom: 0;
+      cursor: pointer;
 
       svg {
         display: block;

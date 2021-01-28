@@ -4,15 +4,18 @@
     label(:for="item.id").address-item__box
       span.address-item__custom-input
       span.address-item__content
-        span.address-item__name {{fullName}}
-        span.address-item__phone {{item.phone}}
-        span.address-item__address {{addressLine1}}
-        span.address-item__address {{addressLine2}}
+        span.address-item__name {{item.surname || ''}} {{item.name || ''}} {{item.patronymic || ''}},
+        span.address-item__phone {{phone}}
+        span.address-item__address {{item.street || ''}}
+          span(v-if="item.house") , {{item.house || ''}}
+          span(v-if="item.flat") {{item.flat || ''}}
+        span.address-item__address {{item.city || ''}}
       span.address-item__controls
         button(type="button" aria-label="редактировать" @click="edit")
           include ../assets/icons/pen.svg
         button(type="button" aria-label="удалить" @click="remove")
           include ../assets/icons/trash.svg
+    Toasted(ref="toasted")
 </template>
 
 <script lang="ts">
@@ -20,32 +23,47 @@ import {
   Component, Prop, Vue, Emit,
 } from 'vue-property-decorator';
 import { AddressItem as ItemType } from '@/models/models';
+import { parsePhoneNumber } from 'libphonenumber-js';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import Toasted from '@/components/Toasted.vue';
+import $store from '@/store';
 
-@Component
+@Component({
+  components: {
+    Toasted,
+  },
+})
 export default class AddressItem extends Vue {
   @Prop() public item!: ItemType;
 
-  @Prop() public i!: number;
+  get phone() {
+    return parsePhoneNumber(this.item.phone || '').formatInternational();
+  }
 
-  fullName = this.item.getFullName?.() || '';
+  change() {
+    const item: ItemType = {
+      ...this.item,
+      isActive: true,
+    };
+    delete item.created_at;
+    delete item.updated_at;
+    createRequest('POST', endpoints.address.update(this.item.id), item);
+  }
 
-  addressLine1 = this.item.getLocation?.() || '';
-
-  addressLine2 = this.item.getGlobal?.() || '';
-
-  @Emit()
-  change(evt) {
-    return { item: this.item, index: this.i };
+  remove() {
+    createRequest('DELETE', endpoints.address.get(this.item.id)).then(this.handleRemoveSuccess);
   }
 
   @Emit()
-  remove(evt) {
-    return this.item.id;
+  edit() {
+    return this.item;
   }
 
-  @Emit()
-  edit(evt) {
-    return this.item.id;
+  handleRemoveSuccess() {
+    const toast: any = this.$refs.toasted;
+    toast.showSuccess('Адрес успешно удален');
+    $store.dispatch('profile/loadProfile');
   }
 }
 </script>
@@ -69,6 +87,9 @@ export default class AddressItem extends Vue {
   }
 
   .address-item {
+    &:hover &__box {
+      background-color: #f8f9ff;
+    }
 
     &__box {
       display: flex;

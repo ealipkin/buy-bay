@@ -108,7 +108,6 @@ export default class Header extends Vue {
 
   @Action('app/fetchMenu') fetchMenu;
 
-
   showNotifications = false;
 
   searchFocused = false;

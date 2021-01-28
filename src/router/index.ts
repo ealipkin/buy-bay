@@ -1,9 +1,6 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import $store from '../store';
-import { vm } from '@/main';
-import { createRequest } from '@/services/http.service';
-import { endpoints } from '@/config';
 
 Vue.use(VueRouter);
 

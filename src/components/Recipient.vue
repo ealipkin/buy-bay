@@ -2,19 +2,19 @@
   .recipient
     legend.recipient__legend Получатель
     .recipient__input-box
-      Input(name="surname" label="Фамилия" :value="addressItem ? addressItem.surname : ''" :rules="['required']")
+      Input(name="surname" label="Фамилия" v-model="addressItem.surname" :rules="['required']")
 
     .recipient__input-box
-      Input(name="surname" label="Имя" :value="addressItem ? addressItem.name : ''" :rules="['required']")
+      Input(name="name" label="Имя" v-model="addressItem.name" :rules="['required']")
 
     .recipient__input-box
-      Input(name="patronymic" :value="addressItem ? addressItem.patronymic : ''" label="Отчество")
+      Input(name="patronymic" v-model="addressItem.patronymic" label="Отчество")
 
     .recipient__input-box
-      Input(name="email" :value="addressItem ? addressItem.email : ''" :rules="['email']" label="Электронная почта")
+      Input(name="email" v-model="addressItem.email" :rules="['email', 'required']" label="Электронная почта")
 
     .recipient__input-box
-      Input(name="phone" :value="addressItem ? addressItem.phone : ''" label="Мобильный телефон")
+      Input(:rules="['required', 'phone']" label="Мобильный телефон" name="phone" :mask="INPUT_MASKS.phone" :placeholder="INPUT_PLACEHOLDERS.phone" v-model="addressItem.phone" ref="phoneInput").form__input
 
 </template>
 
@@ -22,12 +22,17 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Input from '@/components/Input.vue';
 import { AddressItem } from '@/models/models';
+import { INPUT_MASKS, INPUT_PLACEHOLDERS } from '@/validations';
 
 @Component({
   components: { Input },
 })
 export default class Recipient extends Vue {
   @Prop() public addressItem!: AddressItem | object;
+
+  INPUT_MASKS = INPUT_MASKS;
+
+  INPUT_PLACEHOLDERS = INPUT_PLACEHOLDERS;
 }
 </script>
 

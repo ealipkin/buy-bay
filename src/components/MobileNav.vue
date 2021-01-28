@@ -32,7 +32,6 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { mapGetters } from 'vuex';
 import router from '@/router';
 import { NotificationItem } from '@/models/models';
 
@@ -41,7 +40,6 @@ import { NotificationItem } from '@/models/models';
 })
 export default class MobileNav extends Vue {
   @Prop() public notifications!: NotificationItem[];
-
 
   toggleNotifications(event) {
     const { target } = event;

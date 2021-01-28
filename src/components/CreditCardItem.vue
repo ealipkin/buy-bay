@@ -4,15 +4,16 @@
     label(:for="item.id").credit-card-item__box
       span.credit-card-item__custom-input
       span.credit-card-item__content
-        span(v-if="item.type === 'master'").credit-card-item__type
+        span(v-if="item.card_type === cardTypes.MASTERCARD").credit-card-item__type
           include ../assets/icons/mastercard.svg
-        span(v-if="item.type === 'visa'").credit-card-item__type
+        span(v-if="item.card_type === cardTypes.VISA").credit-card-item__type
           include ../assets/icons/visa-card.svg
         span.credit-card-item__number {{number}}
 
       span.credit-card-item__controls
         button(type="button" aria-label="удалить" @click="remove")
           include ../assets/icons/trash.svg
+    Toasted(ref="toasted")
 </template>
 
 <script lang="ts">
@@ -20,14 +21,23 @@ import {
   Component, Prop, Vue, Emit,
 } from 'vue-property-decorator';
 import { CardItem } from '@/models/models';
+import { CARD_TYPES } from '@/models/enums';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import $store from '@/store';
+import Toasted from '@/components/Toasted.vue';
 
-@Component
+@Component({
+  components: {
+    Toasted,
+  },
+})
 export default class CreditCardItem extends Vue {
   @Prop() public item!: CardItem;
 
-  @Prop() public i!: number;
+  cardTypes = CARD_TYPES;
 
-  number = `●●●● ${this.item.number}`;
+  number = `●●●● ${this.item.last4}`;
 
   @Emit()
   change(evt) {
@@ -36,13 +46,22 @@ export default class CreditCardItem extends Vue {
 
   @Emit()
   remove(evt) {
-    return this.item.id;
+    createRequest('DELETE', endpoints.card.edit(this.item.id)).then(this.handleRemoveSuccess);
+  }
+
+  handleRemoveSuccess() {
+    const toast: any = this.$refs.toasted;
+    toast.showSuccess('Карта успешно удалена');
+    $store.dispatch('profile/loadProfile');
   }
 }
 </script>
 
 <style scoped lang="scss">
   .credit-card-item {
+    &:hover &__box {
+      background-color: $grey-10;
+    }
 
     input:checked ~ .credit-card-item__box {
       background-color: $grey-10;
@@ -98,6 +117,8 @@ export default class CreditCardItem extends Vue {
 
     &__type {
       margin-right: 20px;
+      display: flex;
+      align-items: center;
 
       svg {
         display: block;

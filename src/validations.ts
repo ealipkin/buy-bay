@@ -14,6 +14,7 @@ export const addBasicValidations = () => {
   extend('alpha', alpha);
 
   extend('phone', (value) => PHONE_REGEXP.test(value));
+  // extend('phone', (value) => false);
 
   extend('phoneCode', (value) => value.length && value.length === PHONE_CODE_LENGTH);
 
@@ -22,4 +23,14 @@ export const addBasicValidations = () => {
   extend('integer', integer);
   // Override the default message.
   extend('required', required);
+};
+
+export const INPUT_MASKS = {
+  phone: '+7 ### ###-##-##',
+  smsCode: '####',
+};
+
+export const INPUT_PLACEHOLDERS = {
+  phone: '+7 ___ ___-__-__',
+  smsCode: '____',
 };

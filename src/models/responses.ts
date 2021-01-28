@@ -69,5 +69,23 @@ export interface IndexPageResponse {
   data: {
     data: IndexPage;
   };
+}
 
+export interface ProfileResponse {
+  data: {
+    success: boolean;
+    data: ProfileUser;
+  };
+}
+
+export interface GetCodeResponse {
+  data: {
+    data: {
+      resp: string;
+      code: number;
+      token: string;
+    };
+    message: string;
+    success: boolean;
+  };
 }

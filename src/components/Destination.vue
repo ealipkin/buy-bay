@@ -1,30 +1,29 @@
 <template lang="pug">
-  .destination
+  form.destination
     legend.destination__legend Адрес доставки
+    div(data-prop="city").destination__input-box
+      Input(name="c" label="Город" v-model="addressItem.city" :rules="['required']")
+
+    div(data-prop="district").destination__input-box
+      Input(name="district" v-model="addressItem.district" label="Область")
+
+    div(data-prop="street").destination__input-box
+      Input(name="s" v-model="addressItem.street" label="Улица" :rules="['required']")
+
+    div(data-prop="house").destination__input-box.destination__input-box--half
+      Input(name="building" v-model="addressItem.house" label="Дом")
+    //
+    //.destination__input-box.destination__input-box--half
+    //  Input(name="part" v-model="addressItem.part" label="Корпус")
+    //
+    //.destination__input-box.destination__input-box--half
+    //  Input(name="building" v-model="addressItem.building" label="Строение")
+
+    div(data-prop="flat").destination__input-box.destination__input-box--half
+      Input(name="flat" v-model="addressItem.flat" label="Квартира/офис" )
 
     .destination__input-box
-      Input(name="city" label="Город" :value="addressItem ? addressItem.city : addressItem" :rules="['required']")
-
-    .destination__input-box
-      Input(name="district" :value="addressItem ? addressItem.district : addressItem" label="Область" :rules="['alpha']")
-
-    .destination__input-box
-      Input(name="street" :value="addressItem ? addressItem.street : addressItem" label="Улица")
-
-    .destination__input-box.destination__input-box--half
-      Input(name="house" :value="addressItem ? addressItem.house : addressItem" label="Дом")
-
-    .destination__input-box.destination__input-box--half
-      Input(name="part" :value="addressItem ? addressItem.part : addressItem" label="Корпус")
-
-    .destination__input-box.destination__input-box--half
-      Input(name="building" :value="addressItem ? addressItem.building : addressItem" label="Строение")
-
-    .destination__input-box.destination__input-box--half
-      Input(name="flat" :value="addressItem ? addressItem.flat : addressItem" label="Квартира/офис")
-
-    .destination__input-box
-      Input(name="index" label="Индекс" :value="addressItem ? addressItem.index : addressItem" :rules="['required', 'digits:6']")
+      Input(name="zip" label="Индекс" v-model="addressItem.index" :rules="['required']")
 
 </template>
 
@@ -33,11 +32,89 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import Input from '@/components/Input.vue';
 import { AddressItem } from '@/models/models';
 
+declare let $: any;
+
 @Component({
   components: { Input },
 })
 export default class Destination extends Vue {
   @Prop() public addressItem!: AddressItem | object;
+
+  initKladr() {
+    const self = this;
+    const $container = $(this.$el);
+
+    const $zip = $container.find('[name="zip"]');
+    const $district = $container.find('[name="district"]');
+    const $city = $container.find('[name="c"]');
+    const $street = $container.find('[name="s"]');
+    const $building = $container.find('[name="building"]');
+
+    // tslint:disable-next-line
+    $.fias.setDefault({
+      parentInput: '.destination',
+      verify: true,
+      select(obj) {
+        const fieldProp = this.closest('.destination__input-box').dataset.prop;
+        self.$nextTick(() => {
+          Vue.set(self.addressItem, fieldProp, obj.name);
+        });
+        if (obj.contentType === 'city') {
+          $street.fias('parentId', obj.id);
+          $building.fias('parentId', obj.id);
+          Vue.set(self.addressItem, 'cityType', obj.type);
+        }
+        if (obj.contentType === 'street') {
+          $building.fias('parentId', obj.id);
+          Vue.set(self.addressItem, 'streetType', obj.type);
+        }
+      },
+      check(obj) {
+        const $input = $(this);
+        if (!obj) {
+          self.showError($input, 'Введено неверно');
+        }
+      },
+      checkBefore() {
+        const $input = $(this);
+        return $.trim($input.val());
+      },
+      change(obj) {
+        if (obj && obj.parents) {
+          $.fias.setValues(obj.parents, '.js-form-address');
+        }
+
+        if (obj && obj.zip) {
+          self.$nextTick(() => {
+            Vue.set(self.addressItem, 'index', obj.zip);
+          });
+        }
+      },
+    });
+
+    $city.fias('type', $.fias.type.city);
+    $street.fias('type', $.fias.type.street);
+    $building.fias('type', $.fias.type.building);
+
+    $district.fias('withParents', true);
+    $city.fias('withParents', true);
+    $street.fias('withParents', true);
+
+    $street.fias('parentType', $.fias.type.city);
+    $building.fias('parentType', $.fias.type.street);
+
+    // Отключаем проверку введённых данных для строений
+    $building.fias('verify', false);
+  }
+
+  showError($input, message) {
+    // console.log('showError -> ');
+    // console.log(message);
+  }
+
+  mounted() {
+    this.initKladr();
+  }
 }
 </script>
 
