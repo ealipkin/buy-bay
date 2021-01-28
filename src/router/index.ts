@@ -114,5 +114,15 @@ export async function loadUser(to, from, next) {
   next();
 }
 
+export async function redirectForPublic(to, from, next) {
+  if (to.path.includes('/public')) {
+    const newPath = to.path.replace('/public', '');
+    next({ path: newPath })
+  } else {
+    next();
+  }
+}
+
+router.beforeEach(redirectForPublic);
 router.beforeEach(loadUser);
 export default router;
