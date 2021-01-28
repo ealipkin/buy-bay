@@ -82,6 +82,8 @@ export default class PhoneConfirmation extends Vue {
 
   error: string | null = null;
 
+  pending = false;
+
   get safePhoneNumber() {
     const number = this.phoneNumber;
     const splittedPhone = number.split('-');
@@ -129,9 +131,7 @@ export default class PhoneConfirmation extends Vue {
   handleCodeInput() {
     const safeValue = Number(this.code);
     if (safeValue && !Number.isNaN(this.code) && String(this.code).length === PHONE_CODE_LENGTH) {
-      this.login(safeValue)
-        .then(this.checkCodeSuccess)
-        .catch(this.catchError);
+      this.login(safeValue);
     }
   }
 
@@ -142,22 +142,28 @@ export default class PhoneConfirmation extends Vue {
     $auth.token(null, token, false);
     this.$emit('confirmed');
     this.loadUser();
+    this.pending = false;
   }
 
   catchError(res) {
     this.error = res.response && res.response.data && res.response.data.message;
   }
 
-  async login(code): Promise<LoginResponse> {
+  async login(code) {
+    if (this.pending) {
+      return;
+    }
     const phone = `+${this.safePhoneNumber.replace(/\D/g, '')}`;
     const token = this.smsToken;
-
-    return (this as any).$auth.login({
+    this.pending = true;
+    (this as any).$auth.login({
       data: {
         phone, code: String(code), token,
       },
       fetchUser: false,
-    });
+    })
+      .then(this.checkCodeSuccess)
+      .catch(this.catchError);
   }
 
   handleGetNewCodeClick() {
