@@ -21,14 +21,14 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Input from '@/components/Input.vue';
-import { AddressItem } from '@/models/models';
+import { UserAddressItem } from '@/models/models';
 import { INPUT_MASKS, INPUT_PLACEHOLDERS } from '@/validations';
 
 @Component({
   components: { Input },
 })
 export default class Recipient extends Vue {
-  @Prop() public addressItem!: AddressItem | object;
+  @Prop() public addressItem!: UserAddressItem | object;
 
   INPUT_MASKS = INPUT_MASKS;
 

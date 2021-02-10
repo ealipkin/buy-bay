@@ -28,6 +28,10 @@ export default class Index extends Vue {
     padding: 0;
   }
 
+  .v-modal-overlay {
+    z-index: 99999;
+  }
+
   #app {
     flex: 1 0 auto;
     display: flex;
@@ -48,7 +52,7 @@ export default class Index extends Vue {
   }
 
   main {
-    flex: 1;
+    flex: 1 0 auto;
     background: $background-color;
     position: relative;
   }

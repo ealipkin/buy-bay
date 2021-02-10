@@ -22,18 +22,15 @@ export enum PRODUCT_FEATURES {
 }
 
 export enum ORDER_STATUSES {
-  // SUCCESS = 'success', // заказ доставлен
-  // PENDING = 'pending', // ожидаем участников группы
-  // FAIL = 'fail', // группа не сформирована
-  REJECT = 'reject', // заказ отменен
-  // success order statuses
-  FULFILL = 'fulfill', // группа сформирована
-  PREPARED = 'prepared', // Заказ передан продавцу
-  SEND = 'send', // заказ отправлен
-  // fail order statuses
-  CANCELLED = 'cancelled', // Заказ отменён продавцом
-  CANCELLED_BY_CUSTOMER = 'cancelledByCustomer', // Заказ отменён покупателем
-  DELIVERED = 'delivered', // Заказ доставлен
+  PAYMENT_WAITING = 1, // Ожидается оплата
+  PAID = 2, // Оплачен
+  ERROR_PAY = 3, // Ошибка оплаты
+  SENT = 4, // Отправлен
+  DELIVERED = 5, // Доставлен
+  EXPIRED = 6, // Просрочен
+  REJECTED = 7, // Отклонен
+  IN_PROCESS = 8, // В процессе оформления
+  CANCELED_BY_CUSTOMER = 9, // Заказ отменен покупателем
 }
 
 export enum CARD_TYPES {
@@ -71,9 +68,14 @@ export enum PROFILE_NAV_TYPES {
   PROFILE = 'profile',
   GROUPS = 'groups',
   ORDERS = 'orders',
-  FAVOURITES = 'favourites',
+  FAVOURITES = 'fav',
 }
 
 export enum SERVER_ERRORS {
   UNAUTHORIZED = 'Unauthorized'
+}
+
+export enum PAY_STATUSES {
+  SUCCEDED = 'succeeded',
+  PENDING = 'pending'
 }

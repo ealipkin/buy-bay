@@ -1,7 +1,9 @@
 import {
-  BigSliderItem, ProfileUser, SeoBlock,
+  BigSliderItem, CardItem, ProfileCounts, ProfileUser, SeoBlock, UserAddressItem,
 } from '@/models/models';
 import { BrandItem, Product, ProductShop } from '@/models/product';
+import { Order, OrderData } from '@/models/order';
+import { PAY_STATUSES } from '@/models/enums';
 
 export interface PaginationInfo {
   count: number;
@@ -29,6 +31,12 @@ export interface UserResponse {
 
 export interface FavCountResponse {
   data: number;
+}
+
+export interface ProfileCountsResponse {
+  data: {
+    data: ProfileCounts
+  };
 }
 
 export interface FavProductsResponse {
@@ -85,6 +93,70 @@ export interface GetCodeResponse {
       code: number;
       token: string;
     };
+    message: string;
+    success: boolean;
+  };
+}
+
+export interface OrderResponse {
+  data: {
+    data: {
+      oid: string;
+    };
+    message: string;
+    success: boolean;
+  };
+}
+
+export interface OrderPaymentResponse {
+  data: {
+    data: OrderData;
+    message: string;
+    success: boolean;
+  };
+}
+
+export interface ProfileAddressResponse {
+  data: {
+    data: UserAddressItem[];
+    message: string;
+    success: boolean;
+  };
+}
+
+export interface OrderCardsResponse {
+  data: {
+    data: CardItem[];
+    message: string;
+    success: boolean;
+  };
+}
+
+export interface OrderPayResponse {
+  data: {
+    data: {
+      confirmation_url: string,
+      status: PAY_STATUSES,
+    };
+    message: string;
+    success: boolean;
+  };
+}
+
+export interface OrdersResponse {
+  data: {
+    data: {
+      data: OrderData[];
+      paginationInfo: PaginationInfo;
+    };
+    message: string;
+    success: boolean;
+  };
+}
+
+export interface OrderAddAddressResponse {
+  data: {
+    data: Order
     message: string;
     success: boolean;
   };

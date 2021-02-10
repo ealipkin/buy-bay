@@ -1,6 +1,6 @@
 <template lang="pug">
   .credit-card-item
-    input(type="radio" name="card" :value="item.id" :id="item.id" :checked="item.is_active" @change="change").visually-hidden
+    input(type="radio" name="card" :value="item.id" :id="item.id" :checked="item.is_active" @change="select").visually-hidden
     label(:for="item.id").credit-card-item__box
       span.credit-card-item__custom-input
       span.credit-card-item__content
@@ -22,9 +22,6 @@ import {
 } from 'vue-property-decorator';
 import { CardItem } from '@/models/models';
 import { CARD_TYPES } from '@/models/enums';
-import { createRequest } from '@/services/http.service';
-import { endpoints } from '@/config';
-import $store from '@/store';
 import Toasted from '@/components/Toasted.vue';
 
 @Component({
@@ -39,19 +36,14 @@ export default class CreditCardItem extends Vue {
 
   number = `●●●● ${this.item.last4}`;
 
-  change(evt) {
-    createRequest('GET', endpoints.card.setActive(this.item.id));
+  @Emit()
+  select() {
+    return this.item;
   }
 
   @Emit()
-  remove(evt) {
-    createRequest('DELETE', endpoints.card.edit(this.item.id)).then(this.handleRemoveSuccess);
-  }
-
-  handleRemoveSuccess() {
-    const toast: any = this.$refs.toasted;
-    toast.showSuccess('Карта успешно удалена');
-    $store.dispatch('profile/loadProfile');
+  remove() {
+    return this.item;
   }
 }
 </script>

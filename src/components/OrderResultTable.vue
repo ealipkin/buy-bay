@@ -1,21 +1,21 @@
 <template lang="pug">
   table.order-result-table
-    tbody
-      tr(v-for="metaItem in metaValues").order-result-table__row
-        td.order-result-table__data {{metaItem.title}}
-        td.order-result-table__data {{metaItem.value.label}}
+    tbody(v-if="options && options.length")
+      tr(v-for="option in options").order-result-table__row
+        td.order-result-table__data {{option.property.title}}
+        td(v-if="option.isDate").order-result-table__data {{ option.propValue.title | dateFormat('DD MMMM YYYY') }}
+        td(v-if="!option.isDate").order-result-table__data {{ option.propValue.title }}
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProductMeta } from '@/models/product';
+import { OrderPaymentOption } from '@/models/order';
 
 @Component
 export default class OrderResultTable extends Vue {
-  @Prop() public meta!: ProductMeta;
+  @Prop() public options!: OrderPaymentOption[];
 
-  metaValues = Object.values(this.meta);
 }
 </script>
 

@@ -118,6 +118,10 @@ export default class ItemPreview extends Vue {
       }
     }
 
+    &__top-slide {
+      display: block !important;
+    }
+
     &__bottom {
       margin-top: 30px;
       display: flex;

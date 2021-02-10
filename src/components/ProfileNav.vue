@@ -31,15 +31,26 @@ import { BaseMenuItem } from '@/models/menu';
 import { mapGetters } from 'vuex';
 import { PROFILE_NAV_TYPES } from '@/models/enums';
 import $store from '@/store';
+import { ProfileCounts } from '@/models/models';
 
 @Component({
   computed: {
     ...mapGetters({
+      profileCounts: 'app/getProfileCounts',
       favouritesCount: 'app/getFavouritesCount',
     }),
   },
 })
 export default class ProfileNav extends Vue {
+  @Watch('profileCounts') onProfileCountsChange(counts: ProfileCounts) {
+    const entries = Object.entries(counts);
+    entries.forEach(entry => {
+      const itemIndex = this.items.findIndex((item: BaseMenuItem) => item.type === entry[0]);
+      const item = this.items[itemIndex];
+      Vue.set(this.items, itemIndex, { ...item, count: entry[1] });
+    })
+  }
+
   @Watch('favouritesCount') onFavouritesCountChange(count) {
     const itemIndex = this.items.findIndex((item: BaseMenuItem) => item.type === this.NAV_TYPES.FAVOURITES);
     const item = this.items[itemIndex];
@@ -82,6 +93,7 @@ export default class ProfileNav extends Vue {
     @include clearList();
     background-color: #fff;
     border-radius: 8px;
+    overflow: hidden;
     box-shadow: 0 2px 14px 0 rgba(30, 39, 51, 0.05);
 
     &__item {
@@ -124,6 +136,7 @@ export default class ProfileNav extends Vue {
       padding: 20px 32px;
       display: flex;
       align-items: center;
+      cursor: pointer;
 
       svg {
         width: 18px;

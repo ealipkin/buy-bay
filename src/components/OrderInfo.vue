@@ -13,17 +13,17 @@
         Rate(:rate="item.rate").order-info__rate
 
       template(v-if="!type")
-        PickedOptionsBox(:options="item.options").order-info__picked-options
+        PickedOptionsBox(:options="options").order-info__picked-options
 
         span.order-info__label Групповая цена
         span.order-info__price {{divideNumberWithSpaces(item.groupPrice)}} ₽
     template(v-if="type === 'checkout'")
-      PickedOptionsBox(:options="item.options").order-info__picked-options
+      PickedOptionsBox(:options="options").order-info__picked-options
 
       span.order-info__label Итого к оплате
       span.order-info__price {{divideNumberWithSpaces(item.groupPrice)}} ₽
 
-    PickedOptionsBox(:options="item.options").order-info__picked-options.picked-options-box--group
+    PickedOptionsBox(:options="options").order-info__picked-options.picked-options-box--group
 </template>
 
 <script lang="ts">
@@ -32,6 +32,7 @@ import { divideNumberWithSpaces } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
 import PickedOptionsBox from '@/components/PickedOptionsBox.vue';
 import { Product } from '@/models/product';
+import { OrderPaymentOption } from '@/models/order';
 
 @Component({
   components: {
@@ -41,6 +42,8 @@ import { Product } from '@/models/product';
 })
 export default class OrderInfo extends Vue {
   @Prop() public item!: Product;
+
+  @Prop() public options!: OrderPaymentOption[];
 
   @Prop() public type!: string;
 

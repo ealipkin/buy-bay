@@ -39,7 +39,7 @@ import Pagination from '@/components/Pagination.vue';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import Loader from '@/components/Loader.vue';
-import SimilarSlider from '@/components/AmountChooser/SimilarSlider.vue';
+import SimilarSlider from '@/components/SimilarSlider.vue';
 import { Product } from '@/models/product';
 import { BreadcrumbLink, SeoBlock } from '@/models/models';
 

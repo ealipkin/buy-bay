@@ -1,16 +1,16 @@
 <template lang="pug">
   li.order
     router-link(:to="link").order__img
-      img(:src="order.image")
-    div.order__content
-      span.order__date {{order.date}}
-      router-link(:to="link").order__title {{order.title | truncate(45)}}
+      img(:src="image")
+    div(v-if="orderItem").order__content
+      span(v-if="date").order__date {{date | dateFormat('DD MMMM YYYY')}}
+      router-link(:to="link").order__title {{orderItem.title | truncate(45)}}
       .order__info
-        OrderStatus(:users="order.users" :status="order.status" :maxUsers="order.maxUsers" :time="order.time" :isGroup="isGroup").order__status
-        OrderTimer(v-if="isGroup" :time="order.time")
+        OrderStatus(:order="order").order__status
+        OrderTimer(v-if="isGroup" :time="orderItem.time")
       span.order__box
         include ../assets/icons/group-button.svg
-        span.order__price {{divideNumberWithSpaces(order.price)}} ₽
+        span.order__price {{divideNumberWithSpaces(orderItem.selfPrice)}} ₽
         router-link(:to="link" v-if="!hideButton").button.order__button {{buttonText}}
 </template>
 
@@ -20,7 +20,8 @@ import OrderTimer from '@/components/OrderTimer.vue';
 import OrderStatus from '@/components/OrderStatus.vue';
 
 import { divideNumberWithSpaces } from '@/utils/common';
-import { OrderItem as OrderItemModel } from '@/models/models';
+import { OrderData } from '@/models/order';
+import { Product } from '@/models/product';
 
 @Component({
   components: {
@@ -29,7 +30,7 @@ import { OrderItem as OrderItemModel } from '@/models/models';
   },
 })
 export default class OrderItem extends Vue {
-  @Prop() public order!: OrderItemModel;
+  @Prop() public order!: OrderData;
 
   @Prop() public link!: string;
 
@@ -38,6 +39,19 @@ export default class OrderItem extends Vue {
   @Prop() public isGroup!: boolean;
 
   @Prop() public hideButton!: boolean;
+
+  get orderItem(): Product | null {
+    return (this.order && this.order.orderItems && this.order.orderItems.length) ? this.order.orderItems[0].product : null
+  }
+
+  get image() : string | null {
+    return (this.orderItem && this.orderItem) ? this.orderItem.images.preview : null
+  }
+
+  get date() {
+    const date = this.order && this.order.order && this.order.order.created_at;
+    return date && new Date(date)
+  }
 
   divideNumberWithSpaces(number) {
     return divideNumberWithSpaces(number);

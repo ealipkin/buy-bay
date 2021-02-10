@@ -73,7 +73,7 @@ export default class CatalogCardItem extends Vue {
   divideNumberWithSpaces = (number) => divideNumberWithSpaces(number);
 
   toggleFav() {
-    const id = this.item.id_product;
+    const id = this.item.product_id;
     this.item.isFavourite = !this.item.isFavourite;
     this.$emit('toggle-fav');
     createRequest('GET', endpoints.favourites.deleteProduct(id))

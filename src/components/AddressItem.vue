@@ -1,6 +1,6 @@
 <template lang="pug">
   .address-item
-    input(type="radio" name="address" :value="item.id" :id="item.id" :checked="item.isActive" @change="change").visually-hidden
+    input(type="radio" name="address" :value="item.id" :id="item.id" :checked="item.isActive" @change="select").visually-hidden
     label(:for="item.id").address-item__box
       span.address-item__custom-input
       span.address-item__content
@@ -15,55 +15,37 @@
           include ../assets/icons/pen.svg
         button(type="button" aria-label="удалить" @click="remove")
           include ../assets/icons/trash.svg
-    Toasted(ref="toasted")
+
 </template>
 
 <script lang="ts">
 import {
   Component, Prop, Vue, Emit,
 } from 'vue-property-decorator';
-import { AddressItem as ItemType } from '@/models/models';
+import { UserAddressItem } from '@/models/models';
 import { parsePhoneNumber } from 'libphonenumber-js';
-import { createRequest } from '@/services/http.service';
-import { endpoints } from '@/config';
-import Toasted from '@/components/Toasted.vue';
-import $store from '@/store';
 
-@Component({
-  components: {
-    Toasted,
-  },
-})
+@Component
 export default class AddressItem extends Vue {
-  @Prop() public item!: ItemType;
+  @Prop() public item!: UserAddressItem;
 
   get phone() {
     return parsePhoneNumber(this.item.phone || '').formatInternational();
   }
 
-  change() {
-    const item: ItemType = {
-      ...this.item,
-      isActive: true,
-    };
-    delete item.created_at;
-    delete item.updated_at;
-    createRequest('POST', endpoints.address.update(this.item.id), item);
+  @Emit()
+  select() {
+    return this.item;
   }
 
+  @Emit()
   remove() {
-    createRequest('DELETE', endpoints.address.get(this.item.id)).then(this.handleRemoveSuccess);
+    return this.item.id;
   }
 
   @Emit()
   edit() {
     return this.item;
-  }
-
-  handleRemoveSuccess() {
-    const toast: any = this.$refs.toasted;
-    toast.showSuccess('Адрес успешно удален');
-    $store.dispatch('profile/loadProfile');
   }
 }
 </script>
@@ -93,6 +75,7 @@ export default class AddressItem extends Vue {
 
     &__box {
       display: flex;
+      align-items: flex-start;
       padding: 15px;
       box-shadow: inset 0 0 0 1px $grey-6;
       border-radius: 4px;
@@ -159,10 +142,12 @@ export default class AddressItem extends Vue {
     &__controls {
       margin-right: -15px;
       margin-left: auto;
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
 
       button {
         @include clearButton();
-        margin-bottom: 18px;
         margin-right: 15px;
         width: 20px;
 

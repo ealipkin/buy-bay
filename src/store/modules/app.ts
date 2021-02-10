@@ -2,8 +2,8 @@ import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import { ProductShop } from '@/models/product';
 import { MenuItem } from '@/models/menu';
-import { FavCountResponse, UserResponse } from '@/models/responses';
-import { ProfileUser } from '@/models/models';
+import { FavCountResponse, ProfileCountsResponse, UserResponse } from '@/models/responses';
+import { ProfileCounts, ProfileUser } from '@/models/models';
 
 interface AppState {
   selectedShop: ProductShop | null;
@@ -11,12 +11,20 @@ interface AppState {
   menuLoaded: boolean;
   favouritesCount: number;
   mainMenu: MenuItem[];
+  profileCounts: ProfileCounts | null;
 }
 
-const updateFavouritesCount = async ({ commit }) => createRequest('GET', endpoints.favourites.counter)
-  .then((res: FavCountResponse) => {
-    commit('SET_FAVOURITES_COUNT', res.data);
-  });
+const updateFavouritesCount = async ({ commit }) =>
+  createRequest('GET', endpoints.favourites.counter)
+    .then((res: FavCountResponse) => {
+      commit('SET_FAVOURITES_COUNT', res.data);
+    });
+
+const updateProfileCounts = async ({ commit }) =>
+  createRequest('GET', endpoints.profile.counts)
+    .then((res: ProfileCountsResponse) => {
+      commit('SET_PROFILE_COUNTS', res.data.data);
+    });
 
 const appState: AppState = {
   selectedShop: null,
@@ -24,6 +32,7 @@ const appState: AppState = {
   menuLoaded: false,
   favouritesCount: 0,
   mainMenu: [],
+  profileCounts: null,
 };
 
 const getters = {
@@ -31,6 +40,7 @@ const getters = {
   getProfilePage: (state: AppState) => state.profilePage,
   getMainMenu: (state: AppState) => state.mainMenu,
   getFavouritesCount: (state: AppState) => state.favouritesCount,
+  getProfileCounts: (state: AppState) => state.profileCounts,
 };
 
 const mutationTypes = {
@@ -40,6 +50,7 @@ const mutationTypes = {
   SET_MAIN_MENU_LOADED: 'SET_MAIN_MENU_LOADED',
   SET_USER_AUTH: 'SET_USER_AUTH',
   SET_FAVOURITES_COUNT: 'SET_FAVOURITES_COUNT',
+  SET_PROFILE_COUNTS: 'SET_PROFILE_COUNTS',
 };
 
 const mutations = {
@@ -58,20 +69,23 @@ const mutations = {
   [mutationTypes.SET_FAVOURITES_COUNT](state: AppState, payload: number) {
     state.favouritesCount = payload;
   },
+  [mutationTypes.SET_PROFILE_COUNTS](state: AppState, payload: ProfileCounts) {
+    state.profileCounts = { ...payload };
+  },
 };
 
 const actions = {
   async setProfilePage({ commit, state }, props) {
-    commit('SET_PROFILE_PAGE', props);
+    commit('app/SET_PROFILE_PAGE', props, { root: true });
   },
   async setSelectedShop({ commit, state }, props) {
-    commit('SET_SELECTED_SHOP', props);
+    commit('app/SET_SELECTED_SHOP', props);
   },
   async setUserAuth({ commit, state }, props) {
-    commit('SET_USER_AUTH', props);
+    commit('app/SET_USER_AUTH', props, { root: true });
   },
   async logout({ commit }, props) {
-    commit('SET_USER_AUTH', props);
+    commit('app/SET_USER_AUTH', props);
     const vm = (this as any)._vm;
     const { $auth } = vm;
     $auth.logout();
@@ -99,6 +113,9 @@ const actions = {
   },
   async updateFavouritesCount({ commit }) {
     await updateFavouritesCount({ commit });
+  },
+  async updateProfileCounts({ commit }) {
+    await updateProfileCounts({ commit });
   },
   async fetchMenu({ commit }) {
     commit('SET_MAIN_MENU_LOADED', true);

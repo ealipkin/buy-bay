@@ -20,10 +20,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import Recipient from '@/components/Recipient.vue';
 import Destination from '@/components/Destination.vue';
-import { AddressItem } from '@/models/models';
-import { createRequest } from '@/services/http.service';
-import { endpoints } from '@/config';
-import $store from '@/store';
+import { UserAddressItem } from '@/models/models';
 import Toasted from '@/components/Toasted.vue';
 
 @Component({
@@ -34,32 +31,23 @@ import Toasted from '@/components/Toasted.vue';
   },
 })
 export default class AddressModal extends Vue {
-  addressItem: AddressItem | object = {};
+  addressItem: UserAddressItem | object = {};
 
   isEdit = false;
 
   addAddress(valid) {
-    if (!valid) {
-      return;
+    if (valid) {
+      if (this.isEdit) {
+        this.$emit('update', { address: this.addressItem });
+      } else {
+        this.$emit('add', { address: this.addressItem });
+      }
+      this.closeModal();
     }
-    const method = this.isEdit ? 'POST' : 'PUT';
-    const id = this.addressItem && (this.addressItem as AddressItem).id;
-    const url = this.isEdit ? endpoints.address.update(id) : endpoints.address.create;
-    delete (this.addressItem as AddressItem).created_at;
-    delete (this.addressItem as AddressItem).updated_at;
-    createRequest(method, url, this.addressItem).then(this.handleAddAddressSuccess);
-  }
-
-  handleAddAddressSuccess() {
-    const toast: any = this.$refs.toasted;
-    const message = this.isEdit ? 'Адрес успешно обновлен' : 'Адрес успешно добавлен';
-    toast.showSuccess(message);
-    $store.dispatch('profile/loadProfile');
-    this.closeModal();
   }
 
   showModal(data) {
-    if (data.id) {
+    if (data && data.id) {
       this.addressItem = data;
       this.isEdit = true;
     } else {
@@ -122,12 +110,6 @@ export default class AddressModal extends Vue {
         width: 30px;
         height: 30px;
       }
-    }
-
-    &__form-fieldset {
-      margin: 0;
-      padding: 0;
-      border: none;
     }
 
     &__recipient {

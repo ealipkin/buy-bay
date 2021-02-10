@@ -133,84 +133,88 @@ export default class LoginModal extends Vue {
   }
 </style>
 <style scoped lang="scss">
-  .login-modal {
-    &__title {
-      font-size: 16px;
-      margin-bottom: 20px;
-      font-weight: bold;
-    }
+.modal {
+  padding: 0;
+}
 
-    &__bottom {
-      margin-top: 30px;
-    }
-
-    &__subtitle {
-      margin-bottom: 15px;
-    }
-
-    &__enter-by {
-      @include clearButton();
-      @include link();
-      color: $blue;
-    }
-
-    &__tabs {
-      margin-bottom: 28px;
-
-      @include tablet() {
-        margin-bottom: 48px;
-      }
-    }
-
-    &__content {
-      padding: 17px 17px 0 16px;
-
-      @include tablet() {
-        padding: 32px 40px 0 40px;
-      }
-    }
-
-    &__inner {
-      padding: 0 10px;
-
-      @include tablet() {
-        padding: 0;
-      }
-    }
-
-    &__forgot {
-      text-align: center;
-      margin-top: 20px;
-
-      @include tablet() {
-        margin-top: 22px;
-      }
-    }
-
-    .modal__close.close {
-      right: 14px;
-      top: 16px;
-
-      @include tablet() {
-        right: 26px;
-        top: 24px;
-        width: 30px;
-        height: 30px;
-      }
-    }
-
-    &__register {
-      padding-bottom: 25px;
-      margin-top: -10px;
-      @include laptop() {
-        margin-top: -13px;
-        padding-bottom: 40px;
-      }
-    }
-
-    &__login {
-      padding-bottom: 25px;
-    }
-
+.login-modal {
+  &__title {
+    font-size: 16px;
+    margin-bottom: 20px;
+    font-weight: bold;
   }
+
+  &__bottom {
+    margin-top: 30px;
+  }
+
+  &__subtitle {
+    margin-bottom: 15px;
+  }
+
+  &__enter-by {
+    @include clearButton();
+    @include link();
+    color: $blue;
+  }
+
+  &__tabs {
+    margin-bottom: 28px;
+
+    @include tablet() {
+      margin-bottom: 48px;
+    }
+  }
+
+  &__content {
+    padding: 17px 17px 0 16px;
+
+    @include tablet() {
+      padding: 32px 40px 0 40px;
+    }
+  }
+
+  &__inner {
+    padding: 0 10px;
+
+    @include tablet() {
+      padding: 0;
+    }
+  }
+
+  &__forgot {
+    text-align: center;
+    margin-top: 20px;
+
+    @include tablet() {
+      margin-top: 22px;
+    }
+  }
+
+  .modal__close.close {
+    right: 14px;
+    top: 16px;
+
+    @include tablet() {
+      right: 26px;
+      top: 24px;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  &__register {
+    padding-bottom: 25px;
+    margin-top: -10px;
+    @include laptop() {
+      margin-top: -13px;
+      padding-bottom: 40px;
+    }
+  }
+
+  &__login {
+    padding-bottom: 25px;
+  }
+
+}
 </style>

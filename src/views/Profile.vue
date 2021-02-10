@@ -14,25 +14,27 @@
               h3.profile__address-title Адреса доставки
               ul.profile__address-list
                 li(v-for="(item) in user.addresses" :key="item.id").profile__address-item
-                  AddressItem(:item="item" @edit="openAddressEditor")
+                  AddressItem(:item="item" @edit="openAddressEditor" @remove="handleAddressRemove" @select="handleAddressSelect")
               button(type="button" @click="openAddressModal(null)").link + Добавить адрес
 
             .profile__cards.profile__item
               h3.profile__cards-title Мои карты
               ul.profile__cards-list
                 li(v-for="(item) in user.cards" :key="item.id").profile__cards-item
-                  CreditCardItem(:item="item")
+                  CreditCardItem(:item="item" @remove="handleRemoveCard" @select="handleSelectCard")
 
               button(type="button" @click="handleAddCard").link + Добавить карту
           div(v-if="!isAuthorized").page__content.profile__content
             h1.empty-message Войдите в учетную запись чтобы редактировать данные профиля
         Loader(v-else)
-    AddressModal(ref="addressModal")
+    AddressModal(ref="addressModal" @update="handleUpdateAddress" @add="handleAddAddress")
     CreditCardModal(ref="creditCardModal")
+    ConfirmationModal(ref="confirmationModal" @confirm="removeConfirm" @cancel="removeCancel")
+    Toasted(ref="toasted")
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import ProfileNav from '@/components/ProfileNav.vue';
 import UserInfo from '@/components/UserInfo.vue';
@@ -47,9 +49,18 @@ import $store from '@/store';
 import { mapGetters } from 'vuex';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
+import { CardItem, UserAddressItem } from '@/models/models';
+import Toasted from '@/components/Toasted.vue';
+import ConfirmationModal from '@/components/ConfirmationModal.vue';
+
+enum ITEMS_TYPES {
+  CARD = 'card',
+  ADDRESS = 'address',
+}
 
 @Component({
   components: {
+    ConfirmationModal,
     Loader,
     ProfileNav,
     UserInfo,
@@ -58,6 +69,7 @@ import { endpoints } from '@/config';
     CreditCardItem,
     AddressModal,
     CreditCardModal,
+    Toasted,
   },
   computed: {
     ...mapGetters({
@@ -67,7 +79,17 @@ import { endpoints } from '@/config';
   },
 })
 export default class Profile extends Vue {
+  @Watch('isAuthorized') isAuthorizedChanged(val) {
+    if (val) {
+      this.$nextTick(() => {
+        $store.dispatch('profile/loadProfile');
+      });
+    }
+  }
+
   profileMenuItems = PROFILE_MENU_ITEMS;
+
+  lastRemovedItem: { type: ITEMS_TYPES; id: any } | null = null;
 
   get isAuthorized() {
     return (this as any).$auth.check();
@@ -95,9 +117,85 @@ export default class Profile extends Vue {
     modalComponent.showModal();
   }
 
+  openConfirmationModal() {
+    const modalComponent: any = this.$refs.confirmationModal;
+    modalComponent.showModal();
+  }
+
+  handleAddressRemove(id) {
+    this.lastRemovedItem = { type: ITEMS_TYPES.ADDRESS, id };
+    this.openConfirmationModal();
+  }
+
+  handleAddressSelect(address: UserAddressItem) {
+    const newAddress: UserAddressItem = {
+      ...address,
+      isActive: true,
+    };
+    delete newAddress.created_at;
+    delete newAddress.updated_at;
+    createRequest('POST', endpoints.address.update(newAddress.id), newAddress);
+  }
+
+  handleRemoveAddressSuccess() {
+    const toast: any = this.$refs.toasted;
+    toast.showSuccess('Адрес успешно удален');
+    $store.dispatch('profile/loadProfile');
+  }
+
+  handleAddAddress(data: { address: UserAddressItem }) {
+    delete data.address.created_at;
+    delete data.address.updated_at;
+    createRequest('PUT', endpoints.address.create, data.address).then(() => this.handleAddAddressSuccess());
+  }
+
+  handleUpdateAddress(data: { address: UserAddressItem }) {
+    delete data.address.created_at;
+    delete data.address.updated_at;
+    createRequest('POST', endpoints.address.update(data.address.id), data.address).then(() => this.handleAddAddressSuccess(true));
+  }
+
+  handleAddAddressSuccess(isEdit?) {
+    const toast: any = this.$refs.toasted;
+    const message = isEdit ? 'Адрес успешно обновлен' : 'Адрес успешно добавлен';
+    toast.showSuccess(message);
+    $store.dispatch('profile/loadProfile');
+  }
+
+  handleRemoveCard(card: CardItem) {
+    this.lastRemovedItem = { type: ITEMS_TYPES.CARD, id: card.id };
+    this.openConfirmationModal();
+  }
+
+  handleSelectCard(card: CardItem) {
+    createRequest('GET', endpoints.card.setActive(card.id));
+  }
+
+  handleRemoveCardSuccess() {
+    const toast: any = this.$refs.toasted;
+    toast.showSuccess('Карта успешно удалена');
+    $store.dispatch('profile/loadProfile');
+  }
+
+  removeConfirm() {
+    if (!this.lastRemovedItem) {
+      return;
+    }
+    if (this.lastRemovedItem.type === ITEMS_TYPES.ADDRESS) {
+      createRequest('DELETE', endpoints.address.get(this.lastRemovedItem.id)).then(this.handleRemoveAddressSuccess);
+    } else {
+      createRequest('DELETE', endpoints.card.edit(this.lastRemovedItem.id)).then(this.handleRemoveCardSuccess);
+    }
+  }
+
+  removeCancel() {
+    this.lastRemovedItem = null;
+  }
+
   async mounted() {
     if (this.isAuthorized) {
       $store.dispatch('profile/loadProfile');
+      $store.dispatch('app/updateProfileCounts');
     } else {
       this.$root.$emit('show-login-modal');
     }

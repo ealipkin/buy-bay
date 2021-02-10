@@ -15,20 +15,20 @@
         h3.item-info__option-title {{option.title}}
         .item-info__option-list
           label(v-for="value in option.values").item-info__option-label
-            input(type="radio" :name="'option['+option.id+']'" :checked="value.selected").visually-hidden
+            input(type="radio" :name="'option['+option.id+']'" :checked="value.selected" @change="optionSelect(option.id, value.value)").visually-hidden
             span {{value.label}}
       li.item-info__option
         h3.item-info__option-title Количество
         .item-info__amount-container
-          AmountChooser(v-model="itemAmount" :options="settings").item-info__amount
-          .item-info__amount-text {{item.maxCount || 12345}} шт. в наличии
+          AmountChooser(v-model="itemAmount" :options="{max: maxCount}").item-info__amount
+          .item-info__amount-text {{item.maxCount}} шт. в наличии
     .item-info__actions
       button(type="button" :class="{'item-info__fav--active': item.isFavourite}" @click="toggleFav").item-info__fav
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22"><path d="M14.2 20.6C-9.601 8.946 7.612-5.544 14.2 4.215c6.588-9.759 23.802 4.73 0 16.385z" stroke="currentColor" stroke-width="2" fill="none" fill-rule="evenodd"/></svg>
-      button(type="button" @click="buySelf").item-info__buy
+      button(type="button" @click="buySelf" :disabled="orderDisabled").item-info__buy
         span.item-info__buy-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
         span.item-info__buy-text Купить одному
-      button(type="button" @click="buyGroup").item-info__buy.item-info__buy--grouped
+      button(type="button" @click="buyGroup" :disabled="orderDisabled").item-info__buy.item-info__buy--grouped
         span.item-info__buy-price {{divideNumberWithSpaces(item.groupPrice)}} ₽
         span.item-info__buy-text Купить вместе
 
@@ -45,6 +45,8 @@ import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import $store from '@/store';
 import { Product } from '@/models/product';
+import { OrderResponse } from '@/models/responses';
+import router from '@/router';
 
 @Component({
   components: { AmountChooser, Rate },
@@ -52,11 +54,33 @@ import { Product } from '@/models/product';
 export default class ItemInfo extends Vue {
   @Prop() public item!: Product;
 
+  selectedOptions: { key: string } | {} = {}
+
   itemAmount = 1;
 
-  settings = {
-    max: 99,
-  };
+  pending = false;
+
+  get isAuthorized() {
+    return (this as any).$auth.check();
+  }
+
+  get maxCount() {
+    return this.item.maxCount && this.item.maxCount < 99 ? this.item.maxCount : 99;
+  }
+
+  get orderDisabled() {
+    const allValuesSelect = Object.values(this.selectedOptions).filter(Boolean).length === Object.keys(this.selectedOptions).length;
+    return this.pending || !allValuesSelect;
+  }
+
+  optionSelect(parentId, id) {
+    if (parentId && id) {
+      this.selectedOptions = {
+        ...this.selectedOptions,
+        [parentId]: id,
+      };
+    }
+  }
 
   toggleFav() {
     if (this.item.isFavourite) {
@@ -67,11 +91,11 @@ export default class ItemInfo extends Vue {
   }
 
   addToFav() {
-    createRequest('GET', endpoints.favourites.addProduct(this.item.id_product)).then(this.updateFavourites);
+    createRequest('GET', endpoints.favourites.addProduct(this.item.product_id)).then(this.updateFavourites);
   }
 
   removeFromFav() {
-    createRequest('GET', endpoints.favourites.deleteProduct(this.item.id_product)).then(this.updateFavourites);
+    createRequest('GET', endpoints.favourites.deleteProduct(this.item.product_id)).then(this.updateFavourites);
   }
 
   updateFavourites() {
@@ -79,16 +103,60 @@ export default class ItemInfo extends Vue {
     $store.dispatch('app/updateFavouritesCount');
   }
 
+  prepareData(type: 'self' | 'group') {
+    const data: any = {
+      id: this.item.product_id,
+      options: Object.values(this.selectedOptions),
+      count: this.itemAmount,
+    };
+    if (type === 'self') {
+      data.self_price = this.item.selfPrice;
+    } else {
+      data.group_price = this.item.groupPrice;
+    }
+    return data;
+  }
+
+  sendOrder(type: 'self' | 'group') {
+    const data = this.prepareData(type);
+    const url = type === 'self' ? endpoints.order.self : endpoints.order.group;
+    this.pending = true;
+    createRequest('POST', url, data)
+      .then((res: OrderResponse) => {
+        const orderId = res.data.data.oid;
+        if (orderId) {
+          router.push({ path: `/order/${orderId}` });
+        }
+      })
+      .catch(() => {
+        this.pending = false;
+      });
+  }
+
   buySelf() {
-    console.log('buySelf');
+    if (this.isAuthorized) {
+      this.sendOrder('self');
+    } else {
+      this.$root.$emit('show-login-modal');
+    }
   }
 
   buyGroup() {
-    console.log('buyGroup');
+    if (this.isAuthorized) {
+      this.sendOrder('group');
+    } else {
+      this.$root.$emit('show-login-modal');
+    }
   }
 
   divideNumberWithSpaces(number) {
     return divideNumberWithSpaces(number);
+  }
+
+  mounted() {
+    Object.keys(this.item.options).forEach((option: string) => {
+      this.selectedOptions[option] = '';
+    });
   }
 }
 
@@ -321,6 +389,11 @@ export default class ItemInfo extends Vue {
       justify-content: center;
       flex: 1;
       padding: 0;
+
+      &:disabled {
+        cursor: default;
+        opacity: 0.8;
+      }
 
       &-price {
         font-size: 18px;

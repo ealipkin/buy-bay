@@ -1,112 +1,146 @@
 <template lang="pug">
   .order-payment
-    .order-payment__breadcrumbs
-      Breadcrumbs(:links="breadCrumbs")
-    h1.order-payment__title Оформление заказа
-    .order-payment__main
-      .order-payment__left-col
-        .order-payment__info.order-payment__item
-          h2.order-payment__info-title Оформелние заказа
-          span.order-payment__info-text Пожалуйста, добавьте недостающие данные
+    template(v-if="loaded")
+      template(v-if="orderData")
+        h1.order-payment__title Оформление заказа
+        ValidationObserver(v-slot="{ validate }")
+          form(@submit.prevent="validate().then(submitNewAddress)")
+            .order-payment__main
+              .order-payment__left-col
+                .order-payment__info.order-payment__item
+                  h2.order-payment__info-title Оформелние заказа
+                  span.order-payment__info-text Пожалуйста, добавьте недостающие данные
 
-        .order-payment__address.order-payment__item
-          h3.order-payment__address-title Адреса доставки
-          ul.order-payment__address-list
-            li(v-for="(item, i) in user.addresses" :key="item.id").order-payment__address-item
-              AddressItem(:item="item" :i="i" @change="addressChange" @remove="removeAddress" @edit="openAddressEditor")
-          button(type="button" @click="openAddressModal").link + Добавить адрес
+                div(v-if="addresses && addresses.length").order-payment__address.order-payment__item
+                  h3.order-payment__address-title Адреса доставки
+                  ul.order-payment__address-list
+                    li(v-for="item in addresses" :key="item.id").order-payment__address-item
+                      AddressItem(:item="item" @select="handleSelectAddress" @remove="removeAddress" @edit="handleAddressEdit")
+                  button(type="button" @click="openAddressModal(null)").link + Добавить адрес
+                div(v-else)
+                  h3.order-payment__address-title Адрес доставки
+                  p.order-payment__address-text Пожалуйста, добавьте недостающие данные
 
-        .order-payment__cards.order-payment__item
-          h3.order-payment__cards-title Мои карты
-          ul.order-payment__cards-list
-            li(v-for="(item, i) in user.cards" :key="item.id").order-payment__cards-item
-              CreditCardItem(:item="item" :i="i" @change="cardChange" @remove="removeCard")
-          button(type="button" @click="openCreditCardModal").link + Добавить карту
+                  fieldset.modal__form-fieldset
+                    Recipient(:addressItem="addressItem").modal__recipient
 
-        .order-payment__item.order-payment__item--last
-          button(type="button").order-payment__button Оплатить
+                  fieldset.modal__form-fieldset
+                    Destination(:addressItem="addressItem").modal__destination
 
-      .order-payment__aside
-        OrderInfo(:item="item" v-if="!isMobile" :type="'checkout'").order-payment__product.order-payment__item.order-info--checkout
-        DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").order-payment__delivery.order-payment__item
+                .order-payment__cards.order-payment__item
+                  h3.order-payment__cards-title Мои карты
+                  ul.order-payment__cards-list
+                    li(v-for="item in cards" :key="item.id").order-payment__cards-item
+                      CreditCardItem(:item="item" @remove="handleRemoveCard" @select="handleSelectCard")
+                  button(type="button" @click="handleAddCard").link + Добавить карту
 
-    AddressModal(ref="addressModal")
-    CreditCardModal(ref="creditCardModal")
+                .order-payment__item.order-payment__item--last
+                  Loader(v-if="submitted").order-payment__submit-loader.inline-loader
+                  button(v-if="addresses && addresses.length" type="button" :disabled="orderDisabled" @click="handleOrder").order-payment__button.button Оплатить
+                  button(v-if="!addresses || !addresses.length" type="submit" :disabled="submitted").order-payment__button.button Продолжить
+
+              .order-payment__aside
+                OrderInfo(:item="order" :options="orderOptions" v-if="order && !isMobile" :type="'checkout'").order-payment__product.order-payment__item.order-info--checkout
+                DeliveryInfo(:deliveryItem="orderData.delivery" v-if="orderData.delivery && !isMobile").order-payment__delivery.order-payment__item
+
+        AddressModal(ref="addressModal" @update="handleUpdateAddress" @add="handleAddAddress")
+        CreditCardModal(ref="creditCardModal")
+        ConfirmationModal(ref="confirmationModal" @confirm="removeConfirm" @cancel="removeCancel")
+      template(v-else)
+        h1.order-payment__title Заказ не найден
+    Loader(v-else)
+    Toasted(ref="toasted")
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
-import { generateProducts, createProfileUser } from '@/utils/data';
+import { createProfileUser } from '@/utils/data';
 import DeliveryInfo from '@/components/DeliveryInfo.vue';
 import { breakPoints } from '@/utils/constants';
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import OrderInfo from '@/components/OrderInfo.vue';
-import AddressItem from '@/components/AddressItem.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
 import AddressModal from '@/components/AddressModal.vue';
 import CreditCardModal from '@/components/CreditCardModal.vue';
-import { BreadcrumbLink } from '@/models/models';
+import { CardItem, UserAddressItem } from '@/models/models';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import Loader from '@/components/Loader.vue';
+import {
+  OrderAddAddressResponse,
+  OrderCardsResponse,
+  OrderPaymentResponse,
+  OrderPayResponse,
+  ProfileAddressResponse
+} from '@/models/responses';
+import { Product } from '@/models/product';
+import AddressItem from '@/components/AddressItem.vue';
+import ConfirmationModal from '@/components/ConfirmationModal.vue';
+import Toasted from '@/components/Toasted.vue';
+import $store from '@/store';
+import { ORDER_STATUSES, PAY_STATUSES } from '@/models/enums';
+import router from '@/router';
+import { OrderData, OrderPaymentOption } from '@/models/order';
+import Recipient from '@/components/Recipient.vue';
+import Destination from '@/components/Destination.vue';
+
+enum ITEMS_TYPES {
+  CARD = 'card',
+  ADDRESS = 'address',
+}
 
 @Component({
   components: {
-    Breadcrumbs,
+    Destination,
+    Recipient,
+    ConfirmationModal,
+    AddressItem,
+    Loader,
     DeliveryInfo,
     OrderInfo,
-    AddressItem,
     CreditCardItem,
     AddressModal,
     CreditCardModal,
+    Toasted,
   },
 })
 export default class OrderPayment extends Vue {
-  breadCrumbs: BreadcrumbLink[] = [
-    { href: '/', label: 'Главная' },
-    { href: '/category', label: 'Мужской гардероб' },
-    { href: '/category', label: 'Сумки и рюкзаки' },
-    { href: '/product/:id/payment', label: 'Рюкзак', current: true },
-  ];
+  @Watch('isAuthorized') isAuthorizedChanged(val) {
+    if (val) {
+      this.$nextTick(() => {
+        this.loadOrder();
+      });
+    }
+  }
+
+  lastRemovedItem: { type: ITEMS_TYPES; id: any } | null = null;
+  addressItem = {};
+  window = {
+    width: 0,
+    height: 0,
+  };
+
+  orderData: OrderData | null = null;
+
+  addresses: UserAddressItem[] | null = null;
+
+  cards: CardItem[] | null = null;
+
+  orderId: string | number | null = null;
 
   user = createProfileUser(null, 1);
 
-  openAddressModal() {
-    const modalComponent: any = this.$refs.addressModal;
-    modalComponent.showModal();
-  }
+  loaded = false
 
-  addressChange({ item, index }) {
-    if (item.isActive) {
-      return;
+  submitted = false;
+
+  get orderDisabled() {
+    if (!this.orderData || !this.orderData.order) {
+      return true;
     }
-
-    this.user.addresses.forEach((address) => address.isActive = false);
-    Vue.set(this.user.addresses, index, { ...item, isActive: true });
-  }
-
-  removeAddress(id: string) {
-    this.user.addresses = this.user.addresses.filter((address) => address.id !== id);
-  }
-
-  openAddressEditor(id: string) {
-    console.log('edit address:', id);
-  }
-
-  openCreditCardModal() {
-    const modalComponent: any = this.$refs.creditCardModal;
-    modalComponent.showModal();
-  }
-
-  cardChange({ item, index }) {
-    // if (item.isActive) {
-    //
-    // }
-    //
-    // this.user.cards.forEach((card) => card.isActive = false);
-    // Vue.set(this.user.cards, index, { ...item, isActive: true });
-  }
-
-  removeCard(id: string) {
-    this.user.cards = this.user.cards.filter((card) => card.id !== id);
+    const { order } = this.orderData;
+    const hasActiveAddress = order.user_address_id;
+    return !hasActiveAddress || this.submitted;
   }
 
   get isMobile() {
@@ -117,12 +151,108 @@ export default class OrderPayment extends Vue {
     return this.window.width >= breakPoints.tablet && this.window.width < breakPoints.laptop;
   }
 
-  window = {
-    width: 0,
-    height: 0,
-  };
+  get order(): Product | null {
+    return this.orderData && this.orderData.orderItems && this.orderData.orderItems[0].product;
+  }
 
-  item = generateProducts(1).pop();
+  get orderOptions(): OrderPaymentOption[] | null {
+    return this.orderData && this.orderData.orderItems && this.orderData.orderItems[0].orderProductOptions;
+  }
+
+  get isAuthorized() {
+    return (this as any).$auth.check();
+  }
+
+  submitNewAddress(valid) {
+    if (valid) {
+      this.submitted = true;
+      this.addAddress({ address: (this.addressItem as UserAddressItem) })
+        .then((res: OrderAddAddressResponse) => {
+          return res.data.data.user_address_id;
+        })
+        .then((addressId) => {
+          return this.selectAddress(addressId)
+        })
+        .then(this.handleOrder)
+    }
+  }
+
+  handleAddressEdit(address: AddressItem) {
+    this.openAddressModal(address);
+  }
+
+  openAddressModal(data) {
+    const modalComponent: any = this.$refs.addressModal;
+    const address = data ? { ...data } : null;
+    modalComponent.showModal(address);
+  }
+
+  openConfirmationModal() {
+    const modalComponent: any = this.$refs.confirmationModal;
+    modalComponent.showModal();
+  }
+
+  addAddress(data: { address: UserAddressItem }): Promise<OrderAddAddressResponse> {
+    delete data.address.created_at;
+    delete data.address.updated_at;
+    return createRequest('POST', endpoints.order.addAddress(this.orderId), data.address)
+  }
+
+  handleAddAddress(data: { address: UserAddressItem }) {
+    this.addAddress(data).then(() => this.handleAddAddressSuccess());
+  }
+
+  handleUpdateAddress(data: { address: UserAddressItem }) {
+    delete data.address.created_at;
+    delete data.address.updated_at;
+    createRequest('POST', endpoints.address.update(data.address.id), data.address).then(() => this.handleAddAddressSuccess(true));
+  }
+
+  handleAddAddressSuccess(isEdit?) {
+    const toast: any = this.$refs.toasted;
+    const message = isEdit ? 'Адрес успешно обновлен' : 'Адрес успешно добавлен';
+    toast.showSuccess(message);
+    this.updateAddresses();
+  }
+
+  removeAddress(id: string) {
+    this.lastRemovedItem = { type: ITEMS_TYPES.ADDRESS, id };
+    this.openConfirmationModal();
+  }
+
+  selectAddress(addressId) {
+    const data = {
+      oid: this.orderId,
+      user_address_id: addressId,
+    };
+    return createRequest('POST', endpoints.order.selectAddress, data)
+  }
+
+  handleSelectAddress(address: UserAddressItem) {
+    this.selectAddress(address.id).then(this.updateOrder);
+  }
+
+  // openCreditCardModal() {
+  // const modalComponent: any = this.$refs.creditCardModal;
+  // modalComponent.showModal();
+  // }
+
+  handleAddCard() {
+    createRequest('POST', endpoints.card.create)
+      .then((res) => {
+        window.location.href = res.data.data.confirmation_url;
+      });
+  }
+
+  handleSelectCard(card: CardItem) {
+    const { pid } = card;
+    createRequest('POST', endpoints.order.selectCard(this.orderId), { pid }).then(this.updateOrder);
+  }
+
+  handleRemoveCard(card: CardItem) {
+    this.lastRemovedItem = { type: ITEMS_TYPES.CARD, id: card.id };
+    this.openConfirmationModal();
+  }
 
   handleResize() {
     this.window.width = window.innerWidth;
@@ -132,6 +262,145 @@ export default class OrderPayment extends Vue {
   created() {
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+  }
+
+  getAddress() {
+    return createRequest('GET', endpoints.profile.addresses);
+  }
+
+  getCards() {
+    return createRequest('GET', endpoints.order.cards);
+  }
+
+  getOrder(): Promise<OrderPaymentResponse> {
+    return createRequest('GET', endpoints.order.get(this.orderId));
+  }
+
+  updateAddresses() {
+    this.getAddress().then((res: ProfileAddressResponse) => {
+      this.addresses = res.data.data;
+    });
+  }
+
+  updateCards() {
+    this.getCards().then((res) => {
+      this.cards = res.data.data;
+    });
+  }
+
+  updateOrder() {
+    this.getOrder()
+      .then((res) => {
+        this.orderData = res.data.data;
+      });
+  }
+
+  loadOrder() {
+    this.orderId = this.$route.params.id;
+    const orderRequest = this.getOrder();
+    const addressesRequest = this.getAddress();
+    const cardsRequest = this.getCards();
+    Promise.all([orderRequest, addressesRequest, cardsRequest])
+      .then((data) => {
+        const orderRes: OrderPaymentResponse = data[0];
+        const orderData = orderRes.data.data;
+        const orderStatus = orderData.order.order_status_id;
+        console.log(orderStatus);
+        //http://localhost:8080/order/268767782
+        const isWaiting = orderStatus === ORDER_STATUSES.PAYMENT_WAITING;
+        const isInProcess = orderStatus === ORDER_STATUSES.IN_PROCESS;
+        const canProceed = !orderStatus || isInProcess || isWaiting;
+        if (!canProceed) {
+          router.push({ path: `/profile/orders/${this.orderId}` });
+          return;
+        }
+        return data;
+      })
+      .then((data) => {
+        if (!data) {
+          return;
+        }
+        const [
+          orderRes,
+          addressesRes,
+          cardsRes,
+        ]: [OrderPaymentResponse, ProfileAddressResponse, OrderCardsResponse] = data;
+
+        const orderData = orderRes.data.data;
+        this.orderData = orderData;
+        const selectedAddress = orderData.order.user_address_id;
+        const selectedCard = orderData.order.payment_card_id;
+        const addresses = addressesRes.data.data;
+        addresses.forEach((address) => {
+          address.isActive = String(address.id) === String(selectedAddress);
+        });
+        this.addresses = addresses;
+        const cards = cardsRes.data.data;
+        cards.forEach((card) => {
+          card.is_active = String(card.id) === String(selectedCard);
+        });
+        this.cards = cards;
+        this.loaded = true;
+      })
+  }
+
+  removeConfirm() {
+    if (!this.lastRemovedItem) {
+      return;
+    }
+    if (this.lastRemovedItem.type === ITEMS_TYPES.ADDRESS) {
+      createRequest('DELETE', endpoints.order.deleteAddress(this.lastRemovedItem.id, this.orderId))
+        .then(this.handleRemoveAddressSuccess)
+        .then(this.updateOrder);
+    } else {
+      createRequest('DELETE', endpoints.order.deleteCard(this.lastRemovedItem.id, this.orderId))
+        .then(this.handleRemoveCardSuccess)
+        .then(this.updateOrder);
+    }
+  }
+
+  removeCancel() {
+    this.lastRemovedItem = null;
+  }
+
+  handleRemoveCardSuccess() {
+    const toast: any = this.$refs.toasted;
+    toast.showSuccess('Карта успешно удалена');
+    $store.dispatch('profile/loadProfile');
+    this.updateCards();
+  }
+
+  handleRemoveAddressSuccess() {
+    const toast: any = this.$refs.toasted;
+    toast.showSuccess('Адрес успешно удален');
+    this.updateAddresses();
+  }
+
+  handleOrder() {
+    this.submitted = true;
+    createRequest('POST', endpoints.order.pay(this.orderId))
+      .then((res: OrderPayResponse) => {
+        console.log(res);
+        const { confirmation_url, status } = res.data.data;
+        if (confirmation_url) {
+          window.location.href = confirmation_url;
+        }
+        if (status === PAY_STATUSES.SUCCEDED) {
+          router.push({ path: `/success`, query: { oid: String(this.orderId) } });
+        }
+      })
+      .finally(() => {
+        this.submitted = true;
+      });
+  }
+
+  mounted() {
+    if (this.isAuthorized) {
+      this.loadOrder();
+    } else {
+      this.loaded = true;
+      this.$root.$emit('show-login-modal');
+    }
   }
 
   destroyed() {
@@ -145,9 +414,14 @@ export default class OrderPayment extends Vue {
     @include container();
     padding-left: 15px;
     padding-right: 15px;
+    padding-top: 15px;
 
     @include tablet() {
+      padding-top: 25px;
       padding-bottom: 85px;
+    }
+    @include laptop() {
+      padding-top: 50px;
     }
 
     &__title {
@@ -174,7 +448,9 @@ export default class OrderPayment extends Vue {
       &--last {
         margin-top: -12px;
         padding-bottom: 50px;
-
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
         @include tablet() {
           margin-top: 0;
           padding: 0;
@@ -337,21 +613,14 @@ export default class OrderPayment extends Vue {
     }
 
     &__button {
-      @include clearButton();
       font-size: 18px;
-      color: #fff;
-      font-weight: bold;
       padding: 17px;
       padding-bottom: 19px;
-      display: block;
-      text-align: center;
-      background-color: $blue;
       border-radius: 8px;
       width: 100%;
 
       @include tablet() {
         max-width: 289px;
-        margin-left: auto;
       }
     }
 
@@ -359,6 +628,19 @@ export default class OrderPayment extends Vue {
       border-radius: 8px;
       border: 1px solid $grey-6;
       margin-top: 12px;
+    }
+
+    &__submit-loader {
+      margin-right: 20px;
+    }
+
+    &__address-title + &__address-text {
+      margin-top: -15px;
+    }
+
+    &__address-text {
+      margin-top: 0;
+      margin-bottom: 30px;
     }
 
   }

@@ -1,18 +1,18 @@
 <template lang="pug">
-  .order-detail
+  div(v-if="loaded && orderData").order-detail
     .order-detail__breadcrumbs
       Breadcrumbs(:links="breadCrumbs")
-    h1.order-detail__title Заказ № {{item.id}} отправлен продавцом
+    h1.order-detail__title Заказ № {{orderData.order.id}} отправлен продавцом
     .order-detail__main
       .order-detail__left-col
-        OrderInfo(:item="item" :hideStatus="false").order-detail__product.order-detail__item
-        OrderStatusCard(:item="item" v-if="isMobile").order-detail__status.order-detail__item
+        OrderInfo(:item="order" :options="orderOptions" :hideStatus="false").order-detail__product.order-detail__item
+        OrderStatusCard(:order="orderData" :options="orderOptions" v-if="isMobile").order-detail__status.order-detail__item
         DeliveryAddress(:contacts="item.contacts").order-detail__address.order-detail__item
         DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").order-detail__delivery.order-detail__item
-        Chat(:users="item.users" :messages="item.messages").order-detail__item
+        Chat(:users="item.users" :options="orderOptions" :messages="item.messages").order-detail__item
       .order-detail__aside
-        OrderStatusCard(:item="item" v-if="!isMobile").order-detail__status.order-detail__item
-        DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").order-detail__delivery.order-detail__item
+        OrderStatusCard(:order="orderData" :options="orderOptions" v-if="!isMobile").order-detail__status.order-detail__item
+        DeliveryInfo(:deliveryItem="orderData.delivery" v-if="!isMobile").order-detail__delivery.order-detail__item
 
 </template>
 
@@ -28,6 +28,13 @@ import DeliveryAddress from '@/components/DeliveryAddress.vue';
 import OrderStatusCard from '@/components/OrderStatusCard.vue';
 import Chat from '@/components/Chat.vue';
 import { BreadcrumbLink } from '@/models/models';
+import { OrderData, OrderPaymentOption } from '@/models/order';
+import { OrderPaymentResponse } from '@/models/responses';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import router from '@/router';
+import { Product } from '@/models/product';
+import { ORDER_STATUSES } from '@/models/enums';
 
 @Component({
   components: {
@@ -40,11 +47,19 @@ import { BreadcrumbLink } from '@/models/models';
   },
 })
 export default class OrderDetail extends Vue {
+  loaded = false;
+  orderId: string | null = null;
+  orderData: OrderData | null = null;
+
   breadCrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
     { href: '/profile', label: 'Мой профиль' },
     { href: '/profile/orders', label: 'Мои заказы' },
   ];
+
+  get isAuthorized() {
+    return (this as any).$auth.check();
+  }
 
   get isMobile() {
     return this.window.width < breakPoints.tablet;
@@ -52,6 +67,14 @@ export default class OrderDetail extends Vue {
 
   get isTablet() {
     return this.window.width >= breakPoints.tablet && this.window.width < breakPoints.laptop;
+  }
+
+  get order(): Product | null {
+    return this.orderData && this.orderData.orderItems && this.orderData.orderItems[0].product;
+  }
+
+  get orderOptions(): OrderPaymentOption[] | null {
+    return this.orderData && this.orderData.orderItems && this.orderData.orderItems[0].orderProductOptions;
   }
 
   window = {
@@ -66,17 +89,42 @@ export default class OrderDetail extends Vue {
     this.window.height = window.innerHeight;
   }
 
-  created() {
+  mounted() {
+    this.orderId = this.$route.params.id as string;
+    if (!this.isAuthorized || !this.orderId) {
+      router.push({ path: '/' });
+    }
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
-  }
+    this.getOrder()
+      .then((res) => {
+        const orderData = res.data.data;
+        if (orderData.order_status.id === ORDER_STATUSES.PAYMENT_WAITING || orderData.order_status.id === ORDER_STATUSES.IN_PROCESS) {
+          router.push({ path: `/order/${this.orderId}` });
+          return;
+        }
+        this.orderData = orderData;
+        this.loaded = true;
 
-  mounted() {
-    this.breadCrumbs.push({ href: '/profile/orders/:id', label: this.item ? `Заказ № ${this.item.id}` : '', current: true });
+        this.breadCrumbs.push({
+          href: '/profile/orders/:id',
+          label: this.item ? `Заказ № ${this.orderData.order.id}` : '',
+          current: true
+        });
+        console.log('this.orderData -> ', this.orderData);
+      })
+      .catch(() => {
+        router.push({ path: '/' });
+      });
   }
 
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
+  }
+
+
+  getOrder(): Promise<OrderPaymentResponse> {
+    return createRequest('GET', endpoints.order.get(this.orderId));
   }
 }
 </script>

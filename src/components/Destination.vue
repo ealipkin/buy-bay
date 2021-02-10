@@ -30,7 +30,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Input from '@/components/Input.vue';
-import { AddressItem } from '@/models/models';
+import { UserAddressItem } from '@/models/models';
 
 declare let $: any;
 
@@ -38,7 +38,7 @@ declare let $: any;
   components: { Input },
 })
 export default class Destination extends Vue {
-  @Prop() public addressItem!: AddressItem | object;
+  @Prop() public addressItem!: UserAddressItem | object;
 
   initKladr() {
     const self = this;

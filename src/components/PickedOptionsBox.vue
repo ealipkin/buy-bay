@@ -1,21 +1,17 @@
 <template lang="pug">
-  div(v-if="options").picked-options-box
-    p(v-for="[title, label] in entries").picked-options-box__item
-      span.picked-options-box__title {{title}}
-      span.picked-options-box__label {{label}}
+  div(v-if="options && options.length").picked-options-box
+    p(v-for="option in options").picked-options-box__item
+      span.picked-options-box__title {{option.property.title}}
+      span.picked-options-box__label {{option.propValue.title}}
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProductOption } from '@/models/product';
+import { OrderPaymentOption } from '@/models/order';
 
 @Component
 export default class PickedOptionsBox extends Vue {
-  @Prop() public options!: ProductOption[];
-
-  get entries() {
-    return Object.values(this.options).map((option: any) => [option.title, option.values.find((value) => value.selected).label]);
-  }
+  @Prop() public options!: OrderPaymentOption[];
 }
 </script>
 
@@ -65,6 +61,7 @@ export default class PickedOptionsBox extends Vue {
     &__item {
       margin: 0;
       padding-right: 15px;
+      margin-bottom: 15px;
 
       @include laptop() {
         padding-right: 50px;

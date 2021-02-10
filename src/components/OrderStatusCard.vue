@@ -1,11 +1,11 @@
 <template lang="pug">
-  .order-status-card
+  div(v-if="order").order-status-card
     h3.order-status-card__title Статус заказа
-    OrderStatus(:status="item.meta.status.value.value" :optionalText="'продавцом'").order-status-card__status.order-status--big
+    OrderStatus(:order="order" :optionalText="'продавцом'").order-status-card__status.order-status--big
 
     p.order-status-card__text Это означает, что скоро, посылка дойдет до вас. Если это уже произошло, вы можете оставить отзыв
 
-    OrderResultTable(:meta="item.meta").order-status-card__table
+    OrderResultTable(:options="enrichedOptions").order-status-card__table
     //router-link(to="#").order-status-card__link Пожаловаться
 
 </template>
@@ -14,7 +14,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import OrderStatus from '@/components/OrderStatus.vue';
 import OrderResultTable from '@/components/OrderResultTable.vue';
-import { Product } from '@/models/product';
+import { OrderData, OrderPaymentOption } from '@/models/order';
 
 @Component({
   components: {
@@ -23,7 +23,30 @@ import { Product } from '@/models/product';
   },
 })
 export default class OrderStatusCard extends Vue {
-  @Prop() public item!: Product;
+  @Prop() public order!: OrderData;
+
+  @Prop() public options!: OrderPaymentOption[];
+
+  enrichedOptions!: OrderPaymentOption[] | [] = [];
+
+  mounted() {
+    this.enrichedOptions = [
+      {
+        property: { title: 'Дата заказа' },
+        propValue: { title: new Date(this.order.order.created_at) },
+        isDate: true
+      },
+      {
+        property: { title: 'Номер' },
+        propValue: { title: this.order.order.id },
+      },
+      {
+        property: { title: 'Статус' },
+        propValue: { title: this.order.order_status.title },
+      },
+      ...this.options,
+    ]
+  }
 }
 </script>
 
@@ -32,10 +55,10 @@ export default class OrderStatusCard extends Vue {
     padding: 24px 16px;
     background-color: #fff;
 
-      @include tablet() {
-        padding: 32px;
-        padding-bottom: 50px;
-      }
+    @include tablet() {
+      padding: 32px;
+      padding-bottom: 50px;
+    }
 
     &__title {
       margin: 0;

@@ -51,7 +51,7 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/OrderCheckout.vue'),
   },
   {
-    path: '/product/:id/payment',
+    path: '/order/:id',
     name: 'OrderPayment',
     component: () => import('../views/OrderPayment.vue'),
   },
@@ -115,9 +115,10 @@ export async function loadUser(to, from, next) {
 }
 
 export async function redirectForPublic(to, from, next) {
+  console.log('redirectForPublic');
   if (to.path.includes('/public')) {
     const newPath = to.path.replace('/public', '');
-    next({ path: newPath })
+    next({ path: newPath, query: to.query });
   } else {
     next();
   }

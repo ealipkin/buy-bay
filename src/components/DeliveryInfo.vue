@@ -1,25 +1,25 @@
 <template lang="pug">
   .delivery-info
-    .delivery-info__title.content-title Бесплатная доставка {{deliveryItem.freeDelivery}}
+    .delivery-info__title.content-title {{deliveryItem.title}}
     .delivery-info__content
       .delivery-info__icon
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 14"><path d="M20.372 7.324v-.01a.457.457 0 00-.46-.45h-.12l-1.865-3.605a.456.456 0 00-.409-.247l-3.183-.001.122-.963a1.328 1.328 0 00-.335-1.023c-.25-.274-.6-.425-.984-.425h-9.88a.488.488 0 00-.483.44l-.099.793h5.63c.365 0 .653.296.644.662a.684.684 0 01-.68.662H6.393l.001.002H.88a.484.484 0 00-.48.468.453.453 0 00.456.468h7.3a.688.688 0 01.582.7.733.733 0 01-.722.71H2.984a.487.487 0 00-.485.472.458.458 0 00.46.473h4.973a.686.686 0 01.593.701.732.732 0 01-.728.71H1.612a.488.488 0 00-.485.472.46.46 0 00.46.473h.415L1.84 10.5a1.32 1.32 0 00.335 1.023c.25.274.6.425.983.425h.357a2.063 2.063 0 002.041 1.708 2.2 2.2 0 002.13-1.707h4.454c.36 0 .7-.138.968-.364.245.235.569.364.923.364h.073a2.062 2.062 0 002.04 1.707 2.2 2.2 0 002.13-1.707h.295c.765 0 1.445-.623 1.514-1.388l.288-3.191v-.013l.002-.02v-.012zM5.581 12.71c-.652 0-1.168-.53-1.151-1.181a1.221 1.221 0 011.213-1.182c.651 0 1.167.53 1.15 1.182a1.22 1.22 0 01-1.212 1.181zm10.588 0c-.651 0-1.168-.53-1.15-1.181a1.22 1.22 0 011.212-1.182c.652 0 1.168.53 1.151 1.182a1.221 1.221 0 01-1.213 1.181zm2.972-2.21a.57.57 0 01-.548.503h-.318a2.06 2.06 0 00-2.02-1.601c-.99 0-1.844.682-2.102 1.601h-.098a.402.402 0 01-.302-.127.41.41 0 01-.1-.315l.597-6.604h1.369l-.217 2.404a1.32 1.32 0 00.335 1.023c.25.275.6.426.983.426h2.664l-.243 2.69z" fill="#000" fill-rule="nonzero" opacity=".9"/></svg>
       .delivery-info__info
         .delivery-info__refund-title
-          span {{deliveryItem.refundFrom}}
-          span  —
-          span {{deliveryItem.refundTo}}
+          span {{ new Date(deliveryItem.from) | dateFormat('DD MMMM YYYY')}}
+          span  —&nbsp;
+          span {{ new Date(deliveryItem.to) | dateFormat('DD MMMM YYYY')}}
         .delivery-info__text Вернем деньги в спортных случаях
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ProductDelivery } from '@/models/product';
+import { OrderDelivery } from '@/models/order';
 
 @Component({})
 export default class DeliveryInfo extends Vue {
-  @Prop() public deliveryItem!: ProductDelivery;
+  @Prop() public deliveryItem!: OrderDelivery;
 }
 
 </script>

@@ -5,7 +5,8 @@ import {
 
 export interface ProductOption {
   title: string;
-  id: string;
+  id?: string;
+  id_property?: string;
   values: {
     label: string;
     value: string;
@@ -68,7 +69,7 @@ export interface ProductMeta {
 
 export interface Product {
   id: string;
-  id_product: string;
+  product_id: string;
   title: string;
   rate: number | string;
   groups: number;

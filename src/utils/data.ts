@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import { Product, ProductFeature, ProductShop } from '@/models/product';
 import {
-  ORDER_STATUSES, PRODUCT_FEATURES, REQUIRED_ADDRESS_FIELDS, SEX_TYPES,
+  PRODUCT_FEATURES, REQUIRED_ADDRESS_FIELDS, SEX_TYPES,
 } from '@/models/enums';
 import {
   Group, OrderItem, OrderUser, ProfileUser,
@@ -57,7 +57,7 @@ export const getShop = (): ProductShop => ({
 
 const createProduct = (item, index): Product => ({
   id: nanoid(),
-  id_product: nanoid(),
+  product_id: nanoid(),
   title: getRandomArrayElement(PRODUCT_TITLES),
   rate: getRate(),
   groups: getRandomNumberBetween(0, 999),
@@ -88,7 +88,7 @@ const createProduct = (item, index): Product => ({
       title: 'Статус',
       value: {
         label: 'Отправлен',
-        value: ORDER_STATUSES.SEND,
+        value: '',
       },
     },
     color: {
@@ -315,8 +315,8 @@ export const createProfileUser = (item, index): ProfileUser => ({
   cards: [],
 });
 
-const orderSuccessStatuses = [ORDER_STATUSES.FULFILL, ORDER_STATUSES.PREPARED, ORDER_STATUSES.SEND];
-const orderFailStatuses = [ORDER_STATUSES.CANCELLED, ORDER_STATUSES.CANCELLED_BY_CUSTOMER, ORDER_STATUSES.DELIVERED];
+const orderSuccessStatuses = [];
+const orderFailStatuses = [];
 
 const createOrder = (item, index, failed?): OrderItem => ({
   id: nanoid(),

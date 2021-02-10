@@ -78,8 +78,8 @@ export interface SocialLink {
   title: string;
 }
 
-export interface AddressItem {
-  id: string;
+export interface UserAddressItem {
+  id: string | number;
   isActive: boolean;
   [REQUIRED_ADDRESS_FIELDS.SURNAME]: string;
   [REQUIRED_ADDRESS_FIELDS.NAME]: string;
@@ -103,7 +103,8 @@ export interface AddressItem {
 }
 
 export interface CardItem {
-  id: string;
+  id: string | number;
+  pid: string;
   is_active: boolean;
   type: string;
   number: string;
@@ -130,7 +131,7 @@ export interface ProfileUser {
   birthday?: Date;
   contacts: { phone: string; email: string };
   avatar?: string;
-  addresses: AddressItem[];
+  addresses: UserAddressItem[];
   cards: CardItem[];
   getFormatDate?: () => string;
 }
@@ -174,4 +175,11 @@ export interface SearchSuggestItem {
 export interface SortOption {
   label: string;
   value: any;
+}
+
+
+export interface ProfileCounts {
+  fav: number
+  groups: number
+  orders: number
 }

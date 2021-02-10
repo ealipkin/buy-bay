@@ -2,7 +2,7 @@
   .phone-confirmation
     ValidationObserver(v-slot="{ validate }" v-show="!phoneSend" v-if="!byMail")
       form(@submit.prevent="validate().then(handleGetCodeClick)").form.phone-confirmation__phone-section
-        Input(:rules="['required', 'phone']" label="Телефон" name="phone" :mask="INPUT_MASKS.phone" :placeholder="INPUT_PLACEHOLDERS.phone" v-model="phoneNumber" ref="phoneInput").form__input
+        Input(:rules="['required', 'phone']" label="Телефон" name="phone" :mask="INPUT_MASKS.phone" :placeholder="INPUT_PLACEHOLDERS.phone" v-model="phoneNumber" ref="phoneInput" @input="phoneInputChange").form__input
         button(type="button" @click="validate().then(handleGetCodeClick)").button.form__login-button Получить код
       div(v-if="error").phone-confirmation__error {{error}}
 
@@ -27,7 +27,7 @@
           button(type="button" @click="handleGetNewCodeClick" v-if="byMail").phone-confirmation__code-get-new Получить новый код
 
         div(v-if="!byMail").tac
-          vac(:left-time="59999" ref="countdown")
+          vac(:left-time="59000" ref="countdown")
             template(v-slot:process="{ timeObj }")
               .phone-confirmation__code-timer
                 .phone-confirmation__code-time Получить новый код можно
@@ -110,6 +110,10 @@ export default class PhoneConfirmation extends Vue {
       this.smsToken = data.data.token;
       this.openCodeStep();
     }
+  }
+
+  phoneInputChange() {
+    this.error = null;
   }
 
   openCodeStep() {

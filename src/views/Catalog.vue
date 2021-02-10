@@ -54,7 +54,7 @@ import CategoryFilter from '@/components/CategoryFilter.vue';
 import { ADVANTAGES, FILTERS } from '@/utils/constants';
 import Pagination from '@/components/Pagination.vue';
 import Slick from 'vue-slick';
-import SimilarSlider from '@/components/AmountChooser/SimilarSlider.vue';
+import SimilarSlider from '@/components/SimilarSlider.vue';
 import { BreadcrumbLink } from '@/models/models';
 
 @Component({
