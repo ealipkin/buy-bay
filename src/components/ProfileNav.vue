@@ -44,11 +44,11 @@ import { ProfileCounts } from '@/models/models';
 export default class ProfileNav extends Vue {
   @Watch('profileCounts') onProfileCountsChange(counts: ProfileCounts) {
     const entries = Object.entries(counts);
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       const itemIndex = this.items.findIndex((item: BaseMenuItem) => item.type === entry[0]);
       const item = this.items[itemIndex];
       Vue.set(this.items, itemIndex, { ...item, count: entry[1] });
-    })
+    });
   }
 
   @Watch('favouritesCount') onFavouritesCountChange(count) {

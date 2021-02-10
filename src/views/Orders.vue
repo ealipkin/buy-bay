@@ -131,7 +131,6 @@ export default class Orders extends Vue {
     return Number(this.inActivePagination.total) > Number(this.inActivePagination.perPage);
   }
 
-
   async mounted() {
     this.setProfilePage(PAGE_TITLE);
     if (this.isAuthorized) {

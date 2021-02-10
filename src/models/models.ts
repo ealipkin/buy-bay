@@ -177,9 +177,8 @@ export interface SortOption {
   value: any;
 }
 
-
 export interface ProfileCounts {
-  fav: number
-  groups: number
-  orders: number
+  fav: number;
+  groups: number;
+  orders: number;
 }

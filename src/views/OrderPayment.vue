@@ -71,7 +71,7 @@ import {
   OrderCardsResponse,
   OrderPaymentResponse,
   OrderPayResponse,
-  ProfileAddressResponse
+  ProfileAddressResponse,
 } from '@/models/responses';
 import { Product } from '@/models/product';
 import AddressItem from '@/components/AddressItem.vue';
@@ -114,7 +114,9 @@ export default class OrderPayment extends Vue {
   }
 
   lastRemovedItem: { type: ITEMS_TYPES; id: any } | null = null;
+
   addressItem = {};
+
   window = {
     width: 0,
     height: 0,
@@ -167,13 +169,9 @@ export default class OrderPayment extends Vue {
     if (valid) {
       this.submitted = true;
       this.addAddress({ address: (this.addressItem as UserAddressItem) })
-        .then((res: OrderAddAddressResponse) => {
-          return res.data.data.user_address_id;
-        })
-        .then((addressId) => {
-          return this.selectAddress(addressId)
-        })
-        .then(this.handleOrder)
+        .then((res: OrderAddAddressResponse) => res.data.data.user_address_id)
+        .then((addressId) => this.selectAddress(addressId))
+        .then(this.handleOrder);
     }
   }
 
@@ -195,7 +193,7 @@ export default class OrderPayment extends Vue {
   addAddress(data: { address: UserAddressItem }): Promise<OrderAddAddressResponse> {
     delete data.address.created_at;
     delete data.address.updated_at;
-    return createRequest('POST', endpoints.order.addAddress(this.orderId), data.address)
+    return createRequest('POST', endpoints.order.addAddress(this.orderId), data.address);
   }
 
   handleAddAddress(data: { address: UserAddressItem }) {
@@ -225,7 +223,7 @@ export default class OrderPayment extends Vue {
       oid: this.orderId,
       user_address_id: addressId,
     };
-    return createRequest('POST', endpoints.order.selectAddress, data)
+    return createRequest('POST', endpoints.order.selectAddress, data);
   }
 
   handleSelectAddress(address: UserAddressItem) {
@@ -305,14 +303,12 @@ export default class OrderPayment extends Vue {
         const orderRes: OrderPaymentResponse = data[0];
         const orderData = orderRes.data.data;
         const orderStatus = orderData.order.order_status_id;
-        console.log(orderStatus);
-        //http://localhost:8080/order/268767782
         const isWaiting = orderStatus === ORDER_STATUSES.PAYMENT_WAITING;
         const isInProcess = orderStatus === ORDER_STATUSES.IN_PROCESS;
         const canProceed = !orderStatus || isInProcess || isWaiting;
         if (!canProceed) {
           router.push({ path: `/profile/orders/${this.orderId}` });
-          return;
+          return null;
         }
         return data;
       })
@@ -341,7 +337,7 @@ export default class OrderPayment extends Vue {
         });
         this.cards = cards;
         this.loaded = true;
-      })
+      });
   }
 
   removeConfirm() {
@@ -386,7 +382,7 @@ export default class OrderPayment extends Vue {
           window.location.href = confirmation_url;
         }
         if (status === PAY_STATUSES.SUCCEDED) {
-          router.push({ path: `/success`, query: { oid: String(this.orderId) } });
+          router.push({ path: '/success', query: { oid: String(this.orderId) } });
         }
       })
       .finally(() => {

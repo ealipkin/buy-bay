@@ -48,7 +48,9 @@ import { ORDER_STATUSES } from '@/models/enums';
 })
 export default class OrderDetail extends Vue {
   loaded = false;
+
   orderId: string | null = null;
+
   orderData: OrderData | null = null;
 
   breadCrumbs: BreadcrumbLink[] = [
@@ -109,7 +111,7 @@ export default class OrderDetail extends Vue {
         this.breadCrumbs.push({
           href: '/profile/orders/:id',
           label: this.item ? `Заказ № ${this.orderData.order.id}` : '',
-          current: true
+          current: true,
         });
         console.log('this.orderData -> ', this.orderData);
       })
@@ -121,7 +123,6 @@ export default class OrderDetail extends Vue {
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   }
-
 
   getOrder(): Promise<OrderPaymentResponse> {
     return createRequest('GET', endpoints.order.get(this.orderId));

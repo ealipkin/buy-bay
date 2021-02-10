@@ -41,16 +41,16 @@ export default class OrderItem extends Vue {
   @Prop() public hideButton!: boolean;
 
   get orderItem(): Product | null {
-    return (this.order && this.order.orderItems && this.order.orderItems.length) ? this.order.orderItems[0].product : null
+    return (this.order && this.order.orderItems && this.order.orderItems.length) ? this.order.orderItems[0].product : null;
   }
 
-  get image() : string | null {
-    return (this.orderItem && this.orderItem) ? this.orderItem.images.preview : null
+  get image(): string | null {
+    return (this.orderItem && this.orderItem) ? this.orderItem.images.preview : null;
   }
 
   get date() {
     const date = this.order && this.order.order && this.order.order.created_at;
-    return date && new Date(date)
+    return date && new Date(date);
   }
 
   divideNumberWithSpaces(number) {

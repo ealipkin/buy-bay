@@ -44,7 +44,9 @@ import { OrderData } from '@/models/order';
 })
 export default class Success extends Vue {
   loaded = false;
+
   orderId: string | null = null;
+
   orderData: OrderData | null = null;
 
   socials = SOCIALS;
@@ -70,7 +72,7 @@ export default class Success extends Vue {
         this.loaded = true;
         console.log(this.orderData);
       })
-      .catch(err => {
+      .catch((err) => {
         router.push({ path: '/' });
       });
   }

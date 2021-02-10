@@ -15,7 +15,6 @@ import { OrderPaymentOption } from '@/models/order';
 @Component
 export default class OrderResultTable extends Vue {
   @Prop() public options!: OrderPaymentOption[];
-
 }
 </script>
 

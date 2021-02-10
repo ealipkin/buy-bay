@@ -3,16 +3,16 @@ import { ORDER_STATUSES } from '@/models/enums';
 
 export interface OrderPaymentOption {
   propValue: {
-    id_property_value: number;
+    id_property_value?: number;
     title: string;
   };
   property: {
-    id_property: number;
-    is_required: number;
+    id_property?: number;
+    is_required?: number;
     title: string;
-    type: string;
+    type?: string;
   };
-  isDate?: boolean
+  isDate?: boolean;
 }
 
 export interface OrderPaymentItem {
@@ -48,18 +48,18 @@ export interface OrderPaymentPos {
 export interface OrderStatus {
   code: string; // 'in_process'
   comment: string; // 'Юзер нажал кнопку, оформляет'
-  id: number
-  is_bad: number
-  message?: any
-  notify?: any
-  sms?: any
+  id: number;
+  is_bad: number;
+  message?: any;
+  notify?: any;
+  sms?: any;
   title: string; // 'В процессе оформления'
 }
 
 export interface OrderDelivery {
-  from: number
-  title: string
-  to: number
+  from: number;
+  title: string;
+  to: number;
 }
 
 export interface OrderData {

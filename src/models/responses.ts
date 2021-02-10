@@ -35,7 +35,7 @@ export interface FavCountResponse {
 
 export interface ProfileCountsResponse {
   data: {
-    data: ProfileCounts
+    data: ProfileCounts;
   };
 }
 
@@ -135,8 +135,8 @@ export interface OrderCardsResponse {
 export interface OrderPayResponse {
   data: {
     data: {
-      confirmation_url: string,
-      status: PAY_STATUSES,
+      confirmation_url: string;
+      status: PAY_STATUSES;
     };
     message: string;
     success: boolean;
@@ -156,7 +156,7 @@ export interface OrdersResponse {
 
 export interface OrderAddAddressResponse {
   data: {
-    data: Order
+    data: Order;
     message: string;
     success: boolean;
   };

@@ -34,7 +34,7 @@ export default class OrderStatusCard extends Vue {
       {
         property: { title: 'Дата заказа' },
         propValue: { title: new Date(this.order.order.created_at) },
-        isDate: true
+        isDate: true,
       },
       {
         property: { title: 'Номер' },
@@ -45,7 +45,7 @@ export default class OrderStatusCard extends Vue {
         propValue: { title: this.order.order_status.title },
       },
       ...this.options,
-    ]
+    ];
   }
 }
 </script>

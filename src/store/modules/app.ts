@@ -14,17 +14,15 @@ interface AppState {
   profileCounts: ProfileCounts | null;
 }
 
-const updateFavouritesCount = async ({ commit }) =>
-  createRequest('GET', endpoints.favourites.counter)
-    .then((res: FavCountResponse) => {
-      commit('SET_FAVOURITES_COUNT', res.data);
-    });
+const updateFavouritesCount = async ({ commit }) => createRequest('GET', endpoints.favourites.counter)
+  .then((res: FavCountResponse) => {
+    commit('SET_FAVOURITES_COUNT', res.data);
+  });
 
-const updateProfileCounts = async ({ commit }) =>
-  createRequest('GET', endpoints.profile.counts)
-    .then((res: ProfileCountsResponse) => {
-      commit('SET_PROFILE_COUNTS', res.data.data);
-    });
+const updateProfileCounts = async ({ commit }) => createRequest('GET', endpoints.profile.counts)
+  .then((res: ProfileCountsResponse) => {
+    commit('SET_PROFILE_COUNTS', res.data.data);
+  });
 
 const appState: AppState = {
   selectedShop: null,

@@ -240,11 +240,11 @@ export default class Favourites extends Vue {
       .then(() => {
         this.loaded = false;
       }).catch((err) => {
-      if (err.response.data.error === SERVER_ERRORS.UNAUTHORIZED) {
-        this.$root.$emit('show-login-modal');
-      }
-      this.loaded = false;
-    });
+        if (err.response.data.error === SERVER_ERRORS.UNAUTHORIZED) {
+          this.$root.$emit('show-login-modal');
+        }
+        this.loaded = false;
+      });
   }
 
   async loadProducts() {
