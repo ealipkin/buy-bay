@@ -27,7 +27,7 @@ export default class OrderStatusCard extends Vue {
 
   @Prop() public options!: OrderPaymentOption[];
 
-  enrichedOptions!: OrderPaymentOption[] | [] = [];
+  enrichedOptions: OrderPaymentOption[] | [] = [];
 
   mounted() {
     this.enrichedOptions = [
@@ -38,7 +38,7 @@ export default class OrderStatusCard extends Vue {
       },
       {
         property: { title: 'Номер' },
-        propValue: { title: this.order.order.id },
+        propValue: { title: String(this.order.order.id) },
       },
       {
         property: { title: 'Статус' },

@@ -4,7 +4,7 @@ import { ORDER_STATUSES } from '@/models/enums';
 export interface OrderPaymentOption {
   propValue: {
     id_property_value?: number;
-    title: string;
+    title: string | Date;
   };
   property: {
     id_property?: number;

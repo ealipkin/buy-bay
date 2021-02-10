@@ -8,7 +8,7 @@
         OrderInfo(:item="order" :options="orderOptions" :hideStatus="false").order-detail__product.order-detail__item
         OrderStatusCard(:order="orderData" :options="orderOptions" v-if="isMobile").order-detail__status.order-detail__item
         DeliveryAddress(:contacts="item.contacts").order-detail__address.order-detail__item
-        DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").order-detail__delivery.order-detail__item
+        DeliveryInfo(:deliveryItem="orderData.delivery" v-if="isMobile").order-detail__delivery.order-detail__item
         Chat(:users="item.users" :options="orderOptions" :messages="item.messages").order-detail__item
       .order-detail__aside
         OrderStatusCard(:order="orderData" :options="orderOptions" v-if="!isMobile").order-detail__status.order-detail__item
