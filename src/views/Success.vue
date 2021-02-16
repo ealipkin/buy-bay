@@ -3,20 +3,20 @@
     div(v-if="loaded").success-page__wrapper
       .success-page__info
         span.success-page__nice Ура!
-        h1(v-if="orderData.order.is_group").success-page__title Группа покупки создана
-        h1(v-if="!orderData.order.is_group").success-page__title Заказ оплачен
-        p(v-if="orderData.order.is_group").success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Достаточно 1 друга, чтобы товар был отправлен.
-        p(v-if="!orderData.order.is_group").success-page__text Ориентировочная дата доставки {{new Date(orderData.delivery.from) | dateFormat('DD MMMM YYYY')}}. Следите за изменениями статуса в разделе&nbsp;
+        h1(v-if="isGroup").success-page__title Группа покупки создана
+        h1(v-if="!isGroup").success-page__title Заказ оплачен
+        p(v-if="isGroup").success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Достаточно 1 друга, чтобы товар был отправлен.
+        p(v-if="!isGroup").success-page__text Ориентировочная дата доставки {{new Date(orderData.delivery.from) | dateFormat('DD MMMM YYYY')}}. Следите за изменениями статуса в разделе&nbsp;
           router-link(to="/profile/orders").link «Мои заказы»
+      template(v-if="isGroup")
+        hr.success-page__hr
 
-      hr.success-page__hr
+        .success-page__share-box
+          Timer(:leftTime="groupTimer" v-if="isGroup").success-page__timer
 
-      .success-page__share-box
-        Timer(:time="shareTimer").success-page__timer
+          SocialList(:socials="socials").success-page__social-list
 
-        SocialList(:socials="socials").success-page__social-list
-
-        Share(:link="shareLink")
+          Share(:link="product.short_link")
     Loader(v-else)
 </template>
 
@@ -26,13 +26,15 @@ import Timer from '@/components/Timer.vue';
 import SocialList from '@/components/SocialList.vue';
 import Share from '@/components/Share.vue';
 
-import { SOCIALS, SHARE_TIMER, SHARE_LINK } from '@/utils/constants';
+import { SHARE_TIMER } from '@/utils/constants';
 import Loader from '@/components/Loader.vue';
 import router from '@/router';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import { OrderPaymentResponse } from '@/models/responses';
-import { OrderData } from '@/models/order';
+import { OrderData, Product } from '@/models/order';
+import { sharingUtils } from '@/utils/sharing';
+import { millisToMinutesAndSeconds } from '@/utils/common';
 
 @Component({
   components: {
@@ -49,11 +51,58 @@ export default class Success extends Vue {
 
   orderData: OrderData | null = null;
 
-  socials = SOCIALS;
+  groupTimer: any = null;
 
-  shareTimer = SHARE_TIMER;
+  get isGroup() {
+    return this.orderData && this.orderData.order && this.orderData.order.is_group;
+  }
 
-  shareLink = SHARE_LINK;
+  get socials() {
+    const product: Product = this.product as Product;
+    return product ? [
+      {
+        href: sharingUtils.tgLink(product.short_link, product.title),
+        icon: 'socials/telegram.svg',
+        type: 'telegram',
+        title: 'Telegram',
+      },
+      {
+        href: sharingUtils.whatsapp(product.short_link, product.title),
+        icon: 'socials/whatsapp.svg',
+        type: 'whatsapp',
+        title: 'Whatsapp',
+      },
+      {
+        href: sharingUtils.viber(product.short_link, product.title),
+        icon: 'socials/viber.svg',
+        type: 'viber',
+        title: 'Viber',
+      },
+
+      {
+        href: sharingUtils.vk(product.short_link, product.title),
+        icon: 'socials/vk.svg',
+        type: 'vk',
+        title: 'VK',
+      },
+      {
+        href: sharingUtils.fb(product.short_link, product.title),
+        icon: 'socials/facebook.svg',
+        type: 'facebook',
+        title: 'Facebook',
+      },
+      {
+        href: sharingUtils.ok(product.short_link, product.title, product.images.preview),
+        icon: 'socials/odnoklassniki.svg',
+        type: 'ok',
+        title: 'OK',
+      },
+    ] : [];
+  }
+
+  get product(): Product | {} {
+    return this.orderData && this.orderData.orderItems && this.orderData.orderItems.length ? this.orderData.orderItems[0].product : {};
+  }
 
   get isAuthorized() {
     return (this as any).$auth.check();
@@ -67,10 +116,12 @@ export default class Success extends Vue {
     this.getOrder()
       .then((res) => {
         console.log(res);
-        // if(da)
         this.orderData = res.data.data;
         this.loaded = true;
-        console.log(this.orderData);
+        const groupTimer = this.orderData.group && this.orderData.group.time;
+        if (groupTimer) {
+          this.groupTimer = groupTimer;
+        }
       })
       .catch((err) => {
         router.push({ path: '/' });

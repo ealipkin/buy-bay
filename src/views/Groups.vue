@@ -6,25 +6,38 @@
           h1.page__title Мои группы
           ProfileNav(:items="profileMenuItems")
 
-        .page__content
-          TabsNav.tabs-nav--inner(:tabs="tabs", @change="selectTab")
-          ul(:class="{'hidden': selectedTab !== 1}").groups__list
-            OrderItem.groups__item(
-              v-for="order in activeOrders"
-              :order="order"
-              :key="order.id"
-              :link="'/profile/groups/' + order.id" :isGroup="true"
-              buttonText="Пригласить друзей"
-            )
-          ul(:class="{'hidden': selectedTab !== 2}").groups__list
-            OrderItem.groups__item(
-              v-for="order in pastOrders"
-              :order="order"
-              :key="order.id"
-              :link="'/profile/orders/' + order.id" :isGroup="true"
-              buttonText="Купить одному"
-            )
-          Pagination.groups__pagination(:moreCount="100" kindText="групп")
+        div(v-if="loaded").page__content
+          TabsNav(:tabs="tabs" @change="selectTab").tabs-nav--inner
+          div(:class="{'hidden': selectedTab === 2}")
+            div(v-if="activeOrders && activeOrders.length")
+              ul.groups__list
+                OrderItem(
+                  v-for="order in activeOrders"
+                  :order="order"
+                  :key="order.id"
+                  :link="'/profile/orders/' + order.order.oid"
+                  :hideButton="true"
+                ).groups__item
+              div(v-if="showActiveOrdersPagination").category__pagination
+                Pagination(:paginationInfo="activePagination" @page="activeOrdersPageChange" @more="showMoreActiveOrders")
+            div(v-else).empty-message Нет активных заказов
+
+          div(:class="{'hidden': selectedTab === 1}")
+            div(v-if="inactiveOrders && inactiveOrders.length")
+              ul.groups__list
+                OrderItem(
+                  v-for="order in inactiveOrders"
+                  :order="order"
+                  :key="order.id"
+                  :link="'/profile/orders/' + order.order.oid"
+                  :hideButton="true"
+                  buttonText="Купить одному"
+                ).groups__item
+              div(v-if="showInActiveOrdersPagination").category__pagination
+                Pagination(:paginationInfo="activePagination" @page="inActiveOrdersPageChange" @more="showMoreInActiveOrders")
+            div(v-else).empty-message Нет завершенных заказов
+        Loader(v-else)
+
 </template>
 
 <script lang="ts">
@@ -38,8 +51,24 @@ import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 
 import { generateOrders, generateProducts } from '@/utils/data';
 import { Action } from 'vuex-class';
+import { SORT_PARAMS } from '@/models/enums';
+import { PaginationInfo } from '@/models/responses';
+import { DEFAULT_PAGINATE_PAGE } from '@/config';
+import { OrderData } from '@/models/order';
 
 const PAGE_TITLE = 'Мои группы';
+const DEFAULT_SORT = SORT_PARAMS.POPULAR;
+const TABS = [
+  {
+    id: 1,
+    label: 'Активные',
+    isActive: true,
+  },
+  {
+    id: 2,
+    label: 'Прошедшие',
+  },
+];
 
 @Component({
   components: {
@@ -56,21 +85,25 @@ export default class Groups extends Vue {
 
   selectedTab = 1;
 
-  tabs = [
-    {
-      id: 1,
-      label: 'Активные',
-      isActive: true,
-    },
-    {
-      id: 2,
-      label: 'Прошедшие',
-    },
-  ];
+  activePagination: PaginationInfo | undefined;
 
-  activeOrders = generateOrders(10);
+  activePage: number = DEFAULT_PAGINATE_PAGE;
 
-  pastOrders = generateOrders(10);
+  activeSort: SORT_PARAMS = DEFAULT_SORT;
+
+  inActivePage: number = DEFAULT_PAGINATE_PAGE;
+
+  inActiveSort: SORT_PARAMS = DEFAULT_SORT;
+
+  inActivePagination: PaginationInfo | undefined;
+
+  loaded = false
+
+  activeOrders: OrderData[] = [];
+
+  inactiveOrders: OrderData[] = []
+
+  tabs = TABS;
 
   selectTab(tabId) {
     this.selectedTab = tabId;

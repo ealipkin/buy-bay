@@ -46,7 +46,7 @@ import Brands from '@/components/Brands.vue';
 import CatalogSlider from '@/components/CatalogSlider.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
 import TopCategories from '@/components/TopCategories.vue';
-import { generateProducts, getRandomNumberBetween } from '@/utils/data';
+import { generateProducts } from '@/utils/data';
 import Advantages from '@/components/Advantages.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import SortSelect from '@/components/SortSelect.vue';
@@ -56,6 +56,7 @@ import Pagination from '@/components/Pagination.vue';
 import Slick from 'vue-slick';
 import SimilarSlider from '@/components/SimilarSlider.vue';
 import { BreadcrumbLink } from '@/models/models';
+import { getRandomNumberBetween } from '@/utils/common';
 
 @Component({
   components: {

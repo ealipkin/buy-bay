@@ -43,7 +43,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import Brands from '@/components/Brands.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
-import { generateProducts, getRandomNumberBetween } from '@/utils/data';
+import { generateProducts } from '@/utils/data';
 import TabsNav from '@/components/TabsNav.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import SimilarSlider from '@/components/SimilarSlider.vue';
@@ -51,7 +51,8 @@ import SortSelect from '@/components/SortSelect.vue';
 import CategoryFilter from '@/components/CategoryFilter.vue';
 import { FILTERS } from '@/utils/constants';
 import { BreadcrumbLink } from '@/models/models';
-import { Product } from '@/models/product';
+import { Product } from '@/models/order';
+import { getRandomNumberBetween } from '@/utils/common';
 
 const BRANDS = [
   {

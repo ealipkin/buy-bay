@@ -57,9 +57,20 @@ export const endpoints = {
     pay: (orderId) => `/order/pay/${orderId}`,
     deleteAddress: (addressId, orderId) => `/profile/address/${addressId}/${orderId}`,
     deleteCard: (cardId, orderId) => `/profile/card/${cardId}/${orderId}`,
+    related: (orderId) => `/order/related/${orderId}`,
+  },
+  group: {
+    get: (groupId) => `/group/info/${groupId}`,
+    leave: (groupId) => `/group/leave/${groupId}`,
+    related: (groupId) => `/group/related/${groupId}`,
   },
   orders: {
     active: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: PaginationInfo) => `/profile/orders/active?page=${page}&sort=${sort}`,
     inactive: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: PaginationInfo) => `/profile/orders/inactive?page=${page}&sort=${sort}`,
   },
+  groups: {
+    active: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: PaginationInfo) => `/profile/groups/active?page=${page}&sort=${sort}`,
+    inactive: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: PaginationInfo) => `/profile/groups/inactive?page=${page}&sort=${sort}`,
+  },
+
 };

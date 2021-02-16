@@ -10,38 +10,62 @@
           TabsNav(:tabs="tabs" @change="selectTab").tabs-nav--inner
           div(:class="{'hidden': selectedTab === 2}")
             div(v-if="activeOrders && activeOrders.length")
-              ul.orders__list
+              ul(v-if="pageSettings.page === 'orders'").orders__list
                 OrderItem(
                   v-for="order in activeOrders"
                   :order="order"
                   :key="order.id"
-                  :link="'/profile/orders/' + order.order.oid"
+                  :link="pageSettings.detailLink + order.order.oid"
                   :hideButton="true"
+                ).orders__item
+
+              ul(v-else).orders__list
+                OrderItem(
+                  v-for="order in activeOrders"
+                  v-if="order.group"
+                  :order="order.orderInfo"
+                  :key="order.orderInfo.order.id"
+                  :link="pageSettings.detailLink + order.group.id"
+                  :hideButton="false"
+                  button-text="Пригласить друзей"
+                  @button-click="selectGroup(order)"
                 ).orders__item
               div(v-if="showActiveOrdersPagination").category__pagination
                 Pagination(:paginationInfo="activePagination" @page="activeOrdersPageChange" @more="showMoreActiveOrders")
-            div(v-else).empty-message Нет активных заказов
+            div(v-else).empty-message Нет активных {{pageSettings.kindLabel}}
 
           div(:class="{'hidden': selectedTab === 1}")
             div(v-if="inactiveOrders && inactiveOrders.length")
-              ul.orders__list
+              ul(v-if="pageSettings.page === 'orders'").orders__list
                 OrderItem(
                   v-for="order in inactiveOrders"
                   :order="order"
                   :key="order.id"
-                  :link="'/profile/orders/' + order.order.oid"
+                  :link="pageSettings.detailLink + order.order.oid"
                   :hideButton="true"
-                  buttonText="Купить одному"
+                ).orders__item
+
+              ul(v-else).orders__list
+                OrderItem(
+                  v-for="order in inactiveOrders"
+                  v-if="order.group"
+                  :order="order.orderInfo"
+                  :key="order.orderInfo.order.id"
+                  :link="pageSettings.detailLink + order.group.id"
+                  :hideButton="false"
+                  button-text="Пригласить друзей"
+                  @button-click="selectGroup(order)"
                 ).orders__item
               div(v-if="showInActiveOrdersPagination").category__pagination
                 Pagination(:paginationInfo="activePagination" @page="inActiveOrdersPageChange" @more="showMoreInActiveOrders")
-            div(v-else).empty-message Нет завершенных заказов
+            div(v-else).empty-message Нет завершенных {{pageSettings.kindLabel}}
         Loader(v-else)
+      GroupInfoModal(:orderData="selectedOrder" ref="groupModal")
 
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import ProfileNav from '@/components/ProfileNav.vue';
 import TabsNav from '@/components/TabsNav.vue';
@@ -57,12 +81,50 @@ import { SORT_PARAMS } from '@/models/enums';
 import { OrderData } from '@/models/order';
 import $store from '@/store';
 import Loader from '@/components/Loader.vue';
+import GroupInfoModal from '@/components/GroupInfoModal.vue';
 
-const PAGE_TITLE = 'Мои заказы';
+interface PageSettings {
+  title: string;
+  activeOrderUrl: string;
+  inActiveOrderUrl: string;
+  detailLink: string;
+  kindLabel: string;
+  page: string;
+}
+
+const PAGE_SETTINGS = {
+  Orders: {
+    title: 'Мои заказы',
+    activeOrderUrl: endpoints.orders.active,
+    inActiveOrderUrl: endpoints.orders.inactive,
+    detailLink: '/profile/orders/',
+    kindLabel: 'заказов',
+    page: 'orders',
+  },
+  Groups: {
+    title: 'Мои группы',
+    activeOrderUrl: endpoints.groups.active,
+    inActiveOrderUrl: endpoints.groups.inactive,
+    detailLink: '/profile/groups/',
+    kindLabel: 'групп',
+    page: 'groups',
+  },
+};
 const DEFAULT_SORT = SORT_PARAMS.POPULAR;
-
+const TABS = [
+  {
+    id: 1,
+    label: 'Активные',
+    isActive: true,
+  },
+  {
+    id: 2,
+    label: 'Завершенные',
+  },
+];
 @Component({
   components: {
+    GroupInfoModal,
     Loader,
     ProfileNav,
     TabsNav,
@@ -72,6 +134,13 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 })
 export default class Orders extends Vue {
   @Action('app/setProfilePage') setProfilePage;
+
+  @Watch('$route') onRouteChange() {
+    this.loaded = false;
+    this.activeOrders = [];
+    this.inactiveOrders = [];
+    this.init();
+  }
 
   profileMenuItems = PROFILE_MENU_ITEMS;
 
@@ -91,21 +160,17 @@ export default class Orders extends Vue {
 
   loaded = false
 
-  tabs = [
-    {
-      id: 1,
-      label: 'Активные',
-      isActive: true,
-    },
-    {
-      id: 2,
-      label: 'Завершенные',
-    },
-  ];
-
   activeOrders: OrderData[] = [];
 
-  inactiveOrders: OrderData[] = []
+  inactiveOrders: OrderData[] = [];
+
+  selectedOrder: OrderData | null = null;
+
+  pageSettings: PageSettings = {
+    title: '', activeOrderUrl: '', inActiveOrderUrl: '', detailLink: '', kindLabel: '', page: '',
+  };
+
+  tabs = TABS;
 
   get isAuthorized() {
     return (this as any).$auth.check();
@@ -131,24 +196,37 @@ export default class Orders extends Vue {
     return Number(this.inActivePagination.total) > Number(this.inActivePagination.perPage);
   }
 
-  async mounted() {
-    this.setProfilePage(PAGE_TITLE);
-    if (this.isAuthorized) {
-      $store.dispatch('app/updateProfileCounts');
-      this.init();
-    } else {
-      this.$root.$emit('show-login-modal');
+  async init() {
+    if (this.$route.name) {
+      this.pageSettings = PAGE_SETTINGS[this.$route.name];
+      this.setProfilePage(this.pageSettings.title);
+      if (this.isAuthorized) {
+        $store.dispatch('app/updateProfileCounts');
+        this.initLoad();
+      } else {
+        this.$root.$emit('show-login-modal');
+      }
+      this.selectTab(1);
     }
   }
 
-  selectTab(tabId) {
-    this.selectedTab = tabId;
+  async mounted() {
+    await this.init();
   }
 
-  init() {
+  selectTab(tabId) {
+    const tabIndex = this.tabs.findIndex((tab) => tab.id === tabId);
+    const tab = this.tabs[tabIndex];
+    this.tabs.forEach((t) => t.isActive = false);
+    tab.isActive = true;
+    this.selectedTab = tabId;
+    Vue.set(this.tabs, tabIndex, tab);
+  }
+
+  initLoad() {
     Promise
       .all([this.loadActiveOrders(), this.loadInActiveOrders()])
-      .then((res) => {
+      .then(() => {
         this.loaded = true;
       })
       .catch((err) => {
@@ -161,10 +239,9 @@ export default class Orders extends Vue {
   }
 
   async loadActiveOrdersRequest(): Promise<OrdersResponse> {
-    return createRequest('GET', endpoints.orders.active({
-      page: this.activePage,
-      sort: this.activeSort,
-    }));
+    const endpoint: any = this.pageSettings.activeOrderUrl;
+    const url = endpoint({ page: this.activePage, sort: this.activeSort });
+    return createRequest('GET', url);
   }
 
   updateActiveOrders(res: OrdersResponse) {
@@ -178,10 +255,12 @@ export default class Orders extends Vue {
   }
 
   async loadInActiveOrdersRequest(): Promise<OrdersResponse> {
-    return createRequest('GET', endpoints.orders.inactive({
+    const endpoint: any = this.pageSettings.inActiveOrderUrl;
+    const url = endpoint({
       page: this.inActivePage,
       sort: this.inActiveSort,
-    }));
+    });
+    return createRequest('GET', url);
   }
 
   updateInActiveOrders(res: OrdersResponse) {
@@ -238,6 +317,16 @@ export default class Orders extends Vue {
           };
         }
       });
+  }
+
+  selectGroup(order: OrderData) {
+    this.selectedOrder = order;
+    this.openGroupModal();
+  }
+
+  openGroupModal() {
+    const modalComponent: any = this.$refs.groupModal;
+    modalComponent.openModal();
   }
 }
 </script>

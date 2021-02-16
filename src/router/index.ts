@@ -73,7 +73,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/profile/groups',
     name: 'Groups',
-    component: () => import('../views/Groups.vue'),
+    component: () => import('../views/Orders.vue'),
   },
   {
     path: '/profile/orders',
@@ -109,13 +109,19 @@ const router = new VueRouter({
   },
 });
 
+export async function updateProfileCounts(to, from, next) {
+  if (to.path.includes('profile')) {
+    await $store.dispatch('app/updateProfileCounts');
+  }
+  next();
+}
+
 export async function loadUser(to, from, next) {
   await $store.dispatch('app/loadUser');
   next();
 }
 
 export async function redirectForPublic(to, from, next) {
-  console.log('redirectForPublic');
   if (to.path.includes('/public')) {
     const newPath = to.path.replace('/public', '');
     next({ path: newPath, query: to.query });
@@ -126,4 +132,5 @@ export async function redirectForPublic(to, from, next) {
 
 router.beforeEach(redirectForPublic);
 router.beforeEach(loadUser);
+router.beforeEach(updateProfileCounts);
 export default router;

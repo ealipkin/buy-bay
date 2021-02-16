@@ -48,10 +48,10 @@
             button(type="button" slot="reference").header__user-btn
               .header__user-btn-inner
                 span.header__user-avatar
-                  img(v-if="$auth.user.image" :src="$auth.user.image")
+                  img(v-if="user.image" :src="user.image")
                   span(v-else)
                     include ../assets/icons/user.svg
-                span.header__user-name {{$auth.user.name || 'Профиль'}}
+                span.header__user-name {{user.name || 'Профиль'}}
             .popper.header__dropdown
               ProfileNav(:items="profileMenuItems")
 
@@ -114,8 +114,6 @@ export default class Header extends Vue {
 
   body: HTMLBodyElement | null = null;
 
-  user: ProfileUser | null = null;
-
   selectedShop;
 
   profilePage;
@@ -125,6 +123,10 @@ export default class Header extends Vue {
   profileMenuItems: BaseMenuItem[] = PROFILE_MENU_ITEMS;
 
   isIndexPage = false;
+
+  get user(): ProfileUser {
+    return (this as any).$auth.user();
+  }
 
   get showProfileHeader() {
     return !this.searchFocused && this.profilePage;
@@ -328,7 +330,7 @@ export default class Header extends Vue {
       border-radius: 50%;
       overflow: hidden;
       display: block;
-      margin: 0 0 0 15px;
+      margin: 0 auto;
       border: solid 1px #ffffff5e;
 
       img {

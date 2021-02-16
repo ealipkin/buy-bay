@@ -40,7 +40,7 @@
                   button(v-if="!addresses || !addresses.length" type="submit" :disabled="submitted").order-payment__button.button Продолжить
 
               .order-payment__aside
-                OrderInfo(:item="order" :options="orderOptions" v-if="order && !isMobile" :type="'checkout'").order-payment__product.order-payment__item.order-info--checkout
+                OrderInfo(:item="order" :orderData="orderData" :options="orderOptions" v-if="order && !isMobile" :type="'checkout'").order-payment__product.order-payment__item.order-info--checkout
                 DeliveryInfo(:deliveryItem="orderData.delivery" v-if="orderData.delivery && !isMobile").order-payment__delivery.order-payment__item
 
         AddressModal(ref="addressModal" @update="handleUpdateAddress" @add="handleAddAddress")
@@ -73,14 +73,13 @@ import {
   OrderPayResponse,
   ProfileAddressResponse,
 } from '@/models/responses';
-import { Product } from '@/models/product';
 import AddressItem from '@/components/AddressItem.vue';
 import ConfirmationModal from '@/components/ConfirmationModal.vue';
 import Toasted from '@/components/Toasted.vue';
 import $store from '@/store';
 import { ORDER_STATUSES, PAY_STATUSES } from '@/models/enums';
 import router from '@/router';
-import { OrderData, OrderPaymentOption } from '@/models/order';
+import { OrderData, OrderPaymentOption, Product } from '@/models/order';
 import Recipient from '@/components/Recipient.vue';
 import Destination from '@/components/Destination.vue';
 
@@ -137,6 +136,7 @@ export default class OrderPayment extends Vue {
   submitted = false;
 
   get orderDisabled() {
+    console.log(this.orderData);
     if (!this.orderData || !this.orderData.order) {
       return true;
     }
@@ -376,7 +376,7 @@ export default class OrderPayment extends Vue {
     this.submitted = true;
     createRequest('POST', endpoints.order.pay(this.orderId))
       .then((res: OrderPayResponse) => {
-        console.log(res);
+        // console.log(res);
         const { confirmation_url, status } = res.data.data;
         if (confirmation_url) {
           window.location.href = confirmation_url;

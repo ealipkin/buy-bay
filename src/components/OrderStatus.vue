@@ -1,14 +1,9 @@
 <template lang="pug">
   span(v-if="order")
     template
-      span(v-if="order.order_status.id === orderStatuses.IN_PROCESS").order-status.order-status--fail
-        img(src="@/assets/icons/fail.svg").order-status__img
-        span {{order.order_status.title}}
-      span(v-else-if="order.order_status.id === orderStatuses.PAYMENT_WAITING").order-status.order-status--fail
-        img(src="@/assets/icons/fail.svg").order-status__img
-        span {{order.order_status.title}}
-      span(v-else).order-status.order-status--success
-        img(src="@/assets/icons/success.svg").order-status__img
+      span(:class="{'order-status--fail': order.order_status.is_bad, 'order-status--success': !order.order_status.is_bad}").order-status
+        img(v-if="order.order_status.is_bad" src="@/assets/icons/fail.svg").order-status__img
+        img(v-if="!order.order_status.is_bad" src="@/assets/icons/success.svg").order-status__img
         span {{order.order_status.title}}
     //template
       template(v-if="isGroup")

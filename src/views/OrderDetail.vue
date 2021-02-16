@@ -7,9 +7,9 @@
       .order-detail__left-col
         OrderInfo(:item="order" :options="orderOptions" :hideStatus="false").order-detail__product.order-detail__item
         OrderStatusCard(:order="orderData" :options="orderOptions" v-if="isMobile").order-detail__status.order-detail__item
-        DeliveryAddress(:contacts="item.contacts").order-detail__address.order-detail__item
+        DeliveryAddress(v-if="orderData.address" :contacts="orderData.address").order-detail__address.order-detail__item
         DeliveryInfo(:deliveryItem="orderData.delivery" v-if="isMobile").order-detail__delivery.order-detail__item
-        Chat(:users="item.users" :options="orderOptions" :messages="item.messages").order-detail__item
+        //Chat(:users="item.users" :options="orderOptions" :messages="item.messages").order-detail__item
       .order-detail__aside
         OrderStatusCard(:order="orderData" :options="orderOptions" v-if="!isMobile").order-detail__status.order-detail__item
         DeliveryInfo(:deliveryItem="orderData.delivery" v-if="!isMobile").order-detail__delivery.order-detail__item
@@ -19,7 +19,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import { generateProducts } from '@/utils/data';
 import DeliveryInfo from '@/components/DeliveryInfo.vue';
 import { breakPoints } from '@/utils/constants';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
@@ -28,16 +27,17 @@ import DeliveryAddress from '@/components/DeliveryAddress.vue';
 import OrderStatusCard from '@/components/OrderStatusCard.vue';
 import Chat from '@/components/Chat.vue';
 import { BreadcrumbLink } from '@/models/models';
-import { OrderData, OrderPaymentOption } from '@/models/order';
+import { OrderData, OrderPaymentOption, Product } from '@/models/order';
 import { OrderPaymentResponse } from '@/models/responses';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import router from '@/router';
-import { Product } from '@/models/product';
 import { ORDER_STATUSES } from '@/models/enums';
+import SimilarSlider from '@/components/SimilarSlider.vue';
 
 @Component({
   components: {
+    SimilarSlider,
     Breadcrumbs,
     DeliveryInfo,
     OrderInfo,
@@ -52,6 +52,8 @@ export default class OrderDetail extends Vue {
   orderId: string | null = null;
 
   orderData: OrderData | null = null;
+
+  similarItems: Product[] | [] = [];
 
   breadCrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
@@ -84,8 +86,6 @@ export default class OrderDetail extends Vue {
     height: 0,
   };
 
-  item = generateProducts(1).pop();
-
   handleResize() {
     this.window.width = window.innerWidth;
     this.window.height = window.innerHeight;
@@ -107,25 +107,29 @@ export default class OrderDetail extends Vue {
         }
         this.orderData = orderData;
         this.loaded = true;
-
         this.breadCrumbs.push({
           href: '/profile/orders/:id',
-          label: this.item ? `Заказ № ${this.orderData.order.id}` : '',
+          label: this.orderData.order.id ? `Заказ № ${this.orderData.order.id}` : '',
           current: true,
         });
-        console.log('this.orderData -> ', this.orderData);
+        // console.log('this.orderData -> ', this.orderData);
       })
       .catch(() => {
         router.push({ path: '/' });
       });
-  }
 
-  destroyed() {
-    window.removeEventListener('resize', this.handleResize);
+    createRequest('get', endpoints.order.related(this.orderId))
+      .then((res) => {
+        this.similarItems = res.data.data;
+      });
   }
 
   getOrder(): Promise<OrderPaymentResponse> {
     return createRequest('GET', endpoints.order.get(this.orderId));
+  }
+
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
   }
 }
 </script>

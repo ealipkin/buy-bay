@@ -1,34 +1,32 @@
 <template lang="pug">
   .group-detail.profile-page
     .container
-      h1.group-detail__title Группа на покупку
-        router-link(:to="`product/${item.id}`").group-detail__title-link  {{item.title}}
+      .order-detail__breadcrumbs
+        Breadcrumbs(:links="breadCrumbs")
+      h1.group-detail__title Группа на покупку&nbsp;
+        router-link(v-if="product" :to="`product/${product.id}`").group-detail__title-link {{product.title}}
       .group-detail__main
         .group-detail__left-col
-          OrderInfo(:item="item" :hideStatus="true" :hideTitle="true").group-detail__product.group-detail__item.order-info--group
-          GroupInfo(:users="users").group-detail__info.group-detail__item
-          GroupAction(:selfPrice="item.selfPrice" v-if="isMobile" :product="item").group-detail__action.group-detail__item
-          DeliveryInfo(:deliveryItem="item.delivery" v-if="isMobile").group-detail__delivery.group-detail__item
+          OrderInfo(v-if="order" :item="order" :order-data="orderData" :options="orderOptions" :hideStatus="true" :hideTitle="true").group-detail__product.group-detail__item.order-info--group
+          GroupInfo(v-if="orderData" :orderData="orderData.orderInfo" :group="orderData.group").group-detail__info.group-detail__item
+          GroupAction(v-if="isMobile && product" :product="product" :group="orderData.group").group-detail__action.group-detail__item
+          DeliveryInfo(:deliveryItem="orderData.delivery" v-if="isMobile && orderData").group-detail__delivery.group-detail__item
         .group-detail__aside
-          GroupAction(:selfPrice="item.selfPrice" v-if="!isMobile" :product="item").group-detail__action.group-detail__item
-          DeliveryInfo(:deliveryItem="item.delivery" v-if="!isMobile").group-detail__delivery.group-detail__item
+          GroupAction(v-if="!isMobile && product" :selfPrice="product.selfPrice" :product="product" :group="orderData.group").group-detail__action.group-detail__item
+          DeliveryInfo(:deliveryItem="orderData.delivery" v-if="!isMobile && orderData").group-detail__delivery.group-detail__item
 
-    section.group-detail__section
-      .section-header.section-header--offset-2
-        .section-title Похожие товары
-        router-link(to="#").link._hide-desktop Показать еще
-      .container
-        SimilarSlider(:items="similarItems").similar-slider--scroll
-
-    section.section.section--seo.section--seo-gray.group-detail__section
-      SeoTexts(:texts="seoBlockDescription").container
+      section(v-if="similarItems && similarItems.length").group-detail__section
+        .section-header.section-header--offset-2
+          .section-title Похожие товары
+          //router-link(to="#").link._hide-desktop Показать еще
+        .container
+          SimilarSlider(:items="similarItems").similar-slider--scroll
 
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import { generateGroups, generateUsers, generateProducts } from '@/utils/data';
 import DeliveryInfo from '@/components/DeliveryInfo.vue';
 import { breakPoints } from '@/utils/constants';
 import OrderInfo from '@/components/OrderInfo.vue';
@@ -36,10 +34,17 @@ import GroupInfo from '@/components/GroupInfo.vue';
 import GroupAction from '@/components/GroupAction.vue';
 import SimilarSlider from '@/components/SimilarSlider.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
-import { Product } from '@/models/product';
+import { BreadcrumbLink } from '@/models/models';
+import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import router from '@/router';
+import { OrderPaymentResponse } from '@/models/responses';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import { OrderData, OrderPaymentOption, Product } from '@/models/order';
 
 @Component({
   components: {
+    Breadcrumbs,
     SeoTexts,
     SimilarSlider,
     DeliveryInfo,
@@ -49,6 +54,31 @@ import { Product } from '@/models/product';
   },
 })
 export default class GroupDetail extends Vue {
+  loaded = false;
+
+  orderId: string | null = null;
+
+  orderData: OrderData | null = null;
+
+  breadCrumbs: BreadcrumbLink[] = [
+    { href: '/', label: 'Главная' },
+    { href: '/profile', label: 'Мой профиль' },
+    { href: '/profile/orders', label: 'Мои заказы' },
+  ];
+
+  window = {
+    width: 0,
+    height: 0,
+  };
+
+  groupId: string | null = null;
+
+  similarItems: Product[] | [] = []
+
+  get isAuthorized() {
+    return (this as any).$auth.check();
+  }
+
   get isMobile() {
     return this.window.width < breakPoints.tablet;
   }
@@ -57,32 +87,65 @@ export default class GroupDetail extends Vue {
     return this.window.width >= breakPoints.tablet && this.window.width < breakPoints.laptop;
   }
 
-  window = {
-    width: 0,
-    height: 0,
-  };
+  get product(): Product | null | undefined {
+    const data: OrderData | null = this.orderData;
+    const orderInfo = data && data.orderInfo;
+    return orderInfo && orderInfo.orderItems && orderInfo.orderItems[0].product;
+  }
 
-  item: Product | undefined = generateProducts(1).pop();
+  get order(): Product | null | undefined {
+    console.log('this.orderData -> ', this.orderData);
+    const data: OrderData | null = this.orderData;
+    const orderInfo = data && data.orderInfo;
+    const order = orderInfo && orderInfo.orderItems && orderInfo.orderItems[0].product;
+    console.log(order);
+    return order;
+  }
 
-  groups = generateGroups(12);
-
-  users = generateUsers(4);
-
-  similarItems = generateProducts(8);
-
-  seoBlockDescription = [
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-  ];
+  get orderOptions(): OrderPaymentOption[] | undefined | null {
+    const data: OrderData | null = this.orderData;
+    const orderInfo = data && data.orderInfo;
+    return orderInfo && orderInfo.orderItems && orderInfo.orderItems[0].orderProductOptions;
+  }
 
   handleResize() {
     this.window.width = window.innerWidth;
     this.window.height = window.innerHeight;
   }
 
-  created() {
+  mounted() {
+    this.groupId = this.$route.params.id as string;
+    if (!this.isAuthorized || !this.groupId) {
+      router.push({ path: '/' });
+    }
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
+    this.getGroup()
+      .then((res: OrderPaymentResponse) => {
+        const orderData: OrderData = res.data.data;
+        const order: OrderData | undefined = orderData && orderData.orderInfo;
+        const product: Product | undefined = order && order.orderItems[0].product;
+        this.orderData = orderData;
+        this.loaded = true;
+        // console.log(product.title);
+        this.breadCrumbs.push({
+          href: '',
+          label: product ? `Группа на покупку ${product.title}` : '',
+          current: true,
+        });
+      })
+      .catch(() => {
+        router.push({ path: '/' });
+      });
+
+    createRequest('get', endpoints.group.related(this.groupId))
+      .then((res) => {
+        this.similarItems = res.data.data;
+      });
+  }
+
+  getGroup(): Promise<OrderPaymentResponse> {
+    return createRequest('GET', endpoints.group.get(this.groupId));
   }
 
   destroyed() {
@@ -174,6 +237,14 @@ export default class GroupDetail extends Vue {
 
       @include laptop() {
         width: 438px;
+      }
+    }
+
+    &__breadcrumbs {
+      display: none;
+
+      @include tablet() {
+        display: flex;
       }
     }
   }

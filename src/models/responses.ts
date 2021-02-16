@@ -1,8 +1,9 @@
 import {
   BigSliderItem, CardItem, ProfileCounts, ProfileUser, SeoBlock, UserAddressItem,
 } from '@/models/models';
-import { BrandItem, Product, ProductShop } from '@/models/product';
-import { Order, OrderData } from '@/models/order';
+import {
+  BrandItem, Order, OrderData, Product, ProductShop,
+} from '@/models/order';
 import { PAY_STATUSES } from '@/models/enums';
 
 export interface PaginationInfo {
@@ -20,12 +21,10 @@ export interface PaginationInfo {
 }
 
 export interface UserResponse {
+  success: boolean;
   data: {
-    success: boolean;
-    data: {
-      status: string;
-      data: ProfileUser;
-    };
+    status: string;
+    data: ProfileUser;
   };
 }
 

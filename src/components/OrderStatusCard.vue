@@ -85,12 +85,12 @@ export default class OrderStatusCard extends Vue {
       font-size: 12px;
       color: $grey-2;
       margin: 0;
-      margin-bottom: 20px;
+      //margin-bottom: 20px;
       margin-top: 17px;
 
       @include tablet() {
         font-size: 14px;
-        margin-bottom: 40px;
+        //margin-bottom: 40px;
       }
     }
 

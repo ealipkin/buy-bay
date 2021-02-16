@@ -14,9 +14,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Rate from '@/components/Rate.vue';
-import { ProductShop } from '@/models/product';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
+import { ProductShop } from '@/models/order';
 
 @Component({
   components: { Rate },

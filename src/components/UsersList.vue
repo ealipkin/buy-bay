@@ -1,17 +1,30 @@
 <template lang="pug">
   ul.users-list
-    li(v-for="(user, i) in users").users-list__item
-      img(:src="user.avatar" :class="i === 0 ? 'user-list__img--active' : ''").users-list__img
-      span.users-list__name {{user.name}}
+    li(v-for="user in users").users-list__item
+      img(v-if="user.image" :src="user.image" :class="user.is_creator ? 'user-list__img--active' : ''").users-list__img
+      span(v-if="!user.image").users-list__img {{smile()}}
+      span(v-if="user.name").users-list__name {{user.name}}
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Group, GroupUser } from '@/models/order';
+import { getRandomSmile } from '@/utils/common';
 
 @Component
 export default class UsersList extends Vue {
-  @Prop() public users!: object[];
+  @Prop() public group!: Group;
+
+  smile() {
+    return getRandomSmile();
+  }
+
+  get users(): GroupUser[] | {}[] {
+    const leftUsers: number = this.group.allUsers - this.group.joinedUsers.length;
+    const leftArray = new Array(leftUsers).fill({});
+    return [...this.group.joinedUsers, ...leftArray];
+  }
 }
 </script>
 
@@ -24,6 +37,7 @@ export default class UsersList extends Vue {
     @include tablet() {
       flex-wrap: wrap;
     }
+
     &__item {
       margin-right: 15px;
       margin-bottom: 15px;
@@ -43,10 +57,13 @@ export default class UsersList extends Vue {
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      display: block;
+      overflow: hidden;
       margin-bottom: 10px;
       background-color: $grey-3;
-
+      display: flex;
+      font-size: 1.5em;
+      align-items: center;
+      justify-content: center;
       @include tablet() {
         width: 70px;
         height: 70px;

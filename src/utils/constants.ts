@@ -1,4 +1,3 @@
-import { getRandomNumberBetween } from '@/utils/data';
 import { nanoid } from 'nanoid';
 import { BaseMenuItem, MenuChildItem } from '@/models/menu';
 import { NotificationItem, SearchSuggestItem } from '@/models/models';
@@ -11,6 +10,8 @@ export const breakPoints = {
   desktop: 1210,
   desktopSliders: 1340,
 };
+
+export const AVATAR_SMILES = ['😉', '🤗', '🙂', '🙃', '👤', '👥', '🎉'];
 
 export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
   {
@@ -314,47 +315,6 @@ export const FILTERS = [
 
 export const SHARE_TIMER = new Date().getTime() + 24 * 60 * 60 * 1000;
 
-export const SHARE_LINK = 'http://vmdesh.ru/8dbuf3';
-
-export const SOCIALS = [
-  {
-    href: '#',
-    icon: 'socials/facebook.svg',
-    type: 'facebook',
-    title: 'Facebook',
-  },
-  {
-    href: '#',
-    icon: 'socials/odnoklassniki.svg',
-    type: 'ok',
-    title: 'OK',
-  },
-  {
-    href: '#',
-    icon: 'socials/vk.svg',
-    type: 'vk',
-    title: 'VK',
-  },
-  {
-    href: '#',
-    icon: 'socials/whatsapp.svg',
-    type: 'whatsapp',
-    title: 'Whatsapp',
-  },
-  {
-    href: '#',
-    icon: 'socials/telegram.svg',
-    type: 'telegram',
-    title: 'Telegram',
-  },
-  {
-    href: '#',
-    icon: 'socials/viber.svg',
-    type: 'viber',
-    title: 'Viber',
-  },
-];
-
 export const NOTIFICATIONS: NotificationItem[] = [
   {
     type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: false,
@@ -401,13 +361,13 @@ export const SEARCH_SUGGEST: SearchSuggestItem[] = [
       {
         id: nanoid(),
         type: SEARCH_ITEM_TYPE.BRAND,
-        image: `https://picsum.photos/id/${getRandomNumberBetween(0, 20)}/40`,
+        image: 'https://picsum.photos/id/2/40',
         title: 'Adidas Classic',
       },
       {
         id: nanoid(),
         type: SEARCH_ITEM_TYPE.BRAND,
-        image: `https://picsum.photos/id/${getRandomNumberBetween(0, 20)}/40`,
+        image: 'https://picsum.photos/id/240',
         title: 'Adidas Sport',
       },
     ],
@@ -418,7 +378,7 @@ export const SEARCH_SUGGEST: SearchSuggestItem[] = [
       {
         id: nanoid(),
         type: SEARCH_ITEM_TYPE.PRODUCT,
-        image: `https://picsum.photos/id/${getRandomNumberBetween(0, 20)}/40`,
+        image: 'https://picsum.photos/id/240',
         title: 'Adidas кроссовки AirMav',
         price: 7760,
         groups: 8,
@@ -426,7 +386,7 @@ export const SEARCH_SUGGEST: SearchSuggestItem[] = [
       {
         id: nanoid(),
         type: SEARCH_ITEM_TYPE.PRODUCT,
-        image: `https://picsum.photos/id/${getRandomNumberBetween(0, 20)}/40`,
+        image: 'https://picsum.photos/id/240',
         title: 'Adidas Sport',
         price: 7760,
         groups: 1,

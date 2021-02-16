@@ -1,10 +1,11 @@
 <template lang="pug">
   .group-action
-    Timer(:time="shareTimer").group-action__timer
-    h2.group-action__title Купить вне группы
-    span.group-action__price {{divideNumberWithSpaces(selfPrice)}} ₽
-    router-link(:to="`/product/${product.id}/payment`").button.button--big Купить одному
-
+    template(v-if="group.is_complete")
+      .group-action__ended Время истекло
+      h2.group-action__title Купить вне группы
+      span.group-action__price {{divideNumberWithSpaces(product.selfPrice)}} ₽
+      router-link(:to="`/product/${product.id}`").button.button--big Купить одному
+    Timer(v-else :time="shareTimer").group-action__timer
 </template>
 
 <script lang="ts">
@@ -12,7 +13,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { SHARE_TIMER } from '@/utils/constants';
 import { divideNumberWithSpaces } from '@/utils/common';
 import Timer from '@/components/Timer.vue';
-import { Product } from '@/models/product';
+import { Group, Product } from '@/models/order';
 
 @Component({
   components: {
@@ -20,9 +21,9 @@ import { Product } from '@/models/product';
   },
 })
 export default class GroupAction extends Vue {
-  @Prop() public selfPrice!: number;
-
   @Prop() public product!: Product;
+
+  @Prop() public group!: Group;
 
   shareTimer = SHARE_TIMER;
 
@@ -44,12 +45,14 @@ export default class GroupAction extends Vue {
       padding: 40px 50px;
     }
 
-    &__timer {
-      margin-bottom: 24px;
-
-      @include tablet() {
-        margin-bottom: 34px;
-      }
+    &__ended {
+      font-weight: bold;
+      font-size: 20px;
+      color: $black-1;
+      margin: 0;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      text-align: center;
     }
 
     &__title {
@@ -57,12 +60,14 @@ export default class GroupAction extends Vue {
       font-size: 14px;
       color: $black-1;
       margin: 0;
+      margin-top: 24px;
       margin-bottom: 10px;
       display: block;
       text-align: center;
 
       @include tablet() {
         margin-bottom: 2px;
+        margin-top: 34px;
       }
     }
 

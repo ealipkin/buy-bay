@@ -8,7 +8,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Slick from 'vue-slick';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
-import { Product } from '@/models/product';
+import { Product } from '@/models/order';
 
 @Component({ components: { CatalogCardItem, Slick } })
 export default class SimilarSlider extends Vue {

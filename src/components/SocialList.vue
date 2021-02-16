@@ -3,7 +3,7 @@
     h4.social-list__title Зови друзей скорее
     ul.social-list
       li(v-for="(social, i) in socials" :key="i").social-list__item
-        router-link(:to="social.href" :title="social.title").social-list__link
+        a(:href="social.href" :title="social.title" target="_blank").social-list__link
           img(:src="require('@/assets/' + social.icon + '')").social-list__icon
 </template>
 

@@ -1,7 +1,26 @@
 <template lang="pug">
   ul.profile-nav
     li(v-for="item in filteredItems").profile-nav__item
-      button(@click="handleClick(item)" :class="{'profile-nav__link--active': $route.path === item.href}").profile-nav__link
+      router-link(v-if="item.href" :to="item.href" :class="{'profile-nav__link--active': $route.path === item.href}").profile-nav__link
+        template(v-if="item.icon === 'user'")
+          include ../assets/icons/user.svg
+
+        template(v-if="item.icon === 'users'")
+          include ../assets/icons/users.svg
+
+        template(v-if="item.icon === 'bag'")
+          include ../assets/icons/bag.svg
+
+        template(v-if="item.icon === 'heart'")
+          include ../assets/icons/heart.svg
+
+        template(v-if="item.icon === 'logout'")
+          include ../assets/icons/logout.svg
+
+        span {{item.title}}
+        span(v-if="item.count").profile-nav__item-count ({{item.count}})
+
+      button(v-else @click="handleClick(item)").profile-nav__link
         template(v-if="item.icon === 'user'")
           include ../assets/icons/user.svg
 
@@ -70,7 +89,7 @@ export default class ProfileNav extends Vue {
   NAV_TYPES = PROFILE_NAV_TYPES;
 
   handleClick(item: BaseMenuItem) {
-    if (item.href) {
+    if (item.href && this.$route.path !== item.href) {
       router.push({ path: item.href });
     }
     if (item.action) {
@@ -148,6 +167,7 @@ export default class ProfileNav extends Vue {
 
     &__link--active {
       font-weight: bold;
+      cursor: default;
 
       svg {
         color: $blue;

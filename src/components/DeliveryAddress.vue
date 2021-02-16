@@ -3,20 +3,26 @@
     h3.delivery-address__title Адрес доставки
     .delivery-address__item
       h4.delivery-address__sub-title
-        span.delivery-address__name {{contacts.name + ','}}
+        span.delivery-address__name {{contacts.surname || ''}} {{contacts.name || ''}} {{contacts.patronymic || ''}},
         span.delivery-address__phone {{contacts.phone}}
-      p.delivery-address__location {{formatLocation(contacts.address)}}
+      p.delivery-address__location {{contacts.street || ''}}
+        span(v-if="contacts.house") , {{contacts.house || ''}}
+        span(v-if="contacts.flat") {{contacts.flat || ''}}
+      p.delivery-address__location {{contacts.city || ''}}
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Contacts } from '@/models/models';
+import { Contacts, UserAddressItem } from '@/models/models';
+import { parsePhoneNumber } from 'libphonenumber-js';
 
 @Component
 export default class DeliveryAddress extends Vue {
-  @Prop() public contacts!: Contacts;
+  @Prop() public contacts!: UserAddressItem;
 
-  formatLocation = (address) => Object.values(address).join(', ');
+  get phone() {
+    return parsePhoneNumber(this.contacts.phone || '').formatInternational();
+  }
 }
 </script>
 
@@ -86,7 +92,7 @@ export default class DeliveryAddress extends Vue {
       font-size: 12px;
       color: $grey-2;
 
-            @include tablet() {
+      @include tablet() {
         width: 345px;
         max-width: 100%;
         padding: 0;

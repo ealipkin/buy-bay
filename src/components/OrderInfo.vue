@@ -1,11 +1,11 @@
 <template lang="pug">
-  .order-info
+  div(v-if="item").order-info
     router-link(:to="`/product/${item.id}`").order-info__img
       img(:src="item.images.preview")
     .order-info__box
       router-link(:to="`/product/${item.id}`" v-if="!hideTitle").order-info__title {{item.title}}
 
-      div(v-if="hideStatus").order-info__date Дата заказа: {{item.orderDate | dateFormat('DD.MM.YYYY')}}
+      div(v-if="hideStatus").order-info__date Дата заказа: {{(item.orderDate || new Date(orderData.group.created_at)) | dateFormat('DD.MM.YYYY')}}
       template(v-if="!hideStatus")
         span.order-info__orders
           img(src="../assets/icons/order-package.svg")
@@ -21,7 +21,7 @@
       PickedOptionsBox(:options="options").order-info__picked-options
 
       span.order-info__label Итого к оплате
-      span.order-info__price {{divideNumberWithSpaces(item.groupPrice)}} ₽
+      span(v-if="orderData && orderData.order").order-info__price {{divideNumberWithSpaces(orderData.order.price)}} ₽
 
     PickedOptionsBox(:options="options").order-info__picked-options.picked-options-box--group
 </template>
@@ -31,8 +31,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { divideNumberWithSpaces } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
 import PickedOptionsBox from '@/components/PickedOptionsBox.vue';
-import { Product } from '@/models/product';
-import { OrderPaymentOption } from '@/models/order';
+import { OrderData, OrderPaymentOption, Product } from '@/models/order';
 
 @Component({
   components: {
@@ -41,6 +40,8 @@ import { OrderPaymentOption } from '@/models/order';
   },
 })
 export default class OrderInfo extends Vue {
+  @Prop() public orderData!: OrderData;
+
   @Prop() public item!: Product;
 
   @Prop() public options!: OrderPaymentOption[];

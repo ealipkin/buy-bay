@@ -57,6 +57,9 @@ export default class Share extends Vue {
       flex-shrink: 1;
       border-top-left-radius: 4px;
       border-bottom-left-radius: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       @include tablet() {
         font-size: 16px;

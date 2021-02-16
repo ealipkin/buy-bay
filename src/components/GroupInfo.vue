@@ -1,23 +1,24 @@
 <template lang="pug">
   .group-info
     .group-info__header
-      h2.group-info__title Нужно еще {{needUsersCount}} человека
+      h2(v-if="group").group-info__title {{title}}
       button(type="button").group-info__link.link Покинуть группу
     CustomScrollWrapper.custom-scroll-wrapper--mobile-only
-      UsersList(:users="usersToRender").group-info__users
+      UsersList(v-if="group" :group="group").group-info__users
     hr.group-info__hr
     SocialList(:socials="socials").group-info__social
-    Share(:link="shareLink")
+    Share(v-if="product" :link="product.short_link")
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SOCIALS, SHARE_LINK } from '@/utils/constants';
-import { generateDefaultUsers } from '@/utils/data';
 import UsersList from '@/components/UsersList.vue';
 import SocialList from '@/components/SocialList.vue';
 import Share from '@/components/Share.vue';
 import CustomScrollWrapper from '@/components/CustomScrollWrapper.vue';
+import { sharingUtils } from '@/utils/sharing';
+import { Group, OrderData, Product } from '@/models/order';
+import { declOfNum } from '@/utils/common';
 
 @Component({
   components: {
@@ -28,15 +29,68 @@ import CustomScrollWrapper from '@/components/CustomScrollWrapper.vue';
   },
 })
 export default class GroupInfo extends Vue {
-  @Prop() public users!: object[];
+  @Prop() public orderData!: OrderData;
 
-  socials = SOCIALS;
+  @Prop() public group!: Group;
 
-  shareLink = SHARE_LINK;
+  get userDelta() {
+    return this.group.allUsers - this.group.joinedUsers.length;
+  }
 
-  needUsersCount = 2;
+  get socials() {
+    const product: Product = this.product as Product;
+    return product ? [
+      {
+        href: sharingUtils.tgLink(product.short_link, product.title),
+        icon: 'socials/telegram.svg',
+        type: 'telegram',
+        title: 'Telegram',
+      },
+      {
+        href: sharingUtils.whatsapp(product.short_link, product.title),
+        icon: 'socials/whatsapp.svg',
+        type: 'whatsapp',
+        title: 'Whatsapp',
+      },
+      {
+        href: sharingUtils.viber(product.short_link, product.title),
+        icon: 'socials/viber.svg',
+        type: 'viber',
+        title: 'Viber',
+      },
 
-  usersToRender = Array(0).concat(this.users).concat(generateDefaultUsers(this.needUsersCount));
+      {
+        href: sharingUtils.vk(product.short_link, product.title),
+        icon: 'socials/vk.svg',
+        type: 'vk',
+        title: 'VK',
+      },
+      {
+        href: sharingUtils.fb(product.short_link, product.title),
+        icon: 'socials/facebook.svg',
+        type: 'facebook',
+        title: 'Facebook',
+      },
+      {
+        href: sharingUtils.ok(product.short_link, product.title, product.images.preview),
+        icon: 'socials/odnoklassniki.svg',
+        type: 'ok',
+        title: 'OK',
+      },
+    ] : [];
+  }
+
+  get product(): Product | null {
+    return this.orderData && this.orderData.orderItems && this.orderData.orderItems.length ? this.orderData.orderItems[0].product : null;
+  }
+
+  get title() {
+    return `${declOfNum(this.userDelta, ['Нужен', 'Нужно', 'Нужны'])} еще ${this.userDelta} ${this.userDeclension(this.userDelta)}`;
+  }
+
+  userDeclension(number) {
+    return declOfNum(number, ['человек', 'человека', 'человек']);
+  }
 }
 </script>
 
@@ -94,6 +148,12 @@ export default class GroupInfo extends Vue {
 
     &__social {
       margin-bottom: 32px;
+    }
+
+    &--hide-leave & {
+      &__link {
+        display: none;
+      }
     }
   }
 </style>

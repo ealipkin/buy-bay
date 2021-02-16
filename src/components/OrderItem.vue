@@ -11,7 +11,7 @@
       span.order__box
         include ../assets/icons/group-button.svg
         span.order__price {{divideNumberWithSpaces(orderItem.selfPrice)}} ₽
-        router-link(:to="link" v-if="!hideButton").button.order__button {{buttonText}}
+        button(v-if="!hideButton" @click="buttonClick").button.order__button {{buttonText}}
 </template>
 
 <script lang="ts">
@@ -20,8 +20,7 @@ import OrderTimer from '@/components/OrderTimer.vue';
 import OrderStatus from '@/components/OrderStatus.vue';
 
 import { divideNumberWithSpaces } from '@/utils/common';
-import { OrderData } from '@/models/order';
-import { Product } from '@/models/product';
+import { OrderData, Product } from '@/models/order';
 
 @Component({
   components: {
@@ -55,6 +54,10 @@ export default class OrderItem extends Vue {
 
   divideNumberWithSpaces(number) {
     return divideNumberWithSpaces(number);
+  }
+
+  buttonClick() {
+    this.$emit('button-click', this.order);
   }
 }
 </script>

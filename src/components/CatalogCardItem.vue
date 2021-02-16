@@ -46,9 +46,9 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { divideNumberWithSpaces, declOfNum } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
-import { Product } from '@/models/product';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
+import { Product } from '@/models/order';
 
 @Component({
   components: { Rate },

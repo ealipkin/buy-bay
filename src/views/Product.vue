@@ -40,8 +40,8 @@ import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import Loader from '@/components/Loader.vue';
 import SimilarSlider from '@/components/SimilarSlider.vue';
-import { Product } from '@/models/product';
 import { BreadcrumbLink, SeoBlock } from '@/models/models';
+import { Product } from '@/models/order';
 
 interface ProductPage extends Product {
   seo_block: SeoBlock;

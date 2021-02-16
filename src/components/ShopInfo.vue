@@ -21,7 +21,7 @@ import Rate from '@/components/Rate.vue';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import $store from '@/store';
-import { ProductShop } from '@/models/product';
+import { ProductShop } from '@/models/order';
 
 @Component({
   components: { Rate, ShowMoreText },

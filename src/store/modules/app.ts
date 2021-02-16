@@ -1,9 +1,9 @@
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
-import { ProductShop } from '@/models/product';
 import { MenuItem } from '@/models/menu';
 import { FavCountResponse, ProfileCountsResponse, UserResponse } from '@/models/responses';
 import { ProfileCounts, ProfileUser } from '@/models/models';
+import { ProductShop } from '@/models/order';
 
 interface AppState {
   selectedShop: ProductShop | null;
@@ -81,6 +81,7 @@ const actions = {
   },
   async setUserAuth({ commit, state }, props) {
     commit('app/SET_USER_AUTH', props, { root: true });
+    updateProfileCounts({ commit });
   },
   async logout({ commit }, props) {
     commit('app/SET_USER_AUTH', props);
@@ -96,7 +97,7 @@ const actions = {
       // load user
       createRequest('GET', endpoints.user, { token })
         .then((res: UserResponse) => {
-          const user: ProfileUser = res.data.data.data;
+          const user: ProfileUser = res.data.data;
           $auth.user(user);
         })
         .catch(() => {

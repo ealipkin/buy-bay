@@ -16,7 +16,7 @@ import Slick from 'vue-slick';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import { debounce } from '@/utils/common';
 import { breakPoints } from '@/utils/constants';
-import { Product } from '@/models/product';
+import { Product } from '@/models/order';
 
 @Component({
   components: {

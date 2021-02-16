@@ -22,16 +22,6 @@ export interface Contacts {
   address: Location;
 }
 
-export interface Group {
-  id: string;
-  isJoined: boolean;
-  avatar: string;
-  allUsers: number;
-  joinedUsers: GroupUser[] | [] | null;
-  title: string;
-  time: number;
-}
-
 export interface BreadcrumbLink {
   href?: string;
   label: string;
@@ -43,14 +33,6 @@ export interface OrderUser {
   orderId: string;
   name: string;
   avatar: string;
-}
-
-export interface GroupUser {
-  group_id: number;
-  id: number;
-  is_creator: number;
-  name: string;
-  user_id: number;
 }
 
 export interface Message {
@@ -81,8 +63,8 @@ export interface SocialLink {
 export interface UserAddressItem {
   id: string | number;
   isActive: boolean;
-  [REQUIRED_ADDRESS_FIELDS.SURNAME]: string;
-  [REQUIRED_ADDRESS_FIELDS.NAME]: string;
+  surname: string;
+  name: string;
   patronymic: string;
   street?: string;
   house?: string;

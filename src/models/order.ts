@@ -1,5 +1,113 @@
-import { Product } from '@/models/product';
-import { ORDER_STATUSES } from '@/models/enums';
+import { ORDER_STATUSES, PRODUCT_FEATURES } from '@/models/enums';
+import {
+  Contacts, Message, OrderUser, UserAddressItem,
+} from '@/models/models';
+
+export interface ProductOption {
+  title: string;
+  id?: string;
+  id_property?: string;
+  values: {
+    label: string;
+    value: string;
+    selected?: boolean;
+  }[];
+}
+
+export interface ProductFeature {
+  type: PRODUCT_FEATURES;
+  icon: string; // class
+  title: string;
+  time?: number;
+}
+
+export interface ProductDetailImage {
+  url: string;
+  isVideo?: boolean;
+  videoLink?: string;
+}
+
+export interface ProductImage {
+  preview: string;
+  detail?: ProductDetailImage[];
+}
+
+export interface ProductDelivery {
+  freeDelivery: string;
+  refundFrom: string;
+  refundTo: string;
+}
+
+export interface ProductShop {
+  id: string;
+  id_brand: string;
+  name: string;
+  brand?: string;
+  description: string;
+  category: string;
+  image: string;
+  orders: number;
+  rate: number | string;
+  isFavourite: boolean;
+}
+
+export interface ProductMetaItem {
+  title: string;
+  value: object;
+}
+
+export interface ProductMeta {
+  date: ProductMetaItem;
+  index: ProductMetaItem;
+  status: ProductMetaItem;
+  color: ProductMetaItem;
+  size: ProductMetaItem;
+  quantity: ProductMetaItem;
+  delivery: ProductMetaItem;
+  resultCost: ProductMetaItem;
+}
+
+export interface BrandItem {
+  brand: string;
+  category: string;
+  data: Product[];
+  id_brand: string;
+  link: string;
+  rate: number;
+}
+
+export interface Product {
+  id: string;
+  product_id: string;
+  title: string;
+  rate: number | string;
+  groups: number;
+  group?: {
+    groupCount: number;
+    data: Group[];
+  };
+  images: ProductImage;
+  features: ProductFeature[];
+  meta: ProductMeta;
+  options: {
+    [key: string]: ProductOption;
+  };
+  maxCount: number;
+  description: string;
+  crossedPrice: number;
+  selfPrice: number;
+  groupPrice: number;
+  orders: number;
+  watches?: number;
+  isFavourite: boolean;
+  brand?: ProductShop;
+  delivery?: ProductDelivery | false;
+  contacts: Contacts | false;
+  users: OrderUser[];
+  messages: Message[];
+  orderDate: string | Date;
+  short_link: string;
+}
 
 export interface OrderPaymentOption {
   propValue: {
@@ -35,6 +143,33 @@ export interface Order {
   user_id: number;
 }
 
+export interface GroupUser {
+  created_at: string;
+  group_id: number;
+  id: number;
+  image: string;
+  is_creator: number;
+  name: string;
+  updated_at: string;
+  user_id: number;
+}
+
+export interface Group {
+  allUsers: number;
+  avatar: string;
+  created_at: string;
+  group_status: string;
+  id: number;
+  isJoined: any;
+  is_complete: number;
+  joinedUsers: GroupUser[];
+  now: string; // "08:46:08"
+  time: number;
+  time_h: string; // "23"
+  time_min: number;
+  title: string;
+}
+
 export interface OrderPaymentPos {
   amount: number;
   created_at: string;
@@ -63,10 +198,12 @@ export interface OrderDelivery {
 }
 
 export interface OrderData {
-  address: null;
+  address: UserAddressItem;
   order: Order;
+  group?: Group;
   orderItems: OrderPaymentItem[];
   orderPos: OrderPaymentPos[];
   order_status: OrderStatus;
   delivery?: OrderDelivery;
+  orderInfo?: OrderData;
 }

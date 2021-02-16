@@ -18,7 +18,7 @@ import BrandsItem from '@/components/BrandsItem.vue';
 import Slick from 'vue-slick';
 import { debounce } from '@/utils/common';
 import { breakPoints } from '@/utils/constants';
-import { BrandItem } from '@/models/product';
+import { BrandItem } from '@/models/order';
 
 @Component({
   components: {

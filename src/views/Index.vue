@@ -84,8 +84,8 @@ import { endpoints } from '@/config';
 import { topCategories } from '@/utils/data';
 import Loader from '@/components/Loader.vue';
 import { BigSliderItem, SeoBlock } from '@/models/models';
-import { BrandItem, Product } from '@/models/product';
 import { IndexPage, IndexPageResponse } from '@/models/responses';
+import { BrandItem, Product } from '@/models/order';
 
 enum TABS_IDS {
   POPULAR = 'popular',

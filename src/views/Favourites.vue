@@ -57,9 +57,9 @@ import { createRequest } from '@/services/http.service';
 import { DEFAULT_PAGINATE_PAGE, endpoints } from '@/config';
 import Loader from '@/components/Loader.vue';
 import { SERVER_ERRORS, SORT_PARAMS } from '@/models/enums';
-import { Product, ProductShop } from '@/models/product';
 import { FavBrandsResponse, FavProductsResponse, PaginationInfo } from '@/models/responses';
 import $store from '@/store';
+import { Product, ProductShop } from '@/models/order';
 
 const PAGE_TITLE = 'Избранное';
 

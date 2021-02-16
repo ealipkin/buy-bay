@@ -36,7 +36,7 @@
 
 <script lang="ts">
 import {
-  Component, Prop, Vue,
+  Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
 import { divideNumberWithSpaces } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
@@ -44,9 +44,9 @@ import AmountChooser from '@/components/AmountChooser/vue-amount-chooser.vue';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import $store from '@/store';
-import { Product } from '@/models/product';
 import { OrderResponse } from '@/models/responses';
 import router from '@/router';
+import { Product } from '@/models/order';
 
 @Component({
   components: { AmountChooser, Rate },
@@ -54,7 +54,7 @@ import router from '@/router';
 export default class ItemInfo extends Vue {
   @Prop() public item!: Product;
 
-  selectedOptions: { key: string } | {} = {}
+  selectedOptions: any = null
 
   itemAmount = 1;
 
@@ -69,6 +69,10 @@ export default class ItemInfo extends Vue {
   }
 
   get orderDisabled() {
+    if (!this.selectedOptions) {
+      return false;
+    }
+    const allOptions = Object.keys(this.selectedOptions).length;
     const allValuesSelect = Object.values(this.selectedOptions).filter(Boolean).length === Object.keys(this.selectedOptions).length;
     return this.pending || !allValuesSelect;
   }
@@ -154,6 +158,7 @@ export default class ItemInfo extends Vue {
   }
 
   mounted() {
+    this.selectedOptions = {};
     Object.keys(this.item.options).forEach((option: string) => {
       this.selectedOptions[option] = '';
     });

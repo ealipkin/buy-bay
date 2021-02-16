@@ -13,7 +13,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Slick from 'vue-slick';
 import GroupItem from '@/components/GroupItem.vue';
-import { Group } from '@/models/models';
+import { Group } from '@/models/order';
 
 const SLIDER_VISIBLE_GROUPS = 10;
 const LIST_VISIBLE_GROUPS = 3;

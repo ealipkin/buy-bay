@@ -9,7 +9,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ShowMoreText from '@/components/ShowMoreText.vue';
 import ShopInfo from '@/components/ShopInfo.vue';
-import { ProductShop } from '@/models/product';
+import { ProductShop } from '@/models/order';
 
 @Component({
   components: { ShopInfo, ShowMoreText },

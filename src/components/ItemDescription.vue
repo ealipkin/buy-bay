@@ -8,7 +8,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ShowMoreText from '@/components/ShowMoreText.vue';
-import { Product } from '@/models/product';
+import { Product } from '@/models/order';
 
 @Component({
   components: { ShowMoreText },

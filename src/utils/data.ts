@@ -1,15 +1,10 @@
 import { nanoid } from 'nanoid';
-import { Product, ProductFeature, ProductShop } from '@/models/product';
 import {
   PRODUCT_FEATURES, REQUIRED_ADDRESS_FIELDS, SEX_TYPES,
 } from '@/models/enums';
-import {
-  Group, OrderItem, OrderUser, ProfileUser,
-} from '@/models/models';
-import { getIfExist } from './common';
-
-export const getRandomArrayElement = (array: any[]) => array[Math.floor(Math.random() * array.length)];
-export const getRandomNumberBetween = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
+import { OrderItem, OrderUser, ProfileUser } from '@/models/models';
+import { Product, ProductFeature, ProductShop } from '@/models/order';
+import { getIfExist, getRandomArrayElement, getRandomNumberBetween } from './common';
 
 const featureDate = (): number => new Date().getTime() + ((getRandomNumberBetween(10, 24) * 60 * 60 * 1000) * 0.9);
 
@@ -58,6 +53,7 @@ export const getShop = (): ProductShop => ({
 const createProduct = (item, index): Product => ({
   id: nanoid(),
   product_id: nanoid(),
+  short_link: '',
   title: getRandomArrayElement(PRODUCT_TITLES),
   rate: getRate(),
   groups: getRandomNumberBetween(0, 999),
@@ -208,16 +204,6 @@ const createProduct = (item, index): Product => ({
   orderDate: getDate(),
 });
 
-const createGroup = (item, index): Group => ({
-  id: nanoid(),
-  isJoined: Boolean(getRandomNumberBetween(0, 1)),
-  avatar: `https://picsum.photos/id/${index * 2 + getRandomNumberBetween(0, 100)}/50`,
-  allUsers: getRandomNumberBetween(10, 20),
-  joinedUsers: [],
-  title: 'Фото камера сумка через плечо крест цифровой',
-  time: featureDate(),
-});
-
 const createUser = (item, index): OrderUser => ({
   id: nanoid(),
   orderId: nanoid(),
@@ -332,13 +318,6 @@ const createOrder = (item, index, failed?): OrderItem => ({
 
 export const generateProducts = (count: number): Product[] => new Array(count).fill({}).map(createProduct);
 export const generateOrders = (count: number): OrderItem[] => new Array(count).fill({}).map((item, index) => createOrder(item, index));
-export const generateFailOrders = (count: number): OrderItem[] => new Array(count).fill({}).map((item, index) => createOrder(item, index, true));
-
-export const generateGroups = (count: number) => new Array(count).fill({}).map(createGroup);
-export const generateShops = (count: number) => new Array(count).fill({}).map(getShop);
-
-export const generateUsers = (count: number) => new Array(count).fill({}).map(createUser);
-
 export const generateDefaultUsers = (count: number) => new Array(count).fill({}).map(createDefaultUser);
 
 const CATEGORIES_COLORS = ['pink', 'yellow', 'cyan'];

@@ -133,6 +133,7 @@ export default class PhoneConfirmation extends Vue {
   }
 
   handleCodeInput() {
+    console.log('handleCodeInput');
     const safeValue = Number(this.code);
     if (safeValue && !Number.isNaN(this.code) && String(this.code).length === PHONE_CODE_LENGTH) {
       this.login(safeValue);
@@ -151,6 +152,7 @@ export default class PhoneConfirmation extends Vue {
 
   catchError(res) {
     this.error = res.response && res.response.data && res.response.data.message;
+    this.pending = false;
   }
 
   async login(code) {
