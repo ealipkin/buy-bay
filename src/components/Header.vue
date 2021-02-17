@@ -49,8 +49,9 @@
               .header__user-btn-inner
                 span.header__user-avatar
                   img(v-if="user.image" :src="user.image")
-                  span(v-else)
-                    include ../assets/icons/user.svg
+                  span.profile-smile(v-else)
+                    span {{getSmile()}}
+
                 span.header__user-name {{user.name || 'Профиль'}}
             .popper.header__dropdown
               ProfileNav(:items="profileMenuItems")
@@ -80,6 +81,7 @@ import { Action } from 'vuex-class';
 import SearchField from '@/components/SearchField.vue';
 import { NotificationItem, ProfileUser } from '@/models/models';
 import { BaseMenuItem } from '@/models/menu';
+import { getRandomSmile } from '@/utils/common';
 
 @Component({
   components: {
@@ -134,6 +136,10 @@ export default class Header extends Vue {
 
   get showLogin() {
     return (this as any).$auth.check();
+  }
+
+  getSmile() {
+    return getRandomSmile()
   }
 
   openLoginModal(type) {
@@ -332,6 +338,12 @@ export default class Header extends Vue {
       display: block;
       margin: 0 auto;
       border: solid 1px #ffffff5e;
+
+      .profile-smile {
+        span {
+          transform: scale(0.5);
+        }
+      }
 
       img {
         max-width: 100%;

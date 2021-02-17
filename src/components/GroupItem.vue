@@ -1,9 +1,12 @@
 <template lang="pug">
   .group-item
-    div(v-if="group.avatar").group-item__avatar.avatar
-      img(:src="group.avatar")
+    div(v-if="creator.image").group-item__avatar.avatar
+      img(:src="creator.image")
+    div(v-else).group-item__avatar.avatar
+      span.profile-smile
+        span {{getSmile()}}
     .group-item__middle
-      .group-item__title {{ group.title | truncate(28)}}
+      .group-item__title {{ creator.name | truncate(28)}}
       .group-item__info
         .group-item__users
           img(src="../assets/icons/group-user.svg")
@@ -16,20 +19,32 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="#7B8197" fill-rule="nonzero" stroke="#7B8197" stroke-width=".3"><path d="M7 1C3.692 1 1 3.692 1 7s2.692 6 6 6 6-2.692 6-6-2.692-6-6-6zm0 10.737c-2.612 0-4.737-2.125-4.737-4.737S4.388 2.263 7 2.263 11.737 4.388 11.737 7 9.612 11.737 7 11.737z"/><path d="M10.22 6.815H7.879a1.03 1.03 0 00-.341-.341V3.657a.537.537 0 00-1.074 0v2.817a1.028 1.028 0 101.415 1.414h2.341a.537.537 0 100-1.073z"/></g></svg>
               span {{ `${timeObj.h}:${timeObj.m}:${timeObj.s}`}}
             template(v-slot:finish)
-    button(type="button" :class="{'button--secondary': !group.isJoined}" @click="handleClick").group-item__button.button {{group.isJoined ? 'Вступить' : 'Выйти'}}
+    button(v-if="!group.isJoined"
+      type="button"
+      :disabled="disabled"
+      @click="handleClick"
+    ).group-item__button.button Вступить
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Group } from '@/models/order';
+import { getRandomSmile } from '@/utils/common';
 
 @Component({})
 export default class GroupItem extends Vue {
   @Prop() public group!: Group;
+  @Prop() public disabled!: boolean;
 
+  getSmile() {
+    return getRandomSmile();
+  }
+  get creator() {
+    return this.group.joinedUsers.filter(user => user.is_creator).pop()
+  }
   handleClick() {
-    this.group.isJoined = !this.group.isJoined;
+    this.$emit('join', this.group)
   }
 }
 

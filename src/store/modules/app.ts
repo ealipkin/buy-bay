@@ -81,6 +81,7 @@ const actions = {
   },
   async setUserAuth({ commit, state }, props) {
     commit('app/SET_USER_AUTH', props, { root: true });
+    // debugger
     updateProfileCounts({ commit });
   },
   async logout({ commit }, props) {
@@ -114,6 +115,7 @@ const actions = {
     await updateFavouritesCount({ commit });
   },
   async updateProfileCounts({ commit }) {
+    // debugger;
     await updateProfileCounts({ commit });
   },
   async fetchMenu({ commit }) {

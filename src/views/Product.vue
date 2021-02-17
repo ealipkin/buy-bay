@@ -7,8 +7,8 @@
         ItemPreview(:item="item").item-detail__item.item-detail__item--preview
         ItemDescription(:item="item" v-if="!isMobile").item-detail__item.item-detail__item--description
       .item-detail__aside
-        ItemInfo(:item="item").item-detail__item.item-detail__item--info
-        ItemGroups(v-if="groups && groups.length" :groups="groups").item-detail__item.item-detail__item--groups
+        ItemInfo(:item="item" ref="itemInfo" @order-disabled="setOrderDisabled").item-detail__item.item-detail__item--info
+        ItemGroups(v-if="groups && groups.length" :groups="groups" @join="handleJoinToGroup" :disabled="orderDisabled").item-detail__item.item-detail__item--groups
         ItemDescription(:item="item" v-if="isMobile").item-detail__item.item-detail__item--description
         ItemShopCard(v-if="item.brand" :shop="item.brand").item-detail__item.item-detail__item--shop
         DeliveryInfo(v-if="item.delivery" :deliveryItem="item.delivery").item-detail__delivery.item-detail__item.item-detail__item--delivery
@@ -41,7 +41,7 @@ import { endpoints } from '@/config';
 import Loader from '@/components/Loader.vue';
 import SimilarSlider from '@/components/SimilarSlider.vue';
 import { BreadcrumbLink, SeoBlock } from '@/models/models';
-import { Product } from '@/models/order';
+import { Group, Product } from '@/models/order';
 
 interface ProductPage extends Product {
   seo_block: SeoBlock;
@@ -117,6 +117,8 @@ export default class ItemDetail extends Vue {
 
   item: Product | null = null;
 
+  orderDisabled: boolean = true;
+
   window = {
     width: 0,
     height: 0,
@@ -129,6 +131,10 @@ export default class ItemDetail extends Vue {
   similarItems: Product[] | null = null;
 
   sliderSettings = PRODUCT_SLIDER_SETTINGS;
+
+  setOrderDisabled(state: boolean) {
+    this.orderDisabled = state
+  }
 
   handleResize() {
     this.window.width = window.innerWidth;
@@ -155,6 +161,7 @@ export default class ItemDetail extends Vue {
         if (response) {
           this.seo = response.seo_block;
           this.item = response;
+          console.log(this.item);
         }
       });
     createRequest('get', `${endpoints.product}/${productId}/related`)
@@ -166,6 +173,11 @@ export default class ItemDetail extends Vue {
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   }
+
+  handleJoinToGroup(group: Group) {
+    (this.$refs.itemInfo as any).sendOrder('group', group)
+  }
+
 }
 </script>
 

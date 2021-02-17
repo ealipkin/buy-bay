@@ -38,11 +38,23 @@ export default class ShopInfo extends Vue {
   }
 
   addToFav() {
-    createRequest('GET', endpoints.favourites.addBrand(this.shop.id)).then(this.updateFavourites);
+    createRequest('GET', endpoints.favourites.addBrand(this.shop.id))
+      .then(() => {
+        this.$root.$emit('show-toast', {
+          message: 'Бренд добавлен из избранное'
+        });
+        this.updateFavourites();
+      });
   }
 
   removeFromFav() {
-    createRequest('GET', endpoints.favourites.deleteBrand(this.shop.id)).then(this.updateFavourites);
+    createRequest('GET', endpoints.favourites.deleteBrand(this.shop.id))
+      .then(() => {
+        this.$root.$emit('show-toast', {
+          message: 'Бренд удален из избранного'
+        });
+        this.updateFavourites();
+      });
   }
 
   updateFavourites() {

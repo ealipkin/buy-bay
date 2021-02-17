@@ -8,7 +8,7 @@
       .group-detail__main
         .group-detail__left-col
           OrderInfo(v-if="order" :item="order" :order-data="orderData" :options="orderOptions" :hideStatus="true" :hideTitle="true").group-detail__product.group-detail__item.order-info--group
-          GroupInfo(v-if="orderData" :orderData="orderData.orderInfo" :group="orderData.group").group-detail__info.group-detail__item
+          GroupInfo(v-if="orderData" :orderData="orderData.orderInfo" :group="orderData.group" @leave="handleLeaveGroup").group-detail__info.group-detail__item
           GroupAction(v-if="isMobile && product" :product="product" :group="orderData.group").group-detail__action.group-detail__item
           DeliveryInfo(:deliveryItem="orderData.delivery" v-if="isMobile && orderData").group-detail__delivery.group-detail__item
         .group-detail__aside
@@ -21,9 +21,13 @@
           //router-link(to="#").link._hide-desktop Показать еще
         .container
           SimilarSlider(:items="similarItems").similar-slider--scroll
-
+    ConfirmationModal(ref="confirmationModal" :maxWidth="500" @confirm="leaveConfirm" cancelText="Остаться" confirmText="Выйти" :text="confirmModalText")
 </template>
 
+
+Описание:
+
+Кнопки:  и Остаться
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
@@ -41,9 +45,11 @@ import { OrderPaymentResponse } from '@/models/responses';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import { OrderData, OrderPaymentOption, Product } from '@/models/order';
+import ConfirmationModal from '@/components/ConfirmationModal.vue';
 
 @Component({
   components: {
+    ConfirmationModal,
     Breadcrumbs,
     SeoTexts,
     SimilarSlider,
@@ -79,6 +85,13 @@ export default class GroupDetail extends Vue {
     return (this as any).$auth.check();
   }
 
+  get confirmModalText(): string {
+    if (!this.product) {
+      return ''
+    }
+    return `Не стоит упускать возможность сэкономить ${this.product.selfPrice - this.product.groupPrice} ₽.<br>Если решите покинуть группу, мы вернём деньги в течение 14 дней.`
+  }
+
   get isMobile() {
     return this.window.width < breakPoints.tablet;
   }
@@ -94,12 +107,9 @@ export default class GroupDetail extends Vue {
   }
 
   get order(): Product | null | undefined {
-    console.log('this.orderData -> ', this.orderData);
     const data: OrderData | null = this.orderData;
     const orderInfo = data && data.orderInfo;
-    const order = orderInfo && orderInfo.orderItems && orderInfo.orderItems[0].product;
-    console.log(order);
-    return order;
+    return orderInfo && orderInfo.orderItems && orderInfo.orderItems[0].product;;
   }
 
   get orderOptions(): OrderPaymentOption[] | undefined | null {
@@ -151,6 +161,22 @@ export default class GroupDetail extends Vue {
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   }
+
+  handleLeaveGroup() {
+    this.openConfirmationModal();
+  }
+
+  openConfirmationModal() {
+    const modalComponent: any = this.$refs.confirmationModal;
+    modalComponent.showModal();
+  }
+
+  leaveConfirm() {
+    return createRequest('GET', endpoints.group.leave(this.groupId)).then(() => {
+      router.push({ path: '/' });
+    });
+  }
+
 }
 </script>
 

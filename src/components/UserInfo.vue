@@ -6,13 +6,15 @@
         span(v-else) Профиль
       span(v-if="user.age").user-info__age {{user.age}} {{declOfNum(user.age)}}
     img(v-if="user.image" :src="user.image").user-info__img
-    img(v-else src="@/assets/empty-avatar.jpg").user-info__img
+    .user-info__img
+      span.profile-smile
+        span {{getSmile()}}
 
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { declOfNum } from '@/utils/common';
+import { declOfNum, getRandomSmile } from '@/utils/common';
 import { ProfileUser } from '@/models/models';
 
 @Component
@@ -22,6 +24,10 @@ export default class UserInfo extends Vue {
   title = `${this.user.surname} ${this.user.name}`;
 
   declOfNum = (groups) => declOfNum(groups, ['год', 'года', 'лет']);
+
+  getSmile() {
+    return getRandomSmile();
+  }
 }
 </script>
 
@@ -90,6 +96,9 @@ export default class UserInfo extends Vue {
         width: 100px;
         height: 100px;
       }
+    }
+    .profile-smile span {
+      transform: scale(1.1);
     }
   }
 </style>

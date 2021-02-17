@@ -165,3 +165,18 @@ fieldset {
   padding: 0;
   border: none;
 }
+
+.profile-smile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFDFD3;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  font-size: 26px;
+
+  span {
+    transform: scale(0.8);
+  }
+}

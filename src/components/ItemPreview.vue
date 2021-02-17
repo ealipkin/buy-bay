@@ -63,6 +63,16 @@ export default class ItemPreview extends Vue {
 
   mounted() {
     this.updateGradients();
+    document.addEventListener('keydown', this.handleArrowKeyDown.bind(this));
+  }
+
+  handleArrowKeyDown(e) {
+    if (e.code === 'ArrowLeft') {
+      (this.$refs.slickTop as any).prev();
+    }
+    if (e.code === 'ArrowRight') {
+      (this.$refs.slickTop as any).next();
+    }
   }
 
   onBottomScroll() {

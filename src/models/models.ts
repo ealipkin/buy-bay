@@ -164,3 +164,11 @@ export interface ProfileCounts {
   groups: number;
   orders: number;
 }
+
+export interface IShareData {
+  image: string,
+  link: string,
+  groupPrice: number,
+  productName: string,
+  leftUsers: number
+}

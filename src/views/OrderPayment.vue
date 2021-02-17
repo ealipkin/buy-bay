@@ -227,6 +227,7 @@ export default class OrderPayment extends Vue {
   }
 
   handleSelectAddress(address: UserAddressItem) {
+    this.submitted = true;
     this.selectAddress(address.id).then(this.updateOrder);
   }
 
@@ -244,6 +245,7 @@ export default class OrderPayment extends Vue {
 
   handleSelectCard(card: CardItem) {
     const { pid } = card;
+    this.submitted = true;
     createRequest('POST', endpoints.order.selectCard(this.orderId), { pid }).then(this.updateOrder);
   }
 
@@ -289,6 +291,7 @@ export default class OrderPayment extends Vue {
   updateOrder() {
     this.getOrder()
       .then((res) => {
+        this.submitted = false;
         this.orderData = res.data.data;
       });
   }
@@ -376,17 +379,21 @@ export default class OrderPayment extends Vue {
     this.submitted = true;
     createRequest('POST', endpoints.order.pay(this.orderId))
       .then((res: OrderPayResponse) => {
-        // console.log(res);
+        console.log('handleOrder -> ', res);
         const { confirmation_url, status } = res.data.data;
         if (confirmation_url) {
           window.location.href = confirmation_url;
         }
-        if (status === PAY_STATUSES.SUCCEDED) {
+        if (status === PAY_STATUSES.SUCCEEDED) {
           router.push({ path: '/success', query: { oid: String(this.orderId) } });
         }
+        if (status === PAY_STATUSES.CANCELED) {
+          router.push({ path: `/profile/orders/${this.orderId}` });
+        }
+        this.submitted = false;
       })
       .finally(() => {
-        this.submitted = true;
+        this.submitted = false;
       });
   }
 

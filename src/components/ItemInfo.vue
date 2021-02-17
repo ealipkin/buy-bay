@@ -74,7 +74,10 @@ export default class ItemInfo extends Vue {
     }
     const allOptions = Object.keys(this.selectedOptions).length;
     const allValuesSelect = Object.values(this.selectedOptions).filter(Boolean).length === Object.keys(this.selectedOptions).length;
-    return this.pending || !allValuesSelect;
+    const isDisabled = this.pending || !allValuesSelect;
+    console.log('orderDisabled -> ');
+    this.$emit('order-disabled', isDisabled)
+    return isDisabled
   }
 
   optionSelect(parentId, id) {
@@ -95,11 +98,23 @@ export default class ItemInfo extends Vue {
   }
 
   addToFav() {
-    createRequest('GET', endpoints.favourites.addProduct(this.item.product_id)).then(this.updateFavourites);
+    createRequest('GET', endpoints.favourites.addProduct(this.item.product_id))
+      .then(() => {
+        this.$root.$emit('show-toast', {
+          message: 'Продукт добавлен в избранное'
+        });
+        this.updateFavourites()
+      });
   }
 
   removeFromFav() {
-    createRequest('GET', endpoints.favourites.deleteProduct(this.item.product_id)).then(this.updateFavourites);
+    createRequest('GET', endpoints.favourites.deleteProduct(this.item.product_id))
+      .then(() => {
+        this.$root.$emit('show-toast', {
+          message: 'Продукт удален из избранного'
+        });
+        this.updateFavourites()
+      });
   }
 
   updateFavourites() {
@@ -107,12 +122,15 @@ export default class ItemInfo extends Vue {
     $store.dispatch('app/updateFavouritesCount');
   }
 
-  prepareData(type: 'self' | 'group') {
+  prepareData(type: 'self' | 'group', group?: Product | undefined) {
     const data: any = {
       id: this.item.product_id,
       options: Object.values(this.selectedOptions),
       count: this.itemAmount,
     };
+    if (group) {
+      data['group_id'] = group.id
+    }
     if (type === 'self') {
       data.self_price = this.item.selfPrice;
     } else {
@@ -121,8 +139,8 @@ export default class ItemInfo extends Vue {
     return data;
   }
 
-  sendOrder(type: 'self' | 'group') {
-    const data = this.prepareData(type);
+  sendOrder(type: 'self' | 'group', group?: Product | undefined) {
+    const data = this.prepareData(type, group);
     const url = type === 'self' ? endpoints.order.self : endpoints.order.group;
     this.pending = true;
     createRequest('POST', url, data)

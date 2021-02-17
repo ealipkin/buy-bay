@@ -2,7 +2,7 @@
   .group-info
     .group-info__header
       h2(v-if="group").group-info__title {{title}}
-      button(type="button").group-info__link.link Покинуть группу
+      button(type="button" @click="handleLeaveGroup").group-info__link.link Покинуть группу
     CustomScrollWrapper.custom-scroll-wrapper--mobile-only
       UsersList(v-if="group" :group="group").group-info__users
     hr.group-info__hr
@@ -16,9 +16,10 @@ import UsersList from '@/components/UsersList.vue';
 import SocialList from '@/components/SocialList.vue';
 import Share from '@/components/Share.vue';
 import CustomScrollWrapper from '@/components/CustomScrollWrapper.vue';
-import { sharingUtils } from '@/utils/sharing';
+import { createSharingLinks } from '@/utils/sharing';
 import { Group, OrderData, Product } from '@/models/order';
 import { declOfNum } from '@/utils/common';
+import { IShareData } from '@/models/models';
 
 @Component({
   components: {
@@ -39,45 +40,15 @@ export default class GroupInfo extends Vue {
 
   get socials() {
     const product: Product = this.product as Product;
-    return product ? [
-      {
-        href: sharingUtils.tgLink(product.short_link, product.title),
-        icon: 'socials/telegram.svg',
-        type: 'telegram',
-        title: 'Telegram',
-      },
-      {
-        href: sharingUtils.whatsapp(product.short_link, product.title),
-        icon: 'socials/whatsapp.svg',
-        type: 'whatsapp',
-        title: 'Whatsapp',
-      },
-      {
-        href: sharingUtils.viber(product.short_link, product.title),
-        icon: 'socials/viber.svg',
-        type: 'viber',
-        title: 'Viber',
-      },
-
-      {
-        href: sharingUtils.vk(product.short_link, product.title),
-        icon: 'socials/vk.svg',
-        type: 'vk',
-        title: 'VK',
-      },
-      {
-        href: sharingUtils.fb(product.short_link, product.title),
-        icon: 'socials/facebook.svg',
-        type: 'facebook',
-        title: 'Facebook',
-      },
-      {
-        href: sharingUtils.ok(product.short_link, product.title, product.images.preview),
-        icon: 'socials/odnoklassniki.svg',
-        type: 'ok',
-        title: 'OK',
-      },
-    ] : [];
+    const group = this.group;
+    const shareData: IShareData = {
+      link: product.short_link,
+      groupPrice: product.groupPrice,
+      productName: product.title,
+      image: product.images.preview,
+      leftUsers: group.allUsers - group.joinedUsers.length
+    };
+    return product ? createSharingLinks(shareData) : [];
   }
 
   get product(): Product | null {
@@ -90,6 +61,10 @@ export default class GroupInfo extends Vue {
 
   userDeclension(number) {
     return declOfNum(number, ['человек', 'человека', 'человек']);
+  }
+
+  handleLeaveGroup() {
+    this.$emit('leave')
   }
 }
 </script>

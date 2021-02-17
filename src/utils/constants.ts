@@ -11,7 +11,7 @@ export const breakPoints = {
   desktopSliders: 1340,
 };
 
-export const AVATAR_SMILES = ['😉', '🤗', '🙂', '🙃', '👤', '👥', '🎉'];
+export const AVATAR_SMILES = ['😀', '😁', '😃', '😄', '😊', '😎', '🙂', '🤗', '🤩', '😌', '🙃', '😱', '🥳', '🤓', '👏', '👍', '🎉'];
 
 export const PROFILE_MENU_ITEMS: BaseMenuItem[] = [
   {

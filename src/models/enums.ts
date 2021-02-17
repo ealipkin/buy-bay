@@ -76,6 +76,7 @@ export enum SERVER_ERRORS {
 }
 
 export enum PAY_STATUSES {
-  SUCCEDED = 'succeeded',
+  SUCCEEDED = 'succeeded',
+  CANCELED = 'canceled',
   PENDING = 'pending'
 }

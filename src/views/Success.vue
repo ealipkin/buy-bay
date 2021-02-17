@@ -16,7 +16,7 @@
 
           SocialList(:socials="socials").success-page__social-list
 
-          Share(:link="product.short_link")
+          Share(v-if="product" :link="product.short_link")
     Loader(v-else)
 </template>
 
@@ -26,15 +26,14 @@ import Timer from '@/components/Timer.vue';
 import SocialList from '@/components/SocialList.vue';
 import Share from '@/components/Share.vue';
 
-import { SHARE_TIMER } from '@/utils/constants';
 import Loader from '@/components/Loader.vue';
 import router from '@/router';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import { OrderPaymentResponse } from '@/models/responses';
-import { OrderData, Product } from '@/models/order';
-import { sharingUtils } from '@/utils/sharing';
-import { millisToMinutesAndSeconds } from '@/utils/common';
+import { Group, OrderData, Product } from '@/models/order';
+import { createSharingLinks } from '@/utils/sharing';
+import { IShareData } from '@/models/models';
 
 @Component({
   components: {
@@ -59,49 +58,26 @@ export default class Success extends Vue {
 
   get socials() {
     const product: Product = this.product as Product;
-    return product ? [
-      {
-        href: sharingUtils.tgLink(product.short_link, product.title),
-        icon: 'socials/telegram.svg',
-        type: 'telegram',
-        title: 'Telegram',
-      },
-      {
-        href: sharingUtils.whatsapp(product.short_link, product.title),
-        icon: 'socials/whatsapp.svg',
-        type: 'whatsapp',
-        title: 'Whatsapp',
-      },
-      {
-        href: sharingUtils.viber(product.short_link, product.title),
-        icon: 'socials/viber.svg',
-        type: 'viber',
-        title: 'Viber',
-      },
-
-      {
-        href: sharingUtils.vk(product.short_link, product.title),
-        icon: 'socials/vk.svg',
-        type: 'vk',
-        title: 'VK',
-      },
-      {
-        href: sharingUtils.fb(product.short_link, product.title),
-        icon: 'socials/facebook.svg',
-        type: 'facebook',
-        title: 'Facebook',
-      },
-      {
-        href: sharingUtils.ok(product.short_link, product.title, product.images.preview),
-        icon: 'socials/odnoklassniki.svg',
-        type: 'ok',
-        title: 'OK',
-      },
-    ] : [];
+    const group: Group = this.group as Group;
+    if (!product && !this.group) {
+      return []
+    }
+    const shareData: IShareData = {
+      link: product.short_link,
+      groupPrice: product.groupPrice,
+      productName: product.title,
+      image: product.images.preview,
+      leftUsers: group.allUsers - group.joinedUsers.length
+    };
+    return product ? createSharingLinks(shareData) : [];
   }
 
-  get product(): Product | {} {
-    return this.orderData && this.orderData.orderItems && this.orderData.orderItems.length ? this.orderData.orderItems[0].product : {};
+  get product(): Product | null {
+    return this.orderData && this.orderData.orderItems && this.orderData.orderItems.length ? this.orderData.orderItems[0].product : null;
+  }
+
+  get group(): Group | null {
+    return this.orderData && this.orderData.group ? this.orderData.group : null;
   }
 
   get isAuthorized() {

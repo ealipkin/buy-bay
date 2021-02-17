@@ -4,7 +4,7 @@
     main
       router-view
     Footer
-
+    Toasted(ref="toasted")
 </template>
 
 <script lang="ts">
@@ -12,14 +12,25 @@
 import { Component, Vue } from 'vue-property-decorator';
 import Footer from '@/components/Footer.vue';
 import Header from '@/components/Header.vue';
+import Toasted from '@/components/Toasted.vue';
 
 @Component({
   components: {
     Footer,
     Header,
+    Toasted
   },
 })
 export default class Index extends Vue {
+  mounted() {
+    this.$root.$on('show-toast', (data) => {
+      const { message, type } = data;
+      const toast: any = this.$refs.toasted;
+      if (!type || type === 'success') {
+        toast.showSuccess(message);
+      }
+    })
+  }
 }
 </script>
 <style lang="scss">

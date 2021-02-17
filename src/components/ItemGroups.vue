@@ -5,7 +5,7 @@
 
     Slick(ref="slick" :options="sliderSettings").item-groups__slider
       div(v-for="(group) in visibleSliderGroups").item-groups__slide
-        GroupItem(:group="group").item-groups__item
+        GroupItem(:group="group" @join="handleJoin" :disabled="disabled").item-groups__item
 
 </template>
 
@@ -26,6 +26,7 @@ const LIST_VISIBLE_GROUPS = 3;
 })
 export default class ItemGroups extends Vue {
   @Prop() public groups!: Group[];
+  @Prop() public disabled!: boolean;
 
   showMobile = false;
 
@@ -70,6 +71,10 @@ export default class ItemGroups extends Vue {
       },
     ],
   };
+
+  handleJoin(group: Group) {
+    this.$emit('join', group)
+  }
 }
 
 </script>
