@@ -139,7 +139,7 @@ export default class Header extends Vue {
   }
 
   getSmile() {
-    return getRandomSmile()
+    return getRandomSmile();
   }
 
   openLoginModal(type) {

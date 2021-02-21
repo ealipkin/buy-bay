@@ -1,7 +1,6 @@
-import { nanoid } from 'nanoid';
 import { BaseMenuItem, MenuChildItem } from '@/models/menu';
-import { NotificationItem, SearchSuggestItem } from '@/models/models';
-import { NOTIFICATIONS_TYPES, PROFILE_NAV_TYPES, SEARCH_ITEM_TYPE } from '@/models/enums';
+import { NotificationItem } from '@/models/models';
+import { NOTIFICATIONS_TYPES, PROFILE_NAV_TYPES } from '@/models/enums';
 
 export const breakPoints = {
   mobile: 320,
@@ -351,61 +350,5 @@ export const NOTIFICATIONS: NotificationItem[] = [
   },
   {
     type: NOTIFICATIONS_TYPES.MESSAGE, title: '6 новых сообщений', text: 'в группе «iPhone 12 Pro»', read: true,
-  },
-];
-
-export const SEARCH_SUGGEST: SearchSuggestItem[] = [
-  {
-    title: 'Бренды',
-    items: [
-      {
-        id: nanoid(),
-        type: SEARCH_ITEM_TYPE.BRAND,
-        image: 'https://picsum.photos/id/2/40',
-        title: 'Adidas Classic',
-      },
-      {
-        id: nanoid(),
-        type: SEARCH_ITEM_TYPE.BRAND,
-        image: 'https://picsum.photos/id/240',
-        title: 'Adidas Sport',
-      },
-    ],
-  },
-  {
-    title: 'Товары',
-    items: [
-      {
-        id: nanoid(),
-        type: SEARCH_ITEM_TYPE.PRODUCT,
-        image: 'https://picsum.photos/id/240',
-        title: 'Adidas кроссовки AirMav',
-        price: 7760,
-        groups: 8,
-      },
-      {
-        id: nanoid(),
-        type: SEARCH_ITEM_TYPE.PRODUCT,
-        image: 'https://picsum.photos/id/240',
-        title: 'Adidas Sport',
-        price: 7760,
-        groups: 1,
-      },
-    ],
-  },
-  {
-    title: 'Категории',
-    items: [
-      {
-        id: nanoid(),
-        type: SEARCH_ITEM_TYPE.CATEGORY,
-        title: 'Adidas Спортивные товары',
-      },
-      {
-        id: nanoid(),
-        type: SEARCH_ITEM_TYPE.CATEGORY,
-        title: 'Adidas Товары для дома',
-      },
-    ],
   },
 ];

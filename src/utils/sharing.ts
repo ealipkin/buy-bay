@@ -1,7 +1,7 @@
 import { IShareData } from '@/models/models';
 import { declOfNum } from '@/utils/common';
 
-const getText = (shareData: IShareData) => `Смотри! Можно всего за ${shareData.groupPrice} ₽ купить ${shareData.productName}. ${declOfNum(shareData.leftUsers, ['Нужен', 'Нужно', 'Нужны'])} ещё ${shareData.leftUsers} человек для покупки!"`
+const getText = (shareData: IShareData) => `Смотри! Можно всего за ${shareData.groupPrice} ₽ купить ${shareData.productName}. ${declOfNum(shareData.leftUsers, ['Нужен', 'Нужно', 'Нужны'])} ещё ${shareData.leftUsers} человек для покупки!"`;
 
 export const sharingUtils = {
   tgLink: (shareData: IShareData) => `https://t.me/share/url?url=${shareData.link}&text=${getText(shareData)}`,
@@ -49,4 +49,4 @@ export const createSharingLinks = (shareData: IShareData) => [
     icon: 'socials/odnoklassniki.svg',
     type: 'ok',
     title: 'OK',
-  }]
+  }];

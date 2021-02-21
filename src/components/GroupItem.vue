@@ -35,16 +35,19 @@ import { getRandomSmile } from '@/utils/common';
 @Component({})
 export default class GroupItem extends Vue {
   @Prop() public group!: Group;
+
   @Prop() public disabled!: boolean;
 
   getSmile() {
     return getRandomSmile();
   }
+
   get creator() {
-    return this.group.joinedUsers.filter(user => user.is_creator).pop()
+    return this.group.joinedUsers.filter((user) => user.is_creator).pop();
   }
+
   handleClick() {
-    this.$emit('join', this.group)
+    this.$emit('join', this.group);
   }
 }
 

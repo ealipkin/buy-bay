@@ -20,7 +20,9 @@ export default class ConfirmationModal extends Vue {
   @Prop({ default: 'Данное действие нельзя отменить' }) text!: string;
 
   @Prop({ default: 'Подтвердить' }) confirmText!: string;
+
   @Prop({ default: 'Отменить' }) cancelText!: string;
+
   @Prop({ default: 390 }) maxWidth!: number;
 
   showModal(data) {

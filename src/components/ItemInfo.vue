@@ -76,8 +76,8 @@ export default class ItemInfo extends Vue {
     const allValuesSelect = Object.values(this.selectedOptions).filter(Boolean).length === Object.keys(this.selectedOptions).length;
     const isDisabled = this.pending || !allValuesSelect;
     console.log('orderDisabled -> ');
-    this.$emit('order-disabled', isDisabled)
-    return isDisabled
+    this.$emit('order-disabled', isDisabled);
+    return isDisabled;
   }
 
   optionSelect(parentId, id) {
@@ -101,9 +101,9 @@ export default class ItemInfo extends Vue {
     createRequest('GET', endpoints.favourites.addProduct(this.item.product_id))
       .then(() => {
         this.$root.$emit('show-toast', {
-          message: 'Продукт добавлен в избранное'
+          message: 'Продукт добавлен в избранное',
         });
-        this.updateFavourites()
+        this.updateFavourites();
       });
   }
 
@@ -111,9 +111,9 @@ export default class ItemInfo extends Vue {
     createRequest('GET', endpoints.favourites.deleteProduct(this.item.product_id))
       .then(() => {
         this.$root.$emit('show-toast', {
-          message: 'Продукт удален из избранного'
+          message: 'Продукт удален из избранного',
         });
-        this.updateFavourites()
+        this.updateFavourites();
       });
   }
 
@@ -129,7 +129,7 @@ export default class ItemInfo extends Vue {
       count: this.itemAmount,
     };
     if (group) {
-      data['group_id'] = group.id
+      data.group_id = group.id;
     }
     if (type === 'self') {
       data.self_price = this.item.selfPrice;

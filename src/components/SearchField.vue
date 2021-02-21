@@ -1,9 +1,16 @@
 <template lang="pug">
   form(@submit="searchSubmit" :class="{'search-field--focused': isFocused}").search-field
     .search-field__inner
-      input.search-field__input(placeholder="Найти товар" v-model="search" @focus="handleFocus" ref="input")
+      input.search-field__input(
+        placeholder="Найти товар"
+        v-model="search"
+        @focus="handleFocus"
+        @keydown="inputKeydown"
+        ref="input"
+        v-debounce:500ms="handleInput"
+      )
     transition(name="fade")
-      SearchSuggest(:items="searchResults" v-if="showResults" @item-click="itemClick").search-field__results
+      SearchSuggest(:searchResults="searchResults" v-if="showResults && searchEnd" @item-click="itemClick").search-field__results
     button(type="button" @click="handleClear").search-field__clear Отмена
     button(type="submit").search-field__submit-button.button Найти
 </template>
@@ -12,9 +19,11 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import router from '@/router';
 import clickOutside from '@/utils/clickOutside';
-import { SEARCH_SUGGEST } from '@/utils/constants';
 import SearchSuggest from '@/components/SearchSuggest.vue';
-import { SearchItem, SearchSuggestItem } from '@/models/models';
+import { ISearchSuggest, SearchItem } from '@/models/models';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import { SearchSuggestResponse } from '@/models/responses';
 
 const MIN_SEARCH_LENGTH = 3;
 @Component({
@@ -23,17 +32,46 @@ const MIN_SEARCH_LENGTH = 3;
 export default class SearchField extends Vue {
   @Watch('$route') routeChange() {
     this.isFocused = false;
+    this.search = '';
+    this.lastSearch = '';
+  }
+
+  get searchValid() {
+    return this.search && this.search.trim().length >= MIN_SEARCH_LENGTH;
   }
 
   get showResults() {
-    return this.isFocused && this.search && this.search.length >= MIN_SEARCH_LENGTH;
+    return this.isFocused && this.searchResults && this.searchValid;
   }
 
   search = '';
 
-  searchResults: SearchSuggestItem[] = SEARCH_SUGGEST;
+  lastSearch = '';
+
+  currentFocus = -1;
+
+  input: any = null;
+
+  searchEnd = false;
+
+  searchResults: ISearchSuggest | null = null;
 
   isFocused = false;
+
+  handleInput() {
+    const val = this.search;
+    if (this.searchValid && val.trim() !== this.lastSearch.trim()) {
+      this.searchEnd = false;
+      this.searchResults = null;
+      this.currentFocus = -1;
+      createRequest('GET', endpoints.search.suggest(val))
+        .then((res: SearchSuggestResponse) => {
+          this.searchResults = res.data.data;
+          this.lastSearch = val;
+          this.searchEnd = true;
+        });
+    }
+  }
 
   searchSubmit(event) {
     event.preventDefault();
@@ -67,15 +105,85 @@ export default class SearchField extends Vue {
   }
 
   doFocus() {
-    const input: HTMLElement | null = this.$el.querySelector('.search-field__input');
-    if (input) {
-      input.focus();
+    if (this.input) {
+      this.input.focus();
       this.handleFocus();
     }
   }
 
+  inputKeydown(e) {
+    if (!this.search) {
+      this.searchEnd = false;
+      this.searchResults = null;
+    }
+    if (this.searchValid && this.search.trim() !== this.lastSearch.trim()) {
+      this.searchResults = null;
+      this.searchEnd = false;
+    }
+    if (!this.searchResults) {
+      return;
+    }
+    const list = document.querySelector('.search-suggest');
+    let items;
+    if (list) {
+      items = list.querySelectorAll('.search-suggest__item-wrapper .search-suggest__inner-item');
+    }
+    if (e.keyCode === 40) {
+      this.currentFocus += 1;
+      this.addActive(items);
+    } else if (e.keyCode === 38) {
+      this.currentFocus -= 1;
+      this.addActive(items);
+    } else if (e.keyCode === 13) {
+      e.preventDefault();
+      if (this.currentFocus > -1) {
+        if (items) {
+          items[this.currentFocus].click();
+        }
+      }
+    }
+  }
+
+  addActive(listElements) {
+    if (!listElements) return;
+    this.removeActive(listElements);
+    if (this.currentFocus >= listElements.length) {
+      this.currentFocus = 0;
+    }
+    if (this.currentFocus < 0) {
+      this.currentFocus = (listElements.length - 1);
+    }
+    const el = listElements[this.currentFocus];
+    if (el) {
+      el.classList.add('autocomplete-active');
+      this.scrollToActive(el);
+    }
+  }
+
+  scrollToActive(el) {
+    const list: HTMLElement | null = document.querySelector('.search-suggest');
+    if (!list) {
+      return;
+    }
+    const listHeight = list.offsetHeight;
+    const listScroll = list.scrollTop;
+    const elPosition = el.offsetTop;
+    const bottom = listHeight + listScroll;
+
+    if (elPosition < listScroll || elPosition > bottom) {
+      list.scrollTop = elPosition;
+    }
+  }
+
+  removeActive(listElements) {
+    Array.from(listElements).forEach((el) => {
+      el.classList.remove('autocomplete-active');
+    });
+  }
+
   mounted() {
     this.search = this.$route.query.q as string;
+    this.input = this.$refs.input;
     clickOutside(this.$el, (e) => {
       const isProfileSearch = e.target.closest('.header-main__profile-search');
       const isPrevent = isProfileSearch;
@@ -226,7 +334,7 @@ export default class SearchField extends Vue {
       top: calc(100% + 9px);
       height: calc(100vh - 30px);
       width: calc(100% + 27px);
-      z-index: 10;
+      z-index: 20;
       overflow: auto;
 
       @include tablet() {

@@ -20,6 +20,7 @@ export const endpoints = {
   logout: '/auth/logout',
   refreshToken: '/auth/refresh ',
   getMenu: '/category/tree',
+  category: (category, params = '') => `/category/${category}?${params}`,
   favourites: {
     products: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: PaginationInfo) => `/wishlist/products?page=${page}&sort=${sort}`,
     brands: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: PaginationInfo) => `/wishlist/brands?page=${page}&sort=${sort}`,
@@ -72,5 +73,8 @@ export const endpoints = {
     active: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: PaginationInfo) => `/profile/groups/active?page=${page}&sort=${sort}`,
     inactive: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: PaginationInfo) => `/profile/groups/inactive?page=${page}&sort=${sort}`,
   },
-
+  search: {
+    global: (term) => `/search/global?q=${term}`,
+    suggest: (term) => `/search/suggest?q=${term}`,
+  },
 };

@@ -41,7 +41,7 @@ export default class ShopInfo extends Vue {
     createRequest('GET', endpoints.favourites.addBrand(this.shop.id))
       .then(() => {
         this.$root.$emit('show-toast', {
-          message: 'Бренд добавлен из избранное'
+          message: 'Бренд добавлен из избранное',
         });
         this.updateFavourites();
       });
@@ -51,7 +51,7 @@ export default class ShopInfo extends Vue {
     createRequest('GET', endpoints.favourites.deleteBrand(this.shop.id))
       .then(() => {
         this.$root.$emit('show-toast', {
-          message: 'Бренд удален из избранного'
+          message: 'Бренд удален из избранного',
         });
         this.updateFavourites();
       });

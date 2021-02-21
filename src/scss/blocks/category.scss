@@ -1,4 +1,7 @@
 .category {
+  .page__aside {
+    position: relative;
+  }
 
   &__inner {
     background: white;
@@ -127,4 +130,10 @@
     }
   }
 
+  &__filters {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+  }
 }

@@ -166,9 +166,15 @@ export interface ProfileCounts {
 }
 
 export interface IShareData {
-  image: string,
-  link: string,
-  groupPrice: number,
-  productName: string,
-  leftUsers: number
+  image: string;
+  link: string;
+  groupPrice: number;
+  productName: string;
+  leftUsers: number;
+}
+
+export interface ISearchSuggest {
+  brands: SearchItem[];
+  categories: SearchItem[];
+  products: SearchItem[];
 }

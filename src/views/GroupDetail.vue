@@ -24,7 +24,6 @@
     ConfirmationModal(ref="confirmationModal" :maxWidth="500" @confirm="leaveConfirm" cancelText="Остаться" confirmText="Выйти" :text="confirmModalText")
 </template>
 
-
 Описание:
 
 Кнопки:  и Остаться
@@ -87,9 +86,9 @@ export default class GroupDetail extends Vue {
 
   get confirmModalText(): string {
     if (!this.product) {
-      return ''
+      return '';
     }
-    return `Не стоит упускать возможность сэкономить ${this.product.selfPrice - this.product.groupPrice} ₽.<br>Если решите покинуть группу, мы вернём деньги в течение 14 дней.`
+    return `Не стоит упускать возможность сэкономить ${this.product.selfPrice - this.product.groupPrice} ₽.<br>Если решите покинуть группу, мы вернём деньги в течение 14 дней.`;
   }
 
   get isMobile() {
@@ -109,7 +108,7 @@ export default class GroupDetail extends Vue {
   get order(): Product | null | undefined {
     const data: OrderData | null = this.orderData;
     const orderInfo = data && data.orderInfo;
-    return orderInfo && orderInfo.orderItems && orderInfo.orderItems[0].product;;
+    return orderInfo && orderInfo.orderItems && orderInfo.orderItems[0].product;
   }
 
   get orderOptions(): OrderPaymentOption[] | undefined | null {
@@ -176,7 +175,6 @@ export default class GroupDetail extends Vue {
       router.push({ path: '/' });
     });
   }
-
 }
 </script>
 

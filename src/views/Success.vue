@@ -60,14 +60,14 @@ export default class Success extends Vue {
     const product: Product = this.product as Product;
     const group: Group = this.group as Group;
     if (!product && !this.group) {
-      return []
+      return [];
     }
     const shareData: IShareData = {
       link: product.short_link,
       groupPrice: product.groupPrice,
       productName: product.title,
       image: product.images.preview,
-      leftUsers: group.allUsers - group.joinedUsers.length
+      leftUsers: group.allUsers - group.joinedUsers.length,
     };
     return product ? createSharingLinks(shareData) : [];
   }

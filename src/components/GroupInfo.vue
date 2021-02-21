@@ -40,13 +40,13 @@ export default class GroupInfo extends Vue {
 
   get socials() {
     const product: Product = this.product as Product;
-    const group = this.group;
+    const { group } = this;
     const shareData: IShareData = {
       link: product.short_link,
       groupPrice: product.groupPrice,
       productName: product.title,
       image: product.images.preview,
-      leftUsers: group.allUsers - group.joinedUsers.length
+      leftUsers: group.allUsers - group.joinedUsers.length,
     };
     return product ? createSharingLinks(shareData) : [];
   }
@@ -64,7 +64,7 @@ export default class GroupInfo extends Vue {
   }
 
   handleLeaveGroup() {
-    this.$emit('leave')
+    this.$emit('leave');
   }
 }
 </script>

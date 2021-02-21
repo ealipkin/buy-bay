@@ -1,10 +1,18 @@
 import {
-  BigSliderItem, CardItem, ProfileCounts, ProfileUser, SeoBlock, UserAddressItem,
+  BigSliderItem,
+  BreadcrumbLink,
+  CardItem,
+  ISearchSuggest,
+  ProfileCounts,
+  ProfileUser,
+  SeoBlock,
+  UserAddressItem,
 } from '@/models/models';
 import {
   BrandItem, Order, OrderData, Product, ProductShop,
 } from '@/models/order';
 import { PAY_STATUSES } from '@/models/enums';
+import { IFilter, IFilterItem } from '@/models/filters';
 
 export interface PaginationInfo {
   count: number;
@@ -158,5 +166,36 @@ export interface OrderAddAddressResponse {
     data: Order;
     message: string;
     success: boolean;
+  };
+}
+
+export interface CatalogPage {
+  link: string;
+  title: string;
+  breadcrumbs: BreadcrumbLink[];
+  products: {
+    data: Product[]; paginationInfo: PaginationInfo;
+  };
+  recommended: Product[];
+  seo_block: SeoBlock;
+  filters: IFilter[];
+  // filters block
+  brands: IFilterItem[];
+  delivery: IFilterItem[];
+  sale: IFilterItem[];
+  options: any[];
+  categoryList: any[];
+  topBrand: any[];
+}
+
+export interface CatalogResponse {
+  data: {
+    data: CatalogPage;
+  };
+}
+
+export interface SearchSuggestResponse {
+  data: {
+    data: ISearchSuggest;
   };
 }

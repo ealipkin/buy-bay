@@ -14,24 +14,47 @@
               .input-search
                 .input-search__icon
                   include ../assets/icons/search.svg
-                input(type="search" @input="handleSearch" placeholder="Поиск").category-filter__search-field.input-search__field
+                input(type="search" v-on:input="$emit('input', {value: $event.target.value, filter, index})" placeholder="Поиск").category-filter__search-field.input-search__field
 
             div(v-if="filter.type === 'checkbox'").category-filter__block.category-filter__block--checkbox
-              Checkbox(v-for="(item, i) in filter.items" :key="i" :checked="item.selected" :value="item.value" :name="item.label" :label="item.label" :count="item.count")
+              Checkbox(
+                v-for="(item, i) in filteredItems(filter)"
+                :key="i"
+                :checked="item.selected"
+                :value="item.value"
+                :name="item.label"
+                :label="item.label"
+                :count="item.count"
+              )
+              span(v-if="!filteredItems(filter).length").category-filter__empty Ничего не найдено
 
+            // accordion
             div(v-if="filter.type === 'accordion'").category-filter__block.category-filter__block--accordion
               .accordion.category-filter__accordion
-                div(v-for="(accordion, index) in filter.items").accordion__item
+                div(
+                  v-for="(accordion, index) in filteredItems(filter)"
+                ).accordion__item
                   div(@click="toggleAccordion(accordion, index, filter)" :class="{'accordion__header--open': accordion.isOpen}").accordion__header {{accordion.label}}
                     span.accordion__icon
                   div(:class="{'accordion__content--open': accordion.isOpen}").accordion__content.category-filter__accordion-items
                     button(v-for="item in accordion.items" type="button").category-filter__accordion-item {{item.label}}
+                span(v-if="!filteredItems(filter).length").category-filter__empty Ничего не найдено
 
+            // color
             div(v-if="filter.type === 'color'").category-filter__block.category-filter__block--color
               ColorSelect(:colors="filter.items").category-filter__colors
 
+            //radio
             div(v-if="filter.type === 'radio'").category-filter__block.category-filter__block--radio
-              Radio(v-for="(item, i) in filter.items" :key="i" :checked="item.selected" :value="item.value" :name="filter.name" :label="item.label")
+              Radio(
+                v-for="(item, i) in filteredItems(filter)"
+                :key="i"
+                :checked="item.selected"
+                :value="item.value"
+                :name="filter.name"
+                :label="item.label"
+              )
+              span(v-if="!filteredItems(filter).length").category-filter__empty Ничего не найдено
 
         button(type="button" @click="handleSubmit").button.category-filter__submit Применить
 
@@ -42,6 +65,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import ColorSelect from '@/components/ColorSelect.vue';
 import Checkbox from '@/components/Checkbox.vue';
 import Radio from '@/components/Radio.vue';
+import { IFilter, IFilterItem } from '@/models/filters';
 
 @Component({
   components: { Radio, Checkbox, ColorSelect },
@@ -51,8 +75,15 @@ export default class CategoryFilter extends Vue {
 
   closed = true;
 
-  handleSearch() {
-    console.log('handleSearch');
+  handleSearch(e) {
+    const { value, filter, index }: { value: string; filter: IFilter; index: number } = e;
+    filter.searchTerm = value && value.length ? value.trim() : null;
+    Vue.set(this.filters, index, { ...filter });
+  }
+
+  filteredItems(filter: IFilter) {
+    const term = filter.searchTerm && filter.searchTerm.toLowerCase().trim();
+    return filter.items.filter((item: IFilterItem) => (term ? item.label.toLowerCase().includes(term) : true));
   }
 
   toggleAccordion(accordion, index, filter) {
@@ -79,6 +110,7 @@ export default class CategoryFilter extends Vue {
 
   mounted() {
     this.filters.forEach((f) => f.isOpen = true);
+    this.$on('input', this.handleSearch.bind(this));
   }
 }
 </script>
@@ -188,7 +220,7 @@ export default class CategoryFilter extends Vue {
       left: 0;
       top: 0;
       z-index: 10;
-      overflow: auto;
+      //overflow: auto;
       border-radius: 8px;
 
       &--open {

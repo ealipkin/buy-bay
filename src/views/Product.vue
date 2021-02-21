@@ -117,7 +117,7 @@ export default class ItemDetail extends Vue {
 
   item: Product | null = null;
 
-  orderDisabled: boolean = true;
+  orderDisabled = true;
 
   window = {
     width: 0,
@@ -133,7 +133,7 @@ export default class ItemDetail extends Vue {
   sliderSettings = PRODUCT_SLIDER_SETTINGS;
 
   setOrderDisabled(state: boolean) {
-    this.orderDisabled = state
+    this.orderDisabled = state;
   }
 
   handleResize() {
@@ -175,9 +175,8 @@ export default class ItemDetail extends Vue {
   }
 
   handleJoinToGroup(group: Group) {
-    (this.$refs.itemInfo as any).sendOrder('group', group)
+    (this.$refs.itemInfo as any).sendOrder('group', group);
   }
-
 }
 </script>
 

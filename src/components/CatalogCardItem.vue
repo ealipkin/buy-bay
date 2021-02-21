@@ -9,7 +9,7 @@
           //:style="{backgroundImage: `url(${promoImage.image})`}"
           // img(:src="item.images.preview")
         ul(v-if="item.features && item.features.length").catalog-card__features
-          template(v-if="item.features.find(item => item.time)")
+          template(v-if="item.features.find(i => i.time)")
             li(
               v-for="feature in item.features"
               v-if="feature.time"
@@ -31,7 +31,7 @@
         .catalog-card__group
           p.catalog-card__group-text {{groups}} {{declOfNum(groups)}}
             span  на покупку
-          Rate(:rate="item.rate").catalog-card__group-rating.rate--small-star
+          Rate(:rate="item.rate" v-if="item.rate").catalog-card__group-rating.rate--small-star
 
         a.catalog-card__title-link
           h3.catalog-card__title {{item.title | truncate(truncateLength)}}

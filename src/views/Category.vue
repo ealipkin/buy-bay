@@ -1,5 +1,5 @@
 <template lang="pug">
-  .category.page
+  .category.page(v-if="init")
     .container.page__breadcrumbs
       Breadcrumbs(:links="breadCrumbs")
     .page__header.container
@@ -17,7 +17,7 @@
 
     section.section.section--seo
       SeoTexts(:texts="seoBlockDescription").container
-
+  Loader(v-else)
 </template>
 
 <script lang="ts">
@@ -33,9 +33,11 @@ import { ADVANTAGES, MENU_CHILD_ITEMS } from '@/utils/constants';
 import CatalogNav from '@/components/CatalogNav.vue';
 import { MenuChildItem } from '@/models/menu';
 import { BreadcrumbLink } from '@/models/models';
+import Loader from '@/components/Loader.vue';
 
 @Component({
   components: {
+    Loader,
     CatalogNav,
     Breadcrumbs,
     Advantages,
@@ -53,6 +55,8 @@ export default class Index extends Vue {
   ];
 
   items = generateProducts(16);
+
+  init = true;
 
   seoBlockDescription = [
     'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',

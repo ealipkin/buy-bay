@@ -18,7 +18,7 @@ import Toasted from '@/components/Toasted.vue';
   components: {
     Footer,
     Header,
-    Toasted
+    Toasted,
   },
 })
 export default class Index extends Vue {
@@ -29,7 +29,7 @@ export default class Index extends Vue {
       if (!type || type === 'success') {
         toast.showSuccess(message);
       }
-    })
+    });
   }
 }
 </script>

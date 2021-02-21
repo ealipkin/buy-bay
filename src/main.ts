@@ -13,6 +13,7 @@ import {
 import Vue from 'vue';
 import { addBasicValidations } from '@/validations';
 import VueAuth from '@websanova/vue-auth/dist/v2/vue-auth.esm';
+import vueDebounce from 'vue-debounce';
 
 import { i18n } from './i18n';
 import vee_ru from './lang/vee_ru.json';
@@ -26,6 +27,10 @@ import store from './store';
 import './scss/style.scss';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import './assets/fonts/opensans.css';
+
+Vue.use(vueDebounce, {
+  listenTo: ['input', 'keyup'],
+});
 
 Vue.use(VueAuth, authConfig);
 

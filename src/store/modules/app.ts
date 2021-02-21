@@ -77,7 +77,7 @@ const actions = {
     commit('app/SET_PROFILE_PAGE', props, { root: true });
   },
   async setSelectedShop({ commit, state }, props) {
-    commit('app/SET_SELECTED_SHOP', props);
+    commit('app/SET_SELECTED_SHOP', props, { root: true });
   },
   async setUserAuth({ commit, state }, props) {
     commit('app/SET_USER_AUTH', props, { root: true });

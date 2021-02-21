@@ -26,6 +26,7 @@ const LIST_VISIBLE_GROUPS = 3;
 })
 export default class ItemGroups extends Vue {
   @Prop() public groups!: Group[];
+
   @Prop() public disabled!: boolean;
 
   showMobile = false;
@@ -73,7 +74,7 @@ export default class ItemGroups extends Vue {
   };
 
   handleJoin(group: Group) {
-    this.$emit('join', group)
+    this.$emit('join', group);
   }
 }
 
