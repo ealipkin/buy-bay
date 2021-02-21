@@ -1,7 +1,7 @@
 <template lang="pug">
   .brands-item
     router-link(:to="{ path: brand.link }").brands-item__header
-      div(v-if="brand.image").brands-item__logo(:style="{backgroundImage: `url(${brand.image})`}")
+      div(v-if="brand.image" :style="{backgroundImage: `url(${brand.image})`}").brands-item__logo
       .brands-item__header-inner
         h3.brands-item__title {{brand.brand}}
         p.brands-item__category {{brand.category}}
