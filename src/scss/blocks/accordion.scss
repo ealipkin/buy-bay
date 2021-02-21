@@ -1,4 +1,3 @@
-
 .accordion {
   &__header {
     font-size: 14px;
@@ -7,6 +6,7 @@
     padding: 13px 24px 17px;
     border-bottom: 1px solid #ededed;
     cursor: pointer;
+    text-align: left;
   }
 
   &__item:last-child &__header {
@@ -19,6 +19,11 @@
     &--open {
       display: block;
     }
+  }
+
+  &__header-button {
+    @include clearButton;
+    text-align: left;
   }
 
   &__icon {

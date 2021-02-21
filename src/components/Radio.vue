@@ -10,6 +10,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Radio extends Vue {
+  @Prop() public item!: any;
+
   @Prop() public checked!: boolean;
 
   @Prop() public value!: string;
@@ -20,7 +22,7 @@ export default class Radio extends Vue {
 
   handleChange(event) {
     const isChecked: boolean = event.currentTarget.checked;
-    this.$emit('change', isChecked);
+    this.$emit('change', { checked: isChecked, item: this.item });
   }
 }
 </script>
@@ -53,6 +55,7 @@ export default class Radio extends Vue {
     &__input:checked + &__icon {
       border: 6px solid $blue;
     }
+
     &--style--2 {
 
       .radio__input:checked ~ .radio__icon {
@@ -64,6 +67,7 @@ export default class Radio extends Vue {
         }
       }
     }
+
     &--style--2 & {
       &__icon {
         padding: 0;

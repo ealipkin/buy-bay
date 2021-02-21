@@ -1,71 +1,85 @@
 <template lang="pug">
-  .category-filter
-    button(type="button" @click="handleOpen").category-filter__open
-    div(:class="{'category-filter__inner--open': !closed}").category-filter__inner
-      .category-filter__main-header Фильтр
-        button(type="button" @click="handleClose").close.category-filter__close
+  form(ref="form").category-filter
+    div(v-if="selectedFilters.length").category-filter__top
+      button(type="button" @click="resetFilters").category-filter__reset.link Сбросить
+    .category-filter__wrapper
+      button(type="button" @click="handleOpen").category-filter__open
+      div(:class="{'category-filter__inner--open': !closed}").category-filter__inner
+        .category-filter__main-header Фильтр
+          button(type="button" @click="handleClose").close.category-filter__close
+        .category-filter__content
+          div
+            div(v-for="(filter, index) in filters" v-if="filter.items && filter.items.length").category-filter__section
+              div(@click="toggleHeader(filter, index)" :class="{'category-filter__header--open': filter.isOpen}").category-filter__header {{filter.label}}
 
-      .category-filter__content
-        div(v-for="(filter, index) in filters").category-filter__section
-          div(@click="toggleHeader(filter, index)" :class="{'category-filter__header--open': filter.isOpen}").category-filter__header {{filter.label}}
+              div(:class="{'category-filter__category-wrapper--open': filter.isOpen}").category-filter__category-wrapper
+                div(v-if="filter.isSearch").category-filter__search
+                  .input-search
+                    .input-search__icon
+                      include ../assets/icons/search.svg
+                    input(type="search" v-on:input="this.$emit('input', {value: $event.target.value, filter, index})" placeholder="Поиск").category-filter__search-field.input-search__field
 
-          div(:class="{'category-filter__category-wrapper--open': filter.isOpen}").category-filter__category-wrapper
-            div(v-if="filter.isSearch").category-filter__search
-              .input-search
-                .input-search__icon
-                  include ../assets/icons/search.svg
-                input(type="search" v-on:input="$emit('input', {value: $event.target.value, filter, index})" placeholder="Поиск").category-filter__search-field.input-search__field
+                div(v-if="filter.type === 'checkbox'").category-filter__block.category-filter__block--checkbox
+                  Checkbox(
+                    v-for="(item, i) in filteredItems(filter)"
+                    :key="i"
+                    :item="{...item, query: filter.query}"
+                    :checked="item.selected"
+                    :value="item.value"
+                    :name="filter.query"
+                    :label="item.label"
+                    :count="item.count"
+                    @change="handleFilterChange"
+                  )
+                  span(v-if="!filteredItems(filter).length").category-filter__empty Ничего не найдено
 
-            div(v-if="filter.type === 'checkbox'").category-filter__block.category-filter__block--checkbox
-              Checkbox(
-                v-for="(item, i) in filteredItems(filter)"
-                :key="i"
-                :checked="item.selected"
-                :value="item.value"
-                :name="item.label"
-                :label="item.label"
-                :count="item.count"
-              )
-              span(v-if="!filteredItems(filter).length").category-filter__empty Ничего не найдено
+                // accordion
+                div(v-if="filter.type === 'accordion'").category-filter__block.category-filter__block--accordion
+                  .accordion.category-filter__accordion
+                    div(
+                      v-for="(accordion, index) in filteredItems(filter)"
+                    ).accordion__item
+                      div(@click="toggleAccordion(accordion, index, filter)" :class="{'accordion__header--open': accordion.expand}").accordion__header
+                        button(type="button").accordion__header-button {{accordion.label}}
+                        span.accordion__icon
+                      div(:class="{'accordion__content--open': accordion.expand}").accordion__content.category-filter__accordion-items
+                        button(
+                          v-for="item in accordion.items"
+                          type="button"
+                          :class="{'category-filter__accordion-item--active': item.href === $route.path}"
+                          @click="accordionItemClick(item)"
+                        ).category-filter__accordion-item {{item.label}}
+                    span(v-if="!filteredItems(filter).length").category-filter__empty Ничего не найдено
 
-            // accordion
-            div(v-if="filter.type === 'accordion'").category-filter__block.category-filter__block--accordion
-              .accordion.category-filter__accordion
-                div(
-                  v-for="(accordion, index) in filteredItems(filter)"
-                ).accordion__item
-                  div(@click="toggleAccordion(accordion, index, filter)" :class="{'accordion__header--open': accordion.isOpen}").accordion__header {{accordion.label}}
-                    span.accordion__icon
-                  div(:class="{'accordion__content--open': accordion.isOpen}").accordion__content.category-filter__accordion-items
-                    button(v-for="item in accordion.items" type="button").category-filter__accordion-item {{item.label}}
-                span(v-if="!filteredItems(filter).length").category-filter__empty Ничего не найдено
+                // color
+                div(v-if="filter.type === 'color'").category-filter__block.category-filter__block--color
+                  ColorSelect(:colors="filter.items").category-filter__colors
 
-            // color
-            div(v-if="filter.type === 'color'").category-filter__block.category-filter__block--color
-              ColorSelect(:colors="filter.items").category-filter__colors
+                //radio
+                div(v-if="filter.type === 'radio'").category-filter__block.category-filter__block--radio
+                  Radio(
+                    v-for="(item, i) in filteredItems(filter)"
+                    :key="i"
+                    :item="{...item, query: filter.query}"
+                    :checked="item.selected"
+                    :value="item.value"
+                    :name="filter.query"
+                    :label="item.label"
+                    @change="handleFilterChange"
+                  )
+                  span(v-if="!filteredItems(filter).length").category-filter__empty Ничего не найдено
 
-            //radio
-            div(v-if="filter.type === 'radio'").category-filter__block.category-filter__block--radio
-              Radio(
-                v-for="(item, i) in filteredItems(filter)"
-                :key="i"
-                :checked="item.selected"
-                :value="item.value"
-                :name="filter.name"
-                :label="item.label"
-              )
-              span(v-if="!filteredItems(filter).length").category-filter__empty Ничего не найдено
-
-        button(type="button" @click="handleSubmit").button.category-filter__submit Применить
+          button(type="button" @click="handleSubmit").button.category-filter__submit Применить
 
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, } from 'vue-property-decorator';
 import ColorSelect from '@/components/ColorSelect.vue';
 import Checkbox from '@/components/Checkbox.vue';
 import Radio from '@/components/Radio.vue';
 import { IFilter, IFilterItem } from '@/models/filters';
+import { debounce } from 'vue-debounce';
 
 @Component({
   components: { Radio, Checkbox, ColorSelect },
@@ -74,6 +88,8 @@ export default class CategoryFilter extends Vue {
   @Prop() public filters!: any[];
 
   closed = true;
+
+  selectedFilters: any = [];
 
   handleSearch(e) {
     const { value, filter, index }: { value: string; filter: IFilter; index: number } = e;
@@ -87,7 +103,7 @@ export default class CategoryFilter extends Vue {
   }
 
   toggleAccordion(accordion, index, filter) {
-    accordion.isOpen = !accordion.isOpen;
+    accordion.expand = !accordion.expand;
     Vue.set(filter.items, index, accordion);
   }
 
@@ -111,6 +127,41 @@ export default class CategoryFilter extends Vue {
   mounted() {
     this.filters.forEach((f) => f.isOpen = true);
     this.$on('input', this.handleSearch.bind(this));
+    this.$on('filterChange', debounce(this.filterChange.bind(this), 1000));
+  }
+
+  handleFilterChange(filterItem: { checked: boolean; item: IFilterItem }) {
+    if (filterItem.checked) {
+      this.selectedFilters.push(filterItem.item);
+    } else {
+      const selectedIndex = this.selectedFilters.findIndex((sItem) => sItem.id === filterItem.item.id);
+      if (selectedIndex !== 1) {
+        this.selectedFilters.splice((selectedIndex as number), 1);
+      }
+    }
+    this.$emit('filterChange');
+  }
+
+  filterChange() {
+    const { form } = this.$refs;
+    const formData = new FormData(form as any);
+    const filter = {};
+    /* eslint-disable-next-line */
+    for (const key of formData.keys()) {
+      filter[key] = formData.getAll(key);
+    }
+    this.$emit('change', filter);
+  }
+
+  resetFilters() {
+    const { form } = this.$refs;
+    (form as any).reset();
+    this.$emit('change', {});
+    this.selectedFilters = [];
+  }
+
+  accordionItemClick(item: IFilterItem) {
+    this.$emit('categoryChange', item);
   }
 }
 </script>
@@ -130,9 +181,16 @@ export default class CategoryFilter extends Vue {
 
 <style scoped lang="scss">
   .category-filter {
-    border-radius: 8px;
-    box-shadow: 0 2px 14px 0 #1e27330c;
-    background-color: #ffffff;
+
+    &__reset {
+      @include clearButton;
+    }
+
+    &__wrapper {
+      border-radius: 8px;
+      box-shadow: 0 2px 14px 0 #1e27330c;
+      background-color: #ffffff;
+    }
 
     &__section {
       border-bottom: 1px solid #ededed;
@@ -290,6 +348,10 @@ export default class CategoryFilter extends Vue {
       }
     }
 
+    &__section:last-child &__block {
+      margin-bottom: 0;
+    }
+
     &__accordion-item {
       @include clearButton();
       cursor: pointer;
@@ -303,6 +365,7 @@ export default class CategoryFilter extends Vue {
       border-bottom: 1px solid #ededed;
       align-items: center;
       padding: 15px 0 16px 40px;
+      text-align: left;
 
       &:before {
         content: '';
@@ -313,6 +376,11 @@ export default class CategoryFilter extends Vue {
         border-radius: 6px;
         background-color: #496cff;
         margin-right: 12px;
+      }
+
+      &--active {
+        cursor: default;
+        opacity: 0.7;
       }
     }
 
@@ -336,6 +404,11 @@ export default class CategoryFilter extends Vue {
       @include laptop() {
         padding: 0;
       }
+    }
+
+    &__top {
+      margin-bottom: 10px;
+      text-align: right;
     }
 
   }

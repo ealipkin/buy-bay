@@ -11,6 +11,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
 export default class Checkbox extends Vue {
+  @Prop() public item!: any;
+
   @Prop() public checked!: boolean;
 
   @Prop() public value!: string;
@@ -23,7 +25,7 @@ export default class Checkbox extends Vue {
 
   handleChange(event) {
     const isChecked: boolean = event.currentTarget.checked;
-    this.$emit('change', isChecked);
+    this.$emit('change', { checked: isChecked, item: this.item });
   }
 }
 </script>

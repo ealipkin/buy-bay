@@ -1,46 +1,54 @@
 <template lang="pug">
   .category.page.catalog(v-if="pageLoaded")
-    .container.page__breadcrumbs
-      Breadcrumbs(:links="breadCrumbs")
-    .catalog__wrapper
-      .page__header.container
-        .page__title {{pageTitle}}
-        .category__sort
-          SortSelect(:options="selectOptions" @change="sortChange")
-      .container.category__inner
-        .page__layout
-          .page__aside
-            .filters-wrapper
-              CategoryFilter(:filters="filters").category__filters
-          .category__items.page__content
-            .category__list
-              .category__item(v-for="(item, index) in products" :key="index")
-                CatalogCardItem(:item="item")
-            .category__pagination
-              Pagination(:paginationInfo="pagination" kindText="товаров" @page="pageChange" @more="showMore")
-          Loader(v-if="productsPending")
-    Advantages(:advantagesList="advantagesList").category__advantages
+    template
+      .container.page__breadcrumbs
+        Breadcrumbs(:links="breadCrumbs")
+      .catalog__wrapper
+        .page__header.container
+          .page__title {{pageTitle}}
+          .category__sort
+            SortSelect(:options="selectOptions" @change="sortChange")
+        .container.category__inner
+          .page__layout
+            .page__aside
+              .filters-wrapper
+                CategoryFilter(:filters="filters" @change="selectFilter" @categoryChange="categoryChange").category__filters
+            .page__content
+              div(v-if="hasResults").category__items
+                .category__list
+                  .category__item(v-for="(item, index) in products" :key="index")
+                    CatalogCardItem(:item="item")
+                .category__pagination
+                  Pagination(:paginationInfo="pagination" kindText="товаров" @page="pageChange" @more="showMore")
+              div(v-else)
+                .search-empty
+                  .search-empty__icon
+                    include ../assets/icons/search-big.svg
+                  .search-empty__title Ничего не удалось найти
+                  .search-empty__text Попробуте изменить запрос
+              Loader(v-if="productsPending")
+      Advantages(:advantagesList="advantagesList").category__advantages
 
-    .section.category__similar-slider
-      .section__container
-        .section-header
-          .section-title Пользователи рекомендуют
-        SimilarSlider(:items="recommended" v-if="recommended")
+      div(v-if="recommended").section.category__similar-slider
+        .section__container
+          .section-header
+            .section-title Пользователи рекомендуют
+          SimilarSlider(:items="recommended")
 
-    section.section.section--brands
-      .section__container
-        .section-header
-          .section-title Лучшие бренды
-          router-link(to="#").section-link Показать еще
-        Brands(:brands="brands")
+      section(v-if='brands').section.section--brands
+        .section__container
+          .section-header
+            .section-title Лучшие бренды
+            router-link(to="#").section-link Показать еще
+          Brands(:brands="brands")
 
-    section.section.section--seo
-      SeoTexts(:block="seoBlock").container
+      section.section.section--seo
+        SeoTexts(:block="seoBlock").container
   Loader(v-else)
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Brands from '@/components/Brands.vue';
@@ -60,9 +68,12 @@ import { createRequest } from '@/services/http.service';
 import { DEFAULT_PAGINATE_PAGE, endpoints } from '@/config';
 import { CatalogPage, CatalogResponse, PaginationInfo } from '@/models/responses';
 import { BrandItem, Product } from '@/models/order';
-import { IFilter } from '@/models/filters';
+import { IFilter, IFilterItem } from '@/models/filters';
 import { SORT_PARAMS } from '@/models/enums';
-import { paramsObjToString } from '@/utils/filters';
+import {
+  addParamsToLocation, paramsObjToString, parseQuery, setActiveFilters,
+} from '@/utils/filters';
+import router from '@/router';
 
 const SORT_OPTIONS = [
   {
@@ -109,6 +120,13 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
   },
 })
 export default class Index extends Vue {
+  @Watch('$route') routeChange() {
+    this.pageLoaded = false;
+    this.loadProducts(true);
+  }
+
+  filter = {}
+
   pageLoaded = false;
 
   productsPending = false;
@@ -122,6 +140,10 @@ export default class Index extends Vue {
   advantagesList = ADVANTAGES;
 
   catalogPage: CatalogPage | null = null
+
+  get hasResults(): boolean | null {
+    return this.catalogPage && this.catalogPage.products && Boolean(this.catalogPage.products.data.length);
+  }
 
   get breadCrumbs(): BreadcrumbLink[] | null {
     return this.catalogPage && this.catalogPage.breadcrumbs;
@@ -160,16 +182,17 @@ export default class Index extends Vue {
   }
 
   loadProducts(isInit?) {
+    const selectedFilters = parseQuery(this.$route.query);
     this.loadProductsRequest()
       .then((res: CatalogResponse) => {
         if (res && res.data) {
           const catalog = res.data.data;
           if (isInit) {
+            setActiveFilters(catalog.filters, selectedFilters);
             this.catalogPage = catalog;
           } else if (this.catalogPage) {
             this.catalogPage.products = catalog.products;
           }
-          console.log(this.catalogPage);
           this.pageLoaded = true;
           this.productsPending = false;
         }
@@ -178,13 +201,18 @@ export default class Index extends Vue {
 
   async loadProductsRequest(): Promise<CatalogResponse> {
     const categoryId = this.$route.params.id;
-    const params = {
+    const params = this.collectQueryParams();
+    const url = endpoints.category(categoryId, params);
+    return createRequest('GET', url);
+  }
+
+  collectQueryParams() {
+    const pageParams = paramsObjToString({
       page: this.page,
       sort: this.sort,
-    };
-    const pageParams = paramsObjToString(params);
-    const url = endpoints.category(categoryId, pageParams);
-    return createRequest('GET', url);
+    });
+    const filtersParams = paramsObjToString(this.filter);
+    return `${pageParams}${filtersParams}`;
   }
 
   sortChange(sort: { label: string; value: SORT_PARAMS }) {
@@ -217,6 +245,21 @@ export default class Index extends Vue {
           }
         }
       });
+  }
+
+  selectFilter(filter: { [key: string]: string }) {
+    this.filter = filter;
+    const filterParams = paramsObjToString(filter);
+    addParamsToLocation(this.$route, filterParams);
+    this.productsPending = true;
+    this.loadProducts();
+  }
+
+  categoryChange(item: IFilterItem) {
+    if (item.href !== this.$route.path) {
+      const params = this.collectQueryParams();
+      router.push({ path: `${item.href}?${params}` });
+    }
   }
 }
 </script>

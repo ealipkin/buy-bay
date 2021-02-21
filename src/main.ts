@@ -29,7 +29,7 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import './assets/fonts/opensans.css';
 
 Vue.use(vueDebounce, {
-  listenTo: ['input', 'keyup'],
+  listenTo: ['input', 'keyup', 'change'],
 });
 
 Vue.use(VueAuth, authConfig);

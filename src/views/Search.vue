@@ -13,11 +13,11 @@
             CategoryFilter(:filters="filters").category__filters
           .page__content
             div(v-if="searchResults && searchResults.length").search__items
-            div(v-else).search__empty
-              .search__empty-icon
+            div(v-else).search-empty
+              .search-empty__icon
                 include ../assets/icons/search-big.svg
-              .search__empty-title Ничего не удалось найти
-              .search__empty-text Попробуте изменить запрос
+              .search-empty__title Ничего не удалось найти
+              .search-empty__text Попробуте изменить запрос
 
     section.search__section
       .section-header.section-header--offset-2
@@ -191,47 +191,6 @@ export default class Index extends Vue {
       @include laptop() {
         background: transparent;
         margin-bottom: 50px;
-      }
-    }
-
-    &__empty {
-      padding-bottom: 77px;
-      background: white;
-      border-radius: 6px;
-
-      @include laptop() {
-        padding-top: 58px;
-        padding-bottom: 114px;
-      }
-
-      &-icon {
-        margin: 0 auto;
-        margin-top: 7px;
-        width: 80px;
-      }
-
-      &-title {
-        font-size: 16px;
-        font-weight: bold;
-        color: #222222;
-        margin-top: 42px;
-        text-align: center;
-
-        @include laptop() {
-          font-size: 18px;
-          margin-top: 27px;
-        }
-      }
-
-      &-text {
-        margin-top: 14px;
-        font-size: 12px;
-        text-align: center;
-        color: #7b8197;
-
-        @include laptop() {
-          font-size: 14px;
-        }
       }
     }
   }

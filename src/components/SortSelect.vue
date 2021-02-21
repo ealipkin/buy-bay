@@ -26,8 +26,10 @@ export default class SortSelect extends Vue {
   .sort-select {
     display: flex;
     align-items: center;
+    flex-wrap: nowrap;
 
     &__title {
+      white-space: nowrap;
       font-size: 14px;
       color: #7b8197;
       margin-right: 16px;

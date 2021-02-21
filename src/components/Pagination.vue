@@ -1,5 +1,5 @@
 <template lang="pug">
-  .pagination
+  div(v-if="paginationInfo.lastPage > 1").pagination
     button(type="button" @click="showMore" :disabled="paginationInfo ? paginationInfo.lastPage === currentPage : false").button.pagination__show-more Показать еще {{moreCountNumber}} {{kindText || 'товаров'}}
     paginate(
       v-model="currentPage"

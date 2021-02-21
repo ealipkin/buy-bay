@@ -1,0 +1,40 @@
+.search-empty {
+  padding-bottom: 77px;
+  background: white;
+  border-radius: 6px;
+
+  @include laptop() {
+    padding-top: 58px;
+    padding-bottom: 114px;
+  }
+
+  &__icon {
+    margin: 0 auto;
+    margin-top: 7px;
+    width: 80px;
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #222222;
+    margin-top: 42px;
+    text-align: center;
+
+    @include laptop() {
+      font-size: 18px;
+      margin-top: 27px;
+    }
+  }
+
+  &__text {
+    margin-top: 14px;
+    font-size: 12px;
+    text-align: center;
+    color: #7b8197;
+
+    @include laptop() {
+      font-size: 14px;
+    }
+  }
+}
