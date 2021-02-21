@@ -50,7 +50,7 @@
                 span.header__user-avatar
                   img(v-if="user.image" :src="user.image")
                   span.profile-smile(v-else)
-                    span {{getSmile()}}
+                    span {{user.emoji || getSmile()}}
 
                 span.header__user-name {{user.name || 'Профиль'}}
             .popper.header__dropdown

@@ -105,6 +105,7 @@ export interface ProfileUser {
   patronymic?: string;
   image: string;
   email?: string;
+  emoji?: string;
   sex?: {
     label: string;
     value: SEX_TYPES;

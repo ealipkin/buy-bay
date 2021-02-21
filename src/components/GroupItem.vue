@@ -4,7 +4,7 @@
       img(:src="creator.image")
     div(v-else).group-item__avatar.avatar
       span.profile-smile
-        span {{getSmile()}}
+        span {{creator.emoji || getSmile()}}
     .group-item__middle
       .group-item__title {{ creator.name | truncate(28)}}
       .group-item__info

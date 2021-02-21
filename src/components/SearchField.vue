@@ -176,7 +176,7 @@ export default class SearchField extends Vue {
   }
 
   removeActive(listElements) {
-    Array.from(listElements).forEach((el) => {
+    Array.from(listElements).forEach((el: any) => {
       el.classList.remove('autocomplete-active');
     });
   }

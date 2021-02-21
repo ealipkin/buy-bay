@@ -148,6 +148,7 @@ export interface GroupUser {
   group_id: number;
   id: number;
   image: string;
+  emoji?: string;
   is_creator: number;
   name: string;
   updated_at: string;
