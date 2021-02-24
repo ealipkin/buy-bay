@@ -78,8 +78,12 @@ export default class CatalogMenu extends Vue {
 
   mounted() {
     this.header = document.querySelector('.header');
-    this.headerHeight = this.header.offsetHeight;
     [this.childMenu] = this.links;
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.headerHeight = this.header.offsetHeight;
+      }, 500);
+    })
     window.addEventListener('resize', () => {
       this.headerHeight = this.header.offsetHeight;
     });

@@ -17,7 +17,7 @@
                   .input-search
                     .input-search__icon
                       include ../assets/icons/search.svg
-                    input(type="search" v-on:input="this.$emit('input', {value: $event.target.value, filter, index})" placeholder="Поиск").category-filter__search-field.input-search__field
+                    input(type="search" v-on:input="$emit('input', {value: $event.target.value, filter, index})" placeholder="Поиск").category-filter__search-field.input-search__field
 
                 div(v-if="filter.type === 'checkbox'").category-filter__block.category-filter__block--checkbox
                   Checkbox(

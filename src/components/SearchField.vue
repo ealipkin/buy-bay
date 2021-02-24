@@ -32,8 +32,8 @@ const MIN_SEARCH_LENGTH = 3;
 export default class SearchField extends Vue {
   @Watch('$route') routeChange() {
     this.isFocused = false;
-    this.search = '';
-    this.lastSearch = '';
+    // this.search = '';
+    // this.lastSearch = '';
   }
 
   get searchValid() {
@@ -73,9 +73,13 @@ export default class SearchField extends Vue {
     }
   }
 
-  searchSubmit(event) {
-    event.preventDefault();
-    if (this.search && this.search.length) {
+  searchSubmit(event?) {
+    if (event) {
+      event.preventDefault();
+    }
+    const currentQuery: string | null = this.$route.query && (this.$route.query.q as string);
+    const isEqual = currentQuery && currentQuery.toLowerCase().trim() === this.search.toLowerCase().trim();
+    if (this.search && this.search.length && !isEqual) {
       router.push({ path: '/search', query: { q: this.search } });
     }
     (this.$refs.input as any).blur();
@@ -127,6 +131,9 @@ export default class SearchField extends Vue {
     let items;
     if (list) {
       items = list.querySelectorAll('.search-suggest__item-wrapper .search-suggest__inner-item');
+    }
+    if (e.keyCode === 13) {
+      this.searchSubmit()
     }
     if (e.keyCode === 40) {
       this.currentFocus += 1;

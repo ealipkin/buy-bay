@@ -1,9 +1,9 @@
 <template lang="pug">
-  .notifications
+  div(v-if="unreadNotifications.length || readNotifications.length").notifications
     .notifications__header Уведомления
     .notifications__inner
-      ul(v-if="newNotifications && newNotifications.length").notifications__list
-        li(v-for="item in newNotifications").notifications__item
+      ul(v-if="unreadNotifications && unreadNotifications.length").notifications__list
+        li(v-for="item in unreadNotifications").notifications__item
           span.notifications__icon
             template(v-if="item.type === NOTIFICATIONS_TYPES.MESSAGE")
               include ../assets/icons/mail.svg
@@ -16,7 +16,7 @@
             span.notifications__text {{item.text}}
       template(v-if="readNotifications && readNotifications.length")
         .notifications__divider прочитанные уведомления
-      ul.notifications__list
+      ul(v-if="readNotifications && readNotifications.length").notifications__list
         li(v-for="item in readNotifications").notifications__item
           span.notifications__icon
             template(v-if="item.type === NOTIFICATIONS_TYPES.MESSAGE")
@@ -38,18 +38,10 @@ import { NotificationItem } from '@/models/models';
 
 @Component
 export default class Notifications extends Vue {
-  @Prop() public notifications!: NotificationItem[];
+  @Prop() public readNotifications!: NotificationItem[];
+  @Prop() public unreadNotifications!: NotificationItem[];
 
   NOTIFICATIONS_TYPES = NOTIFICATIONS_TYPES;
-
-  newNotifications: NotificationItem[] = [];
-
-  readNotifications: NotificationItem[] = [];
-
-  mounted() {
-    this.newNotifications = this.notifications.filter((notification: NotificationItem) => !notification.read);
-    this.readNotifications = this.notifications.filter((notification: NotificationItem) => notification.read);
-  }
 }
 </script>
 

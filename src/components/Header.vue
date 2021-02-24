@@ -39,10 +39,10 @@
               button(type="button" slot="reference").notification-button.header__notification-toggle
                 span.notification-button__icon
                   include ../assets/icons/bell.svg
-                  span.notification-button__number 9
+                  span.notification-button__number {{unreadNotifications.length || 0}}
                 p.notification-button__text Уведомления
-              .popper.header__dropdown.header__dropdown--popper
-                Notifications(:notifications="notifications").header__notifications
+              div(v-show="unreadNotifications.length || readNotifications.length").popper.header__dropdown.header__dropdown--popper
+                Notifications(:readNotifications="readNotifications" :unreadNotifications="unreadNotifications").header__notifications
 
           Popper(popper trigger="hover" :options="{placement: 'bottom-end'}" )
             button(type="button" slot="reference").header__user-btn
@@ -74,12 +74,12 @@ import MainNav from '@/components/MainNav.vue';
 import HeaderShopCard from '@/components/HeaderShopCard.vue';
 import LoginModal from '@/components/LoginModal.vue';
 import Notifications from '@/components/Notifications.vue';
-import { NOTIFICATIONS, PROFILE_MENU_ITEMS } from '@/utils/constants';
+import { PROFILE_MENU_ITEMS } from '@/utils/constants';
 import ProfileNav from '@/components/ProfileNav.vue';
 import MobileNav from '@/components/MobileNav.vue';
 import { Action } from 'vuex-class';
 import SearchField from '@/components/SearchField.vue';
-import { NotificationItem, ProfileUser } from '@/models/models';
+import { ProfileUser } from '@/models/models';
 import { BaseMenuItem } from '@/models/menu';
 import { getRandomSmile } from '@/utils/common';
 
@@ -100,6 +100,8 @@ import { getRandomSmile } from '@/utils/common';
       profilePage: 'app/getProfilePage',
       mainMenu: 'app/getMainMenu',
       favouritesCount: 'app/getFavouritesCount',
+      readNotifications: 'app/getReadNotifications',
+      unreadNotifications: 'app/getUnreadNotifications',
     }),
   },
 })
@@ -119,8 +121,6 @@ export default class Header extends Vue {
   selectedShop;
 
   profilePage;
-
-  notifications: NotificationItem[] = NOTIFICATIONS;
 
   profileMenuItems: BaseMenuItem[] = PROFILE_MENU_ITEMS;
 

@@ -77,4 +77,9 @@ export const endpoints = {
     global: (term) => `/search/global?q=${term}`,
     suggest: (term) => `/search/suggest?q=${term}`,
   },
+  notifications: {
+    getRead: '/notification/read',
+    getUnread: '/notification/unread',
+    markAsRead: (id) => `/notification/set_read/${id}`
+  }
 };

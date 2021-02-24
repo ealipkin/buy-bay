@@ -6,7 +6,7 @@
         span(v-else) Профиль
       span(v-if="user.age").user-info__age {{user.age}} {{declOfNum(user.age)}}
     img(v-if="user.image" :src="user.image").user-info__img
-    .user-info__img
+    div(v-else).user-info__img
       span.profile-smile
         span {{getSmile()}}
 
