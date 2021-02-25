@@ -18,6 +18,7 @@ import {
 } from 'vue-property-decorator';
 import { PaginationInfo } from '@/models/responses';
 import { DEFAULT_PAGINATE_PAGE } from '@/config';
+import { addParamsToLocation } from '@/utils/filters';
 
 @Component
 export default class Pagination extends Vue {
@@ -31,6 +32,7 @@ export default class Pagination extends Vue {
   paginationInfoChange(paginationInfo: PaginationInfo) {
     if (paginationInfo) {
       this.currentPage = paginationInfo.currentPage;
+      addParamsToLocation(this.$route, { page: this.currentPage });
     }
   }
 

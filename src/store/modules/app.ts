@@ -12,8 +12,8 @@ interface AppState {
   favouritesCount: number;
   mainMenu: MenuItem[];
   profileCounts: ProfileCounts | null;
-  readNotifications: NotificationItem[] | null,
-  unreadNotifications: NotificationItem[] | null,
+  readNotifications: NotificationItem[] | null;
+  unreadNotifications: NotificationItem[] | null;
 }
 
 const mutationTypes = {
@@ -38,7 +38,7 @@ const getNotifications = async ({ commit }) => {
   const read = readResponse.data.data;
   const unread = unreadResponse.data.data;
   commit(mutationTypes.SET_NOTIFICATIONS, { read, unread });
-}
+};
 
 const updateProfileCounts = async ({ commit }) => createRequest('GET', endpoints.profile.counts)
   .then((res: ProfileCountsResponse) => {
@@ -85,7 +85,7 @@ const mutations = {
   [mutationTypes.SET_PROFILE_COUNTS](state: AppState, payload: ProfileCounts) {
     state.profileCounts = { ...payload };
   },
-  [mutationTypes.SET_NOTIFICATIONS](state: AppState, payload: { read: NotificationItem[], unread: NotificationItem[] }) {
+  [mutationTypes.SET_NOTIFICATIONS](state: AppState, payload: { read: NotificationItem[]; unread: NotificationItem[] }) {
     state.readNotifications = { ...payload.read };
     state.unreadNotifications = { ...payload.unread };
   },

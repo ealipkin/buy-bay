@@ -39,6 +39,7 @@ import { NotificationItem } from '@/models/models';
 @Component
 export default class Notifications extends Vue {
   @Prop() public readNotifications!: NotificationItem[];
+
   @Prop() public unreadNotifications!: NotificationItem[];
 
   NOTIFICATIONS_TYPES = NOTIFICATIONS_TYPES;

@@ -74,12 +74,12 @@ export const endpoints = {
     inactive: ({ page = DEFAULT_PAGINATE_PAGE, sort = '' }: PaginationInfo) => `/profile/groups/inactive?page=${page}&sort=${sort}`,
   },
   search: {
-    global: (term) => `/search/global?q=${term}`,
+    global: (params = '') => `/search/global?${params}`,
     suggest: (term) => `/search/suggest?q=${term}`,
   },
   notifications: {
     getRead: '/notification/read',
     getUnread: '/notification/unread',
-    markAsRead: (id) => `/notification/set_read/${id}`
-  }
+    markAsRead: (id) => `/notification/set_read/${id}`,
+  },
 };

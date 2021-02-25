@@ -1,14 +1,17 @@
 <template lang="pug">
   .sort-select
     .sort-select__title Сортировать по
-    Select(:options="options" @change="handleChange").sort-select__select
+    Select(:options="options" @change="handleChange" v-if="isMounted").sort-select__select
 
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 import Select from '@/components/Select.vue';
 import { SortOption } from '@/models/models';
+import { addParamsToLocation } from '@/utils/filters';
 
 @Component({
   components: { Select },
@@ -16,8 +19,21 @@ import { SortOption } from '@/models/models';
 export default class SortSelect extends Vue {
   @Prop() public options!: SortOption[];
 
-  handleChange(value: SortOption) {
-    this.$emit('change', value);
+  @Prop() public selectedOption!: string;
+
+  isMounted = false;
+
+  handleChange(option: SortOption) {
+    this.$emit('change', option);
+    addParamsToLocation(this.$route, { sort: option.value });
+  }
+
+  mounted() {
+    const selectedOption = this.selectedOption && this.options.find((option: SortOption) => option.value === this.selectedOption);
+    if (selectedOption) {
+      selectedOption.selected = true;
+    }
+    this.isMounted = true;
   }
 }
 </script>

@@ -16,7 +16,7 @@
     div(v-if="similarItems").item-detail__section
       .item-detail__title Похожие товары
       SimilarSlider(:items="similarItems")
-      Pagination(moreCount="50").item-detail__pagination
+      //Pagination(moreCount="50").item-detail__pagination
     SeoTexts(:block="seo").item-detail__seo
   Loader(v-else)
 </template>

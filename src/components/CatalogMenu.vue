@@ -83,7 +83,7 @@ export default class CatalogMenu extends Vue {
       setTimeout(() => {
         this.headerHeight = this.header.offsetHeight;
       }, 500);
-    })
+    });
     window.addEventListener('resize', () => {
       this.headerHeight = this.header.offsetHeight;
     });

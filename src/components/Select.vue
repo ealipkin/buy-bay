@@ -14,6 +14,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import DropdownMenu from '@innologica/vue-dropdown-menu';
+import { SortOption } from '@/models/models';
 
 interface SelectOption {
   label: string;
@@ -41,7 +42,8 @@ export default class Select extends Vue {
   }
 
   mounted() {
-    this.selected = this.options.length && this.options[0];
+    const selectedOption = this.options.find((option: SortOption) => option.selected);
+    this.selected = (this.options.length && selectedOption) || this.options[0];
   }
 }
 </script>

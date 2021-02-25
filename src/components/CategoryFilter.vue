@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import ColorSelect from '@/components/ColorSelect.vue';
 import Checkbox from '@/components/Checkbox.vue';
 import Radio from '@/components/Radio.vue';

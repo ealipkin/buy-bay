@@ -7,7 +7,7 @@
         .page__header.container
           .page__title {{pageTitle}}
           .category__sort
-            SortSelect(:options="selectOptions" @change="sortChange")
+            SortSelect(:options="selectOptions" @change="sortChange" :selectedOption="sort")
         .container.category__inner
           .page__layout
             .page__aside
@@ -35,7 +35,7 @@
             .section-title Пользователи рекомендуют
           SimilarSlider(:items="recommended")
 
-      section(v-if='brands').section.section--brands
+      section(v-if='brands && brands.length').section.section--brands
         .section__container
           .section-header
             .section-title Лучшие бренды
@@ -121,6 +121,7 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 })
 export default class Index extends Vue {
   @Watch('$route') routeChange() {
+    console.log('routeChange');
     this.pageLoaded = false;
     this.loadProducts(true);
   }
@@ -134,6 +135,8 @@ export default class Index extends Vue {
   sort: SORT_PARAMS = DEFAULT_SORT;
 
   page: number = DEFAULT_PAGINATE_PAGE;
+
+  isSearch = false;
 
   selectOptions = SORT_OPTIONS;
 
@@ -150,7 +153,9 @@ export default class Index extends Vue {
   }
 
   get pageTitle(): string | null {
-    return this.catalogPage && this.catalogPage.title;
+    const search: string = (this.$route.query && this.$route.query.q as string) || '';
+    const title: string = (this.catalogPage && this.catalogPage.title) || '';
+    return this.isSearch ? `«${search}»` : title;
   }
 
   get seoBlock(): SeoBlock | null {
@@ -177,18 +182,36 @@ export default class Index extends Vue {
     return this.catalogPage && this.catalogPage.filters;
   }
 
-  mounted() {
+  init() {
+    this.isSearch = this.$route.path === '/search';
+    const selectedFilters = parseQuery(this.$route.query);
+    if (selectedFilters) {
+      if (selectedFilters.sort) {
+        this.sort = String(selectedFilters.sort) as SORT_PARAMS;
+      }
+      if (selectedFilters.page) {
+        this.page = Number(String(selectedFilters.page));
+      }
+    }
     this.loadProducts(true);
   }
 
-  loadProducts(isInit?) {
+  mounted() {
+    this.init();
+  }
+
+  setFiltersFromUrl(catalog: CatalogPage) {
     const selectedFilters = parseQuery(this.$route.query);
+    setActiveFilters(catalog.filters, selectedFilters);
+  }
+
+  loadProducts(isInit?) {
     this.loadProductsRequest()
       .then((res: CatalogResponse) => {
         if (res && res.data) {
           const catalog = res.data.data;
           if (isInit) {
-            setActiveFilters(catalog.filters, selectedFilters);
+            this.setFiltersFromUrl(catalog);
             this.catalogPage = catalog;
           } else if (this.catalogPage) {
             this.catalogPage.products = catalog.products;
@@ -202,7 +225,7 @@ export default class Index extends Vue {
   async loadProductsRequest(): Promise<CatalogResponse> {
     const categoryId = this.$route.params.id;
     const params = this.collectQueryParams();
-    const url = endpoints.category(categoryId, params);
+    const url = this.isSearch ? endpoints.search.global(params) : endpoints.category(categoryId, params);
     return createRequest('GET', url);
   }
 
@@ -212,7 +235,8 @@ export default class Index extends Vue {
       sort: this.sort,
     });
     const filtersParams = paramsObjToString(this.filter);
-    return `${pageParams}${filtersParams}`;
+    const search = this.isSearch ? `q=${this.$route.query.q}&` : '';
+    return `${search}${pageParams}${filtersParams}`;
   }
 
   sortChange(sort: { label: string; value: SORT_PARAMS }) {
@@ -249,8 +273,7 @@ export default class Index extends Vue {
 
   selectFilter(filter: { [key: string]: string }) {
     this.filter = filter;
-    const filterParams = paramsObjToString(filter);
-    addParamsToLocation(this.$route, filterParams);
+    addParamsToLocation(this.$route, filter);
     this.productsPending = true;
     this.loadProducts();
   }

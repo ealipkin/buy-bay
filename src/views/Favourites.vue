@@ -60,6 +60,7 @@ import { SERVER_ERRORS, SORT_PARAMS } from '@/models/enums';
 import { FavBrandsResponse, FavProductsResponse, PaginationInfo } from '@/models/responses';
 import $store from '@/store';
 import { Product, ProductShop } from '@/models/order';
+import { addParamsToLocation, paramsStringToObject } from '@/utils/filters';
 
 const PAGE_TITLE = 'Избранное';
 
@@ -153,7 +154,7 @@ export default class Favourites extends Vue {
 
   loaded = false;
 
-  selectedTab = 'items';
+  selectedTab = CATEGORIES.ITEMS;
 
   productSort: SORT_PARAMS = DEFAULT_SORT;
 
@@ -204,6 +205,7 @@ export default class Favourites extends Vue {
 
   selectTab(tabId) {
     this.selectedTab = tabId;
+    addParamsToLocation(this.$route, { tab: tabId });
   }
 
   async productPageChange(page) {
@@ -229,6 +231,26 @@ export default class Favourites extends Vue {
   }
 
   async mounted() {
+    const parsedParams: { sort?: SORT_PARAMS; page?: string; tab?: string } = paramsStringToObject(window.location.search);
+    if (parsedParams) {
+      if (parsedParams.tab) {
+        this.selectTab(parsedParams.tab);
+      }
+      if (parsedParams.sort) {
+        if (this.selectedTab === CATEGORIES.ITEMS) {
+          this.productSort = parsedParams.sort;
+        } else {
+          this.brandSort = parsedParams.sort;
+        }
+      }
+      if (parsedParams.page) {
+        if (this.selectedTab === CATEGORIES.ITEMS) {
+          this.productPage = Number(parsedParams.page);
+        } else {
+          this.shopPage = Number(parsedParams.page);
+        }
+      }
+    }
     this.loaded = true;
     $store.dispatch('app/updateProfileCounts');
     this.init();

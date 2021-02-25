@@ -24,6 +24,7 @@ import { ISearchSuggest, SearchItem } from '@/models/models';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import { SearchSuggestResponse } from '@/models/responses';
+import { paramsStringToObject } from '@/utils/filters';
 
 const MIN_SEARCH_LENGTH = 3;
 @Component({
@@ -133,7 +134,7 @@ export default class SearchField extends Vue {
       items = list.querySelectorAll('.search-suggest__item-wrapper .search-suggest__inner-item');
     }
     if (e.keyCode === 13) {
-      this.searchSubmit()
+      this.searchSubmit();
     }
     if (e.keyCode === 40) {
       this.currentFocus += 1;
@@ -189,7 +190,8 @@ export default class SearchField extends Vue {
   }
 
   mounted() {
-    this.search = this.$route.query.q as string;
+    const params = paramsStringToObject(window.location.search);
+    this.search = (params && params.q) || '';
     this.input = this.$refs.input;
     clickOutside(this.$el, (e) => {
       const isProfileSearch = e.target.closest('.header-main__profile-search');

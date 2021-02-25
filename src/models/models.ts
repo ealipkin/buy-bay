@@ -158,6 +158,7 @@ export interface SearchSuggestItem {
 export interface SortOption {
   label: string;
   value: any;
+  selected?: boolean;
 }
 
 export interface ProfileCounts {

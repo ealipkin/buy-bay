@@ -38,7 +38,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/search',
     name: 'Search',
-    component: () => import('../views/Search.vue'),
+    component: () => import('../views/Catalog.vue'),
   },
   {
     path: '/product/:id',

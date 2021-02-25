@@ -2,18 +2,29 @@ import { IFilter, IFilterItem } from '@/models/filters';
 
 export const paramsObjToString = (obj) => {
   const entries = Object.entries(obj);
-
   return entries.reduce(
-    (acc, entry) => `${acc}${entry[0]}=${entry[1]}&`, '',
+    (acc, entry, index) => `${acc}${entry[0]}=${entry[1]}${index === entries.length - 1 ? '' : '&'}`, '',
   );
 };
 
-export const addParamsToLocation = ($route, paramsString) => {
+export const paramsStringToObject = (string) => Object.fromEntries(new URLSearchParams(string));
+
+export const addParamsToLocation = ($route, paramsObj: { [key: string]: any }) => {
+  let query = { ...paramsObj };
+  const existingSearch = window.location.search;
+  if (existingSearch && existingSearch.length) {
+    const existedQuery = paramsStringToObject(existingSearch);
+    query = {
+      ...existedQuery,
+      ...paramsObj,
+    };
+  }
+  const filterParams = paramsObjToString(query);
   /* eslint-disable-next-line */
-  history.pushState({}, '', `${$route.path}?${paramsString}`);
+  history.pushState({}, '', `${$route.path}?${filterParams}`);
 };
 
-export const parseQuery = (queryObj) => {
+export const parseQuery = (queryObj): { [key: string]: string[] } => {
   const obj = {};
   /* eslint-disable-next-line */
   for (const key in queryObj) {
