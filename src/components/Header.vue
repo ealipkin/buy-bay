@@ -119,8 +119,9 @@ export default class Header extends Vue {
   body: HTMLBodyElement | null = null;
 
   selectedShop;
-
   profilePage;
+  readNotifications;
+  unreadNotifications;
 
   profileMenuItems: BaseMenuItem[] = PROFILE_MENU_ITEMS;
 
@@ -265,8 +266,9 @@ export default class Header extends Vue {
     }
 
     &__notifications {
-      overflow: hidden;
       border-radius: 8px;
+      max-height: 80vh;
+      overflow: auto;
     }
 
     &__notification-toggle {

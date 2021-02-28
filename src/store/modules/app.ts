@@ -86,8 +86,8 @@ const mutations = {
     state.profileCounts = { ...payload };
   },
   [mutationTypes.SET_NOTIFICATIONS](state: AppState, payload: { read: NotificationItem[]; unread: NotificationItem[] }) {
-    state.readNotifications = { ...payload.read };
-    state.unreadNotifications = { ...payload.unread };
+    state.readNotifications = [...payload.read];
+    state.unreadNotifications = [...payload.unread];
   },
 };
 
@@ -98,18 +98,19 @@ const actions = {
   async setSelectedShop({ commit, state }, props) {
     commit('app/SET_SELECTED_SHOP', props, { root: true });
   },
-  async setUserAuth({ commit, state }, props) {
-    commit('app/SET_USER_AUTH', props, { root: true });
+  async setUserAuth({ commit }) {
+    // commit(mutationTypes.SET_USER_AUTH, props);
     // debugger
     updateProfileCounts({ commit });
   },
-  async logout({ commit }, props) {
-    commit('app/SET_USER_AUTH', props);
+  async logout() {
+    // commit('app/SET_USER_AUTH', props);
     const vm = (this as any)._vm;
     const { $auth } = vm;
     $auth.logout();
   },
-  async loadUser({ commit }) {
+  async loadUser(store) {
+    const { commit } = store;
     const vm = (this as any)._vm;
     const { $auth } = vm;
     const token = $auth.token();
@@ -124,9 +125,8 @@ const actions = {
           $auth.token(null, null, false);
         });
 
-      // load favourites counter
       await updateFavouritesCount({ commit });
-      // load notifications here
+      await store.dispatch('readNotification');
       await getNotifications({ commit });
     }
   },
@@ -138,6 +138,15 @@ const actions = {
   },
   async getNotifications({ commit }) {
     await getNotifications({ commit });
+  },
+  async readNotification() {
+    const vm = (this as any)._vm;
+    const { $auth } = vm;
+    const isAuthorized = $auth.check();
+    const { notification } = Object.fromEntries(new URLSearchParams(window.location.search));
+    if (isAuthorized && notification) {
+      await createRequest('GET', endpoints.notifications.markAsRead(notification))
+    }
   },
   async fetchMenu({ commit }) {
     commit('SET_MAIN_MENU_LOADED', true);

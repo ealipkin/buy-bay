@@ -120,10 +120,11 @@ export interface ProfileUser {
 }
 
 export interface NotificationItem {
-  type: NOTIFICATIONS_TYPES;
+  id: number;
+  code: NOTIFICATIONS_TYPES;
   title: string;
   text: string;
-  read: boolean;
+  link: string;
 }
 
 export interface SeoBlock {

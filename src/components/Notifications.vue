@@ -3,27 +3,28 @@
     .notifications__header Уведомления
     .notifications__inner
       ul(v-if="unreadNotifications && unreadNotifications.length").notifications__list
-        li(v-for="item in unreadNotifications").notifications__item
-          span.notifications__icon
-            template(v-if="item.type === NOTIFICATIONS_TYPES.MESSAGE")
-              include ../assets/icons/mail.svg
-            template(v-if="item.type === NOTIFICATIONS_TYPES.GROUP")
-              include ../assets/icons/check.svg
-            template(v-if="item.type === NOTIFICATIONS_TYPES.DELIVERY")
-              include ../assets/icons/delivery.svg
-          span.notifications__info
-            span.notifications__title {{item.title}}
-            span.notifications__text {{item.text}}
+        li(v-for="item in unreadNotifications")
+          router-link(:to="`${item.link}?notification=${item.id}`").notifications__item.notifications__item--link
+            span.notifications__icon
+              template(v-if="item.code === NOTIFICATIONS_TYPES.MESSAGE")
+                include ../assets/icons/mail.svg
+              template(v-if="item.code === NOTIFICATIONS_TYPES.GROUP")
+                include ../assets/icons/check.svg
+              template(v-if="item.code === NOTIFICATIONS_TYPES.DELIVERY")
+                include ../assets/icons/delivery.svg
+            span.notifications__info
+              span.notifications__title {{item.title}}
+              span.notifications__text {{item.text}}
       template(v-if="readNotifications && readNotifications.length")
         .notifications__divider прочитанные уведомления
       ul(v-if="readNotifications && readNotifications.length").notifications__list
         li(v-for="item in readNotifications").notifications__item
           span.notifications__icon
-            template(v-if="item.type === NOTIFICATIONS_TYPES.MESSAGE")
+            template(v-if="item.code === NOTIFICATIONS_TYPES.MESSAGE")
               include ../assets/icons/mail.svg
-            template(v-if="item.type === NOTIFICATIONS_TYPES.GROUP")
+            template(v-if="item.code === NOTIFICATIONS_TYPES.GROUP")
               include ../assets/icons/check.svg
-            template(v-if="item.type === NOTIFICATIONS_TYPES.DELIVERY")
+            template(v-if="item.code === NOTIFICATIONS_TYPES.DELIVERY")
               include ../assets/icons/delivery.svg
           span.notifications__info
             span.notifications__title {{item.title}}
@@ -70,8 +71,10 @@ export default class Notifications extends Vue {
       padding: 13px 23px 17px;
       box-shadow: inset 0 -1px 0 0 #ece7e7;
       align-items: center;
+      color: black;
+      text-decoration: none;
 
-      &:hover {
+      &--link:hover {
         background-color: #f7f7fa;
       }
     }
