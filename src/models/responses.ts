@@ -186,6 +186,13 @@ export interface CatalogPage {
   options: any[];
   categoryList: any[];
   topBrand: any[];
+  name?: string;
+  image?: string;
+  rate?: number | string,
+  orders?: number
+  isFavourite: boolean;
+  description?: string // needed
+  category?: string // needed
 }
 
 export interface CatalogResponse {

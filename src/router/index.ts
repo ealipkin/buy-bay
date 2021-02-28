@@ -8,12 +8,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/brand/:id',
     name: 'Brand',
-    component: () => import('../views/Shop.vue'),
-  },
-  {
-    path: '/shop/:id',
-    name: 'Shop',
-    component: () => import('../views/Shop.vue'),
+    component: () => import('../views/Catalog.vue'),
   },
   {
     path: '/catalog',
@@ -24,11 +19,6 @@ const routes: Array<RouteConfig> = [
     path: '/catalog/:id',
     name: 'Catalog item',
     component: () => import('../views/Catalog.vue'),
-  },
-  {
-    path: '/category',
-    name: 'Category',
-    component: () => import('../views/Category.vue'),
   },
   {
     path: '/category/:id',

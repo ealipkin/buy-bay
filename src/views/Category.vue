@@ -1,23 +1,26 @@
 <template lang="pug">
-  .category.page(v-if="init")
+  .category.page(v-if="loaded")
     .container.page__breadcrumbs
-      Breadcrumbs(:links="breadCrumbs")
+      Breadcrumbs(:links="breadCrumbs" v-if="breadCrumbs && breadCrumbs.length")
     .page__header.container
-      .page__title Электроника
+      .page__title {{pageTitle}}
 
     .container.category__inner.page__layout
       .page__aside
         CatalogNav(:items="menuItems").page__catalog-nav
       .category__items.page__content
         .category__list
-          .category__item(v-for="(item, index) in items" :key="index")
+          .category__item(v-for="(item, index) in products" :key="index")
             CatalogCardItem(:item="item")
 
-    Advantages(:advantagesList="advantagesList").category__advantages
+        .category__pagination
+          Pagination(:paginationInfo="pagination" kindText="товаров" @page="pageChange" @more="showMore")
+
+    //Advantages(:advantagesList="advantagesList").category__advantages
 
     section.section.section--seo
-      SeoTexts(:texts="seoBlockDescription").container
-  Loader(v-else)
+      SeoTexts(:block="seoBlock").container
+  //Loader(v-else)
 </template>
 
 <script lang="ts">
@@ -26,14 +29,21 @@ import { Component, Vue } from 'vue-property-decorator';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import SeoTexts from '@/components/SeoTexts.vue';
 import TopCategories from '@/components/TopCategories.vue';
-import { generateProducts } from '@/utils/data';
 import Advantages from '@/components/Advantages.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { ADVANTAGES, MENU_CHILD_ITEMS } from '@/utils/constants';
+import { MENU_CHILD_ITEMS } from '@/utils/constants';
 import CatalogNav from '@/components/CatalogNav.vue';
 import { MenuChildItem } from '@/models/menu';
-import { BreadcrumbLink } from '@/models/models';
+import { BreadcrumbLink, SeoBlock } from '@/models/models';
 import Loader from '@/components/Loader.vue';
+import { paramsObjToString, parseQuery } from '@/utils/filters';
+import { SORT_PARAMS } from '@/models/enums';
+import { DEFAULT_PAGINATE_PAGE, endpoints } from '@/config';
+import { CatalogPage, CatalogResponse, PaginationInfo } from '@/models/responses';
+import { createRequest } from '@/services/http.service';
+import { Product } from '@/models/order';
+
+const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 
 @Component({
   components: {
@@ -48,22 +58,108 @@ import Loader from '@/components/Loader.vue';
 })
 export default class Index extends Vue {
   menuItems: MenuChildItem[] = MENU_CHILD_ITEMS;
+  productsPending = false;
+  loaded = false;
 
-  breadCrumbs: BreadcrumbLink[] = [
-    { href: '/', label: 'Главная' },
-    { label: 'Электроника', current: true },
-  ];
+  sort: SORT_PARAMS = DEFAULT_SORT;
 
-  items = generateProducts(16);
+  page: number = DEFAULT_PAGINATE_PAGE;
 
-  init = true;
+  catalogPage: CatalogPage | null = null
 
-  seoBlockDescription = [
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-    'Сайт рыбатекст поможет дизайнеру, верстальщику, вебмастеру сгенерировать несколько абзацев более менее осмысленного текста рыбы на русском языке, а начинающему оратору отточить навык публичных выступлений в домашних условиях. При создании генератора мы использовали небезизвестный универсальный код речей. Текст генерируется абзацами случайным образом от двух до десяти предложений в абзаце, что позволяет сделать текст более привлекательным и живым для визуально-слухового восприятия.',
-  ];
+  get breadCrumbs(): BreadcrumbLink[] | null {
+    return this.catalogPage && this.catalogPage.breadcrumbs;
+  }
 
-  advantagesList = ADVANTAGES;
+  get pageTitle(): string | null {
+    return this.catalogPage && this.catalogPage.title;
+  }
+
+  get seoBlock(): SeoBlock | null {
+    return this.catalogPage && this.catalogPage.seo_block;
+  }
+
+  get products(): Product[] | null {
+    return this.catalogPage && this.catalogPage.products.data;
+  }
+
+  get pagination(): PaginationInfo | null {
+    return this.catalogPage && this.catalogPage.products.paginationInfo;
+  }
+
+  mounted() {
+    this.init();
+  }
+
+  init() {
+    const selectedFilters = parseQuery(this.$route.query);
+    if (selectedFilters) {
+      if (selectedFilters.sort) {
+        this.sort = String(selectedFilters.sort) as SORT_PARAMS;
+      }
+      if (selectedFilters.page) {
+        this.page = Number(String(selectedFilters.page));
+      }
+    }
+    this.loadProducts(true);
+  }
+
+  loadProducts(isInit?) {
+    this.loadProductsRequest()
+      .then((res: CatalogResponse) => {
+        if (res && res.data) {
+          const catalog = res.data.data;
+          console.log(catalog);
+          if (isInit) {
+            this.catalogPage = catalog;
+          } else if (this.catalogPage) {
+            this.catalogPage.products = catalog.products;
+          }
+          this.loaded = true;
+          this.productsPending = false;
+        }
+      })
+  }
+
+  async loadProductsRequest(): Promise<CatalogResponse> {
+    const categoryId = this.$route.params.id;
+    const params = this.collectQueryParams();
+    const url = endpoints.category(categoryId, params);
+    return createRequest('GET', url);
+  }
+
+  collectQueryParams() {
+    const pageParams = paramsObjToString({
+      page: this.page,
+      sort: this.sort,
+    });
+    return `${pageParams}`;
+  }
+
+  pageChange(page) {
+    this.productsPending = true;
+    this.page = page;
+    this.loadProducts();
+  }
+
+  showMore() {
+    this.page += 1;
+    this.loadProductsRequest()
+      .then((res: CatalogResponse) => {
+        if (res && res.data) {
+          const newItems = res.data.data.products.data;
+          if (this.catalogPage) {
+            this.catalogPage.products.data.push(...newItems);
+            if (this.pagination) {
+              this.catalogPage.products.paginationInfo = {
+                ...this.pagination,
+                currentPage: this.page,
+              };
+            }
+          }
+        }
+      });
+  }
 }
 </script>
 

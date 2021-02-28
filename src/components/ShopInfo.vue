@@ -1,8 +1,8 @@
 <template lang="pug">
   .shop-info
-    router-link(:to="{ path: `/shop/${shop.id}` }" :style="{backgroundImage: `url(${shop.image})`}").shop-info__avatar.avatar
+    router-link(:to="{ path: `/brand/${shop.id}` }" :style="{backgroundImage: `url(${shop.image})`}").shop-info__avatar.avatar
       img(:src="shop.image")
-    router-link(:to="{ path: `/shop/${shop.id}` }").shop-info__info
+    router-link(:to="{ path: `/brand/${shop.id}` }").shop-info__info
       .shop-info__name {{shop.name}}
       .shop-info__middle
         .shop-info__orders

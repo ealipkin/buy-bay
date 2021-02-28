@@ -15,6 +15,15 @@ export enum SORT_PARAMS {
   DISCOUNT = 'discount'
 }
 
+export const SORT_LABELS = {
+  [SORT_PARAMS.POPULAR]: 'По популярности',
+  [SORT_PARAMS.PRICE]: 'Сначала дешевле',
+  [SORT_PARAMS.PRICE_DESC]: 'Сначала дороже',
+  [SORT_PARAMS.GROUPS]: 'По количеству групп',
+  [SORT_PARAMS.DATE]: 'Новинки',
+  [SORT_PARAMS.DISCOUNT]: 'По размеру скидки',
+}
+
 export enum PRODUCT_FEATURES {
   DELIVERY = 'delivery',
   HOT = 'hot',

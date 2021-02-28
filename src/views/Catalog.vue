@@ -74,6 +74,7 @@ import {
   addParamsToLocation, paramsObjToString, parseQuery, setActiveFilters,
 } from '@/utils/filters';
 import router from '@/router';
+import { Action } from 'vuex-class';
 
 const SORT_OPTIONS = [
   {
@@ -120,6 +121,8 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
   },
 })
 export default class Index extends Vue {
+  @Action('app/setSelectedShop') selectShop;
+
   @Watch('$route') routeChange() {
     console.log('routeChange');
     this.pageLoaded = false;
@@ -137,6 +140,7 @@ export default class Index extends Vue {
   page: number = DEFAULT_PAGINATE_PAGE;
 
   isSearch = false;
+  isBrand = false;
 
   selectOptions = SORT_OPTIONS;
 
@@ -183,7 +187,8 @@ export default class Index extends Vue {
   }
 
   init() {
-    this.isSearch = this.$route.path === '/search';
+    this.isSearch = this.$route.name === 'Search';
+    this.isBrand = this.$route.name === 'Brand';
     const selectedFilters = parseQuery(this.$route.query);
     if (selectedFilters) {
       if (selectedFilters.sort) {
@@ -213,6 +218,9 @@ export default class Index extends Vue {
           if (isInit) {
             this.setFiltersFromUrl(catalog);
             this.catalogPage = catalog;
+            if (this.isBrand) {
+              this.selectShop(catalog);
+            }
           } else if (this.catalogPage) {
             this.catalogPage.products = catalog.products;
           }
@@ -225,7 +233,7 @@ export default class Index extends Vue {
   async loadProductsRequest(): Promise<CatalogResponse> {
     const categoryId = this.$route.params.id;
     const params = this.collectQueryParams();
-    const url = this.isSearch ? endpoints.search.global(params) : endpoints.category(categoryId, params);
+    const url = this.isSearch ? endpoints.search.global(params) : this.isBrand ? endpoints.brand(categoryId, params) : endpoints.category(categoryId, params);
     return createRequest('GET', url);
   }
 
@@ -284,6 +292,13 @@ export default class Index extends Vue {
       router.push({ path: `${item.href}?${params}` });
     }
   }
+
+  beforeDestroy() {
+    if (this.isBrand) {
+      this.selectShop(null);
+    }
+  }
+
 }
 </script>
 

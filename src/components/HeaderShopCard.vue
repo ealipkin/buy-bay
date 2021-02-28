@@ -4,12 +4,12 @@
       .header-shop-card__main
         .header-shop-card__avatar
           img(:src="shop.image")
-        .header-shop-card__title {{shop.description}}
+        .header-shop-card__title {{shop.name}}
       .header-shop-card__aside
         Rate(:rate="shop.rate").header-shop-card__rate
-        .header-shop-card__fav
+        button(type="button" :class="{'header-shop-card__fav--active': isFavourite}" @click="toggleFav").header-shop-card__fav
           include ../assets/icons/heart.svg
-        button(type="button" @click="writeToShop").header-shop-card__button.button.button--secondary Написать продавцу
+        //button(type="button" @click="writeToShop").header-shop-card__button.button.button--secondary Написать продавцу
 
 </template>
 
@@ -17,15 +17,56 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Rate from '@/components/Rate.vue';
 import { ProductShop } from '@/models/order';
+import { createRequest } from '@/services/http.service';
+import { endpoints } from '@/config';
+import $store from '@/store';
 
 @Component({
   components: { Rate },
 })
 export default class HeaderShopCard extends Vue {
   @Prop() public shop!: ProductShop;
+  isFavourite: boolean = false;
 
   writeToShop() {
     console.log('writeToShop');
+  }
+
+  mounted() {
+    this.isFavourite = this.shop.isFavourite;
+  }
+
+  toggleFav() {
+    if (this.isFavourite) {
+      this.removeFromFav();
+    } else {
+      this.addToFav();
+    }
+  }
+
+  addToFav() {
+    createRequest('GET', endpoints.favourites.addBrand(this.shop.id))
+      .then(() => {
+        this.$root.$emit('show-toast', {
+          message: 'Бренд добавлен из избранное',
+        });
+        this.updateFavourites();
+      });
+  }
+
+  removeFromFav() {
+    createRequest('GET', endpoints.favourites.deleteBrand(this.shop.id))
+      .then(() => {
+        this.$root.$emit('show-toast', {
+          message: 'Бренд удален из избранного',
+        });
+        this.updateFavourites();
+      });
+  }
+
+  updateFavourites() {
+    this.isFavourite = !this.isFavourite;
+    $store.dispatch('app/updateFavouritesCount');
   }
 }
 </script>
@@ -95,6 +136,12 @@ export default class HeaderShopCard extends Vue {
       margin-right: 15px;
       @include tablet() {
         margin-right: 37px;
+      }
+
+      &--active {
+        svg path {
+          fill: $blue
+        }
       }
     }
 
