@@ -22,7 +22,7 @@ export const SORT_LABELS = {
   [SORT_PARAMS.GROUPS]: 'По количеству групп',
   [SORT_PARAMS.DATE]: 'Новинки',
   [SORT_PARAMS.DISCOUNT]: 'По размеру скидки',
-}
+};
 
 export enum PRODUCT_FEATURES {
   DELIVERY = 'delivery',

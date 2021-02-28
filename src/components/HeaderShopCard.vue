@@ -26,7 +26,8 @@ import $store from '@/store';
 })
 export default class HeaderShopCard extends Vue {
   @Prop() public shop!: ProductShop;
-  isFavourite: boolean = false;
+
+  isFavourite = false;
 
   writeToShop() {
     console.log('writeToShop');

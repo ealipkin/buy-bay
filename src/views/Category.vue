@@ -58,7 +58,9 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 })
 export default class Index extends Vue {
   menuItems: MenuChildItem[] = MENU_CHILD_ITEMS;
+
   productsPending = false;
+
   loaded = false;
 
   sort: SORT_PARAMS = DEFAULT_SORT;
@@ -118,7 +120,7 @@ export default class Index extends Vue {
           this.loaded = true;
           this.productsPending = false;
         }
-      })
+      });
   }
 
   async loadProductsRequest(): Promise<CatalogResponse> {

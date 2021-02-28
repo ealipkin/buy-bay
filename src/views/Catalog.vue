@@ -140,6 +140,7 @@ export default class Index extends Vue {
   page: number = DEFAULT_PAGINATE_PAGE;
 
   isSearch = false;
+
   isBrand = false;
 
   selectOptions = SORT_OPTIONS;
@@ -298,7 +299,6 @@ export default class Index extends Vue {
       this.selectShop(null);
     }
   }
-
 }
 </script>
 

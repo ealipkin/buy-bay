@@ -82,5 +82,5 @@ export const endpoints = {
     getUnread: '/notification/unread',
     markAsRead: (id) => `/notification/set_read/${id}`,
   },
-  brand: (brandId, params = '') => `/brand/${brandId}?${params}`
+  brand: (brandId, params = '') => `/brand/${brandId}?${params}`,
 };

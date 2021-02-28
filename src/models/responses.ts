@@ -188,11 +188,11 @@ export interface CatalogPage {
   topBrand: any[];
   name?: string;
   image?: string;
-  rate?: number | string,
-  orders?: number
+  rate?: number | string;
+  orders?: number;
   isFavourite: boolean;
-  description?: string // needed
-  category?: string // needed
+  description?: string; // needed
+  category?: string; // needed
 }
 
 export interface CatalogResponse {

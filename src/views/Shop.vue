@@ -37,9 +37,8 @@ import Pagination from '@/components/Pagination.vue';
   },
 })
 export default class Index extends Vue {
+  loaded = false;
 
-
-  loaded: boolean = false;
   shop = getShop();
 
   filters = FILTERS;
@@ -60,8 +59,6 @@ export default class Index extends Vue {
   mounted() {
     // brand
   }
-
-
 }
 </script>
 
