@@ -119,8 +119,11 @@ export default class Header extends Vue {
   body: HTMLBodyElement | null = null;
 
   selectedShop;
+
   profilePage;
+
   readNotifications;
+
   unreadNotifications;
 
   profileMenuItems: BaseMenuItem[] = PROFILE_MENU_ITEMS;

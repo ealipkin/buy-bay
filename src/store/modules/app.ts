@@ -145,7 +145,7 @@ const actions = {
     const isAuthorized = $auth.check();
     const { notification } = Object.fromEntries(new URLSearchParams(window.location.search));
     if (isAuthorized && notification) {
-      await createRequest('GET', endpoints.notifications.markAsRead(notification))
+      await createRequest('GET', endpoints.notifications.markAsRead(notification));
     }
   },
   async fetchMenu({ commit }) {
