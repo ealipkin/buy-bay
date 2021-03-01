@@ -101,6 +101,7 @@ export default class Profile extends Vue {
   }
 
   openAddressEditor(address: AddressItem) {
+    console.log(address);
     this.openAddressModal(address);
   }
 

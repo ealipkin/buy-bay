@@ -6,7 +6,7 @@
       .catalog__wrapper
         .page__header.container
           .page__title {{pageTitle}}
-          .category__sort
+          div(v-if="hasResults").category__sort
             SortSelect(:options="selectOptions" @change="sortChange" :selectedOption="sort")
         .container.category__inner
           .page__layout
@@ -19,7 +19,7 @@
                   .category__item(v-for="(item, index) in products" :key="index")
                     CatalogCardItem(:item="item")
                 .category__pagination
-                  Pagination(:paginationInfo="pagination" kindText="товаров" @page="pageChange" @more="showMore")
+                  Pagination(:paginationInfo="pagination" @page="pageChange" @more="showMore")
               div(v-else)
                 .search-empty
                   .search-empty__icon
@@ -29,7 +29,7 @@
               Loader(v-if="productsPending")
       Advantages(:advantagesList="advantagesList").category__advantages
 
-      div(v-if="recommended").section.category__similar-slider
+      div(v-if="recommended && recommended.length").section.category__similar-slider
         .section__container
           .section-header
             .section-title Пользователи рекомендуют
@@ -75,6 +75,7 @@ import {
 } from '@/utils/filters';
 import router from '@/router';
 import { Action } from 'vuex-class';
+import { declOfNum } from '@/utils/common';
 
 const SORT_OPTIONS = [
   {
@@ -207,6 +208,7 @@ export default class Index extends Vue {
   }
 
   setFiltersFromUrl(catalog: CatalogPage) {
+    console.log('setFiltersFromUrl -> ');
     const selectedFilters = parseQuery(this.$route.query);
     setActiveFilters(catalog.filters, selectedFilters);
   }
@@ -245,7 +247,7 @@ export default class Index extends Vue {
     });
     const filtersParams = paramsObjToString(this.filter);
     const search = this.isSearch ? `q=${this.$route.query.q}&` : '';
-    return `${search}${pageParams}${filtersParams}`;
+    return `${search}${pageParams}&${filtersParams}`;
   }
 
   sortChange(sort: { label: string; value: SORT_PARAMS }) {

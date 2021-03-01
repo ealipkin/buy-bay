@@ -181,3 +181,10 @@ export interface ISearchSuggest {
   categories: SearchItem[];
   products: SearchItem[];
 }
+
+export interface ICategoryItem {
+  href: string;
+  id: number;
+  items: ICategoryItem[];
+  label: string;
+}

@@ -108,6 +108,7 @@ export default class Main extends Vue {
       padding-bottom: 12px;
       padding-top: 12px;
       text-decoration: none;
+      background: white;
 
       &:hover, &.autocomplete-active {
         background-color: $grey-7;
@@ -116,6 +117,11 @@ export default class Main extends Vue {
       &:last-child {
         margin-bottom: 0;
       }
+    }
+
+    &__inner-item._empty:hover {
+      background: white;
+      cursor: default;
     }
 
     &__title {
@@ -173,6 +179,7 @@ export default class Main extends Vue {
       color: #8e8e8e;
       margin-left: 24px;
     }
+
     ._empty {
       margin-left: 0;
       margin-right: 0;

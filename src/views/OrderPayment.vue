@@ -62,7 +62,7 @@ import OrderInfo from '@/components/OrderInfo.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
 import AddressModal from '@/components/AddressModal.vue';
 import CreditCardModal from '@/components/CreditCardModal.vue';
-import { CardItem, UserAddressItem } from '@/models/models';
+import { CardItem, ProfileUser, UserAddressItem } from '@/models/models';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import Loader from '@/components/Loader.vue';
@@ -129,8 +129,6 @@ export default class OrderPayment extends Vue {
 
   orderId: string | number | null = null;
 
-  user = createProfileUser(null, 1);
-
   loaded = false
 
   submitted = false;
@@ -165,6 +163,10 @@ export default class OrderPayment extends Vue {
     return (this as any).$auth.check();
   }
 
+  get user(): ProfileUser {
+    return (this as any).$auth.user();
+  }
+
   submitNewAddress(valid) {
     if (valid) {
       this.submitted = true;
@@ -181,7 +183,8 @@ export default class OrderPayment extends Vue {
 
   openAddressModal(data) {
     const modalComponent: any = this.$refs.addressModal;
-    const address = data ? { ...data } : null;
+    const phone = this.user && this.user.phone;
+    const address = data ? { ...data } : phone ? { phone } : null;
     modalComponent.showModal(address);
   }
 

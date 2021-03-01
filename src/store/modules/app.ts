@@ -103,11 +103,12 @@ const actions = {
     // debugger
     updateProfileCounts({ commit });
   },
-  async logout() {
+  async logout({ commit }) {
     // commit('app/SET_USER_AUTH', props);
     const vm = (this as any)._vm;
     const { $auth } = vm;
     $auth.logout();
+    commit(mutationTypes.SET_FAVOURITES_COUNT, 0);
   },
   async loadUser(store) {
     const { commit } = store;

@@ -38,18 +38,6 @@ const getRate = () => `${getRandomNumberBetween(0, 9)},${getRandomNumberBetween(
 
 const getDate = () => new Date(getRandomNumberBetween(1970, 2010), getRandomNumberBetween(0, 11), getRandomNumberBetween(1, 31));
 
-export const getShop = (): ProductShop => ({
-  id: nanoid(),
-  id_brand: nanoid(),
-  name: 'Nike',
-  description: 'Магазин электроники в котором есть все',
-  image: `https://picsum.photos/id/${3 * 2 + getRandomNumberBetween(0, 100)}/100`,
-  orders: getRandomNumberBetween(100000, 500000),
-  rate: getRate(),
-  isFavourite: Boolean(getRandomNumberBetween(0, 1)),
-  category: 'Спортивные товары',
-});
-
 const createProduct = (item, index): Product => ({
   id: nanoid(),
   product_id: nanoid(),
@@ -157,7 +145,6 @@ const createProduct = (item, index): Product => ({
   groupPrice: getRandomNumberBetween(1000, 300000),
   orders: getRandomNumberBetween(1000, 700000),
   isFavourite: Boolean(getRandomNumberBetween(0, 1)),
-  brand: getShop(),
   contacts: {
     name: 'Nikulin Alexander Ivanovich',
     phone: '+7 995 115-55-16',

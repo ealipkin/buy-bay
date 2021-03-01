@@ -14,13 +14,13 @@
             CatalogCardItem(:item="item")
 
         .category__pagination
-          Pagination(:paginationInfo="pagination" kindText="товаров" @page="pageChange" @more="showMore")
+          Pagination(:paginationInfo="pagination" @page="pageChange" @more="showMore")
 
     //Advantages(:advantagesList="advantagesList").category__advantages
 
     section.section.section--seo
       SeoTexts(:block="seoBlock").container
-  //Loader(v-else)
+  Loader(v-else)
 </template>
 
 <script lang="ts">
@@ -31,10 +31,8 @@ import SeoTexts from '@/components/SeoTexts.vue';
 import TopCategories from '@/components/TopCategories.vue';
 import Advantages from '@/components/Advantages.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { MENU_CHILD_ITEMS } from '@/utils/constants';
 import CatalogNav from '@/components/CatalogNav.vue';
-import { MenuChildItem } from '@/models/menu';
-import { BreadcrumbLink, SeoBlock } from '@/models/models';
+import { BreadcrumbLink, ICategoryItem, SeoBlock } from '@/models/models';
 import Loader from '@/components/Loader.vue';
 import { paramsObjToString, parseQuery } from '@/utils/filters';
 import { SORT_PARAMS } from '@/models/enums';
@@ -42,11 +40,13 @@ import { DEFAULT_PAGINATE_PAGE, endpoints } from '@/config';
 import { CatalogPage, CatalogResponse, PaginationInfo } from '@/models/responses';
 import { createRequest } from '@/services/http.service';
 import { Product } from '@/models/order';
+import Pagination from '@/components/Pagination.vue';
 
 const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 
 @Component({
   components: {
+    Pagination,
     Loader,
     CatalogNav,
     Breadcrumbs,
@@ -57,8 +57,6 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
   },
 })
 export default class Index extends Vue {
-  menuItems: MenuChildItem[] = MENU_CHILD_ITEMS;
-
   productsPending = false;
 
   loaded = false;
@@ -87,6 +85,10 @@ export default class Index extends Vue {
 
   get pagination(): PaginationInfo | null {
     return this.catalogPage && this.catalogPage.products.paginationInfo;
+  }
+
+  get menuItems(): ICategoryItem[] | null | undefined {
+    return this.catalogPage && this.catalogPage.categoryList;
   }
 
   mounted() {

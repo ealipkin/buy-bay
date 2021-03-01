@@ -47,9 +47,13 @@ export default class AddressModal extends Vue {
   }
 
   showModal(data) {
-    if (data && data.id) {
-      this.addressItem = data;
-      this.isEdit = true;
+    if (data) {
+      if (data.id) {
+        this.addressItem = data;
+        this.isEdit = true;
+      } else {
+        this.addressItem = data;
+      }
     } else {
       this.addressItem = {};
       this.isEdit = false;

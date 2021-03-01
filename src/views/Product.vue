@@ -98,21 +98,6 @@ export default class ItemDetail extends Vue {
     this.init();
   }
 
-  breadCrumbs: BreadcrumbLink[] = [
-    { href: '/', label: 'Главная' },
-    { href: '/category', label: 'Мужской гардероб' },
-    { href: '/category', label: 'Сумки и рюкзаки' },
-    { href: '/', label: 'Рюкзаки', current: true },
-  ];
-
-  get isMobile() {
-    return this.window.width < breakPoints.tablet;
-  }
-
-  get isTablet() {
-    return this.window.width >= breakPoints.tablet && this.window.width < breakPoints.laptop;
-  }
-
   seo: SeoBlock | null = null;
 
   item: Product | null = null;
@@ -124,13 +109,25 @@ export default class ItemDetail extends Vue {
     height: 0,
   };
 
-  get groups() {
-    return this.item && this.item.group && this.item.group.data;
-  }
-
   similarItems: Product[] | null = null;
 
   sliderSettings = PRODUCT_SLIDER_SETTINGS;
+
+  get isMobile() {
+    return this.window.width < breakPoints.tablet;
+  }
+
+  get isTablet() {
+    return this.window.width >= breakPoints.tablet && this.window.width < breakPoints.laptop;
+  }
+
+  get isAuthorized() {
+    return (this as any).$auth.check();
+  }
+
+  get groups() {
+    return this.item && this.item.group && this.item.group.data;
+  }
 
   setOrderDisabled(state: boolean) {
     this.orderDisabled = state;
@@ -175,7 +172,11 @@ export default class ItemDetail extends Vue {
   }
 
   handleJoinToGroup(group: Group) {
-    (this.$refs.itemInfo as any).sendOrder('group', group);
+    if (this.isAuthorized) {
+      (this.$refs.itemInfo as any).sendOrder('group', group);
+    } else {
+      this.$root.$emit('show-login-modal');
+    }
   }
 }
 </script>

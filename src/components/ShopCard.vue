@@ -2,12 +2,12 @@
   .shop-card
     button(@click="toggleFav" :class="{'shop-card__fav--active': shop.isFavourite}").shop-card__fav
       include ../assets/icons/trash.svg
-    router-link(:to="{path: `/shop/${shop.id}`}").shop-card__inner
+    router-link(:to="{path: `/brans/${shop.id}`}").shop-card__inner
       .shop-card__image
         img(:src="shop.image")
       .shop-card__name {{shop.name || shop.brand}}
       .shop-card__category {{shop.category}}
-      Rate(:rate="shop.rate || '5'" :list="true").shop-card__rate
+      Rate(:rate="shop.rate" :list="true").shop-card__rate
 
 </template>
 
@@ -25,7 +25,7 @@ export default class CatalogCardItem extends Vue {
   @Prop() public shop!: ProductShop;
 
   toggleFav() {
-    const id = this.shop.id_brand;
+    const id = this.shop.brand_id;
     this.shop.isFavourite = !this.shop.isFavourite;
     this.$emit('toggle-fav');
     createRequest('GET', endpoints.favourites.deleteBrand(id))
@@ -82,7 +82,9 @@ export default class CatalogCardItem extends Vue {
     &__image {
       width: 60px;
       height: 60px;
-      display: block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       margin: 0 auto;
       border-radius: 50%;
       overflow: hidden;

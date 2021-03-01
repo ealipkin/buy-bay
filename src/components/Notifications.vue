@@ -4,7 +4,7 @@
     .notifications__inner
       ul(v-if="unreadNotifications && unreadNotifications.length").notifications__list
         li(v-for="item in unreadNotifications")
-          router-link(:to="`${item.link}?notification=${item.id}`").notifications__item.notifications__item--link
+          router-link(:to="`/${item.link}?notification=${item.id}`").notifications__item.notifications__item--link
             span.notifications__icon
               template(v-if="item.code === NOTIFICATIONS_TYPES.MESSAGE")
                 include ../assets/icons/mail.svg

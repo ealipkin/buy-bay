@@ -409,6 +409,9 @@ export default class CategoryFilter extends Vue {
     &__top {
       margin-bottom: 10px;
       text-align: right;
+      position: absolute;
+      top: -35px;
+      right: 0;
     }
 
   }

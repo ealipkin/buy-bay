@@ -4,7 +4,7 @@
       .order-detail__breadcrumbs
         Breadcrumbs(:links="breadCrumbs")
       h1.group-detail__title Группа на покупку&nbsp;
-        router-link(v-if="product" :to="`product/${product.id}`").group-detail__title-link {{product.title}}
+        router-link(v-if="product" :to="`/product/${product.id}`").group-detail__title-link {{product.title}}
       .group-detail__main
         .group-detail__left-col
           OrderInfo(v-if="order" :item="order" :order-data="orderData" :options="orderOptions" :hideStatus="true" :hideTitle="true").group-detail__product.group-detail__item.order-info--group

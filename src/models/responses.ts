@@ -1,7 +1,7 @@
 import {
   BigSliderItem,
   BreadcrumbLink,
-  CardItem,
+  CardItem, ICategoryItem,
   ISearchSuggest,
   ProfileCounts,
   ProfileUser,
@@ -184,7 +184,7 @@ export interface CatalogPage {
   delivery: IFilterItem[];
   sale: IFilterItem[];
   options: any[];
-  categoryList: any[];
+  categoryList?: ICategoryItem[];
   topBrand: any[];
   name?: string;
   image?: string;

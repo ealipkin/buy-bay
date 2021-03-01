@@ -1,6 +1,6 @@
 <template lang="pug">
   div(v-if="paginationInfo.lastPage > 1").pagination
-    button(type="button" @click="showMore" :disabled="paginationInfo ? paginationInfo.lastPage === currentPage : false").button.pagination__show-more Показать еще {{moreCountNumber}} {{kindText || 'товаров'}}
+    button(type="button" @click="showMore" :disabled="paginationInfo ? paginationInfo.lastPage === currentPage : false").button.pagination__show-more Показать еще {{moreCountNumber}} {{kindText || getKindText()}}
     paginate(
       v-model="currentPage"
       :page-count="paginationInfo ? paginationInfo.lastPage : 99"
@@ -19,6 +19,7 @@ import {
 import { PaginationInfo } from '@/models/responses';
 import { DEFAULT_PAGINATE_PAGE } from '@/config';
 import { addParamsToLocation } from '@/utils/filters';
+import { declOfNum } from '@/utils/common';
 
 @Component
 export default class Pagination extends Vue {
@@ -40,6 +41,11 @@ export default class Pagination extends Vue {
 
   get moreCountNumber() {
     return this.paginationInfo ? this.paginationInfo.perPage : this.moreCount;
+  }
+
+  getKindText() {
+    const count = this.paginationInfo.perPage;
+    return declOfNum(count, ['товар', 'товара', 'товаров']);
   }
 
   showMore() {

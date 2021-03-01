@@ -36,7 +36,7 @@
                       @favRemove="removeShop(id, index)"
                     )
                 div(v-if="showBrandsPagination").category__pagination
-                  Pagination(:paginationInfo="shopPagination" kindText="магазинов" @page="shopPageChange" @more="showMoreBrands")
+                  Pagination(:paginationInfo="shopPagination" :kindText="getShopKindText(shopPagination.perPage)" @page="shopPageChange" @more="showMoreBrands")
               div(v-else).empty-message В избранном пока нет товаров
           Loader(v-else)
 </template>
@@ -61,6 +61,7 @@ import { FavBrandsResponse, FavProductsResponse, PaginationInfo } from '@/models
 import $store from '@/store';
 import { Product, ProductShop } from '@/models/order';
 import { addParamsToLocation, paramsStringToObject } from '@/utils/filters';
+import { declOfNum } from '@/utils/common';
 
 const PAGE_TITLE = 'Избранное';
 
@@ -389,6 +390,10 @@ export default class Favourites extends Vue {
           };
         }
       });
+  }
+
+  getShopKindText(count) {
+    return declOfNum(count, ['магазин', 'магазина', 'магазинов']);
   }
 
   beforeDestroy() {

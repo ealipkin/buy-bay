@@ -103,6 +103,9 @@ export default class HeaderShopCard extends Vue {
       overflow: hidden;
       box-sizing: border-box;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       img {
         max-width: 100%;

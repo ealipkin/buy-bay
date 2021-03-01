@@ -1,19 +1,17 @@
 <template lang="pug">
   ul.catalog-nav
     li(v-for="(item, index) in items" :key="index").catalog-nav__item
-      router-link(:to="item.main.href").catalog-nav__link.catalog-nav__link--main {{item.main.title}}
-      ul(v-if="item.links && item.links.length").catalog-nav__sub-list
-        li(v-for="subItem in item.links").catalog-nav__sub-item
-          router-link(:to="subItem.href").catalog-nav__link {{subItem.title}}
+      router-link(:to="item.href" :class="{'catalog-nav__link--main': item.items.length}").catalog-nav__link {{item.label}}
+      CatalogNav(:items="item.items" v-if="item.items && item.items.length").page__catalog-nav
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { MenuChildItem } from '@/models/menu';
+import { ICategoryItem } from '@/models/models';
 
 @Component
 export default class CatalogNav extends Vue {
-  @Prop() public items!: MenuChildItem[];
+  @Prop() public items!: ICategoryItem[];
 }
 </script>
 

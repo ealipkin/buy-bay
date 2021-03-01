@@ -43,7 +43,7 @@ export const setActiveFilters = (filters: IFilter[], selectedFilters: { [key: st
     if (filtersKeys.includes(filter.query)) {
       const values = selectedFilters[filter.query];
       filter.items.forEach((item: IFilterItem) => {
-        if (values.includes(String(item.id))) {
+        if (values.includes(String(item.id)) || values.includes(String(item.value))) {
           item.selected = true;
         }
       });
