@@ -42,8 +42,8 @@
             router-link(to="#").section-link Показать еще
           Brands(:brands="brands")
 
-      section.section.section--seo
-        SeoTexts(:block="seoBlock").container
+      section(v-if="seoBlock").section.section--seo
+        SeoBlock(:block="seoBlock").container
   Loader(v-else)
 </template>
 
@@ -53,7 +53,6 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Brands from '@/components/Brands.vue';
 import CatalogSlider from '@/components/CatalogSlider.vue';
-import SeoTexts from '@/components/SeoTexts.vue';
 import TopCategories from '@/components/TopCategories.vue';
 import Advantages from '@/components/Advantages.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
@@ -62,7 +61,7 @@ import CategoryFilter from '@/components/CategoryFilter.vue';
 import { ADVANTAGES } from '@/utils/constants';
 import Pagination from '@/components/Pagination.vue';
 import SimilarSlider from '@/components/SimilarSlider.vue';
-import { BreadcrumbLink, SeoBlock } from '@/models/models';
+import { BreadcrumbLink, ISeoBlock } from '@/models/models';
 import Loader from '@/components/Loader.vue';
 import { createRequest } from '@/services/http.service';
 import { DEFAULT_PAGINATE_PAGE, endpoints } from '@/config';
@@ -75,7 +74,7 @@ import {
 } from '@/utils/filters';
 import router from '@/router';
 import { Action } from 'vuex-class';
-import { declOfNum } from '@/utils/common';
+import SeoBlock from '@/components/SeoBlock.vue';
 
 const SORT_OPTIONS = [
   {
@@ -115,7 +114,7 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
     Breadcrumbs,
     Advantages,
     TopCategories,
-    SeoTexts,
+    SeoBlock,
     CatalogSlider,
     Brands,
     CatalogCardItem,
@@ -164,7 +163,7 @@ export default class Index extends Vue {
     return this.isSearch ? `«${search}»` : title;
   }
 
-  get seoBlock(): SeoBlock | null {
+  get seoBlock(): ISeoBlock | null {
     return this.catalogPage && this.catalogPage.seo_block;
   }
 

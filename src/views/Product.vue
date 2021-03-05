@@ -17,7 +17,7 @@
       .item-detail__title Похожие товары
       SimilarSlider(:items="similarItems")
       //Pagination(moreCount="50").item-detail__pagination
-    SeoTexts(:block="seo").item-detail__seo
+    SeoBlock(v-if="seo" :block="seo").item-detail__seo
   Loader(v-else)
 </template>
 
@@ -32,7 +32,7 @@ import ItemDescription from '@/components/ItemDescription.vue';
 import ItemShopCard from '@/components/ItemShopCard.vue';
 import DeliveryInfo from '@/components/DeliveryInfo.vue';
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
-import SeoTexts from '@/components/SeoTexts.vue';
+import SeoBlock from '@/components/SeoBlock.vue';
 import { breakPoints } from '@/utils/constants';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import Pagination from '@/components/Pagination.vue';
@@ -40,11 +40,11 @@ import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import Loader from '@/components/Loader.vue';
 import SimilarSlider from '@/components/SimilarSlider.vue';
-import { BreadcrumbLink, SeoBlock } from '@/models/models';
+import { BreadcrumbLink, ISeoBlock } from '@/models/models';
 import { Group, Product } from '@/models/order';
 
 interface ProductPage extends Product {
-  seo_block: SeoBlock;
+  seo_block: ISeoBlock;
   breadcrumbs: BreadcrumbLink[];
 }
 
@@ -82,7 +82,7 @@ const PRODUCT_SLIDER_SETTINGS = {
     Loader,
     Pagination,
     Breadcrumbs,
-    SeoTexts,
+    SeoBlock,
     CatalogCardItem,
     DeliveryInfo,
     ItemShopCard,
@@ -98,7 +98,7 @@ export default class ItemDetail extends Vue {
     this.init();
   }
 
-  seo: SeoBlock | null = null;
+  seo: ISeoBlock | null = null;
 
   item: Product | null = null;
 

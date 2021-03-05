@@ -2,10 +2,9 @@ import {
   BigSliderItem,
   BreadcrumbLink,
   CardItem, ICategoryItem,
-  ISearchSuggest,
+  ISearchSuggest, ISeoBlock,
   ProfileCounts,
   ProfileUser,
-  SeoBlock,
   UserAddressItem,
 } from '@/models/models';
 import {
@@ -77,7 +76,7 @@ export interface IndexPage {
   highlights: [];
   top_cat: [];
 
-  seo_block: SeoBlock;
+  seo_block: ISeoBlock;
 }
 
 export interface IndexPageResponse {
@@ -177,7 +176,7 @@ export interface CatalogPage {
     data: Product[]; paginationInfo: PaginationInfo;
   };
   recommended: Product[];
-  seo_block: SeoBlock;
+  seo_block: ISeoBlock;
   filters: IFilter[];
   // filters block
   brands: IFilterItem[];

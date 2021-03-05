@@ -36,7 +36,7 @@ import OrderInfo from '@/components/OrderInfo.vue';
 import GroupInfo from '@/components/GroupInfo.vue';
 import GroupAction from '@/components/GroupAction.vue';
 import SimilarSlider from '@/components/SimilarSlider.vue';
-import SeoTexts from '@/components/SeoTexts.vue';
+import SeoBlock from '@/components/SeoBlock.vue';
 import { BreadcrumbLink } from '@/models/models';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import router from '@/router';
@@ -50,7 +50,7 @@ import ConfirmationModal from '@/components/ConfirmationModal.vue';
   components: {
     ConfirmationModal,
     Breadcrumbs,
-    SeoTexts,
+    SeoBlock,
     SimilarSlider,
     DeliveryInfo,
     OrderInfo,

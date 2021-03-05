@@ -1,21 +1,33 @@
 <template lang="pug">
-  section(v-if="texts").seo
-    h2.seo__title SEO Block
-    p.seo__description(v-for="text in texts") {{text}}
-  section(v-else).seo
+  section(v-if="block").seo
     h2.seo__title {{block.title}}
     p.seo__description {{block.text}}
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SeoBlock } from '@/models/models';
+import { ISeoBlock } from '@/models/models';
 
-@Component({})
-export default class SeoTexts extends Vue {
-  @Prop() public texts!: string[];
+@Component({
+  metaInfo() {
+    const seoBlock: ISeoBlock = (this as any).block;
+    return {
+      title: seoBlock.meta_title,
+      meta: [
+        { vmid: 'description', name: 'description', content: seoBlock.meta_desc },
+        { vmid: 'og:desc', name: 'og:desc', property: 'og:desc', content: seoBlock.og_desc },
+        { vmid: 'og:image', name: 'og:image', property: 'og:image', content: seoBlock.og_image },
+        { vmid: 'og:site', name: 'og:site', property: 'og:site', content: seoBlock.og_site },
+      ]
+    }
+  }
+})
+export default class SeoBlock extends Vue {
+  @Prop() public block!: ISeoBlock;
 
-  @Prop() public block!: SeoBlock;
+  mounted() {
+    console.log(this.block);
+  }
 }
 
 </script>
@@ -23,6 +35,7 @@ export default class SeoTexts extends Vue {
 <style lang="scss" scoped>
   .seo {
     padding-top: 16px;
+
     &__title {
       font-size: 18px;
       font-weight: 600;

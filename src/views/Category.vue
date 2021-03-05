@@ -18,8 +18,8 @@
 
     //Advantages(:advantagesList="advantagesList").category__advantages
 
-    section.section.section--seo
-      SeoTexts(:block="seoBlock").container
+    section(v-if="seoBlock").section.section--seo
+      SeoBlock(:block="seoBlock").container
   Loader(v-else)
 </template>
 
@@ -27,12 +27,11 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
-import SeoTexts from '@/components/SeoTexts.vue';
 import TopCategories from '@/components/TopCategories.vue';
 import Advantages from '@/components/Advantages.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import CatalogNav from '@/components/CatalogNav.vue';
-import { BreadcrumbLink, ICategoryItem, SeoBlock } from '@/models/models';
+import { BreadcrumbLink, ICategoryItem, ISeoBlock } from '@/models/models';
 import Loader from '@/components/Loader.vue';
 import { paramsObjToString, parseQuery } from '@/utils/filters';
 import { SORT_PARAMS } from '@/models/enums';
@@ -41,6 +40,7 @@ import { CatalogPage, CatalogResponse, PaginationInfo } from '@/models/responses
 import { createRequest } from '@/services/http.service';
 import { Product } from '@/models/order';
 import Pagination from '@/components/Pagination.vue';
+import SeoBlock from '@/components/SeoBlock.vue';
 
 const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 
@@ -52,7 +52,7 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
     Breadcrumbs,
     Advantages,
     TopCategories,
-    SeoTexts,
+    SeoBlock,
     CatalogCardItem,
   },
 })
@@ -75,7 +75,7 @@ export default class Index extends Vue {
     return this.catalogPage && this.catalogPage.title;
   }
 
-  get seoBlock(): SeoBlock | null {
+  get seoBlock(): ISeoBlock | null {
     return this.catalogPage && this.catalogPage.seo_block;
   }
 

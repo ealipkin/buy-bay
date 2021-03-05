@@ -59,7 +59,7 @@
         Brands(:brands="brands")
 
     section(v-if="seo").section.section--seo
-      SeoTexts(:block="seo").container.index__seo
+      SeoBlock(:block="seo").container.index__seo
   Loader(v-else)
 
 </template>
@@ -72,7 +72,6 @@ import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import Brands from '@/components/Brands.vue';
 import Slick from 'vue-slick';
 import CatalogSlider from '@/components/CatalogSlider.vue';
-import SeoTexts from '@/components/SeoTexts.vue';
 import FeaturesSlider from '@/components/FeaturesSlider.vue';
 import TopCategories from '@/components/TopCategories.vue';
 import TabsNav from '@/components/TabsNav.vue';
@@ -83,9 +82,10 @@ import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import { topCategories } from '@/utils/data';
 import Loader from '@/components/Loader.vue';
-import { BigSliderItem, SeoBlock } from '@/models/models';
+import { BigSliderItem, ISeoBlock } from '@/models/models';
 import { IndexPage, IndexPageResponse } from '@/models/responses';
 import { BrandItem, Product } from '@/models/order';
+import SeoBlock from '@/components/SeoBlock.vue';
 
 enum TABS_IDS {
   POPULAR = 'popular',
@@ -117,7 +117,7 @@ const PRODUCT_TABS = [
     TabsNav,
     TopCategories,
     FeaturesSlider,
-    SeoTexts,
+    SeoBlock,
     CatalogSlider,
     Brands,
     CatalogCardItem,
@@ -162,7 +162,7 @@ export default class Index extends Vue {
 
   bestItems: Product[] | null = null;
 
-  seo: SeoBlock | null = null;
+  seo: ISeoBlock | null = null;
 
   pageLoaded = false;
 

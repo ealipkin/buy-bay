@@ -27,6 +27,7 @@ import store from './store';
 import './scss/style.scss';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import './assets/fonts/opensans.css';
+import VueMeta from 'vue-meta';
 
 Vue.use(vueDebounce, {
   listenTo: ['input', 'keyup', 'change'],
@@ -34,8 +35,9 @@ Vue.use(vueDebounce, {
 
 Vue.use(VueAuth, authConfig);
 
-Vue.directive('mask', VueMaskDirective);
-
+Vue.use(VueMeta, {
+  refreshOnceOnNavigation: true
+})
 Vue.use(Loading);
 
 Vue.use(VueFilterDateFormat, {
@@ -51,6 +53,9 @@ Vue.use(vueAwesomeCountdown, 'vac');
 Vue.use(VueTruncate);
 Vue.use(VueClipboard);
 Vue.use(Toasted);
+
+Vue.directive('mask', VueMaskDirective);
+
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 addBasicValidations();
