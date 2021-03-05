@@ -15,12 +15,18 @@ import { ISeoBlock } from '@/models/models';
       title: seoBlock.meta_title,
       meta: [
         { vmid: 'description', name: 'description', content: seoBlock.meta_desc },
-        { vmid: 'og:desc', name: 'og:desc', property: 'og:desc', content: seoBlock.og_desc },
-        { vmid: 'og:image', name: 'og:image', property: 'og:image', content: seoBlock.og_image },
-        { vmid: 'og:site', name: 'og:site', property: 'og:site', content: seoBlock.og_site },
-      ]
-    }
-  }
+        {
+          vmid: 'og:desc', name: 'og:desc', property: 'og:desc', content: seoBlock.og_desc,
+        },
+        {
+          vmid: 'og:image', name: 'og:image', property: 'og:image', content: seoBlock.og_image,
+        },
+        {
+          vmid: 'og:site', name: 'og:site', property: 'og:site', content: seoBlock.og_site,
+        },
+      ],
+    };
+  },
 })
 export default class SeoBlock extends Vue {
   @Prop() public block!: ISeoBlock;

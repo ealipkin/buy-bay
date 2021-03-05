@@ -6,6 +6,7 @@ import Loading from 'vue-loading-overlay';
 import Paginate from 'vuejs-paginate';
 import VueTruncate from 'vue-truncate-filter';
 import VueClipboard from 'vue-clipboard2';
+import VueMeta from 'vue-meta';
 import Toasted from 'vue-toasted';
 import {
   ValidationObserver, ValidationProvider, localize, setInteractionMode,
@@ -27,7 +28,6 @@ import store from './store';
 import './scss/style.scss';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import './assets/fonts/opensans.css';
-import VueMeta from 'vue-meta';
 
 Vue.use(vueDebounce, {
   listenTo: ['input', 'keyup', 'change'],
@@ -36,8 +36,8 @@ Vue.use(vueDebounce, {
 Vue.use(VueAuth, authConfig);
 
 Vue.use(VueMeta, {
-  refreshOnceOnNavigation: true
-})
+  refreshOnceOnNavigation: true,
+});
 Vue.use(Loading);
 
 Vue.use(VueFilterDateFormat, {
