@@ -17,6 +17,9 @@ export default class CatalogNav extends Vue {
 
 <style scoped lang="scss">
   .catalog-nav {
+    .catalog-nav {
+      box-shadow: none;
+    }
     border-radius: 8px;
     box-shadow: 0 2px 14px 0 #1e27330c;
     background-color: #ffffff;
