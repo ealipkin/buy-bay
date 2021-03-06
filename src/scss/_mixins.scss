@@ -117,13 +117,56 @@
   width: 100%;
   padding: 10px 22px;
   transition: all 0.3s ease;
-  outline: 0;
   font-family: inherit;
+  outline: 0;
 
   height: 52px;
   border-radius: 4px;
   border: solid 1px #B6BBCD;
   background-color: #ffffff;
+}
+
+@mixin button() {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: normal;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  min-height: 40px;
+  border-radius: 4px;
+  background-color: $blue;
+  box-sizing: border-box;
+  box-shadow: none;
+  font-family: inherit;
+  border: none;
+  padding: 0 24px;
+  padding-bottom: 2px;
+  transition: background-color 0.5s ease;
+  outline: none;
+  text-decoration: none;
+
+  &:focus,
+  &:hover {
+    background: $buttonHover;
+  }
+
+  &:active {
+    background: $buttonActive;
+  }
+}
+
+@mixin button-big() {
+  padding: 0 32px;
+  border-radius: 8px;
+  height: 60px;
+
+  @include tablet() {
+    font-size: 18px;
+  }
 }
 
 .close {

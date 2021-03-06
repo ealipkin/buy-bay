@@ -3,6 +3,8 @@ import { SORT_PARAMS } from '@/models/enums';
 export const API_URL = process.env.VUE_APP_API_URL;
 export const PROXY_URL = process.env.VUE_APP_PROXY_URL;
 export const AUTH_API_URL = process.env.VUE_APP_AUTH_API_URL;
+export const YOOKASSA_ID = process.env.VUE_APP_YOOKASSA_ID;
+
 
 export const DEFAULT_PAGINATE_PAGE = 1;
 
@@ -46,6 +48,7 @@ export const endpoints = {
     create: '/profile/card/create',
     edit: (id) => `/profile/card/${id}`,
     setActive: (id) => `/profile/card/active/${id}`,
+    getByPid : (pid) => `/card/getbypid/${pid}`
   },
   order: {
     get: (id) => `/order/get/${id}`,

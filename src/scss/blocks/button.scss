@@ -1,42 +1,8 @@
 .button {
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: normal;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  min-height: 40px;
-  border-radius: 4px;
-  background-color: $blue;
-  box-sizing: border-box;
-  box-shadow: none;
-  border: none;
-  padding: 0 24px;
-  padding-bottom: 2px;
-  transition: background-color 0.5s ease;
-  outline: none;
-  text-decoration: none;
+  @include button;
 
   &--big {
-    padding: 0 32px;
-    border-radius: 8px;
-    height: 60px;
-
-    @include tablet() {
-      font-size: 18px;
-    }
-  }
-
-  &:focus,
-  &:hover {
-    background: $buttonHover;
-  }
-
-  &:active {
-    background: $buttonActive;
+    @include button-big;
   }
 
   &--disabled,

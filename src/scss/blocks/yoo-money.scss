@@ -1,0 +1,162 @@
+.yoomoney-checkout-bank-card__logo {
+  display: block;
+  position: static;
+  margin: 0;
+  margin-bottom: 10px;
+  padding: 0;
+  opacity: 1;
+  color: black;
+  font-family: inherit;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  @include tablet() {
+    margin-bottom: 48px;
+  }
+}
+
+.yoomoney-checkout-cardpayment__content {
+  padding: 40px 20px;
+  font-family: $openSans;
+  background: white;
+  border-radius: 8px;
+  box-sizing: border-box;
+  max-width: calc(100% - 40px);
+  @include tablet() {
+    padding: 39px 50px 38px;
+    max-width: 460px;
+  }
+}
+
+.yoomoney-checkout-button {
+  @include button;
+  @include button-big;
+  max-width: 350px;
+}
+
+.yoomoney-checkout-bank-card__validity, .yoomoney-checkout-bank-card__cvc,
+.yoomoney-checkout-bank-card__validity .yoomoney-checkout-input {
+  width: 100%;
+  @include tablet() {
+    //width: 50%;
+  }
+}
+
+.yoomoney-checkout-bank-card__validity {
+  @include tablet {
+    width: 45%;
+  }
+}
+
+.yoomoney-checkout-bank-card__cvc {
+  @include tablet {
+    width: 55%;
+  }
+}
+
+.yoomoney-checkout-bank-card__validity .yoomoney-checkout-input {
+  span {
+    width: 100%;
+    padding: 0;
+    display: block;
+    box-sizing: border-box;
+
+    .yoomoney-checkout-input__control {
+      padding: 0 12px;
+    }
+  }
+}
+
+.yoomoney-checkout-input__control {
+  @include input;
+  outline: none;
+  font-weight: 500;
+
+  &:focus {
+    outline: none;
+    border-color: $blue;
+  }
+}
+
+.yoomoney-checkout-bank-card {
+  height: auto;
+}
+
+.yoomoney-checkout-cardpayment__logo {
+  display: none;
+}
+
+.yoomoney-checkout-bank-card {
+  font-family: $openSans;
+}
+
+.yoomoney-checkout-bank-card__logotypes {
+  display: none;
+}
+
+.yoomoney-checkout-bank-card__front {
+  padding: 0;
+  box-shadow: none;
+  max-width: 350px;
+  background: none !important;
+  display: flex;
+  flex-direction: column;
+
+  @include tablet {
+    display: block;
+  }
+
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+.yoomoney-checkout-cardpayment__close {
+  @include close;
+  right: 26px;
+  top: 24px;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  z-index: 1;
+}
+
+.yoomoney-checkout-cardpayment__form {
+  position: static;
+}
+
+.yoomoney-checkout-cardpayment__payment-information {
+  position: static;
+}
+
+.yoomoney-save-card-checkbox {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+
+.yookasssa-add-card {
+  .yoomoney-save-card-checkbox {
+    display: none;
+  }
+}
+
+.yookasssa-payment {
+
+}
+
+@keyframes yoomoney-checkout-spin {
+  0% {
+    border-top-color: white;
+    border-left-color: white;
+    transform: rotate(0);
+  }
+  100% {
+    border-top-color: white;
+    border-left-color: white;
+    transform: rotate(360deg);
+  }
+}

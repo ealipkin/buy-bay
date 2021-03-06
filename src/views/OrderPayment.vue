@@ -44,7 +44,6 @@
                 DeliveryInfo(:deliveryItem="orderData.delivery" v-if="orderData.delivery && !isMobile").order-payment__delivery.order-payment__item
 
         AddressModal(ref="addressModal" @update="handleUpdateAddress" @add="handleAddAddress")
-        CreditCardModal(ref="creditCardModal")
         ConfirmationModal(ref="confirmationModal" @confirm="removeConfirm" @cancel="removeCancel")
       template(v-else)
         h1.order-payment__title Заказ не найден
@@ -55,16 +54,14 @@
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
 
-import { createProfileUser } from '@/utils/data';
 import DeliveryInfo from '@/components/DeliveryInfo.vue';
 import { breakPoints } from '@/utils/constants';
 import OrderInfo from '@/components/OrderInfo.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
 import AddressModal from '@/components/AddressModal.vue';
-import CreditCardModal from '@/components/CreditCardModal.vue';
 import { CardItem, ProfileUser, UserAddressItem } from '@/models/models';
 import { createRequest } from '@/services/http.service';
-import { endpoints } from '@/config';
+import { endpoints, YOOKASSA_ID } from '@/config';
 import Loader from '@/components/Loader.vue';
 import {
   OrderAddAddressResponse,
@@ -88,6 +85,13 @@ enum ITEMS_TYPES {
   ADDRESS = 'address',
 }
 
+enum PAYMENT_FORM_TYPES {
+  PAY = 'pay',
+  ADD = 'add'
+}
+
+declare const YooMoneyCheckoutUI;
+
 @Component({
   components: {
     Destination,
@@ -99,7 +103,6 @@ enum ITEMS_TYPES {
     OrderInfo,
     CreditCardItem,
     AddressModal,
-    CreditCardModal,
     Toasted,
   },
 })
@@ -132,6 +135,11 @@ export default class OrderPayment extends Vue {
   loaded = false
 
   submitted = false;
+
+  openedForm: PAYMENT_FORM_TYPES | null = null;
+
+  yoooKassaModal: HTMLElement | null = null;
+  yooKassa: any = null;
 
   get orderDisabled() {
     console.log(this.orderData);
@@ -234,21 +242,43 @@ export default class OrderPayment extends Vue {
     this.selectAddress(address.id).then(this.updateOrder);
   }
 
-  // openCreditCardModal() {
-  // const modalComponent: any = this.$refs.creditCardModal;
-  // modalComponent.showModal();
-  // }
-
-  handleAddCard() {
-    createRequest('POST', endpoints.card.create)
-      .then((res) => {
-        window.location.href = res.data.data.confirmation_url;
-      });
+  async handleAddCard() {
+    this.initYooKassa();
+    const modal = new YooMoneyCheckoutUI(YOOKASSA_ID, {
+      language: 'ru',
+      domSelector: '.$addCard',
+      amount: 1
+    });
+    modal.open();
+    modal.on('yc_success', async (res) => {
+      console.log('yc_success -> ', res);
+      const paymentToken = res.data.response.paymentToken;
+      const createRes = await createRequest('POST', endpoints.card.create, { paymentToken });
+      console.log('create success -> ', createRes);
+      const pid = createRes.data.data.pid;
+      const gRes = await createRequest('GET', endpoints.card.getByPid(pid));
+      console.log('getByPid success -> ', gRes);
+      modal.chargeSuccessful();
+      this.updateCards();
+      modal.close();
+    });
+    if (this.yoooKassaModal) {
+      this.yoooKassaModal.classList.add('yookasssa-add-card');
+      this.yoooKassaModal.classList.remove('yookasssa-payment');
+      const title = this.yoooKassaModal.querySelector('.yoomoney-checkout-bank-card__logo');
+      if (title) {
+        title.innerHTML = 'Добавить карту';
+      }
+    }
   }
 
   handleSelectCard(card: CardItem) {
     const { pid } = card;
     this.submitted = true;
+    const cardIndex: number = (this.cards as CardItem[]).findIndex((c: CardItem) => c.id === card.id);
+    if (this.cards && cardIndex !== -1) {
+      Vue.set(this.cards, cardIndex, { ...card, is_active: true });
+    }
     createRequest('POST', endpoints.order.selectCard(this.orderId), { pid }).then(this.updateOrder);
   }
 
@@ -379,7 +409,9 @@ export default class OrderPayment extends Vue {
   }
 
   handleOrder() {
-    this.submitted = true;
+    this.openPaymentModal();
+    // this.submitted = true;
+    /*
     createRequest('POST', endpoints.order.pay(this.orderId))
       .then((res: OrderPayResponse) => {
         console.log('handleOrder -> ', res);
@@ -398,20 +430,73 @@ export default class OrderPayment extends Vue {
       .finally(() => {
         this.submitted = false;
       });
+    */
+  }
+
+  openPaymentModal() {
+    this.initYooKassa();
+    const modal = new YooMoneyCheckoutUI(YOOKASSA_ID, {
+      language: 'ru',
+      domSelector: '.$checkout',
+      amount: this.orderData && this.orderData.order.price
+    });
+    modal.open();
+
+    modal.on('yc_success', (res) => {
+      const paymentToken = res.response.paymentToken;
+      modal.chargeSuccessful();
+    });
+    if (this.yoooKassaModal) {
+      this.yoooKassaModal.classList.remove('yookasssa-add-card');
+      this.yoooKassaModal.classList.add('yookasssa-payment');
+      const title = this.yoooKassaModal.querySelector('.yoomoney-checkout-bank-card__logo');
+      const checkbox: HTMLInputElement | null = document.querySelector('.yoomoney-save-card-checkbox');
+      if (title) {
+        title.innerHTML = 'Оплата заказа';
+      }
+      if (checkbox) {
+        checkbox.checked = false;
+      }
+    }
   }
 
   mounted() {
     if (this.isAuthorized) {
       this.loadOrder();
+      // this.initYooKassa();
+      console.log(this.yoooKassaModal);
     } else {
       this.loaded = true;
       this.$root.$emit('show-login-modal');
     }
   }
 
+  initYooKassa() {
+    const exist = document.querySelector('.yoomoney-checkout-ui_status_created');
+    if (exist) {
+      exist.remove();
+    }
+    this.yooKassa = (window as any).YooMoneyCheckoutUI(YOOKASSA_ID);
+    this.yoooKassaModal = document.querySelector('.yoomoney-checkout-cardpayment__window');
+    const cardContainer = document.querySelector('.yoomoney-checkout-bank-card__front');
+    const saveCheckbox = document.querySelector('.yoomoney-save-card-checkbox');
+    if (cardContainer && !saveCheckbox) {
+      cardContainer.insertAdjacentHTML('afterend',
+        `
+          <label class="checkbox yoomoney-save-card-checkbox">
+            <input type="checkbox" name="saveCard" class="visually-hidden" value="saveCard">
+            <span class="checkbox__icon"></span>
+            <span class="checkbox__text">Сохранить карту</span>
+          </label>
+        `
+      );
+    }
+  }
+
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   }
+
 }
 </script>
 
