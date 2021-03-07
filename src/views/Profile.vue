@@ -50,7 +50,7 @@ import Loader from '@/components/Loader.vue';
 import $store from '@/store';
 import { mapGetters } from 'vuex';
 import { createRequest } from '@/services/http.service';
-import { endpoints } from '@/config';
+import { endpoints, YOOKASSA_ID } from '@/config';
 import { CardItem, UserAddressItem } from '@/models/models';
 import Toasted from '@/components/Toasted.vue';
 import ConfirmationModal from '@/components/ConfirmationModal.vue';
@@ -60,6 +60,8 @@ enum ITEMS_TYPES {
   CARD = 'card',
   ADDRESS = 'address',
 }
+
+declare const YooMoneyCheckoutUI;
 
 @Component({
   components: {
@@ -91,6 +93,8 @@ export default class Profile extends Vue {
     }
   }
 
+  yooKassa: any = null;
+  yooKassaModal: HTMLElement | null = null;
   profileMenuItems = PROFILE_MENU_ITEMS;
 
   lastRemovedItem: { type: ITEMS_TYPES; id: any } | null = null;
@@ -109,11 +113,55 @@ export default class Profile extends Vue {
     this.openAddressModal(address);
   }
 
-  handleAddCard() {
-    createRequest('POST', endpoints.card.create)
-      .then((res) => {
-        window.location.href = res.data.data.confirmation_url;
-      });
+  async handleAddCard() {
+    console.log('handleAddCard -> ');
+    this.initYooKassa();
+    const modal = new YooMoneyCheckoutUI(YOOKASSA_ID, {
+      language: 'ru',
+      domSelector: '.$addCard',
+      amount: 1,
+    });
+    modal.open();
+    modal.on('yc_success', async (res) => {
+      const { paymentToken } = res.data.response;
+      const createRes = await createRequest('POST', endpoints.card.create, { paymentToken });
+      const { pid } = createRes.data.data;
+      await createRequest('GET', endpoints.card.getByPid(pid))
+        .then(() => {
+          this.$root.$emit('show-toast', {
+            message: 'Карта успешно добавлена',
+          });
+          $store.dispatch('profile/loadProfile');
+        })
+        .catch((err) => {
+          const { message } = err.data;
+          this.$root.$emit('show-toast', {
+            message,
+            type: 'error',
+          });
+        }).finally(() => {
+          modal.chargeSuccessful();
+          modal.close();
+        });
+    });
+
+    if (this.yooKassaModal) {
+      this.yooKassaModal.classList.add('yookasssa-add-card');
+      this.yooKassaModal.classList.remove('yookasssa-payment');
+      const title = this.yooKassaModal.querySelector('.yoomoney-checkout-bank-card__logo');
+      if (title) {
+        title.innerHTML = 'Добавить карту';
+      }
+    }
+  }
+
+  initYooKassa() {
+    const exist = document.querySelector('.yoomoney-checkout-ui_status_created');
+    if (exist) {
+      exist.remove();
+    }
+    this.yooKassa = (window as any).YooMoneyCheckoutUI(YOOKASSA_ID);
+    this.yooKassaModal = document.querySelector('.yoomoney-checkout-cardpayment__window');
   }
 
   openCreditCardModal() {
