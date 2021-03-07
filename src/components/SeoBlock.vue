@@ -9,7 +9,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { ISeoBlock } from '@/models/models';
 
 @Component({
-  metaInfo() {
+  metaInfo(): any {
     const seoBlock: ISeoBlock = (this as any).block;
     return {
       title: seoBlock.meta_title,
@@ -30,10 +30,6 @@ import { ISeoBlock } from '@/models/models';
 })
 export default class SeoBlock extends Vue {
   @Prop() public block!: ISeoBlock;
-
-  mounted() {
-    console.log(this.block);
-  }
 }
 
 </script>

@@ -4,7 +4,7 @@
       .search-suggest__title {{category.title}}
       ul.search-suggest__items-list
         li(v-for="item in category.items").search-suggest__item-wrapper
-          router-link(:to="`/${category.route}/${item.id}`").search-suggest__inner-item
+          router-link(:to="item.href ? item.href : `/${category.route}/${item.id}`").search-suggest__inner-item
             div(v-if="item.image" :class="{'search-suggest__image-container--rounded': item.type === itemTypes.BRAND}" ).search-suggest__image-container
               img(:src="item.image").search-suggest__image
             .search-suggest__info

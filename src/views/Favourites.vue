@@ -39,6 +39,7 @@
                   Pagination(:paginationInfo="shopPagination" :kindText="getShopKindText(shopPagination.perPage)" @page="shopPageChange" @more="showMoreBrands")
               div(v-else).empty-message В избранном пока нет товаров
           Loader(v-else)
+        SeoBlock(v-if="seo" :block="seo")
 </template>
 
 <script lang="ts">
@@ -62,6 +63,8 @@ import $store from '@/store';
 import { Product, ProductShop } from '@/models/order';
 import { addParamsToLocation, paramsStringToObject } from '@/utils/filters';
 import { declOfNum } from '@/utils/common';
+import SeoBlock from '@/components/SeoBlock.vue';
+import { ISeoBlock } from '@/models/models';
 
 const PAGE_TITLE = 'Избранное';
 
@@ -136,6 +139,7 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 
 @Component({
   components: {
+    SeoBlock,
     Loader,
     ShopCard,
     SortSelect,
@@ -162,6 +166,8 @@ export default class Favourites extends Vue {
   brandSort: SORT_PARAMS = DEFAULT_SORT;
 
   tabs = PAGE_TABS;
+
+  seo: ISeoBlock | null = null;
 
   productOptions = PRODUCT_SORT_OPTIONS;
 
@@ -296,6 +302,9 @@ export default class Favourites extends Vue {
     const { data } = res.data;
     this.favouritesItems = data.data;
     this.productPagination = data.paginationInfo;
+    if (!this.seo) {
+      this.seo = data.seo_block;
+    }
   }
 
   updateFavouritesBrands(res: FavBrandsResponse) {

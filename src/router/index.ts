@@ -35,11 +35,11 @@ const routes: Array<RouteConfig> = [
     name: 'Product',
     component: () => import('../views/Product.vue'),
   },
-  {
-    path: '/product/:id/checkout',
-    name: 'OrderCheckout',
-    component: () => import('../views/OrderCheckout.vue'),
-  },
+  // {
+  //   path: '/product/:id/checkout',
+  //   name: 'OrderCheckout',
+  //   component: () => import('../views/OrderCheckout.vue'),
+  // },
   {
     path: '/order/:id',
     name: 'OrderPayment',

@@ -6,24 +6,26 @@
           h1.page__title Мой профиль
           ProfileNav(:items="profileMenuItems")
         template(v-if="!loaded")
-          div(v-if="isAuthorized && user").page__content.profile__content
-            UserInfo(:user="user").profile__item.profile__user-info
-            ProfileNav(:items="profileMenuItems").profile__item.profile__nav-mobile-only
-            Contacts(:user="user").profile__item.profile__contacts
-            .profile__address.profile__item
-              h3.profile__address-title Адреса доставки
-              ul.profile__address-list
-                li(v-for="(item) in user.addresses" :key="item.id").profile__address-item
-                  AddressItem(:item="item" @edit="openAddressEditor" @remove="handleAddressRemove" @select="handleAddressSelect")
-              button(type="button" @click="openAddressModal(null)").link + Добавить адрес
+          div(v-if="isAuthorized && user").page__content
+            .profile__content
+              UserInfo(:user="user").profile__item.profile__user-info
+              ProfileNav(:items="profileMenuItems").profile__item.profile__nav-mobile-only
+              Contacts(:user="user").profile__item.profile__contacts
+              .profile__address.profile__item
+                h3.profile__address-title Адреса доставки
+                ul.profile__address-list
+                  li(v-for="(item) in user.addresses" :key="item.id").profile__address-item
+                    AddressItem(:item="item" @edit="openAddressEditor" @remove="handleAddressRemove" @select="handleAddressSelect")
+                button(type="button" @click="openAddressModal(null)").link + Добавить адрес
 
-            .profile__cards.profile__item
-              h3.profile__cards-title Мои карты
-              ul.profile__cards-list
-                li(v-for="(item) in user.cards" :key="item.id").profile__cards-item
-                  CreditCardItem(:item="item" @remove="handleRemoveCard" @select="handleSelectCard")
+              .profile__cards.profile__item
+                h3.profile__cards-title Мои карты
+                ul.profile__cards-list
+                  li(v-for="(item) in user.cards" :key="item.id").profile__cards-item
+                    CreditCardItem(:item="item" @remove="handleRemoveCard" @select="handleSelectCard")
 
-              button(type="button" @click="handleAddCard").link + Добавить карту
+                button(type="button" @click="handleAddCard").link + Добавить карту
+            SeoBlock(:block="user.seo_block")
           div(v-if="!isAuthorized").page__content.profile__content
             h1.empty-message Войдите в учетную запись чтобы редактировать данные профиля
         Loader(v-else)
@@ -52,6 +54,7 @@ import { endpoints } from '@/config';
 import { CardItem, UserAddressItem } from '@/models/models';
 import Toasted from '@/components/Toasted.vue';
 import ConfirmationModal from '@/components/ConfirmationModal.vue';
+import SeoBlock from '@/components/SeoBlock.vue';
 
 enum ITEMS_TYPES {
   CARD = 'card',
@@ -60,6 +63,7 @@ enum ITEMS_TYPES {
 
 @Component({
   components: {
+    SeoBlock,
     ConfirmationModal,
     Loader,
     ProfileNav,
@@ -108,8 +112,7 @@ export default class Profile extends Vue {
   handleAddCard() {
     createRequest('POST', endpoints.card.create)
       .then((res) => {
-        const url = res.data.data.confirmation_url;
-        window.location.href = url;
+        window.location.href = res.data.data.confirmation_url;
       });
   }
 

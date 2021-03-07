@@ -1,6 +1,6 @@
 import { ORDER_STATUSES, PRODUCT_FEATURES } from '@/models/enums';
 import {
-  Contacts, Message, OrderUser, UserAddressItem,
+  Contacts, ISeoBlock, Message, OrderUser, UserAddressItem,
 } from '@/models/models';
 
 export interface ProductOption {
@@ -207,4 +207,5 @@ export interface OrderData {
   order_status: OrderStatus;
   delivery?: OrderDelivery;
   orderInfo?: OrderData;
+  seo_block: ISeoBlock;
 }

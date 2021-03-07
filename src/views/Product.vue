@@ -158,7 +158,6 @@ export default class ItemDetail extends Vue {
         if (response) {
           this.seo = response.seo_block;
           this.item = response;
-          console.log(this.item);
         }
       });
     createRequest('get', `${endpoints.product}/${productId}/related`)

@@ -117,6 +117,7 @@ export interface ProfileUser {
   addresses: UserAddressItem[];
   cards: CardItem[];
   getFormatDate?: () => string;
+  seo_block?: ISeoBlock;
 }
 
 export interface NotificationItem {
@@ -128,13 +129,13 @@ export interface NotificationItem {
 }
 
 export interface ISeoBlock {
-  title: string;
-  text: string;
-  meta_title: string;
-  meta_desc: string;
-  og_desc: string;
-  og_image: string;
-  og_site: string;
+  title?: string;
+  text?: string;
+  meta_title?: string;
+  meta_desc?: string;
+  og_desc?: string;
+  og_image?: string;
+  og_site?: string;
 }
 
 export interface BigSliderItem {

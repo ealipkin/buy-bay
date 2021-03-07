@@ -2,7 +2,8 @@ import {
   BigSliderItem,
   BreadcrumbLink,
   CardItem, ICategoryItem,
-  ISearchSuggest, ISeoBlock,
+  ISearchSuggest,
+  ISeoBlock,
   ProfileCounts,
   ProfileUser,
   UserAddressItem,
@@ -50,6 +51,7 @@ export interface FavProductsResponse {
     data: {
       data: Product[];
       paginationInfo: PaginationInfo;
+      seo_block: ISeoBlock;
     };
     success: boolean;
   };
@@ -154,6 +156,7 @@ export interface OrdersResponse {
     data: {
       data: OrderData[];
       paginationInfo: PaginationInfo;
+      seo_block: ISeoBlock;
     };
     message: string;
     success: boolean;

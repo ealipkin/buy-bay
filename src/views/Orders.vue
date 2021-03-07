@@ -60,6 +60,7 @@
                 Pagination(:paginationInfo="activePagination" @page="inActiveOrdersPageChange" @more="showMoreInActiveOrders")
             div(v-else).empty-message Нет завершенных {{pageSettings.kindLabel}}
         Loader(v-else)
+      SeoBlock(v-if="seo" :block="seo")
       GroupInfoModal(:orderData="selectedOrder" ref="groupModal")
 
 </template>
@@ -82,6 +83,8 @@ import { OrderData } from '@/models/order';
 import $store from '@/store';
 import Loader from '@/components/Loader.vue';
 import GroupInfoModal from '@/components/GroupInfoModal.vue';
+import SeoBlock from '@/components/SeoBlock.vue';
+import { ISeoBlock } from '@/models/models';
 
 interface PageSettings {
   title: string;
@@ -124,6 +127,7 @@ const TABS = [
 ];
 @Component({
   components: {
+    SeoBlock,
     GroupInfoModal,
     Loader,
     ProfileNav,
@@ -139,12 +143,15 @@ export default class Orders extends Vue {
     this.loaded = false;
     this.activeOrders = [];
     this.inactiveOrders = [];
+    this.seo = null;
     this.init();
   }
 
   profileMenuItems = PROFILE_MENU_ITEMS;
 
   selectedTab = 1;
+
+  seo: ISeoBlock | null = null;
 
   activePagination: PaginationInfo | undefined;
 
@@ -229,13 +236,13 @@ export default class Orders extends Vue {
       .then(() => {
         this.loaded = true;
       })
-      .catch((err) => {
+      .catch(() => {
         this.loaded = true;
       });
   }
 
-  async loadActiveOrders() {
-    await this.loadActiveOrdersRequest().then(this.updateActiveOrders);
+  loadActiveOrders() {
+    return this.loadActiveOrdersRequest().then(this.updateActiveOrders);
   }
 
   async loadActiveOrdersRequest(): Promise<OrdersResponse> {
@@ -246,12 +253,15 @@ export default class Orders extends Vue {
 
   updateActiveOrders(res: OrdersResponse) {
     const { data } = res.data;
+    if (!this.seo) {
+      this.seo = data.seo_block;
+    }
     this.activeOrders = data.data;
     this.activePagination = data.paginationInfo;
   }
 
-  async loadInActiveOrders() {
-    await this.loadInActiveOrdersRequest().then(this.updateInActiveOrders);
+  loadInActiveOrders() {
+    return this.loadInActiveOrdersRequest().then(this.updateInActiveOrders);
   }
 
   async loadInActiveOrdersRequest(): Promise<OrdersResponse> {

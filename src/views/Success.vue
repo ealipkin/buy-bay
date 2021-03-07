@@ -3,8 +3,7 @@
     div(v-if="loaded").success-page__wrapper
       .success-page__info
         span.success-page__nice Ура!
-        h1(v-if="isGroup").success-page__title Группа покупки создана
-        h1(v-if="!isGroup").success-page__title Заказ оплачен
+        h1(v-if="isGroup").success-page__title {{title}}
         p(v-if="isGroup").success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Достаточно 1 друга, чтобы товар был отправлен.
         p(v-if="!isGroup").success-page__text Ориентировочная дата доставки {{new Date(orderData.delivery.from) | dateFormat('DD MMMM YYYY')}}. Следите за изменениями статуса в разделе&nbsp;
           router-link(to="/profile/orders").link «Мои заказы»
@@ -17,6 +16,7 @@
           SocialList(:socials="socials").success-page__social-list
 
           Share(v-if="product" :link="product.short_link")
+    SeoBlock(v-if="seo" :block="seo")
     Loader(v-else)
 </template>
 
@@ -33,10 +33,12 @@ import { endpoints } from '@/config';
 import { OrderPaymentResponse } from '@/models/responses';
 import { Group, OrderData, Product } from '@/models/order';
 import { createSharingLinks } from '@/utils/sharing';
-import { IShareData } from '@/models/models';
+import { ISeoBlock, IShareData } from '@/models/models';
+import SeoBlock from '@/components/SeoBlock.vue';
 
 @Component({
   components: {
+    SeoBlock,
     Loader,
     Timer,
     SocialList,
@@ -48,9 +50,18 @@ export default class Success extends Vue {
 
   orderId: string | null = null;
 
+  seo: ISeoBlock | null = null;
+
   orderData: OrderData | null = null;
 
   groupTimer: any = null;
+
+  get title() {
+    if (!this.orderData) {
+      return '';
+    }
+    return this.isGroup ? 'Группа покупки создана' : 'Заказ оплачен';
+  }
 
   get isGroup() {
     return this.orderData && this.orderData.order && this.orderData.order.is_group;
@@ -91,15 +102,18 @@ export default class Success extends Vue {
     }
     this.getOrder()
       .then((res) => {
-        console.log(res);
         this.orderData = res.data.data;
         this.loaded = true;
         const groupTimer = this.orderData.group && this.orderData.group.time;
         if (groupTimer) {
           this.groupTimer = groupTimer;
         }
+
+        this.seo = {
+          meta_title: this.title,
+        };
       })
-      .catch((err) => {
+      .catch(() => {
         router.push({ path: '/' });
       });
   }

@@ -21,6 +21,7 @@
           //router-link(to="#").link._hide-desktop Показать еще
         .container
           SimilarSlider(:items="similarItems").similar-slider--scroll
+      SeoBlock(:block="seo" v-if="seo")
     ConfirmationModal(ref="confirmationModal" :maxWidth="500" @confirm="leaveConfirm" cancelText="Остаться" confirmText="Выйти" :text="confirmModalText")
 </template>
 
@@ -37,7 +38,7 @@ import GroupInfo from '@/components/GroupInfo.vue';
 import GroupAction from '@/components/GroupAction.vue';
 import SimilarSlider from '@/components/SimilarSlider.vue';
 import SeoBlock from '@/components/SeoBlock.vue';
-import { BreadcrumbLink } from '@/models/models';
+import { BreadcrumbLink, ISeoBlock } from '@/models/models';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import router from '@/router';
 import { OrderPaymentResponse } from '@/models/responses';
@@ -64,6 +65,8 @@ export default class GroupDetail extends Vue {
   orderId: string | null = null;
 
   orderData: OrderData | null = null;
+
+  seo: ISeoBlock | null = null;
 
   breadCrumbs: BreadcrumbLink[] = [
     { href: '/', label: 'Главная' },
@@ -136,12 +139,14 @@ export default class GroupDetail extends Vue {
         const product: Product | undefined = order && order.orderItems[0].product;
         this.orderData = orderData;
         this.loaded = true;
-        // console.log(product.title);
         this.breadCrumbs.push({
           href: '',
           label: product ? `Группа на покупку ${product.title}` : '',
           current: true,
         });
+        this.seo = {
+          meta_title: `Группа на покупку ${(product && product.title) || ''}`,
+        };
       })
       .catch(() => {
         router.push({ path: '/' });

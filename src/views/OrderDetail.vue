@@ -13,6 +13,7 @@
       .order-detail__aside
         OrderStatusCard(:order="orderData" :options="orderOptions" v-if="!isMobile").order-detail__status.order-detail__item
         DeliveryInfo(:deliveryItem="orderData.delivery" v-if="!isMobile").order-detail__delivery.order-detail__item
+    SeoBlock(v-if="seo" :block="seo")
 
 </template>
 
@@ -26,7 +27,7 @@ import OrderInfo from '@/components/OrderInfo.vue';
 import DeliveryAddress from '@/components/DeliveryAddress.vue';
 import OrderStatusCard from '@/components/OrderStatusCard.vue';
 import Chat from '@/components/Chat.vue';
-import { BreadcrumbLink } from '@/models/models';
+import { BreadcrumbLink, ISeoBlock } from '@/models/models';
 import { OrderData, OrderPaymentOption, Product } from '@/models/order';
 import { OrderPaymentResponse } from '@/models/responses';
 import { createRequest } from '@/services/http.service';
@@ -34,9 +35,11 @@ import { endpoints } from '@/config';
 import router from '@/router';
 import { ORDER_STATUSES } from '@/models/enums';
 import SimilarSlider from '@/components/SimilarSlider.vue';
+import SeoBlock from '@/components/SeoBlock.vue';
 
 @Component({
   components: {
+    SeoBlock,
     SimilarSlider,
     Breadcrumbs,
     DeliveryInfo,
@@ -50,6 +53,8 @@ export default class OrderDetail extends Vue {
   loaded = false;
 
   orderId: string | null = null;
+
+  seo: ISeoBlock | null = null;
 
   orderData: OrderData | null = null;
 
@@ -101,6 +106,7 @@ export default class OrderDetail extends Vue {
     this.getOrder()
       .then((res) => {
         const orderData = res.data.data;
+        this.seo = orderData.seo_block;
         if (orderData.order_status.id === ORDER_STATUSES.PAYMENT_WAITING || orderData.order_status.id === ORDER_STATUSES.IN_PROCESS) {
           router.push({ path: `/order/${this.orderId}` });
           return;
@@ -112,7 +118,6 @@ export default class OrderDetail extends Vue {
           label: this.orderData.order.id ? `Заказ № ${this.orderData.order.id}` : '',
           current: true,
         });
-        // console.log('this.orderData -> ', this.orderData);
       })
       .catch(() => {
         router.push({ path: '/' });

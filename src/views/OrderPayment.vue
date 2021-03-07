@@ -45,6 +45,7 @@
 
         AddressModal(ref="addressModal" @update="handleUpdateAddress" @add="handleAddAddress")
         ConfirmationModal(ref="confirmationModal" @confirm="removeConfirm" @cancel="removeCancel")
+      SeoBlock(v-if="seo" :block="seo")
       template(v-else)
         h1.order-payment__title Заказ не найден
     Loader(v-else)
@@ -59,7 +60,9 @@ import { breakPoints } from '@/utils/constants';
 import OrderInfo from '@/components/OrderInfo.vue';
 import CreditCardItem from '@/components/CreditCardItem.vue';
 import AddressModal from '@/components/AddressModal.vue';
-import { CardItem, ProfileUser, UserAddressItem } from '@/models/models';
+import {
+  CardItem, ISeoBlock, ProfileUser, UserAddressItem,
+} from '@/models/models';
 import { createRequest } from '@/services/http.service';
 import { endpoints, YOOKASSA_ID } from '@/config';
 import Loader from '@/components/Loader.vue';
@@ -79,21 +82,18 @@ import router from '@/router';
 import { OrderData, OrderPaymentOption, Product } from '@/models/order';
 import Recipient from '@/components/Recipient.vue';
 import Destination from '@/components/Destination.vue';
+import SeoBlock from '@/components/SeoBlock.vue';
 
 enum ITEMS_TYPES {
   CARD = 'card',
   ADDRESS = 'address',
 }
 
-enum PAYMENT_FORM_TYPES {
-  PAY = 'pay',
-  ADD = 'add'
-}
-
 declare const YooMoneyCheckoutUI;
 
 @Component({
   components: {
+    SeoBlock,
     Destination,
     Recipient,
     ConfirmationModal,
@@ -119,6 +119,8 @@ export default class OrderPayment extends Vue {
 
   addressItem = {};
 
+  seo: ISeoBlock | null = null;
+
   window = {
     width: 0,
     height: 0,
@@ -136,9 +138,8 @@ export default class OrderPayment extends Vue {
 
   submitted = false;
 
-  openedForm: PAYMENT_FORM_TYPES | null = null;
-
   yoooKassaModal: HTMLElement | null = null;
+
   yooKassa: any = null;
 
   get orderDisabled() {
@@ -247,28 +248,30 @@ export default class OrderPayment extends Vue {
     const modal = new YooMoneyCheckoutUI(YOOKASSA_ID, {
       language: 'ru',
       domSelector: '.$addCard',
-      amount: 1
+      amount: 1,
     });
     modal.open();
     modal.on('yc_success', async (res) => {
-      const paymentToken = res.data.response.paymentToken;
+      const { paymentToken } = res.data.response;
       const createRes = await createRequest('POST', endpoints.card.create, { paymentToken });
-      const pid = createRes.data.data.pid;
-      await createRequest('GET', endpoints.card.getByPid(pid)).then(() => {
-        this.updateCards();
-        this.$root.$emit('show-toast', {
-          message: 'Карта успешно добавлена',
+      const { pid } = createRes.data.data;
+      await createRequest('GET', endpoints.card.getByPid(pid))
+        .then(() => {
+          this.updateCards();
+          this.$root.$emit('show-toast', {
+            message: 'Карта успешно добавлена',
+          });
+        })
+        .catch((err) => {
+          const { message } = err.data;
+          this.$root.$emit('show-toast', {
+            message,
+            type: 'error',
+          });
+        }).finally(() => {
+          modal.chargeSuccessful();
+          modal.close();
         });
-      }).catch(err => {
-        const message = res.data.message;
-        this.$root.$emit('show-toast', {
-          message,
-          type: 'error'
-        });
-      }).finally(() => {
-        modal.chargeSuccessful();
-        modal.close();
-      });
     });
 
     if (this.yoooKassaModal) {
@@ -351,6 +354,7 @@ export default class OrderPayment extends Vue {
         const isWaiting = orderStatus === ORDER_STATUSES.PAYMENT_WAITING;
         const isInProcess = orderStatus === ORDER_STATUSES.IN_PROCESS;
         const canProceed = !orderStatus || isInProcess || isWaiting;
+        this.seo = orderRes.data.data.seo_block;
         if (!canProceed) {
           router.push({ path: `/profile/orders/${this.orderId}` });
           return null;
@@ -425,7 +429,7 @@ export default class OrderPayment extends Vue {
     } else {
       const modal = this.openPaymentModal();
       modal.on('yc_success', async (res) => {
-        const paymentToken = res.data.response.paymentToken;
+        const { paymentToken } = res.data.response;
         const isSavedCheckbox: HTMLInputElement | null = document.querySelector('.yoomoney-save-card-checkbox input');
         const isSaved = isSavedCheckbox && isSavedCheckbox.checked;
         this.paymentRequest({ paymentToken, isSaved })
@@ -451,13 +455,13 @@ export default class OrderPayment extends Vue {
           router.push({ path: `/profile/orders/${this.orderId}` });
         }
       })
-      .catch(err => {
-        const message = err.data.message;
+      .catch((err) => {
+        const { message } = err.data;
         this.$root.$emit('show-toast', {
           message,
-          type: 'error'
+          type: 'error',
         });
-      })
+      });
   }
 
   openPaymentModal() {
@@ -465,7 +469,7 @@ export default class OrderPayment extends Vue {
     const modal = new YooMoneyCheckoutUI(YOOKASSA_ID, {
       language: 'ru',
       domSelector: '.$checkout',
-      amount: this.orderData && this.orderData.order.price
+      amount: this.orderData && this.orderData.order.price,
     });
     modal.open();
     if (this.yoooKassaModal) {
@@ -486,8 +490,6 @@ export default class OrderPayment extends Vue {
   mounted() {
     if (this.isAuthorized) {
       this.loadOrder();
-      // this.initYooKassa();
-      console.log(this.yoooKassaModal);
     } else {
       this.loaded = true;
       this.$root.$emit('show-login-modal');
@@ -511,15 +513,13 @@ export default class OrderPayment extends Vue {
             <span class="checkbox__icon"></span>
             <span class="checkbox__text">Сохранить карту</span>
           </label>
-        `
-      );
+        `);
     }
   }
 
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   }
-
 }
 </script>
 
