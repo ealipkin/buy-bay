@@ -29,6 +29,9 @@ export default class Index extends Vue {
       if (!type || type === 'success') {
         toast.showSuccess(message);
       }
+      if(type === 'error') {
+        toast.showError(message);
+      }
     });
   }
 }

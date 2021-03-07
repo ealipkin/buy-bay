@@ -6,8 +6,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { successIcon } from '@/utils/svgIcons';
 
 @Component({
-  components: {
-  },
+  components: {},
 })
 export default class Toasted extends Vue {
   showSuccess(message) {
@@ -22,6 +21,17 @@ export default class Toasted extends Vue {
         el.innerHTML = successIcon;
         return el;
       },
+    });
+  }
+
+  showError(message) {
+    this.$toasted.show(message, {
+      position: 'top-center',
+      duration: 1500,
+      className: ['bb-toasted', 'bb-toasted--error'],
+      fitToScreen: true,
+      fullWidth: true,
+      iconPack: 'callback',
     });
   }
 }
@@ -41,6 +51,11 @@ export default class Toasted extends Vue {
 
   &--success {
     background-color: $green-1 !important;
+    color: #fff !important;
+  }
+
+  &--error {
+    background-color: $red-1 !important;
     color: #fff !important;
   }
 }
