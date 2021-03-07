@@ -282,7 +282,6 @@ export default class OrderPayment extends Vue {
           modal.close();
         });
     });
-
   }
 
   handleSelectCard(card: CardItem) {

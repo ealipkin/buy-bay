@@ -5,14 +5,15 @@
       span.item-info__orders
         img(src="../assets/icons/order-package.svg")
         span Заказов: {{divideNumberWithSpaces(this.item.orders)}}
-      Rate(:rate="item.rate").item-info__rate
+      Rate(:rate="item.rate" v-if="item.rate").item-info__rate
 
     .item-info__prices
       span.item-info__self-price
         span.item-info__self-price-value {{divideNumberWithSpaces(item.selfPrice)}} ₽
     ul(v-if="item.options").item-info__options
       li(v-for="option in item.options").item-info__option
-        h3.item-info__option-title {{option.title}}
+        h3(:class="{'item-info__option-title--error': validated && !selectedOptions[option.id]}").item-info__option-title {{option.title}}
+          span(v-if="validated && !selectedOptions[option.id]") : не выбрано
         .item-info__option-list
           label(v-for="value in option.values").item-info__option-label
             input(type="radio" :name="'option['+option.id+']'" :checked="value.selected" @change="optionSelect(option.id, value.value)").visually-hidden
@@ -25,10 +26,10 @@
     .item-info__actions
       button(type="button" :class="{'item-info__fav--active': item.isFavourite}" @click="toggleFav").item-info__fav
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="22"><path d="M14.2 20.6C-9.601 8.946 7.612-5.544 14.2 4.215c6.588-9.759 23.802 4.73 0 16.385z" stroke="currentColor" stroke-width="2" fill="none" fill-rule="evenodd"/></svg>
-      button(type="button" @click="buySelf" :disabled="orderDisabled").item-info__buy
+      button(type="button" @click="buySelf").item-info__buy
         span.item-info__buy-price {{divideNumberWithSpaces(item.selfPrice)}} ₽
         span.item-info__buy-text Купить одному
-      button(type="button" @click="buyGroup" :disabled="orderDisabled").item-info__buy.item-info__buy--grouped
+      button(type="button" @click="buyGroup").item-info__buy.item-info__buy--grouped
         span.item-info__buy-price {{divideNumberWithSpaces(item.groupPrice)}} ₽
         span.item-info__buy-text Купить вместе
 
@@ -36,7 +37,7 @@
 
 <script lang="ts">
 import {
-  Component, Prop, Vue, Watch,
+  Component, Prop, Vue,
 } from 'vue-property-decorator';
 import { divideNumberWithSpaces } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
@@ -47,6 +48,7 @@ import $store from '@/store';
 import { OrderResponse } from '@/models/responses';
 import router from '@/router';
 import { Product } from '@/models/order';
+import VueScrollTo from 'vue-scrollto';
 
 @Component({
   components: { AmountChooser, Rate },
@@ -60,6 +62,10 @@ export default class ItemInfo extends Vue {
 
   pending = false;
 
+  isOrderDisabled = true;
+
+  validated = false;
+
   get isAuthorized() {
     return (this as any).$auth.check();
   }
@@ -68,16 +74,14 @@ export default class ItemInfo extends Vue {
     return this.item.maxCount && this.item.maxCount < 99 ? this.item.maxCount : 99;
   }
 
-  get orderDisabled() {
+  updateOrderState() {
     if (!this.selectedOptions) {
-      return false;
+      return;
     }
-    const allOptions = Object.keys(this.selectedOptions).length;
     const allValuesSelect = Object.values(this.selectedOptions).filter(Boolean).length === Object.keys(this.selectedOptions).length;
     const isDisabled = this.pending || !allValuesSelect;
-    console.log('orderDisabled -> ');
     this.$emit('order-disabled', isDisabled);
-    return isDisabled;
+    this.isOrderDisabled = isDisabled;
   }
 
   optionSelect(parentId, id) {
@@ -87,6 +91,7 @@ export default class ItemInfo extends Vue {
         [parentId]: id,
       };
     }
+    this.updateOrderState();
   }
 
   toggleFav() {
@@ -140,19 +145,23 @@ export default class ItemInfo extends Vue {
   }
 
   sendOrder(type: 'self' | 'group', group?: Product | undefined) {
-    const data = this.prepareData(type, group);
-    const url = type === 'self' ? endpoints.order.self : endpoints.order.group;
-    this.pending = true;
-    createRequest('POST', url, data)
-      .then((res: OrderResponse) => {
-        const orderId = res.data.data.oid;
-        if (orderId) {
-          router.push({ path: `/order/${orderId}` });
-        }
-      })
-      .catch(() => {
-        this.pending = false;
-      });
+    if (this.isOrderDisabled) {
+      this.validateOptions();
+    } else {
+      const data = this.prepareData(type, group);
+      const url = type === 'self' ? endpoints.order.self : endpoints.order.group;
+      this.pending = true;
+      createRequest('POST', url, data)
+        .then((res: OrderResponse) => {
+          const orderId = res.data.data.oid;
+          if (orderId) {
+            router.push({ path: `/order/${orderId}` });
+          }
+        })
+        .catch(() => {
+          this.pending = false;
+        });
+    }
   }
 
   buySelf() {
@@ -177,8 +186,19 @@ export default class ItemInfo extends Vue {
 
   mounted() {
     this.selectedOptions = {};
-    Object.keys(this.item.options).forEach((option: string) => {
-      this.selectedOptions[option] = '';
+    Object.keys(this.item.options)
+      .forEach((option: string) => {
+        this.selectedOptions[option] = '';
+      });
+  }
+
+  validateOptions() {
+    this.validated = true;
+    this.$nextTick(() => {
+      const erroredEl = document.querySelector('.item-info__option-title--error');
+      if (erroredEl) {
+        VueScrollTo.scrollTo(erroredEl, 100, { offset: -30 });
+      }
     });
   }
 }
@@ -295,6 +315,10 @@ export default class ItemInfo extends Vue {
       margin: 0;
 
       margin-bottom: 14px;
+
+      &--error {
+        color: $red-1;
+      }
     }
 
     &__option-label {

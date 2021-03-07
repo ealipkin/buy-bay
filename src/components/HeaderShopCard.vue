@@ -2,11 +2,10 @@
   .header-shop-card
     .container.header-shop-card__container
       .header-shop-card__main
-        .header-shop-card__avatar
-          img(:src="shop.image")
+        div(:style="{backgroundImage: `url(${shop.image})`}").header-shop-card__avatar
         .header-shop-card__title {{shop.name}}
       .header-shop-card__aside
-        Rate(:rate="shop.rate").header-shop-card__rate
+        Rate(:rate="shop.rate" v-if="shop.rate").header-shop-card__rate
         button(type="button" :class="{'header-shop-card__fav--active': isFavourite}" @click="toggleFav").header-shop-card__fav
           include ../assets/icons/heart.svg
         //button(type="button" @click="writeToShop").header-shop-card__button.button.button--secondary Написать продавцу
@@ -106,6 +105,9 @@ export default class HeaderShopCard extends Vue {
       display: flex;
       align-items: center;
       justify-content: center;
+
+      background: transparent no-repeat center;
+      background-size: 70%;
 
       img {
         max-width: 100%;

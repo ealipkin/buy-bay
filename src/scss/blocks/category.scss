@@ -142,5 +142,7 @@
 .filters-wrapper {
   height: 100%;
   position: relative;
-  min-height: 50vh;
+  @include laptop() {
+    min-height: 50vh;
+  }
 }

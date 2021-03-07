@@ -19,6 +19,7 @@ module.exports = {
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
     'import/prefer-default-export': 'off',
     'global-require': 'off',
     'max-len': 'off',

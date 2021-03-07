@@ -333,6 +333,14 @@ export default class Header extends Vue {
       font-size: 14px;
       font-weight: 600;
       color: #222222;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      display: block;
+    }
+
+    &__user-btn-inner {
+      max-width: 60px;
     }
 
     &__user-avatar {

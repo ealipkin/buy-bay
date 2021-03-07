@@ -17,6 +17,7 @@
   &--hidden {
     @include desktop() {
       opacity: 0;
+      z-index: -1;
     }
   }
 

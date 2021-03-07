@@ -10,6 +10,7 @@ export const paramsObjToString = (obj) => {
 export const paramsStringToObject = (string) => Object.fromEntries(new URLSearchParams(string));
 
 export const addParamsToLocation = ($route, paramsObj: { [key: string]: any }) => {
+  console.log('addParamsToLocation -> ');
   let query = { ...paramsObj };
   const existingSearch = window.location.search;
   if (existingSearch && existingSearch.length) {

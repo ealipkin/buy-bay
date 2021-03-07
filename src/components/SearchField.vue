@@ -31,10 +31,12 @@ const MIN_SEARCH_LENGTH = 3;
   components: { SearchSuggest },
 })
 export default class SearchField extends Vue {
-  @Watch('$route') routeChange() {
+  @Watch('$route') routeChange(val) {
     this.isFocused = false;
-    // this.search = '';
-    // this.lastSearch = '';
+    if (val.name !== 'Search') {
+      this.search = '';
+      this.lastSearch = '';
+    }
   }
 
   get searchValid() {

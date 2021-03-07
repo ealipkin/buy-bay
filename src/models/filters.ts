@@ -10,6 +10,7 @@ export interface IFilterItem {
   label: string;
   count?: number;
   selected?: true;
+  query?: string;
   value?: string | number;
   color?: string | number;
   href: string;

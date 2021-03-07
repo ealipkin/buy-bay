@@ -80,7 +80,6 @@ import { ADVANTAGES } from '@/utils/constants';
 import { Action } from 'vuex-class';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
-import { topCategories } from '@/utils/data';
 import Loader from '@/components/Loader.vue';
 import { BigSliderItem, ISeoBlock } from '@/models/models';
 import { IndexPage, IndexPageResponse } from '@/models/responses';
@@ -166,7 +165,7 @@ export default class Index extends Vue {
 
   pageLoaded = false;
 
-  topCategories = topCategories;
+  topCategories: [] | null = null;
 
   advantagesList = ADVANTAGES;
 
@@ -190,6 +189,8 @@ export default class Index extends Vue {
       this.popularItems = response.popular;
       this.bestItems = response.bestseller;
       this.hotItems = response.hot_groups;
+
+      this.topCategories = response.top_cat;
 
       this.pageLoaded = true;
       return response;

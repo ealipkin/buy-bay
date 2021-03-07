@@ -2,12 +2,12 @@
   .shop-card
     button(@click="toggleFav" :class="{'shop-card__fav--active': shop.isFavourite}").shop-card__fav
       include ../assets/icons/trash.svg
-    router-link(:to="{path: `/brans/${shop.id}`}").shop-card__inner
+    router-link(:to="`/${shop.link}`").shop-card__inner
       .shop-card__image
         img(:src="shop.image")
       .shop-card__name {{shop.name || shop.brand}}
       .shop-card__category {{shop.category}}
-      Rate(:rate="shop.rate" :list="true").shop-card__rate
+      Rate(:rate="shop.rate" :list="true" v-if="shop.rate").shop-card__rate
 
 </template>
 

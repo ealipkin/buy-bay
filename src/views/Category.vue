@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import CatalogCardItem from '@/components/CatalogCardItem.vue';
 import TopCategories from '@/components/TopCategories.vue';
@@ -56,7 +56,14 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
     CatalogCardItem,
   },
 })
-export default class Index extends Vue {
+export default class Category extends Vue {
+  @Watch('$route') onRouteChange() {
+    this.loaded = false;
+    this.page = DEFAULT_PAGINATE_PAGE;
+    this.catalogPage = null;
+    this.init();
+  }
+
   productsPending = false;
 
   loaded = false;
@@ -113,7 +120,6 @@ export default class Index extends Vue {
       .then((res: CatalogResponse) => {
         if (res && res.data) {
           const catalog = res.data.data;
-          console.log(catalog);
           if (isInit) {
             this.catalogPage = catalog;
           } else if (this.catalogPage) {

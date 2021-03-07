@@ -124,7 +124,6 @@ export default class Index extends Vue {
   @Action('app/setSelectedShop') selectShop;
 
   @Watch('$route') routeChange() {
-    console.log('routeChange');
     this.pageLoaded = false;
     this.loadProducts(true);
   }
@@ -207,7 +206,6 @@ export default class Index extends Vue {
   }
 
   setFiltersFromUrl(catalog: CatalogPage) {
-    console.log('setFiltersFromUrl -> ');
     const selectedFilters = parseQuery(this.$route.query);
     setActiveFilters(catalog.filters, selectedFilters);
   }
@@ -235,7 +233,7 @@ export default class Index extends Vue {
   async loadProductsRequest(): Promise<CatalogResponse> {
     const categoryId = this.$route.params.id;
     const params = this.collectQueryParams();
-    const url = this.isSearch ? endpoints.search.global(params) : this.isBrand ? endpoints.brand(categoryId, params) : endpoints.category(categoryId, params);
+    const url = this.isSearch ? this.$route.query.q && endpoints.search.global(params) : this.isBrand ? endpoints.brand(categoryId, params) : endpoints.category(categoryId, params);
     return createRequest('GET', url);
   }
 

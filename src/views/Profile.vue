@@ -94,7 +94,9 @@ export default class Profile extends Vue {
   }
 
   yooKassa: any = null;
+
   yooKassaModal: HTMLElement | null = null;
+
   profileMenuItems = PROFILE_MENU_ITEMS;
 
   lastRemovedItem: { type: ITEMS_TYPES; id: any } | null = null;

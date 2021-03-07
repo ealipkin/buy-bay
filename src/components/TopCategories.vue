@@ -2,7 +2,7 @@
   .top-categories(v-if="groupedCategories")
     .top-categories__pane
       .top-categories__list.top-categories__list--laptop
-        router-link(v-for="(item, index) in categories" :key="index" to="#" v-bind:class="'top-categories__link--'+item.type +''" ).top-categories__link
+        router-link(v-for="(item, index) in categories" :key="index" :to="item.link" v-bind:class="'top-categories__link--'+item.type +''" ).top-categories__link
           p.top-categories__title {{ item.title }}
           span(
             v-bind:class="'top-categories__img-wrapper--'+item.position +' top-categories__img-wrapper--'+ item.color +'  top-categories__img-wrapper--mobile-'+ item.positionMobile + ''"
@@ -10,7 +10,7 @@
           ).top-categories__img-wrapper
       .top-categories__list
         div(v-for="group in groupedCategories").top-categories__col
-          router-link(v-for="(item, index) in group" :key="index" to="#" v-bind:class="'top-categories__link--'+item.type +''" ).top-categories__link
+          router-link(v-for="(item, index) in group" :key="index" :to="item.link" v-bind:class="'top-categories__link--'+item.type +''" ).top-categories__link
             p.top-categories__title {{ item.title }}
             span(
               v-bind:class="'top-categories__img-wrapper--'+item.position +' top-categories__img-wrapper--'+ item.color +'  top-categories__img-wrapper--mobile-'+ item.positionMobile + ''"
@@ -147,7 +147,7 @@ export default class TopCategories extends Vue {
       text-align: left;
       width: 140px;
       color: white;
-      height: 60px;
+      min-height: 60px;
       font-size: 12px;
       font-weight: 600;
       font-stretch: normal;

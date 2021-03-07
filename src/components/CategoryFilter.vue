@@ -80,6 +80,8 @@ import Checkbox from '@/components/Checkbox.vue';
 import Radio from '@/components/Radio.vue';
 import { IFilter, IFilterItem } from '@/models/filters';
 import { debounce } from 'vue-debounce';
+import { disableBodyScroll, enableBodyScroll } from '@/utils/lockBody';
+import { addParamsToLocation, paramsStringToObject } from '@/utils/filters';
 
 @Component({
   components: { Radio, Checkbox, ColorSelect },
@@ -114,10 +116,14 @@ export default class CategoryFilter extends Vue {
 
   handleClose() {
     this.closed = true;
+    enableBodyScroll();
+    this.resetFilters();
   }
 
   handleOpen() {
     this.closed = false;
+    const filter = this.$el.querySelector('.category-filter__content');
+    disableBodyScroll(filter);
   }
 
   handleSubmit() {
@@ -128,14 +134,32 @@ export default class CategoryFilter extends Vue {
     this.filters.forEach((f) => f.isOpen = true);
     this.$on('input', this.handleSearch.bind(this));
     this.$on('filterChange', debounce(this.filterChange.bind(this), 1000));
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 1024) {
+        enableBodyScroll();
+      }
+    });
   }
 
   handleFilterChange(filterItem: { checked: boolean; item: IFilterItem }) {
+    console.log('handleFilterChange -> ', filterItem);
     if (filterItem.checked) {
       this.selectedFilters.push(filterItem.item);
     } else {
       const selectedIndex = this.selectedFilters.findIndex((sItem) => sItem.id === filterItem.item.id);
-      if (selectedIndex !== 1) {
+      const fItem: IFilterItem = filterItem.item;
+      if (selectedIndex !== 1 && fItem) {
+        const existingParams = paramsStringToObject(window.location.search);
+        const query: string = fItem.query as string;
+        const value: number = fItem.value as number;
+        const existedFilter: string = existingParams && existingParams[query];
+        const existedFilters: string[] = (existedFilter && existedFilter.split(',')) as string[];
+        const existedIndex = existedFilters.findIndex((i) => i === String(value));
+        if (existedIndex !== -1) {
+          existedFilters.splice((existedIndex as number), 1);
+          existingParams[query] = existedFilters.join(',');
+          addParamsToLocation(this.$route, existingParams);
+        }
         this.selectedFilters.splice((selectedIndex as number), 1);
       }
     }
@@ -143,6 +167,7 @@ export default class CategoryFilter extends Vue {
   }
 
   filterChange() {
+    console.log('filterChange');
     const { form } = this.$refs;
     const formData = new FormData(form as any);
     const filter = {};
@@ -262,6 +287,7 @@ export default class CategoryFilter extends Vue {
       padding-bottom: 90px;
       box-sizing: border-box;
       flex: 1;
+      overflow: auto;
 
       @include laptop() {
         height: auto;
@@ -412,6 +438,11 @@ export default class CategoryFilter extends Vue {
       position: absolute;
       top: -35px;
       right: 0;
+      display: none;
+
+      @include laptop {
+        display: block;
+      }
     }
 
   }

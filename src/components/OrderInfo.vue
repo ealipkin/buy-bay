@@ -10,7 +10,7 @@
         span.order-info__orders
           img(src="../assets/icons/order-package.svg")
           span Заказов: {{divideNumberWithSpaces(this.item.orders)}}
-        Rate(:rate="item.rate").order-info__rate
+        Rate(:rate="item.rate" v-if="item.rate").order-info__rate
 
       template(v-if="!type")
         PickedOptionsBox(:options="options").order-info__picked-options

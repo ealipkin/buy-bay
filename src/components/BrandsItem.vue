@@ -5,7 +5,7 @@
       .brands-item__header-inner
         h3.brands-item__title {{brand.brand}}
         p.brands-item__category {{brand.category}}
-      Rate(:list="true" :rate="brand.rate").brands-item__rate
+      Rate(:list="true" :rate="brand.rate" v-if="brand.rate").brands-item__rate
     ul(v-if="brand && brand.data && brand.data.length").brands-item__list
       li(v-for="(item, index) in brand.data" :key="index").brands-item__card
         CatalogCardItem(:is-outlined="true" :item="item" title-length="25")

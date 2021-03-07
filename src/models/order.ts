@@ -49,6 +49,7 @@ export interface ProductShop {
   orders: number;
   rate: number | string;
   isFavourite: boolean;
+  link: string;
 }
 
 export interface ProductMetaItem {
