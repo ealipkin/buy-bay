@@ -116,7 +116,6 @@ export default class Profile extends Vue {
   }
 
   async handleAddCard() {
-    console.log('handleAddCard -> ');
     this.initYooKassa();
     const modal = new YooMoneyCheckoutUI(YOOKASSA_ID, {
       language: 'ru',
@@ -127,24 +126,28 @@ export default class Profile extends Vue {
     modal.on('yc_success', async (res) => {
       const { paymentToken } = res.data.response;
       const createRes = await createRequest('POST', endpoints.card.create, { paymentToken });
-      const { pid } = createRes.data.data;
-      await createRequest('GET', endpoints.card.getByPid(pid))
-        .then(() => {
-          this.$root.$emit('show-toast', {
-            message: 'Карта успешно добавлена',
+      const { pid, confirmation_url } = createRes.data.data;
+      if (confirmation_url) {
+        window.location.href = confirmation_url;
+      } else {
+        await createRequest('GET', endpoints.card.getByPid(pid))
+          .then(() => {
+            this.$root.$emit('show-toast', {
+              message: 'Карта успешно добавлена',
+            });
+            $store.dispatch('profile/loadProfile');
+          })
+          .catch((err) => {
+            const { message } = err.data;
+            this.$root.$emit('show-toast', {
+              message,
+              type: 'error',
+            });
+          }).finally(() => {
+            modal.chargeSuccessful();
+            modal.close();
           });
-          $store.dispatch('profile/loadProfile');
-        })
-        .catch((err) => {
-          const { message } = err.data;
-          this.$root.$emit('show-toast', {
-            message,
-            type: 'error',
-          });
-        }).finally(() => {
-          modal.chargeSuccessful();
-          modal.close();
-        });
+      }
     });
 
     if (this.yooKassaModal) {

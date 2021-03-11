@@ -12,6 +12,7 @@
           autocomplete="off"
           v-bind:value="value"
           v-on:input="$emit('input', $event.target.value)"
+          v-on:focus="$emit('focus')"
           v-mask="mask || ''"
           :placeholder="placeholder || ''"
           :class="{'input__field--fail': failed, 'input__field--has-value': value}"

@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { declOfNum, getRandomSmile } from '@/utils/common';
+import { declOfNum } from '@/utils/common';
 import { ProfileUser } from '@/models/models';
 
 @Component
@@ -26,7 +26,7 @@ export default class UserInfo extends Vue {
   declOfNum = (groups) => declOfNum(groups, ['год', 'года', 'лет']);
 
   getSmile() {
-    return getRandomSmile();
+    return this.user.emoji;
   }
 }
 </script>

@@ -76,7 +76,7 @@ export default class PhoneConfirmation extends Vue {
 
   phoneSend = false;
 
-  phoneNumber = '';
+  phoneNumber = '+7';
 
   code: string | number = '';
 
@@ -133,7 +133,6 @@ export default class PhoneConfirmation extends Vue {
   }
 
   handleCodeInput() {
-    console.log('handleCodeInput');
     const safeValue = Number(this.code);
     if (safeValue && !Number.isNaN(this.code) && String(this.code).length === PHONE_CODE_LENGTH) {
       this.login(safeValue);
@@ -178,6 +177,13 @@ export default class PhoneConfirmation extends Vue {
 
   mounted() {
     this.$emit('step-change', CONFIRMATION_STEPS.PHONE);
+    this.$nextTick(() => {
+      const inputEl = (this.$refs.phoneInput as any).$el;
+      (this.$refs.phoneInput as any).doFocus();
+      if (inputEl) {
+        inputEl.setSelectionRange(1, 1);
+      }
+    });
   }
 }
 

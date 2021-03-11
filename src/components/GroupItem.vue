@@ -30,7 +30,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Group } from '@/models/order';
-import { getRandomSmile } from '@/utils/common';
 
 @Component({})
 export default class GroupItem extends Vue {
@@ -39,7 +38,7 @@ export default class GroupItem extends Vue {
   @Prop() public disabled!: boolean;
 
   getSmile() {
-    return getRandomSmile();
+    return this.creator && this.creator.emoji;
   }
 
   get creator() {

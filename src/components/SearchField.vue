@@ -25,6 +25,7 @@ import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import { SearchSuggestResponse } from '@/models/responses';
 import { paramsStringToObject } from '@/utils/filters';
+import { enableBodyScroll } from '@/utils/lockBody';
 
 const MIN_SEARCH_LENGTH = 3;
 @Component({
@@ -91,13 +92,12 @@ export default class SearchField extends Vue {
   handleFocus() {
     this.isFocused = true;
     this.$emit('focus');
-    document.body.classList.add('_hidden');
   }
 
   handleBlur() {
     this.isFocused = false;
     this.$emit('blur');
-    document.body.classList.remove('_hidden');
+    enableBodyScroll();
   }
 
   handleClear() {
@@ -343,7 +343,7 @@ export default class SearchField extends Vue {
       position: absolute;
       left: -11px;
       top: calc(100% + 9px);
-      height: calc(100vh - 30px);
+      height: calc(100vh - 50px);
       width: calc(100% + 27px);
       z-index: 20;
       overflow: auto;

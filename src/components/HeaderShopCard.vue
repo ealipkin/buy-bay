@@ -45,6 +45,7 @@ export default class HeaderShopCard extends Vue {
   }
 
   addToFav() {
+    console.log('addToFav');
     createRequest('GET', endpoints.favourites.addBrand(this.shop.id))
       .then(() => {
         this.$root.$emit('show-toast', {

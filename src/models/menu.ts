@@ -22,6 +22,7 @@ export interface BaseMenuItem {
   is_active?: boolean;
   count?: string;
   type?: string;
+  hideUnAuth?: boolean;
 }
 
 export interface MenuItem extends BaseMenuItem {

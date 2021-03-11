@@ -44,7 +44,7 @@
               div(v-show="unreadNotifications.length || readNotifications.length").popper.header__dropdown.header__dropdown--popper
                 Notifications(:readNotifications="readNotifications" :unreadNotifications="unreadNotifications").header__notifications
 
-          Popper(popper trigger="hover" :options="{placement: 'bottom-end'}" )
+          Popper(ref="profileNav" popper trigger="hover" :options="{placement: 'bottom-end'}")
             button(type="button" slot="reference").header__user-btn
               .header__user-btn-inner
                 span.header__user-avatar
@@ -81,7 +81,6 @@ import { Action } from 'vuex-class';
 import SearchField from '@/components/SearchField.vue';
 import { ProfileUser } from '@/models/models';
 import { BaseMenuItem } from '@/models/menu';
-import { getRandomSmile } from '@/utils/common';
 
 @Component({
   components: {
@@ -108,6 +107,10 @@ import { getRandomSmile } from '@/utils/common';
 export default class Header extends Vue {
   @Watch('$route') routeChange() {
     this.isIndexPage = this.$router.currentRoute.path === '/';
+    const { profileNav } = this.$refs;
+    if (profileNav) {
+      (profileNav as any).doClose();
+    }
   }
 
   @Action('app/fetchMenu') fetchMenu;
@@ -143,7 +146,7 @@ export default class Header extends Vue {
   }
 
   getSmile() {
-    return getRandomSmile();
+    return this.user && this.user.emoji;
   }
 
   openLoginModal(type) {
@@ -340,7 +343,7 @@ export default class Header extends Vue {
     }
 
     &__user-btn-inner {
-      max-width: 60px;
+      max-width: 70px;
     }
 
     &__user-avatar {

@@ -10,14 +10,13 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Group, GroupUser } from '@/models/order';
-import { getRandomSmile } from '@/utils/common';
 
 @Component
 export default class UsersList extends Vue {
   @Prop() public group!: Group;
 
   smile() {
-    return getRandomSmile();
+    return '';
   }
 
   get users(): GroupUser[] | {}[] {

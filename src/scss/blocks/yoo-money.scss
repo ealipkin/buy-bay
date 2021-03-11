@@ -142,10 +142,19 @@
   .yoomoney-save-card-checkbox {
     display: none;
   }
-}
 
-.yookasssa-payment {
+  .yoomoney-checkout-cardpayment__action-button {
+    font-size: 0;
 
+    &:after {
+      content: 'Добавить';
+      font-size: 14px;
+
+      @include tablet() {
+        font-size: 18px;
+      }
+    }
+  }
 }
 
 @keyframes yoomoney-checkout-spin {

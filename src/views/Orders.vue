@@ -5,61 +5,61 @@
         .page__aside.orders__aside
           h1.page__title Мои заказы
           ProfileNav(:items="profileMenuItems")
+        template(v-if="isAuthorized")
+          div(v-if="loaded").page__content
+            TabsNav(:tabs="tabs" @change="selectTab").tabs-nav--inner
+            div(:class="{'hidden': selectedTab === 2}")
+              div(v-if="activeOrders && activeOrders.length")
+                ul(v-if="pageSettings.page === 'orders'").orders__list
+                  OrderItem(
+                    v-for="order in activeOrders"
+                    :order="order"
+                    :key="order.id"
+                    :link="pageSettings.detailLink + order.order.oid"
+                    :hideButton="true"
+                  ).orders__item
 
-        div(v-if="loaded").page__content
-          TabsNav(:tabs="tabs" @change="selectTab").tabs-nav--inner
-          div(:class="{'hidden': selectedTab === 2}")
-            div(v-if="activeOrders && activeOrders.length")
-              ul(v-if="pageSettings.page === 'orders'").orders__list
-                OrderItem(
-                  v-for="order in activeOrders"
-                  :order="order"
-                  :key="order.id"
-                  :link="pageSettings.detailLink + order.order.oid"
-                  :hideButton="true"
-                ).orders__item
+                ul(v-else).orders__list
+                  OrderItem(
+                    v-for="order in activeOrders"
+                    v-if="order.group"
+                    :order="order.orderInfo"
+                    :key="order.orderInfo.order.id"
+                    :link="pageSettings.detailLink + order.group.id"
+                    :hideButton="false"
+                    button-text="Пригласить друзей"
+                    @button-click="selectGroup(order)"
+                  ).orders__item
+                div(v-if="showActiveOrdersPagination").category__pagination
+                  Pagination(:paginationInfo="activePagination" @page="activeOrdersPageChange" @more="showMoreActiveOrders")
+              div(v-else).empty-message Нет активных {{pageSettings.kindLabel}}
 
-              ul(v-else).orders__list
-                OrderItem(
-                  v-for="order in activeOrders"
-                  v-if="order.group"
-                  :order="order.orderInfo"
-                  :key="order.orderInfo.order.id"
-                  :link="pageSettings.detailLink + order.group.id"
-                  :hideButton="false"
-                  button-text="Пригласить друзей"
-                  @button-click="selectGroup(order)"
-                ).orders__item
-              div(v-if="showActiveOrdersPagination").category__pagination
-                Pagination(:paginationInfo="activePagination" @page="activeOrdersPageChange" @more="showMoreActiveOrders")
-            div(v-else).empty-message Нет активных {{pageSettings.kindLabel}}
+            div(:class="{'hidden': selectedTab === 1}")
+              div(v-if="inactiveOrders && inactiveOrders.length")
+                ul(v-if="pageSettings.page === 'orders'").orders__list
+                  OrderItem(
+                    v-for="order in inactiveOrders"
+                    :order="order"
+                    :key="order.id"
+                    :link="pageSettings.detailLink + order.order.oid"
+                    :hideButton="true"
+                  ).orders__item
 
-          div(:class="{'hidden': selectedTab === 1}")
-            div(v-if="inactiveOrders && inactiveOrders.length")
-              ul(v-if="pageSettings.page === 'orders'").orders__list
-                OrderItem(
-                  v-for="order in inactiveOrders"
-                  :order="order"
-                  :key="order.id"
-                  :link="pageSettings.detailLink + order.order.oid"
-                  :hideButton="true"
-                ).orders__item
-
-              ul(v-else).orders__list
-                OrderItem(
-                  v-for="order in inactiveOrders"
-                  v-if="order.group"
-                  :order="order.orderInfo"
-                  :key="order.orderInfo.order.id"
-                  :link="pageSettings.detailLink + order.group.id"
-                  :hideButton="false"
-                  button-text="Пригласить друзей"
-                  @button-click="selectGroup(order)"
-                ).orders__item
-              div(v-if="showInActiveOrdersPagination").category__pagination
-                Pagination(:paginationInfo="activePagination" @page="inActiveOrdersPageChange" @more="showMoreInActiveOrders")
-            div(v-else).empty-message Нет завершенных {{pageSettings.kindLabel}}
-        Loader(v-else)
+                ul(v-else).orders__list
+                  OrderItem(
+                    v-for="order in inactiveOrders"
+                    v-if="order.group"
+                    :order="order.orderInfo"
+                    :key="order.orderInfo.order.id"
+                    :link="pageSettings.detailLink + order.group.id"
+                    :hideButton="false"
+                    button-text="Пригласить друзей"
+                    @button-click="selectGroup(order)"
+                  ).orders__item
+                div(v-if="showInActiveOrdersPagination").category__pagination
+                  Pagination(:paginationInfo="activePagination" @page="inActiveOrdersPageChange" @more="showMoreInActiveOrders")
+              div(v-else).empty-message Нет завершенных {{pageSettings.kindLabel}}
+          Loader(v-else)
       SeoBlock(v-if="seo" :block="seo")
       GroupInfoModal(:orderData="selectedOrder" ref="groupModal")
 

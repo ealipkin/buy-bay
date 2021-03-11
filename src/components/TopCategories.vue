@@ -180,7 +180,7 @@ export default class TopCategories extends Vue {
       @include tablet() {
         background-image: none;
         width: auto;
-        max-width: 210px;
+        max-width: 215px;
         font-size: 18px;
         font-weight: bold;
         color: #222222;

@@ -31,7 +31,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 import router from '@/router';
 import { NotificationItem } from '@/models/models';
 
@@ -39,7 +41,23 @@ import { NotificationItem } from '@/models/models';
   components: {},
 })
 export default class MobileNav extends Vue {
+  @Watch('$route') routeChange() {
+    this.waitForAuth = false;
+  }
+
+  @Watch('isAuthorized') isAuthorizedChanged(val) {
+    if (val && this.waitForAuth) {
+      router.push({ path: '/profile' });
+    }
+  }
+
   @Prop() public notifications!: NotificationItem[];
+
+  waitForAuth = false;
+
+  get isAuthorized() {
+    return (this as any).$auth.check();
+  }
 
   toggleNotifications(event) {
     const { target } = event;
@@ -57,6 +75,7 @@ export default class MobileNav extends Vue {
       router.push({ path: '/profile' });
     } else {
       this.$emit('show-login');
+      this.waitForAuth = true;
     }
   }
 

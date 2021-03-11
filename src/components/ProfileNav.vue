@@ -1,6 +1,6 @@
 <template lang="pug">
   ul.profile-nav
-    li(v-for="item in filteredItems").profile-nav__item
+    li(v-for="item in filteredItems" v-show="isItemVisible(item)").profile-nav__item
       router-link(v-if="item.href" :to="item.href" :class="{'profile-nav__link--active': $route.path === item.href}").profile-nav__link
         template(v-if="item.icon === 'user'")
           include ../assets/icons/user.svg
@@ -87,6 +87,10 @@ export default class ProfileNav extends Vue {
   }
 
   NAV_TYPES = PROFILE_NAV_TYPES;
+
+  isItemVisible(item: BaseMenuItem) {
+    return item.hideUnAuth ? this.isAuthorized : true;
+  }
 
   handleClick(item: BaseMenuItem) {
     if (item.href && this.$route.path !== item.href) {

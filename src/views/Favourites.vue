@@ -37,13 +37,13 @@
                     )
                 div(v-if="showBrandsPagination").category__pagination
                   Pagination(:paginationInfo="shopPagination" :kindText="getShopKindText(shopPagination.perPage)" @page="shopPageChange" @more="showMoreBrands")
-              div(v-else).empty-message В избранном пока нет товаров
+              div(v-else).empty-message В избранном пока нет брендов
           Loader(v-else)
         SeoBlock(v-if="seo" :block="seo")
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 
 import ProfileNav from '@/components/ProfileNav.vue';
 import TabsNav from '@/components/TabsNav.vue';
@@ -153,6 +153,14 @@ const DEFAULT_SORT = SORT_PARAMS.POPULAR;
 export default class Favourites extends Vue {
   @Action('app/setProfilePage') setProfilePage;
 
+  @Watch('isAuthorized') isAuthorizedChanged(val) {
+    if (val) {
+      this.$nextTick(() => {
+        this.init();
+      });
+    }
+  }
+
   CATEGORIES = CATEGORIES;
 
   profileMenuItems = PROFILE_MENU_ITEMS;
@@ -189,6 +197,10 @@ export default class Favourites extends Vue {
 
   brandShowMoreClicked = false;
 
+  get isAuthorized() {
+    return (this as any).$auth.check();
+  }
+
   get showProductsPagination() {
     if (!this.productPagination) {
       return false;
@@ -211,7 +223,13 @@ export default class Favourites extends Vue {
   }
 
   selectTab(tabId) {
+    const tabIndex = this.tabs.findIndex((tab) => tab.id === tabId);
+    const tab = this.tabs[tabIndex];
+    this.tabs.forEach((t) => t.isActive = false);
+    tab.isActive = true;
     this.selectedTab = tabId;
+    Vue.set(this.tabs, tabIndex, tab);
+
     addParamsToLocation(this.$route, { tab: tabId });
   }
 
@@ -259,16 +277,17 @@ export default class Favourites extends Vue {
       }
     }
     this.loaded = true;
-    $store.dispatch('app/updateProfileCounts');
     this.init();
   }
 
   init() {
+    $store.dispatch('app/updateProfileCounts');
     Promise
       .all([this.loadProducts(), this.loadBrands()])
       .then(() => {
         this.loaded = false;
-      }).catch((err) => {
+      })
+      .catch((err) => {
         if (err.response.data.error === SERVER_ERRORS.UNAUTHORIZED) {
           this.$root.$emit('show-login-modal');
         }
@@ -326,7 +345,7 @@ export default class Favourites extends Vue {
     $store.dispatch('app/updateFavouritesCount');
   }
 
-  async removeShop(index: number) {
+  async removeShop(id, index: number) {
     if (this.brandShowMoreClicked && this.productPagination) {
       this.updatePagination(this.CATEGORIES.BRAND, index);
     } else {

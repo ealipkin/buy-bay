@@ -27,7 +27,7 @@
                   fieldset.modal__form-fieldset
                     Destination(:addressItem="addressItem").modal__destination
 
-                .order-payment__cards.order-payment__item
+                div(v-if="cards && cards.length").order-payment__cards.order-payment__item
                   h3.order-payment__cards-title Мои карты
                   ul.order-payment__cards-list
                     li(v-for="item in cards" :key="item.id").order-payment__cards-item
@@ -35,9 +35,9 @@
                   button(type="button" @click="handleAddCard").link + Добавить карту
 
                 .order-payment__item.order-payment__item--last
-                  Loader(v-if="submitted").order-payment__submit-loader.inline-loader
+                  //Loader(v-if="submitted").order-payment__submit-loader.inline-loader
                   button(v-if="addresses && addresses.length" type="button" :disabled="orderDisabled" @click="handleOrder").order-payment__button.button Оплатить
-                  button(v-if="!addresses || !addresses.length" type="submit" :disabled="submitted").order-payment__button.button Продолжить
+                  button(v-if="!addresses || !addresses.length" type="submit").order-payment__button.button Продолжить
 
               .order-payment__aside
                 OrderInfo(:item="order" :orderData="orderData" :options="orderOptions" v-if="order && !isMobile" :type="'checkout'").order-payment__product.order-payment__item.order-info--checkout
@@ -263,24 +263,28 @@ export default class OrderPayment extends Vue {
     modal.on('yc_success', async (res) => {
       const { paymentToken } = res.data.response;
       const createRes = await createRequest('POST', endpoints.card.create, { paymentToken });
-      const { pid } = createRes.data.data;
-      await createRequest('GET', endpoints.card.getByPid(pid))
-        .then(() => {
-          this.updateCards();
-          this.$root.$emit('show-toast', {
-            message: 'Карта успешно добавлена',
+      const { pid, confirmation_url } = createRes.data.data;
+      if (confirmation_url) {
+        window.location.href = confirmation_url;
+      } else {
+        await createRequest('GET', endpoints.card.getByPid(pid))
+          .then(() => {
+            this.updateCards();
+            this.$root.$emit('show-toast', {
+              message: 'Карта успешно добавлена',
+            });
+          })
+          .catch((err) => {
+            const { message } = err.data;
+            this.$root.$emit('show-toast', {
+              message,
+              type: 'error',
+            });
+          }).finally(() => {
+            modal.chargeSuccessful();
+            modal.close();
           });
-        })
-        .catch((err) => {
-          const { message } = err.data;
-          this.$root.$emit('show-toast', {
-            message,
-            type: 'error',
-          });
-        }).finally(() => {
-          modal.chargeSuccessful();
-          modal.close();
-        });
+      }
     });
   }
 
@@ -583,9 +587,9 @@ export default class OrderPayment extends Vue {
     }
 
     &__main {
-
       @include tablet() {
         display: flex;
+        align-items: flex-start;
       }
     }
 

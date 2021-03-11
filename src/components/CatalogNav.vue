@@ -9,7 +9,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { ICategoryItem } from '@/models/models';
 
-@Component
+@Component()
 export default class CatalogNav extends Vue {
   @Prop() public items!: ICategoryItem[];
 }
@@ -20,6 +20,7 @@ export default class CatalogNav extends Vue {
     .catalog-nav {
       box-shadow: none;
     }
+
     border-radius: 8px;
     box-shadow: 0 2px 14px 0 #1e27330c;
     background-color: #ffffff;

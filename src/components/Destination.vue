@@ -95,8 +95,9 @@ export default class Destination extends Vue {
     $city.fias('type', $.fias.type.city);
     $street.fias('type', $.fias.type.street);
     $building.fias('type', $.fias.type.building);
+    $district.fias('type', $.fias.type.region);
 
-    $district.fias('withParents', true);
+    // $district.fias('withParents', true);
     $city.fias('withParents', true);
     $street.fias('withParents', true);
 

@@ -22,6 +22,7 @@ import router from '@/router';
 import { declOfNum, getPrice } from '@/utils/common';
 import { SEARCH_ITEM_TYPE } from '@/models/enums';
 import { ISearchSuggest, SearchItem } from '@/models/models';
+import { disableBodyScroll } from '@/utils/lockBody';
 
 const routesMap = {
   brands: 'brand',
@@ -36,7 +37,7 @@ const titlesMap = {
 };
 
 @Component
-export default class Main extends Vue {
+export default class SearchSuggest extends Vue {
   @Prop() public searchResults!: ISearchSuggest;
 
   get items() {
@@ -66,6 +67,15 @@ export default class Main extends Vue {
     const currentQuery = currentRoute.query.q;
     if (currentQuery !== item.title) {
       router.push({ path: '/search', query: { q: item.title } });
+    }
+  }
+
+  mounted() {
+    if (window.innerWidth < 768 && this.items.length) {
+      this.$nextTick(() => {
+        const suggest = document.querySelector('.search-field__results');
+        disableBodyScroll(suggest);
+      });
     }
   }
 }

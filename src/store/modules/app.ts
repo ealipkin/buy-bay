@@ -135,7 +135,12 @@ const actions = {
     await updateFavouritesCount({ commit });
   },
   async updateProfileCounts({ commit }) {
-    await updateProfileCounts({ commit });
+    const vm = (this as any)._vm;
+    const { $auth } = vm;
+    const isAuthorized = $auth.check();
+    if (isAuthorized) {
+      await updateProfileCounts({ commit });
+    }
   },
   async getNotifications({ commit }) {
     await getNotifications({ commit });

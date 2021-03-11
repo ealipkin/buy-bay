@@ -61,6 +61,11 @@ const routes: Array<RouteConfig> = [
     component: () => import('../views/Profile.vue'),
   },
   {
+    path: '/profile/favourites',
+    name: 'Favourites',
+    component: () => import('../views/Favourites.vue'),
+  },
+  {
     path: '/profile/groups',
     name: 'Groups',
     component: () => import('../views/Orders.vue'),
@@ -79,11 +84,6 @@ const routes: Array<RouteConfig> = [
     path: '/profile/groups/:id',
     name: 'GroupDetail',
     component: () => import('../views/GroupDetail.vue'),
-  },
-  {
-    path: '/profile/favourites',
-    name: 'Favourites',
-    component: () => import('../views/Favourites.vue'),
   },
 ];
 
