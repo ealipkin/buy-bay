@@ -2,14 +2,14 @@
   ul.catalog-nav
     li(v-for="(item, index) in items" :key="index").catalog-nav__item
       router-link(:to="item.href" :class="{'catalog-nav__link--main': item.items.length}").catalog-nav__link {{item.label}}
-      CatalogNav(:items="item.items" v-if="item.items && item.items.length").page__catalog-nav
+      catalog-nav(:items="item.items" v-if="item.items && item.items.length").page__catalog-nav
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { ICategoryItem } from '@/models/models';
 
-@Component()
+@Component
 export default class CatalogNav extends Vue {
   @Prop() public items!: ICategoryItem[];
 }
