@@ -1,6 +1,8 @@
 import { BaseMenuItem } from '@/models/menu';
 import { PROFILE_NAV_TYPES } from '@/models/enums';
 
+export const AVATAR_SMILES = ['😀', '😁', '😃', '😄', '😊', '😎', '🙂', '🤗', '🤩', '😌', '🙃', '😱', '🥳', '🤓', '👏', '👍', '🎉'];
+
 export const breakPoints = {
   mobile: 320,
   tablet: 768,

@@ -181,7 +181,7 @@ export default class PhoneConfirmation extends Vue {
       const inputEl = (this.$refs.phoneInput as any).$el;
       (this.$refs.phoneInput as any).doFocus();
       if (inputEl) {
-        inputEl.setSelectionRange(1, 1);
+        // inputEl.setSelectionRange(1, 1);
       }
     });
   }

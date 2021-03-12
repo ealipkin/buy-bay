@@ -39,7 +39,7 @@ export const parseQuery = (queryObj): { [key: string]: string[] } => {
 
 export const setActiveFilters = (filters: IFilter[], selectedFilters: { [key: string]: string[] }) => {
   const filtersKeys = Object.keys(selectedFilters);
-  return filters.forEach((filter: IFilter) => {
+  filters.forEach((filter: IFilter) => {
     if (filtersKeys.includes(filter.query)) {
       const values = selectedFilters[filter.query];
       filter.items.forEach((item: IFilterItem) => {
@@ -49,4 +49,19 @@ export const setActiveFilters = (filters: IFilter[], selectedFilters: { [key: st
       });
     }
   });
+  return filters;
+};
+
+export const removeFiltersFromQuery = ($route, item: IFilterItem) => {
+  const existingParams = paramsStringToObject(window.location.search);
+  const query: string = item.query as string;
+  const value: number = item.value as number;
+  const existedFilter: string = existingParams && existingParams[query];
+  const existedFilters: string[] = (existedFilter && existedFilter.split(',')) as string[];
+  const existedIndex = existedFilters.findIndex((i) => i === String(value));
+  if (existedIndex !== -1) {
+    existedFilters.splice((existedIndex as number), 1);
+    existingParams[query] = existedFilters.join(',');
+    addParamsToLocation($route, existingParams);
+  }
 };

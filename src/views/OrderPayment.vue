@@ -35,7 +35,7 @@
                   button(type="button" @click="handleAddCard").link + Добавить карту
 
                 .order-payment__item.order-payment__item--last
-                  //Loader(v-if="submitted").order-payment__submit-loader.inline-loader
+                  Loader(v-if="submitted").order-payment__submit-loader.inline-loader
                   button(v-if="addresses && addresses.length" type="button" :disabled="orderDisabled" @click="handleOrder").order-payment__button.button Оплатить
                   button(v-if="!addresses || !addresses.length" type="submit").order-payment__button.button Продолжить
 
@@ -458,8 +458,10 @@ export default class OrderPayment extends Vue {
         if (status === PAY_STATUSES.CANCELED) {
           router.push({ path: `/profile/orders/${this.orderId}` });
         }
+        this.submitted = false;
       })
       .catch((err) => {
+        this.submitted = false;
         const { message } = err.data;
         this.$root.$emit('show-toast', {
           message,

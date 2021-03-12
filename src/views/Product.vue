@@ -8,7 +8,7 @@
         ItemDescription(:item="item" v-if="!isMobile").item-detail__item.item-detail__item--description
       .item-detail__aside
         ItemInfo(:item="item" ref="itemInfo" @order-disabled="setOrderDisabled").item-detail__item.item-detail__item--info
-        ItemGroups(v-if="groups && groups.length" :groups="groups" @join="handleJoinToGroup" :disabled="orderDisabled").item-detail__item.item-detail__item--groups
+        ItemGroups(v-if="groups && groups.length" :groups="groups" @join="handleJoinToGroup").item-detail__item.item-detail__item--groups
         ItemDescription(:item="item" v-if="isMobile").item-detail__item.item-detail__item--description
         ItemShopCard(v-if="item.brand" :shop="item.brand").item-detail__item.item-detail__item--shop
         DeliveryInfo(v-if="item.delivery" :deliveryItem="item.delivery").item-detail__delivery.item-detail__item.item-detail__item--delivery
@@ -171,11 +171,16 @@ export default class ItemDetail extends Vue {
   }
 
   handleJoinToGroup(group: Group) {
-    if (this.isAuthorized) {
-      (this.$refs.itemInfo as any).sendOrder('group', group);
-    } else {
+    if (!this.isAuthorized) {
       this.$root.$emit('show-login-modal');
+      return;
     }
+
+    if (this.orderDisabled) {
+      (this.$refs.itemInfo as any).validateOptions();
+      return;
+    }
+    (this.$refs.itemInfo as any).sendOrder('group', group);
   }
 }
 </script>

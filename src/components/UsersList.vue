@@ -2,7 +2,7 @@
   ul.users-list
     li(v-for="user in users").users-list__item
       img(v-if="user.image" :src="user.image" :class="user.is_creator ? 'user-list__img--active' : ''").users-list__img
-      span(v-if="!user.image").users-list__img {{smile()}}
+      span(v-if="!user.image").users-list__img.users-list__img--smile {{smile()}}
       span(v-if="user.name").users-list__name {{user.name}}
 
 </template>
@@ -10,13 +10,14 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Group, GroupUser } from '@/models/order';
+import { getRandomSmile } from '@/utils/common';
 
 @Component
 export default class UsersList extends Vue {
   @Prop() public group!: Group;
 
   smile() {
-    return '';
+    return getRandomSmile();
   }
 
   get users(): GroupUser[] | {}[] {
@@ -28,7 +29,6 @@ export default class UsersList extends Vue {
 </script>
 
 <style scoped lang="scss">
-
   .users-list {
     @include clearList();
     display: flex;
@@ -68,6 +68,10 @@ export default class UsersList extends Vue {
         height: 70px;
         margin-bottom: 8px;
       }
+
+      &--smile {
+        background-color: #FFDFD3;
+      }
     }
 
     &__name {
@@ -76,6 +80,10 @@ export default class UsersList extends Vue {
       text-align: center;
       width: 100%;
       display: block;
+      max-width: 70px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       @include tablet() {
         font-size: 14px;

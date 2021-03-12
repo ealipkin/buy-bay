@@ -3,7 +3,7 @@
     font-size: 14px;
     color: #222222;
     position: relative;
-    padding: 13px 24px 17px;
+    padding: 13px 40px 17px 24px;
     border-bottom: 1px solid #ededed;
     cursor: pointer;
     text-align: left;
@@ -23,6 +23,8 @@
 
   &__header-button {
     @include clearButton;
+    text-decoration: none;
+    color: black;
     text-align: left;
   }
 

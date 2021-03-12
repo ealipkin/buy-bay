@@ -1,3 +1,5 @@
+import { AVATAR_SMILES } from '@/utils/constants';
+
 export const getRandomArrayElement = (array: any[]) => array[Math.floor(Math.random() * array.length)];
 export const getRandomNumberBetween = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
 export const divideNumberWithSpaces = (number: number): string => String(number).replace(/(\d)(?=(\d{3})+$)/g, '$1 ');
@@ -23,5 +25,5 @@ export const declOfNum = (number, titles) => {
 };
 
 export const getPrice = (price: number | string) => `${divideNumberWithSpaces(Number(price))} ₽`;
-
+export const getRandomSmile = () => getRandomArrayElement(AVATAR_SMILES);
 export const millisToMinutesAndSeconds = (millis) => millis / 1000;

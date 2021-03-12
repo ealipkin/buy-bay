@@ -2,7 +2,7 @@
   .group-info
     .group-info__header
       h2(v-if="group").group-info__title {{title}}
-      button(type="button" @click="handleLeaveGroup").group-info__link.link Покинуть группу
+      button(type="button" @click="handleLeaveGroup" v-if="!group.is_complete").group-info__link.link Покинуть группу
     CustomScrollWrapper.custom-scroll-wrapper--mobile-only
       UsersList(v-if="group" :group="group").group-info__users
     hr.group-info__hr

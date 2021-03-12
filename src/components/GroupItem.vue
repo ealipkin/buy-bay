@@ -13,7 +13,7 @@
           span.group-item__current-users {{group.joinedUsers.length}}
           span.group-item__all-users  из {{group.allUsers}}
         .group-item__timer
-          vac(:end-time="group.time")
+          vac(:left-time="group.time")
             template(v-slot:process="{ timeObj }").group-item__timer-inner
               span.group-item__timer-icon
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><g fill="#7B8197" fill-rule="nonzero" stroke="#7B8197" stroke-width=".3"><path d="M7 1C3.692 1 1 3.692 1 7s2.692 6 6 6 6-2.692 6-6-2.692-6-6-6zm0 10.737c-2.612 0-4.737-2.125-4.737-4.737S4.388 2.263 7 2.263 11.737 4.388 11.737 7 9.612 11.737 7 11.737z"/><path d="M10.22 6.815H7.879a1.03 1.03 0 00-.341-.341V3.657a.537.537 0 00-1.074 0v2.817a1.028 1.028 0 101.415 1.414h2.341a.537.537 0 100-1.073z"/></g></svg>
@@ -47,6 +47,10 @@ export default class GroupItem extends Vue {
 
   handleClick() {
     this.$emit('join', this.group);
+  }
+
+  mounted() {
+    console.log(this.group);
   }
 }
 
@@ -82,6 +86,10 @@ export default class GroupItem extends Vue {
         margin-right: 25px;
         margin-top: 1px;
         margin-bottom: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        max-width: 130px;
       }
     }
 
@@ -131,7 +139,7 @@ export default class GroupItem extends Vue {
       @include laptop() {
         flex: 1;
         text-align: left;
-        padding-right: 5px;
+        padding-right: 15px;
       }
     }
 

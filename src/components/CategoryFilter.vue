@@ -39,9 +39,18 @@
                     div(
                       v-for="(accordion, index) in filteredItems(filter)"
                     ).accordion__item
-                      div(@click="toggleAccordion(accordion, index, filter)" :class="{'accordion__header--open': accordion.expand}").accordion__header
+
+                      div(@click="toggleAccordion(accordion, index, filter)" :class="{'accordion__header--open': accordion.expand}" v-if="accordion.items && accordion.items.length").accordion__header
                         button(type="button").accordion__header-button {{accordion.label}}
                         span.accordion__icon
+
+                      button(
+                        v-else
+                        type="button"
+                        :class="{'category-filter__accordion-item--active': accordion.href === $route.path}"
+                        @click="accordionItemClick(accordion)"
+                      ).category-filter__accordion-item {{accordion.label}}
+
                       div(:class="{'accordion__content--open': accordion.expand}").accordion__content.category-filter__accordion-items
                         button(
                           v-for="item in accordion.items"
@@ -81,7 +90,7 @@ import Radio from '@/components/Radio.vue';
 import { IFilter, IFilterItem } from '@/models/filters';
 import { debounce } from 'vue-debounce';
 import { disableBodyScroll, enableBodyScroll } from '@/utils/lockBody';
-import { addParamsToLocation, paramsStringToObject } from '@/utils/filters';
+import { addParamsToLocation, paramsStringToObject, removeFiltersFromQuery } from '@/utils/filters';
 
 @Component({
   components: { Radio, Checkbox, ColorSelect },
@@ -91,7 +100,7 @@ export default class CategoryFilter extends Vue {
 
   closed = true;
 
-  selectedFilters: any = [];
+  selectedFilters: IFilterItem[] = [];
 
   handleSearch(e) {
     const { value, filter, index }: { value: string; filter: IFilter; index: number } = e;
@@ -131,6 +140,12 @@ export default class CategoryFilter extends Vue {
   }
 
   mounted() {
+    console.log(this.filters);
+    this.selectedFilters = this.filters
+      .filter((f) => f.items.length)
+      .map(
+        (f) => f.items.filter((item) => item.selected).map((item) => ({ ...item, query: f.query })),
+      ).flat();
     this.filters.forEach((f) => f.isOpen = true);
     this.$on('input', this.handleSearch.bind(this));
     this.$on('filterChange', debounce(this.filterChange.bind(this), 1000));
@@ -142,25 +157,16 @@ export default class CategoryFilter extends Vue {
   }
 
   handleFilterChange(filterItem: { checked: boolean; item: IFilterItem }) {
-    console.log('handleFilterChange -> ', filterItem);
     if (filterItem.checked) {
       this.selectedFilters.push(filterItem.item);
     } else {
       const selectedIndex = this.selectedFilters.findIndex((sItem) => sItem.id === filterItem.item.id);
       const fItem: IFilterItem = filterItem.item;
-      if (selectedIndex !== 1 && fItem) {
-        const existingParams = paramsStringToObject(window.location.search);
-        const query: string = fItem.query as string;
-        const value: number = fItem.value as number;
-        const existedFilter: string = existingParams && existingParams[query];
-        const existedFilters: string[] = (existedFilter && existedFilter.split(',')) as string[];
-        const existedIndex = existedFilters.findIndex((i) => i === String(value));
-        if (existedIndex !== -1) {
-          existedFilters.splice((existedIndex as number), 1);
-          existingParams[query] = existedFilters.join(',');
-          addParamsToLocation(this.$route, existingParams);
+      if (fItem) {
+        removeFiltersFromQuery(this.$route, fItem);
+        if (selectedIndex !== 1) {
+          this.selectedFilters.splice((selectedIndex as number), 1);
         }
-        this.selectedFilters.splice((selectedIndex as number), 1);
       }
     }
     this.$emit('filterChange');
@@ -182,6 +188,8 @@ export default class CategoryFilter extends Vue {
     const { form } = this.$refs;
     (form as any).reset();
     this.$emit('change', {});
+    console.log(this.selectedFilters);
+    this.selectedFilters.forEach((fItem: IFilterItem) => removeFiltersFromQuery(this.$route, fItem));
     this.selectedFilters = [];
   }
 
@@ -390,7 +398,7 @@ export default class CategoryFilter extends Vue {
       position: relative;
       border-bottom: 1px solid #ededed;
       align-items: center;
-      padding: 15px 0 16px 40px;
+      padding: 15px 5px 16px 40px;
       text-align: left;
 
       &:before {
