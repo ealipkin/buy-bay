@@ -19,7 +19,6 @@ export default class GroupInfoModal extends Vue {
   @Prop() public orderData!: OrderData;
 
   openModal() {
-    console.log('this.orderData -> ', this.orderData);
     this.$modal.show('group-modal');
     // document.body.classList.add('_hidden');
   }

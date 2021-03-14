@@ -1,7 +1,9 @@
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import { MenuItem } from '@/models/menu';
-import { FavCountResponse, ProfileCountsResponse, UserResponse } from '@/models/responses';
+import {
+  FavCountResponse, ProfileCountsResponse, UserInfoResponse, UserResponse,
+} from '@/models/responses';
 import { NotificationItem, ProfileCounts, ProfileUser } from '@/models/models';
 import { ProductShop } from '@/models/order';
 
@@ -30,6 +32,14 @@ const mutationTypes = {
 const updateFavouritesCount = async ({ commit }) => createRequest('GET', endpoints.favourites.counter)
   .then((res: FavCountResponse) => {
     commit(mutationTypes.SET_FAVOURITES_COUNT, res.data);
+  });
+
+const getUserInfo = async ({ commit }) => createRequest('GET', endpoints.userInfo)
+  .then((res: UserInfoResponse) => {
+    const read = res.data.data.notification.read.original.data;
+    const unread = res.data.data.notification.unread.original.data;
+    commit(mutationTypes.SET_NOTIFICATIONS, { read, unread });
+    commit(mutationTypes.SET_FAVOURITES_COUNT, res.data.data.counter);
   });
 
 const getNotifications = async ({ commit }) => {
@@ -126,13 +136,15 @@ const actions = {
           $auth.token(null, null, false);
         });
 
-      await updateFavouritesCount({ commit });
+      await getUserInfo({ commit });
       await store.dispatch('readNotification');
-      await getNotifications({ commit });
     }
   },
   async updateFavouritesCount({ commit }) {
     await updateFavouritesCount({ commit });
+  },
+  async getUserInfo({ commit }) {
+    await getUserInfo({ commit });
   },
   async updateProfileCounts({ commit }) {
     const vm = (this as any)._vm;

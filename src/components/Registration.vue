@@ -1,6 +1,6 @@
 <template lang="pug">
   ValidationObserver(v-slot="{ invalid }")
-    form(@submit.prevent="submit").form.registration
+    form.form.registration
       .registration__step(v-if="currentStep === regSteps.START")
         Input(:rules="['required']" label="Телефон или адрес эл.почты" name="login").form__input
         Input(:rules="['required']" label="Пароль" name="password" type="password").form__input
@@ -41,10 +41,6 @@ export default class Registration extends Vue {
   user = createProfileUser(null, 1);
 
   regSteps = REG_STEPS;
-
-  submit() {
-    console.log('submit');
-  }
 
   register() {
     this.currentStep = REG_STEPS.FINISH;

@@ -3,7 +3,7 @@ import {
   BreadcrumbLink,
   CardItem, ICategoryItem,
   ISearchSuggest,
-  ISeoBlock,
+  ISeoBlock, NotificationItem,
   ProfileCounts,
   ProfileUser,
   UserAddressItem,
@@ -33,6 +33,26 @@ export interface UserResponse {
   data: {
     status: string;
     data: ProfileUser;
+  };
+}
+
+export interface UserInfoResponse {
+  data: {
+    data: {
+      counter: number;
+      notification: {
+        read: {
+          original: {
+            data: NotificationItem[];
+          };
+        };
+        unread: {
+          original: {
+            data: NotificationItem[];
+          };
+        };
+      };
+    };
   };
 }
 

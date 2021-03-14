@@ -18,6 +18,7 @@ export const endpoints = {
   getPhoneCode: '/auth/phone',
   login: '/auth/login',
   user: '/auth/user',
+  userInfo: '/auth/user/info',
   logout: '/auth/logout',
   refreshToken: '/auth/refresh ',
   getMenu: '/category/tree',
@@ -61,6 +62,7 @@ export const endpoints = {
     deleteAddress: (addressId, orderId) => `/profile/address/${addressId}/${orderId}`,
     deleteCard: (cardId, orderId) => `/profile/card/${cardId}/${orderId}`,
     related: (orderId) => `/order/related/${orderId}`,
+    success: (orderId) => `/order/success/${orderId}`,
   },
   group: {
     get: (groupId) => `/group/info/${groupId}`,
@@ -85,4 +87,5 @@ export const endpoints = {
     markAsRead: (id) => `/notification/set_read/${id}`,
   },
   brand: (brandId, params = '') => `/brand/${brandId}?${params}`,
+
 };

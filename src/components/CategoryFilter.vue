@@ -90,7 +90,7 @@ import Radio from '@/components/Radio.vue';
 import { IFilter, IFilterItem } from '@/models/filters';
 import { debounce } from 'vue-debounce';
 import { disableBodyScroll, enableBodyScroll } from '@/utils/lockBody';
-import { addParamsToLocation, paramsStringToObject, removeFiltersFromQuery } from '@/utils/filters';
+import { removeFiltersFromQuery } from '@/utils/filters';
 
 @Component({
   components: { Radio, Checkbox, ColorSelect },
@@ -140,7 +140,6 @@ export default class CategoryFilter extends Vue {
   }
 
   mounted() {
-    console.log(this.filters);
     this.selectedFilters = this.filters
       .filter((f) => f.items.length)
       .map(
@@ -173,7 +172,6 @@ export default class CategoryFilter extends Vue {
   }
 
   filterChange() {
-    console.log('filterChange');
     const { form } = this.$refs;
     const formData = new FormData(form as any);
     const filter = {};
@@ -188,7 +186,6 @@ export default class CategoryFilter extends Vue {
     const { form } = this.$refs;
     (form as any).reset();
     this.$emit('change', {});
-    console.log(this.selectedFilters);
     this.selectedFilters.forEach((fItem: IFilterItem) => removeFiltersFromQuery(this.$route, fItem));
     this.selectedFilters = [];
   }

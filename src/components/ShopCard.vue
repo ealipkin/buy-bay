@@ -25,7 +25,6 @@ export default class CatalogCardItem extends Vue {
   @Prop() public shop!: ProductShop;
 
   toggleFav() {
-    console.log('toggleFav');
     const { id } = this.shop;
     this.shop.isFavourite = !this.shop.isFavourite;
     this.$emit('toggle-fav');

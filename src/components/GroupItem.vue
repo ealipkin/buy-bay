@@ -48,10 +48,6 @@ export default class GroupItem extends Vue {
   handleClick() {
     this.$emit('join', this.group);
   }
-
-  mounted() {
-    console.log(this.group);
-  }
 }
 
 </script>

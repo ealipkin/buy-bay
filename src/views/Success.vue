@@ -3,10 +3,15 @@
     div(v-if="loaded").success-page__wrapper
       .success-page__info
         span.success-page__nice Ура!
-        h1(v-if="isGroup").success-page__title {{title}}
-        p(v-if="isGroup").success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Достаточно 1 друга, чтобы товар был отправлен.
-        p(v-if="!isGroup").success-page__text Ориентировочная дата доставки {{new Date(orderData.delivery.from) | dateFormat('DD MMMM YYYY')}}. Следите за изменениями статуса в разделе&nbsp;
-          router-link(to="/profile/orders").link «Мои заказы»
+        template(v-if="isGroup && group")
+          h1(v-if="isGroup").success-page__title {{title}}
+          template(v-if="!group.is_complete")
+            p(v-if="group.joinedUsers.length === 1").success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Достаточно 1 друга, чтобы товар был отправлен.
+            p(v-if="group.joinedUsers.length > 1").success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Нужно ещё {{usersDelta}} {{usersDeltaText}}, чтобы товар был отправлен.
+
+        template(v-else)
+          p(v-if="!isGroup").success-page__text Ориентировочная дата доставки {{new Date(orderData.delivery.from) | dateFormat('DD MMMM YYYY')}}. Следите за изменениями статуса в разделе&nbsp;
+            router-link(to="/profile/orders").link «Мои заказы»
       template(v-if="isGroup")
         hr.success-page__hr
 
@@ -31,10 +36,13 @@ import router from '@/router';
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import { OrderPaymentResponse } from '@/models/responses';
-import { Group, OrderData, Product } from '@/models/order';
+import {
+  Group, GroupUser, OrderData, Product,
+} from '@/models/order';
 import { createSharingLinks } from '@/utils/sharing';
-import { ISeoBlock, IShareData } from '@/models/models';
+import { ISeoBlock, IShareData, ProfileUser } from '@/models/models';
 import SeoBlock from '@/components/SeoBlock.vue';
+import { declOfNum } from '@/utils/common';
 
 @Component({
   components: {
@@ -60,11 +68,21 @@ export default class Success extends Vue {
     if (!this.orderData) {
       return '';
     }
-    return this.isGroup ? 'Группа покупки создана' : 'Заказ оплачен';
+    return this.isGroup ? this.isOwner ? 'Группа покупки создана' : 'Вы вступили в группу' : 'Заказ оплачен';
+  }
+
+  get usersDeltaText() {
+    return this.usersDelta && declOfNum(this.usersDelta, ['человек', 'человека', 'человек']);
   }
 
   get isGroup() {
     return this.orderData && this.orderData.order && this.orderData.order.is_group;
+  }
+
+  get isOwner(): boolean {
+    const res = this.user && this.group && this.group.joinedUsers
+      && this.group.joinedUsers.find((user: GroupUser) => String(user.user_id) === String(this.user.id) && user.is_creator);
+    return Boolean(res);
   }
 
   get socials() {
@@ -83,12 +101,20 @@ export default class Success extends Vue {
     return product ? createSharingLinks(shareData) : [];
   }
 
+  get usersDelta(): number | null {
+    return this.isGroup && this.group && (this.group.allUsers - this.group.joinedUsers.length);
+  }
+
   get product(): Product | null {
     return this.orderData && this.orderData.orderItems && this.orderData.orderItems.length ? this.orderData.orderItems[0].product : null;
   }
 
   get group(): Group | null {
     return this.orderData && this.orderData.group ? this.orderData.group : null;
+  }
+
+  get user(): ProfileUser {
+    return (this as any).$auth.user();
   }
 
   get isAuthorized() {
@@ -119,6 +145,7 @@ export default class Success extends Vue {
   }
 
   getOrder(): Promise<OrderPaymentResponse> {
+    // return createRequest('GET', endpoints.order.success(this.orderId));
     return createRequest('GET', endpoints.order.get(this.orderId));
   }
 }

@@ -1,8 +1,13 @@
 <template lang="pug">
   ul.catalog-nav
-    li(v-for="(item, index) in items" :key="index").catalog-nav__item
-      router-link(:to="item.href" :class="{'catalog-nav__link--main': item.items.length}").catalog-nav__link {{item.label}}
-      catalog-nav(:items="item.items" v-if="item.items && item.items.length").page__catalog-nav
+    li(v-for="(category, index) in items" :key="index").catalog-nav__item
+      router-link(:to="category.href" :class="{'catalog-nav__link--main': category.items.length}").catalog-nav__link {{category.label}}
+      ul(v-if="category.items && category.items.length").catalog-nav
+        li(v-for="(subCategory, subIndex) in category.items" :key="subIndex").catalog-nav__item
+          router-link(:to="subCategory.href" :class="{'catalog-nav__link--main': subCategory.items.length}").catalog-nav__link {{subCategory.label}}
+          ul(v-if="subCategory.items && subCategory.items.length").catalog-nav
+            li(v-for="(item, i) in subCategory.items" :key="i" ).catalog-nav__item
+              router-link(:to="item.href" :class="{'catalog-nav__link--main': item.items.length}").catalog-nav__link {{item.label}}
 </template>
 
 <script lang="ts">

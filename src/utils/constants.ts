@@ -66,5 +66,3 @@ export const ADVANTAGES = [
     text: 'Мы стоим за вас стеной гарантируем возврат денег и бесплатную доставку',
   },
 ];
-
-export const SHARE_TIMER = new Date().getTime() + 24 * 60 * 60 * 1000;

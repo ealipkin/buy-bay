@@ -28,10 +28,6 @@ export default class HeaderShopCard extends Vue {
 
   isFavourite = false;
 
-  writeToShop() {
-    console.log('writeToShop');
-  }
-
   mounted() {
     this.isFavourite = this.shop.isFavourite;
   }
@@ -45,7 +41,6 @@ export default class HeaderShopCard extends Vue {
   }
 
   addToFav() {
-    console.log('addToFav');
     createRequest('GET', endpoints.favourites.addBrand(this.shop.id))
       .then(() => {
         this.$root.$emit('show-toast', {
