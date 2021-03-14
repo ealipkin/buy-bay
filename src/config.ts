@@ -62,7 +62,7 @@ export const endpoints = {
     deleteAddress: (addressId, orderId) => `/profile/address/${addressId}/${orderId}`,
     deleteCard: (cardId, orderId) => `/profile/card/${cardId}/${orderId}`,
     related: (orderId) => `/order/related/${orderId}`,
-    success: (orderId) => `/order/success/${orderId}`,
+    success: (orderId) => `/profile/order/success/${orderId}`,
   },
   group: {
     get: (groupId) => `/group/info/${groupId}`,

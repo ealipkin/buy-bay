@@ -6,7 +6,7 @@
         template(v-if="isGroup && group")
           h1(v-if="isGroup").success-page__title {{title}}
           template(v-if="!group.is_complete")
-            p(v-if="group.joinedUsers.length === 1").success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Достаточно 1 друга, чтобы товар был отправлен.
+            p(v-if="group.joinedUsers.length === 1").success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Достаточно {{usersDelta}} {{friendsDeltaText}}, чтобы товар был отправлен.
             p(v-if="group.joinedUsers.length > 1").success-page__text Теперь зовите друзей в группу и они получат супер-цену на данный товар. Нужно ещё {{usersDelta}} {{usersDeltaText}}, чтобы товар был отправлен.
 
         template(v-else)
@@ -58,7 +58,9 @@ export default class Success extends Vue {
 
   orderId: string | null = null;
 
-  seo: ISeoBlock | null = null;
+  get seo(): ISeoBlock | null {
+    return this.orderData && this.orderData.seo_block;
+  }
 
   orderData: OrderData | null = null;
 
@@ -69,6 +71,10 @@ export default class Success extends Vue {
       return '';
     }
     return this.isGroup ? this.isOwner ? 'Группа покупки создана' : 'Вы вступили в группу' : 'Заказ оплачен';
+  }
+
+  get friendsDeltaText() {
+    return this.usersDelta && declOfNum(this.usersDelta, ['друга', 'друзей', 'друзей']);
   }
 
   get usersDeltaText() {
@@ -134,10 +140,6 @@ export default class Success extends Vue {
         if (groupTimer) {
           this.groupTimer = groupTimer;
         }
-
-        this.seo = {
-          meta_title: this.title,
-        };
       })
       .catch(() => {
         router.push({ path: '/' });
@@ -145,8 +147,7 @@ export default class Success extends Vue {
   }
 
   getOrder(): Promise<OrderPaymentResponse> {
-    // return createRequest('GET', endpoints.order.success(this.orderId));
-    return createRequest('GET', endpoints.order.get(this.orderId));
+    return createRequest('GET', endpoints.order.success(this.orderId));
   }
 }
 </script>

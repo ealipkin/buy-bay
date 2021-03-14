@@ -54,7 +54,6 @@ import { INPUT_MASKS, INPUT_PLACEHOLDERS, PHONE_CODE_LENGTH } from '@/validation
 import { createRequest } from '@/services/http.service';
 import { endpoints } from '@/config';
 import $store from '@/store';
-import { CONFIRMATION_STEPS } from '@/models/enums';
 import { GetCodeResponse } from '@/models/responses';
 
 const getFormData = (object) => Object.keys(object).reduce((formData, key) => {
@@ -92,6 +91,7 @@ export default class ProfileModal extends Vue {
     const toast: any = this.$refs.toasted;
     toast.showSuccess('Ваши данные сохранены');
     $store.dispatch('profile/loadProfile');
+    $store.dispatch('app/updateUser');
     this.closeModal();
   }
 
@@ -263,7 +263,6 @@ export default class ProfileModal extends Vue {
       width: 100%;
 
       @include tablet() {
-        width: auto;
         min-width: 289px;
         margin: 0 auto;
         width: 100%;

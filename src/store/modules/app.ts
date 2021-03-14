@@ -29,6 +29,17 @@ const mutationTypes = {
   SET_NOTIFICATIONS: 'SET_NOTIFICATIONS',
 };
 
+const loadUser = async (token, $auth) => {
+  // load user
+  await createRequest('GET', endpoints.user, { token })
+    .then((res: UserResponse) => {
+      const user: ProfileUser = res.data.data;
+      $auth.user(user);
+    })
+    .catch(() => {
+      $auth.token(null, null, false);
+    });
+};
 const updateFavouritesCount = async ({ commit }) => createRequest('GET', endpoints.favourites.counter)
   .then((res: FavCountResponse) => {
     commit(mutationTypes.SET_FAVOURITES_COUNT, res.data);
@@ -126,22 +137,19 @@ const actions = {
     const { $auth } = vm;
     const token = $auth.token();
     if (token) {
-      // load user
-      await createRequest('GET', endpoints.user, { token })
-        .then((res: UserResponse) => {
-          const user: ProfileUser = res.data.data;
-          $auth.user(user);
-        })
-        .catch(() => {
-          $auth.token(null, null, false);
-        });
-
+      await loadUser(token, $auth);
       await getUserInfo({ commit });
       await store.dispatch('readNotification');
     }
   },
   async updateFavouritesCount({ commit }) {
     await updateFavouritesCount({ commit });
+  },
+  async updateUser() {
+    const vm = (this as any)._vm;
+    const { $auth } = vm;
+    const token = $auth.token();
+    await loadUser(token, $auth);
   },
   async getUserInfo({ commit }) {
     await getUserInfo({ commit });
