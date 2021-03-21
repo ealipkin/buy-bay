@@ -3,16 +3,17 @@
     .color-select__items
       label(v-for="(color, index) in colors" :class="{'color-select__label--visible': (index) < visibleCount}").color-select__label
         input(type="checkbox" :checked="color.selected").visually-hidden
-        span(:style="{backgroundColor: color.color}").color-select__item
+        span(:style="{backgroundColor: color.colorHex}").color-select__item
     div(v-if="colors.length > visibleCount" @click="showAll").color-select__show-all Показать еще
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { IFilterItem } from '@/models/filters';
 
 @Component
 export default class ColorSelect extends Vue {
-  @Prop() public colors!: { id: string | number; color: string; selected: boolean }[];
+  @Prop() public colors!: IFilterItem[];
 
   visibleCount = 6;
 

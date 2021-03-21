@@ -12,7 +12,7 @@
               router-link(v-if="item.href" :to="item.href").main-nav__link {{item.title}}
               span(v-else).main-nav__link {{item.title}}
     div.main-nav__menu-wrapper
-      CatalogMenu(:links="mainMenu" :class="{'main-nav__menu--visible': isMenuVisible}").main-nav__menu
+      CatalogMenu(:links="mainMenu" :class="{'main-nav__menu--visible': isMenuVisible}" @search="handleSearch").main-nav__menu
 
 </template>
 
@@ -91,6 +91,11 @@ export default class MainNav extends Vue {
     } else {
       this.showMenu();
     }
+  }
+
+  handleSearch() {
+    this.hideMenu();
+    this.$emit('search');
   }
 }
 </script>

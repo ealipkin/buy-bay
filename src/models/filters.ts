@@ -13,6 +13,7 @@ export interface IFilterItem {
   query?: string;
   value?: string | number;
   color?: string | number;
+  colorHex?: string | number;
   href: string;
 }
 
@@ -21,6 +22,7 @@ export interface IFilter {
   searchTerm: string | null | undefined;
   isSearch?: boolean;
   expand?: boolean;
+  isOpen?: boolean;
   query: string;
   type: FILTER_TYPES;
   items: IFilterItem[];

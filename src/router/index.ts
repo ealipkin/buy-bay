@@ -85,6 +85,15 @@ const routes: Array<RouteConfig> = [
     name: 'GroupDetail',
     component: () => import('../views/GroupDetail.vue'),
   },
+  {
+    path: '/404',
+    name: '404',
+    component: () => import('../views/NotFound.vue'),
+  },
+  {
+    path: '*',
+    redirect: '/404',
+  },
 ];
 
 const router = new VueRouter({

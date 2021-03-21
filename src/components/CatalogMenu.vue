@@ -1,8 +1,8 @@
 <template lang="pug">
-  //.catalog-menu(:style="{top: headerHeight + 'px'}")
   .catalog-menu(:style="{top: headerHeight + 'px'}")
     .catalog-menu__container
-      div(:class="{'catalog-menu__container-primary--hidden': subMenuOpen}").catalog-menu__container-primary
+      //div(:class="{'catalog-menu__container-primary--hidden': subMenuOpen}").catalog-menu__container-primary
+      div.catalog-menu__container-primary
         .catalog-menu__nav-wrapper
           .catalog-menu__nav
             button(type="button" v-for="(link, index) in links" :key="index" @mouseenter="menuLinkClick(link, index)" :class="{'catalog-menu__nav-link--active': selectedIndex === index }").catalog-menu__nav-link
@@ -20,12 +20,12 @@
 
               span.catalog-menu__nav-link-title {{link.title}}
 
-      div(:class="{'catalog-menu__container-secondary--opened': subMenuOpen}" v-if="childMenu").catalog-menu__container-secondary
-        .catalog-menu__sub-wrapper
+      div(:class="{'catalog-menu__container-secondary--opened': subMenuOpen}").catalog-menu__container-secondary
+        div(v-if="childMenu").catalog-menu__sub-wrapper
           .catalog-menu__header
             button(type="button" @click="closeMenu").catalog-menu__back
             .catalog-menu__title {{childMenu.title}}
-            button(type="button").catalog-menu__search
+            button(type="button" @click="searchClick").catalog-menu__search
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M15.804 14.864l-3.846-3.847A6.744 6.744 0 006.743 0a6.743 6.743 0 104.27 11.961l3.847 3.843a.667.667 0 00.944-.94zm-9.061-2.72a5.408 5.408 0 01-5.404-5.401 5.41 5.41 0 015.404-5.404 5.412 5.412 0 015.404 5.404c0 2.978-2.426 5.4-5.404 5.4z" fill="currentColor" fill-rule="evenodd" opacity=".8"/></svg>
           .catalog-menu__sub-inner
             .catalog-menu__sub-lists
@@ -97,6 +97,12 @@ export default class CatalogMenu extends Vue {
 
   closeMenu() {
     this.subMenuOpen = false;
+    this.selectedIndex = null;
+  }
+
+  searchClick() {
+    this.closeMenu();
+    this.$emit('search');
   }
 }
 </script>
@@ -252,10 +258,12 @@ export default class CatalogMenu extends Vue {
       width: 100%;
       height: 100%;
       max-height: 100vh;
-      display: none;
+      transform: translateX(500%);
+      transition: all 0.5s ease;
 
       &--opened {
         display: block;
+        transform: translateX(0);
       }
 
       @include laptop() {

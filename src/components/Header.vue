@@ -59,7 +59,7 @@
     .header-inner
       HeaderShopCard(:shop="selectedShop" v-if="selectedShop")
     .header-bottom
-      MainNav(v-if="mainMenu" :main-menu="mainMenu").container
+      MainNav(v-if="mainMenu" :main-menu="mainMenu" @search="handleSearch").container
     .container
     LoginModal(ref="loginModal")
 </template>
@@ -176,6 +176,10 @@ export default class Header extends Vue {
     setTimeout(() => {
       this.searchFocused = true;
     }, 0);
+  }
+
+  handleSearch() {
+    (this.$refs.search as any).doFocus();
   }
 
   async created() {
@@ -357,7 +361,7 @@ export default class Header extends Vue {
 
       .profile-smile {
         span {
-          transform: scale(0.5);
+          transform: scale(0.9);
         }
       }
 

@@ -1,7 +1,7 @@
 <template lang="pug">
   .tabs-nav
     .tabs-nav__pane
-      button(v-for="(tab, index) in tabs" :key="index" @click="selectTab(tab, index)" type="button" :class="{'tabs-nav__tab--active': isTabActive(tab)}").tabs-nav__tab {{tab.label}}
+      button(v-for="(tab, index) in innerTabs" :key="index" @click="selectTab(tab, index)" type="button" :class="{'tabs-nav__tab--active': tab.isActive}").tabs-nav__tab {{tab.label}}
 
 </template>
 
@@ -12,18 +12,24 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class TabsNav extends Vue {
   @Prop() public tabs!: any[];
 
+  innerTabs: any[] = [];
+
   selectTab(tab, index) {
     if (tab.isActive) {
       return;
     }
-    this.tabs.forEach((t) => t.isActive = false);
+    this.innerTabs.forEach((t) => t.isActive = false);
     tab.isActive = true;
-    Vue.set(this.tabs, index, tab);
+    this.innerTabs = [...this.tabs];
     this.$emit('change', tab.id);
   }
 
   isTabActive(tab) {
     return Boolean(tab.isActive);
+  }
+
+  mounted() {
+    this.innerTabs = [...this.tabs];
   }
 }
 </script>

@@ -114,7 +114,9 @@ export default class SearchField extends Vue {
   doFocus() {
     if (this.input) {
       this.input.focus();
-      this.handleFocus();
+      setTimeout(() => {
+        this.handleFocus();
+      }, 1);
     }
   }
 

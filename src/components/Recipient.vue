@@ -28,7 +28,7 @@ import { INPUT_MASKS, INPUT_PLACEHOLDERS } from '@/validations';
   components: { Input },
 })
 export default class Recipient extends Vue {
-  @Prop() public addressItem!: UserAddressItem | object;
+  @Prop() public addressItem!: UserAddressItem | undefined;
 
   INPUT_MASKS = INPUT_MASKS;
 

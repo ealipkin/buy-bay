@@ -147,6 +147,7 @@ export default class AddressItem extends Vue {
       flex-wrap: nowrap;
 
       button {
+        cursor: pointer;
         @include clearButton();
         margin-right: 15px;
         width: 20px;

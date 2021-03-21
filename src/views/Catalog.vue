@@ -227,6 +227,9 @@ export default class Index extends Vue {
           this.pageLoaded = true;
           this.productsPending = false;
         }
+      })
+      .catch(() => {
+        router.push({ path: '/404' });
       });
   }
 

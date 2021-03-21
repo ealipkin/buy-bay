@@ -154,7 +154,7 @@ export default class Profile extends Vue {
       this.yooKassaModal.classList.remove('yookasssa-payment');
       const title = this.yooKassaModal.querySelector('.yoomoney-checkout-bank-card__logo');
       if (title) {
-        title.innerHTML = 'Добавить карту';
+        title.innerHTML = 'Добавление карты';
       }
     }
   }

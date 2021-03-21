@@ -96,7 +96,7 @@ import { removeFiltersFromQuery } from '@/utils/filters';
   components: { Radio, Checkbox, ColorSelect },
 })
 export default class CategoryFilter extends Vue {
-  @Prop() public filters!: any[];
+  @Prop() public filters!: IFilter[];
 
   closed = true;
 

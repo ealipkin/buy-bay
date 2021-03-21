@@ -94,6 +94,14 @@ const PRODUCT_SLIDER_SETTINGS = {
   },
 })
 export default class ItemDetail extends Vue {
+  @Watch('isAuthorized') isAuthorizedChanged(val) {
+    if (val && this.lastOrderAction) {
+      this.$nextTick(() => {
+        this.lastOrderAction();
+      });
+    }
+  }
+
   @Watch('$route') routeChange() {
     this.init();
   }
@@ -110,6 +118,8 @@ export default class ItemDetail extends Vue {
   };
 
   similarItems: Product[] | null = null;
+
+  lastOrderAction: any;
 
   sliderSettings = PRODUCT_SLIDER_SETTINGS;
 
@@ -171,13 +181,13 @@ export default class ItemDetail extends Vue {
   }
 
   handleJoinToGroup(group: Group) {
-    if (!this.isAuthorized) {
-      this.$root.$emit('show-login-modal');
-      return;
-    }
-
     if (this.orderDisabled) {
       (this.$refs.itemInfo as any).validateOptions();
+      return;
+    }
+    if (!this.isAuthorized) {
+      this.$root.$emit('show-login-modal');
+      this.lastOrderAction = (this.$refs.itemInfo as any).sendOrder.bind(this, 'group', group);
       return;
     }
     (this.$refs.itemInfo as any).sendOrder('group', group);

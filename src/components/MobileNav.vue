@@ -1,32 +1,25 @@
 <template lang="pug">
   .mobile-nav
     ul.mobile-nav__list
-      li(v-for="(item, index) in items").mobile-nav__item
-        router-link(v-if="item.href" :to="item.href" :class="{'mobile-nav__link--active': item.isActive}" :data-index="index").mobile-nav__link
-          template(v-if="item.icon === 'shop'")
-            include ../assets/icons/shop.svg
-          template(v-if="item.icon === 'docs'")
-            include ../assets/icons/docs.svg
-          template(v-if="item.icon === 'bell'")
-            include ../assets/icons/bell.svg
-          template(v-if="item.icon === 'heart'")
-            include ../assets/icons/heart.svg
-          template(v-if="item.icon === 'user'")
-            include ../assets/icons/user.svg
-          span(v-if="item.count").mobile-nav__count {{item.count}}
+      li.mobile-nav__item
+        router-link(to="/" title="Главная").mobile-nav__link
+          include ../assets/icons/shop.svg
+      li.mobile-nav__item
+        router-link(to="/catalog" title="Каталог").mobile-nav__link
+          include ../assets/icons/docs.svg
+      li.mobile-nav__item
+        button(@click="toggleNotifications").mobile-nav__link
+          include ../assets/icons/bell.svg
+          span.mobile-nav__count {{unreadNotifications.length || 0}}
+      li.mobile-nav__item
+        router-link(to="/profile/favourites" title="Избранное").mobile-nav__link
+          include ../assets/icons/heart.svg
 
-        button(v-else @click="item.action" type="button" :class="{'mobile-nav__link--active': item.isActive}" :data-index="index").mobile-nav__link
-          template(v-if="item.icon === 'shop'")
-            include ../assets/icons/shop.svg
-          template(v-if="item.icon === 'docs'")
-            include ../assets/icons/docs.svg
-          template(v-if="item.icon === 'bell'")
-            include ../assets/icons/bell.svg
-          template(v-if="item.icon === 'heart'")
-            include ../assets/icons/heart.svg
-          template(v-if="item.icon === 'user'")
-            include ../assets/icons/user.svg
-          span(v-if="item.count").mobile-nav__count {{item.count}}
+      li.mobile-nav__item
+        router-link(to="/profile" title="Профиль" v-if="isAuthorized").mobile-nav__link
+          include ../assets/icons/user.svg
+        button(@click="login" v-if="!isAuthorized").mobile-nav__link
+          include ../assets/icons/user.svg
 
 </template>
 
@@ -36,9 +29,15 @@ import {
 } from 'vue-property-decorator';
 import router from '@/router';
 import { NotificationItem } from '@/models/models';
+import { mapGetters } from 'vuex';
 
 @Component({
   components: {},
+  computed: {
+    ...mapGetters({
+      unreadNotifications: 'app/getUnreadNotifications',
+    }),
+  },
 })
 export default class MobileNav extends Vue {
   @Watch('$route') routeChange() {
@@ -60,54 +59,13 @@ export default class MobileNav extends Vue {
   }
 
   toggleNotifications(event) {
-    const { target } = event;
-    const link = target.closest('.mobile-nav__link');
-    const { index } = link.dataset;
-    const item = this.items[index];
-    const active = item.isActive;
-    this.items.forEach((i) => i.isActive = false);
-    Vue.set(this.items, index, { ...item, isActive: !active });
     this.$emit('toggle-notifications');
   }
 
   login() {
-    if ((this as any).$auth.check()) {
-      router.push({ path: '/profile' });
-    } else {
-      this.$emit('show-login');
-      this.waitForAuth = true;
-    }
+    this.$emit('show-login');
+    this.waitForAuth = true;
   }
-
-  items = [
-    {
-      href: '/',
-      title: 'Главная',
-      icon: 'shop',
-    },
-    {
-      href: '/catalog',
-      title: '',
-      icon: 'docs',
-    },
-    {
-      count: 9,
-      title: 'Уведомления',
-      icon: 'bell',
-      action: this.toggleNotifications,
-      isActive: false,
-    },
-    {
-      href: '/profile/favourites',
-      title: 'Избранное',
-      icon: 'heart',
-    },
-    {
-      title: 'Профиль',
-      action: this.login,
-      icon: 'user',
-    },
-  ];
 }
 </script>
 

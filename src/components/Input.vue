@@ -50,7 +50,11 @@ export default class Input extends Vue {
 
   doFocus() {
     this.$nextTick(() => {
-      (this.$refs.input as any).focus();
+      const input = (this.$refs.input as any);
+      input.focus();
+      if (input.name === 'phone' && !input.value) {
+        input.value = '+7';
+      }
     });
   }
 }

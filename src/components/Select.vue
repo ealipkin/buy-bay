@@ -51,10 +51,13 @@ export default class Select extends Vue {
 <style scoped lang="scss">
   .select {
     text-align: left;
-
+    &__dropdown {
+      cursor: pointer;
+    }
     &__toggle {
       @include clearButton();
       @include input();
+      cursor: pointer;
 
       text-align: left;
       font-family: inherit;

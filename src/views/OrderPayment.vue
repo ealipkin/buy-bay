@@ -193,6 +193,7 @@ export default class OrderPayment extends Vue {
     const modalComponent: any = this.$refs.addressModal;
     const phone = this.user && this.user.phone;
     const address = data ? { ...data } : phone ? { phone } : null;
+    console.log('address => ', address);
     modalComponent.showModal(address);
   }
 
@@ -256,7 +257,7 @@ export default class OrderPayment extends Vue {
       this.yooKassaModal.classList.remove('yookasssa-payment');
       const title = this.yooKassaModal.querySelector('.yoomoney-checkout-bank-card__logo');
       if (title) {
-        title.innerHTML = 'Добавить карту';
+        title.innerHTML = 'Добавление карты';
       }
     }
 

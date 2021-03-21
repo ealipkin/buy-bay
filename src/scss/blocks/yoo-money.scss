@@ -12,9 +12,16 @@
   font-weight: bold;
 
   @include tablet() {
-    margin-bottom: 48px;
+    margin-bottom: 40px;
+    position: absolute;
+    top: 45px;
+    left: 49px;
   }
 }
+.shake2 {
+  animation: none !important;
+}
+
 
 .yoomoney-checkout-cardpayment__content {
   padding: 40px 20px;
@@ -24,8 +31,39 @@
   box-sizing: border-box;
   max-width: calc(100% - 40px);
   @include tablet() {
-    padding: 39px 50px 38px;
-    max-width: 460px;
+    padding: 45px 49px 68px;
+    max-width: 787px;
+
+    &:before {
+      position: absolute;
+      top: 108px;
+      content: '';
+      display: block;
+      width: 485px;
+      height: 305px;
+      padding: 66px 56px 91px 43px;
+      border-radius: 12px;
+      box-shadow: 0 15px 20px 0 rgba(0, 0, 0, 0.03);
+      border: solid 1px #496cff;
+      background-color: #ffffff;
+      z-index: 1;
+    }
+
+    &:after {
+      content: '';
+      display: block;
+      width: 516px;
+      height: 308px;
+      margin: 0 1px 0 0;
+      padding: 79px 15px 26px 72px;
+      border-radius: 12px;
+      border: solid 1px #f4f4f4;
+      background-color: #f5f7f9;
+      position: absolute;
+      right: 48px;
+      top: 160px;
+      z-index: 0;
+    }
   }
 }
 
@@ -51,7 +89,33 @@
 
 .yoomoney-checkout-bank-card__cvc {
   @include tablet {
-    width: 55%;
+    position: absolute;
+    width: auto;
+
+    right: 101px;
+    top: 234px;
+    input {
+      width: 111px;
+      box-sizing: border-box;
+    }
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: -85px;
+      right: -52px;
+      display: block;
+      height: 56px;
+      width: 201px;
+      background-color: #eef2f5;
+      z-index: 2;
+    }
+  }
+}
+
+.yoomoney-checkout-bank-card__cvc-label {
+  @include tablet {
+    display: none;
   }
 }
 
@@ -95,22 +159,53 @@
   display: none;
 }
 
+.yoomoney-checkout-cardpayment__unit {
+  position: static;
+}
+
 .yoomoney-checkout-bank-card__front {
   padding: 0;
   box-shadow: none;
-  max-width: 350px;
+  max-width: none;
   background: none !important;
   display: flex;
   flex-direction: column;
 
   @include tablet {
-    display: block;
+    white-space: nowrap;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #222222;
+    position: static;
+
+    margin: 0;
+    margin-top: 138px;
+    margin-left: 44px;
+
   }
 
   &:after {
     content: "";
     display: table;
     clear: both;
+  }
+}
+
+.yoomoney-checkout-bank-card__number {
+  @include tablet {
+    width: 235px;
+    margin-bottom: 18px;
+  }
+}
+
+.yoomoney-checkout-bank-card__validity-label {
+  @include tablet {
+    display: none;
   }
 }
 
@@ -145,9 +240,14 @@
 
   .yoomoney-checkout-cardpayment__action-button {
     font-size: 0;
+    @include tablet {
+      margin-top: 186px;
+      width: auto;
+      padding: 0 21px;
+    }
 
     &:after {
-      content: 'Добавить';
+      content: 'Добавить карту';
       font-size: 14px;
 
       @include tablet() {

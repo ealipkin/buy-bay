@@ -127,6 +127,7 @@ export default class ShopInfo extends Vue {
       margin-right: 10px;
       margin-top: -5px;
       margin-left: auto;
+      cursor: pointer;
 
       @include tablet() {
         margin: 0;

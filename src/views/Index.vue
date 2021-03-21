@@ -6,7 +6,6 @@
 
     .container.index__tabs
       TabsNav(:tabs="tabs" v-on:change="selectTab")
-
     section(v-show="popularItems").section.section--catalog-slider
       .section-header.section-header--hide-desktop
         .section-title Популярные
@@ -25,7 +24,7 @@
           .section-title Топ категории
         TopCategories(:categories="topCategories")
 
-    section(v-show="hotItems").section.section--catalog-slider
+    section(v-show="hotItems && hotItems.length").section.section--catalog-slider
       .section-header.section-header--hide-desktop
         .section-title Горящие группы
         router-link(to="#").section-link Показать еще
@@ -92,22 +91,6 @@ enum TABS_IDS {
   BEST = 'best',
 }
 
-const PRODUCT_TABS = [
-  {
-    id: TABS_IDS.POPULAR,
-    label: 'Популярные товары',
-    isActive: true,
-  },
-  {
-    id: TABS_IDS.HOT,
-    label: 'Горящие группы',
-  },
-  {
-    id: TABS_IDS.BEST,
-    label: 'Бестселлеры',
-  },
-];
-
 /* tslint:disable */
 @Component({
   components: {
@@ -171,7 +154,7 @@ export default class Index extends Vue {
 
   brands: BrandItem[] | null = null;
 
-  tabs = PRODUCT_TABS;
+  tabs: any = undefined;
 
   sliderInit(e) {
     const { id } = e;
@@ -193,6 +176,19 @@ export default class Index extends Vue {
       this.topCategories = response.top_cat;
 
       this.pageLoaded = true;
+
+      this.tabs = [];
+
+      if (this.popularItems && this.popularItems.length) {
+        this.tabs.push({ id: TABS_IDS.POPULAR, label: 'Популярные товары', isActive: true });
+      }
+      if (this.bestItems && this.bestItems.length) {
+        this.tabs.push({ id: TABS_IDS.BEST, label: 'Бестселлеры' });
+      }
+      if (this.hotItems && this.hotItems.length) {
+        this.tabs.push({ id: TABS_IDS.HOT, label: 'Горящие группы' });
+      }
+
       return response;
     });
   }

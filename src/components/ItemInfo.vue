@@ -12,7 +12,7 @@
         span.item-info__self-price-value {{divideNumberWithSpaces(item.selfPrice)}} ₽
     ul(v-if="item.options").item-info__options
       li(v-for="option in item.options").item-info__option
-        h3(:class="{'item-info__option-title--error': validated && !selectedOptions[option.id]}").item-info__option-title {{option.title}}
+        h3(:class="{'item-info__option-title--error': validated && !selectedOptions[option.id], 'item-info__option-title--shake': animated}").item-info__option-title {{option.title}}
           span(v-if="validated && !selectedOptions[option.id]") : не выбрано
         .item-info__option-list
           label(v-for="value in option.values").item-info__option-label
@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import {
-  Component, Prop, Vue,
+  Component, Prop, Vue, Watch,
 } from 'vue-property-decorator';
 import { divideNumberWithSpaces } from '@/utils/common';
 import Rate from '@/components/Rate.vue';
@@ -54,6 +54,14 @@ import VueScrollTo from 'vue-scrollto';
   components: { AmountChooser, Rate },
 })
 export default class ItemInfo extends Vue {
+  @Watch('isAuthorized') isAuthorizedChanged(val) {
+    if (val && this.lastOrderAction) {
+      this.$nextTick(() => {
+        this.lastOrderAction();
+      });
+    }
+  }
+
   @Prop() public item!: Product;
 
   selectedOptions: any = null
@@ -65,6 +73,10 @@ export default class ItemInfo extends Vue {
   isOrderDisabled = true;
 
   validated = false;
+
+  animated = false;
+
+  lastOrderAction: any = undefined;
 
   get isAuthorized() {
     return (this as any).$auth.check();
@@ -145,39 +157,41 @@ export default class ItemInfo extends Vue {
   }
 
   sendOrder(type: 'self' | 'group', group?: Product | undefined) {
-    if (this.isOrderDisabled) {
-      this.validateOptions();
-    } else {
-      const data = this.prepareData(type, group);
-      const url = type === 'self' ? endpoints.order.self : endpoints.order.group;
-      this.pending = true;
-      createRequest('POST', url, data)
-        .then((res: OrderResponse) => {
-          const orderId = res.data.data.oid;
-          if (orderId) {
-            router.push({ path: `/order/${orderId}` });
-          }
-        })
-        .catch(() => {
-          this.pending = false;
-        });
+    if (!this.isAuthorized) {
+      this.$root.$emit('show-login-modal');
+      this.lastOrderAction = this.sendOrder.bind(this, type, group);
+      return;
     }
+    const data = this.prepareData(type, group);
+    const url = type === 'self' ? endpoints.order.self : endpoints.order.group;
+    this.pending = true;
+    createRequest('POST', url, data)
+      .then((res: OrderResponse) => {
+        const orderId = res.data.data.oid;
+        if (orderId) {
+          router.push({ path: `/order/${orderId}` });
+        }
+      })
+      .catch(() => {
+        this.pending = false;
+      });
   }
 
   buySelf() {
-    if (this.isAuthorized) {
-      this.sendOrder('self');
-    } else {
-      this.$root.$emit('show-login-modal');
+    if (this.isOrderDisabled) {
+      this.validateOptions();
+      return;
     }
+    this.sendOrder('self');
   }
 
   buyGroup() {
-    if (this.isAuthorized) {
-      this.sendOrder('group');
-    } else {
-      this.$root.$emit('show-login-modal');
+    if (this.isOrderDisabled) {
+      this.validateOptions();
+      return;
     }
+
+    this.sendOrder('group');
   }
 
   divideNumberWithSpaces(number) {
@@ -193,12 +207,18 @@ export default class ItemInfo extends Vue {
   }
 
   validateOptions() {
-    this.validated = true;
+    this.animated = false;
     this.$nextTick(() => {
-      const erroredEl = document.querySelector('.item-info__option-title--error');
-      if (erroredEl) {
-        VueScrollTo.scrollTo(erroredEl, 100, { offset: -30 });
-      }
+      this.validated = true;
+      setTimeout(() => {
+        const erroredEl = document.querySelector('.item-info__option-title--error');
+        if (erroredEl) {
+          setTimeout(() => {
+            this.animated = true;
+          }, 100);
+          VueScrollTo.scrollTo(erroredEl, 100, { offset: -30 });
+        }
+      }, 100);
     });
   }
 }
@@ -318,6 +338,11 @@ export default class ItemInfo extends Vue {
 
       &--error {
         color: $red-1;
+      }
+
+      &--shake {
+        animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+        transform: translate3d(0, 0, 0);
       }
     }
 
