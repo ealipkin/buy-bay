@@ -274,6 +274,7 @@ export default class CatalogMenu extends Vue {
         flex: 1;
         padding: 20px 40px;
         overflow: auto;
+        transform: none;
       }
     }
 
