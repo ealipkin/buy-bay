@@ -167,7 +167,7 @@ export default class CatalogCardItem extends Vue {
       @include laptop() {
         min-height: 41px;
         display: flex;
-        align-items: flex-end;
+        align-items: flex-start;
         font-size: 14px;
       }
     }
